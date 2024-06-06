@@ -1,0 +1,3380 @@
+{
+    "ConvGunAccRcl2-6": [
+        -10,
+        3
+    ],
+    "ConvGunAccRcl7-14": [
+        -9,
+        4
+    ],
+    "ConvGunAccRcl16+": [
+        -8,
+        5
+    ],
+    "MagGunAccRcl2-6": [
+        -8,
+        2
+    ],
+    "MagGunAccRcl7-14": [
+        -7,
+        3
+    ],
+    "MagGunAccRcl16+": [
+        -6,
+        4
+    ],
+    "GravGunAccRcl": [
+        -5,
+        2
+    ],
+    "MissileAccRcl20-28": [
+        -8,
+        1
+    ],
+    "MissileAccRcl32+": [
+        -7,
+        1
+    ],
+    "WarpMissileAccRcl20-28": [
+        17,
+        1
+    ],
+    "WarpMissileAccRcl32+": [
+        18,
+        1
+    ],
+    "LaunchersBeamGunRoFTable": [
+        1,
+        3,
+        10,
+        30
+    ],
+    "RapidBeamGunRoFTable": [
+        10,
+        30,
+        100,
+        300
+    ],
+    "VeryRapidBeamGunRoFTable": [
+        100,
+        300,
+        1000,
+        3000
+    ],
+    "ConventionalWarheadDmgTable": {
+        "2": {
+            "DamageDice": 3,
+            "DamageModifier": 0,
+            "DamageMultiplier": 0
+        },
+        "2.5": {
+            "DamageDice": 3,
+            "DamageModifier": 2,
+            "DamageMultiplier": 0
+        },
+        "3": {
+            "DamageDice": 4,
+            "DamageModifier": 0,
+            "DamageMultiplier": 0
+        },
+        "3.5": {
+            "DamageDice": 5,
+            "DamageModifier": 0,
+            "DamageMultiplier": 0
+        },
+        "4": {
+            "DamageDice": 6,
+            "DamageModifier": 0,
+            "DamageMultiplier": 0
+        },
+        "5": {
+            "DamageDice": 7,
+            "DamageModifier": 0,
+            "DamageMultiplier": 0
+        },
+        "6": {
+            "DamageDice": 9,
+            "DamageModifier": 0,
+            "DamageMultiplier": 0
+        },
+        "7": {
+            "DamageDice": 11,
+            "DamageModifier": 0,
+            "DamageMultiplier": 0
+        },
+        "8": {
+            "DamageDice": 6,
+            "DamageModifier": 0,
+            "DamageMultiplier": 2
+        },
+        "10": {
+            "DamageDice": 3,
+            "DamageModifier": 0,
+            "DamageMultiplier": 5
+        },
+        "12": {
+            "DamageDice": 6,
+            "DamageModifier": 0,
+            "DamageMultiplier": 3
+        },
+        "14": {
+            "DamageDice": 3,
+            "DamageModifier": 0,
+            "DamageMultiplier": 7
+        },
+        "16": {
+            "DamageDice": 6,
+            "DamageModifier": 0,
+            "DamageMultiplier": 4
+        },
+        "20": {
+            "DamageDice": 6,
+            "DamageModifier": 0,
+            "DamageMultiplier": 5
+        },
+        "24": {
+            "DamageDice": 6,
+            "DamageModifier": 0,
+            "DamageMultiplier": 6
+        },
+        "28": {
+            "DamageDice": 6,
+            "DamageModifier": 0,
+            "DamageMultiplier": 7
+        },
+        "32": {
+            "DamageDice": 6,
+            "DamageModifier": 0,
+            "DamageMultiplier": 8
+        },
+        "40": {
+            "DamageDice": 6,
+            "DamageModifier": 0,
+            "DamageMultiplier": 10
+        },
+        "48": {
+            "DamageDice": 6,
+            "DamageModifier": 0,
+            "DamageMultiplier": 12
+        },
+        "56": {
+            "DamageDice": 6,
+            "DamageModifier": 0,
+            "DamageMultiplier": 14
+        },
+        "64": {
+            "DamageDice": 6,
+            "DamageModifier": 0,
+            "DamageMultiplier": 16
+        },
+        "80": {
+            "DamageDice": 6,
+            "DamageModifier": 0,
+            "DamageMultiplier": 20
+        },
+        "96": {
+            "DamageDice": 6,
+            "DamageModifier": 0,
+            "DamageMultiplier": 24
+        },
+        "112": {
+            "DamageDice": 6,
+            "DamageModifier": 0,
+            "DamageMultiplier": 28
+        }
+    },
+    "NuclearAntiMatterDmgTable": {
+        "None": {
+            "DamageDice": 0,
+            "DamageMultiplier": 0,
+            "LinkedDmgDice": 0,
+            "LinkedDmgMultiplier": 0
+        },
+        "25Kilo": {
+            "DamageDice": 4,
+            "DamageMultiplier": 1000,
+            "LinkedDmgDice": 3,
+            "LinkedDmgMultiplier": 1000
+        },
+        "100Kilo": {
+            "DamageDice": 8,
+            "DamageMultiplier": 1000,
+            "LinkedDmgDice": 6,
+            "LinkedDmgMultiplier": 2000
+        },
+        "2.5Mega": {
+            "DamageDice": 8,
+            "DamageMultiplier": 5000,
+            "LinkedDmgDice": 6,
+            "LinkedDmgMultiplier": 5000
+        },
+        "10Mega": {
+            "DamageDice": 8,
+            "DamageMultiplier": 10000,
+            "LinkedDmgDice": 6,
+            "LinkedDmgMultiplier": 20000
+        }
+    },
+    "ConversionDisintegratorHeatLaserTable": {
+        "3": {
+            "10Mile": [
+                15,
+                50
+            ],
+            "100Mile": [
+                2,
+                5
+            ],
+            "1000Mile": [
+                0,
+                0
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 1,
+            "DamageModifier": -4,
+            "DamageMultiplier": 0
+        },
+        "10": {
+            "10Mile": [
+                15,
+                50
+            ],
+            "100Mile": [
+                2,
+                5
+            ],
+            "1000Mile": [
+                0,
+                0
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 1,
+            "DamageModifier": -3,
+            "DamageMultiplier": 0
+        },
+        "30": {
+            "10Mile": [
+                15,
+                50
+            ],
+            "100Mile": [
+                2,
+                5
+            ],
+            "1000Mile": [
+                0,
+                0
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 1,
+            "DamageModifier": -2,
+            "DamageMultiplier": 0
+        },
+        "100": {
+            "10Mile": [
+                30,
+                100
+            ],
+            "100Mile": [
+                3,
+                10
+            ],
+            "1000Mile": [
+                0,
+                1
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 1,
+            "DamageModifier": 0,
+            "DamageMultiplier": 0
+        },
+        "300": {
+            "10Mile": [
+                30,
+                100
+            ],
+            "100Mile": [
+                3,
+                10
+            ],
+            "1000Mile": [
+                0,
+                1
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 1,
+            "DamageModifier": 2,
+            "DamageMultiplier": 0
+        },
+        "1000": {
+            "10Mile": [
+                30,
+                100
+            ],
+            "100Mile": [
+                3,
+                10
+            ],
+            "1000Mile": [
+                0,
+                1
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 2,
+            "DamageModifier": 0,
+            "DamageMultiplier": 0
+        },
+        "3000": {
+            "10Mile": [
+                70,
+                200
+            ],
+            "100Mile": [
+                7,
+                20
+            ],
+            "1000Mile": [
+                1,
+                2
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 3,
+            "DamageModifier": 0,
+            "DamageMultiplier": 0
+        },
+        "10000": {
+            "10Mile": [
+                70,
+                200
+            ],
+            "100Mile": [
+                7,
+                20
+            ],
+            "1000Mile": [
+                1,
+                2
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 4,
+            "DamageModifier": 0,
+            "DamageMultiplier": 0
+        },
+        "30000": {
+            "10Mile": [
+                70,
+                200
+            ],
+            "100Mile": [
+                7,
+                20
+            ],
+            "1000Mile": [
+                1,
+                2
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 6,
+            "DamageModifier": 0,
+            "DamageMultiplier": 0
+        },
+        "100000": {
+            "10Mile": [
+                150,
+                500
+            ],
+            "100Mile": [
+                15,
+                50
+            ],
+            "1000Mile": [
+                2,
+                5
+            ],
+            "10000Mile": [
+                0,
+                1
+            ],
+            "DamageDice": 2,
+            "DamageModifier": 0,
+            "DamageMultiplier": 5
+        },
+        "300000": {
+            "10Mile": [
+                150,
+                500
+            ],
+            "100Mile": [
+                15,
+                50
+            ],
+            "1000Mile": [
+                2,
+                5
+            ],
+            "10000Mile": [
+                0,
+                1
+            ],
+            "DamageDice": 3,
+            "DamageModifier": 0,
+            "DamageMultiplier": 5
+        },
+        "1000000": {
+            "10Mile": [
+                150,
+                500
+            ],
+            "100Mile": [
+                15,
+                50
+            ],
+            "1000Mile": [
+                2,
+                5
+            ],
+            "10000Mile": [
+                0,
+                1
+            ],
+            "DamageDice": 4,
+            "DamageModifier": 0,
+            "DamageMultiplier": 5
+        },
+        "3000000": {
+            "10Mile": [
+                300,
+                1000
+            ],
+            "100Mile": [
+                30,
+                100
+            ],
+            "1000Mile": [
+                3,
+                10
+            ],
+            "10000Mile": [
+                0,
+                1
+            ],
+            "DamageDice": 3,
+            "DamageModifier": 0,
+            "DamageMultiplier": 10
+        },
+        "10000000": {
+            "10Mile": [
+                300,
+                1000
+            ],
+            "100Mile": [
+                30,
+                100
+            ],
+            "1000Mile": [
+                3,
+                10
+            ],
+            "10000Mile": [
+                0,
+                1
+            ],
+            "DamageDice": 4,
+            "DamageModifier": 0,
+            "DamageMultiplier": 10
+        },
+        "30000000": {
+            "10Mile": [
+                300,
+                1000
+            ],
+            "100Mile": [
+                30,
+                100
+            ],
+            "1000Mile": [
+                3,
+                10
+            ],
+            "10000Mile": [
+                0,
+                1
+            ],
+            "DamageDice": 6,
+            "DamageModifier": 0,
+            "DamageMultiplier": 10
+        },
+        "100000000": {
+            "10Mile": [
+                700,
+                2000
+            ],
+            "100Mile": [
+                70,
+                200
+            ],
+            "1000Mile": [
+                7,
+                20
+            ],
+            "10000Mile": [
+                1,
+                2
+            ],
+            "DamageDice": 2,
+            "DamageModifier": 0,
+            "DamageMultiplier": 50
+        },
+        "300000000": {
+            "10Mile": [
+                700,
+                2000
+            ],
+            "100Mile": [
+                70,
+                200
+            ],
+            "1000Mile": [
+                7,
+                20
+            ],
+            "10000Mile": [
+                1,
+                2
+            ],
+            "DamageDice": 3,
+            "DamageModifier": 0,
+            "DamageMultiplier": 50
+        },
+        "1000000000": {
+            "10Mile": [
+                700,
+                2000
+            ],
+            "100Mile": [
+                70,
+                200
+            ],
+            "1000Mile": [
+                7,
+                20
+            ],
+            "10000Mile": [
+                1,
+                2
+            ],
+            "DamageDice": 2,
+            "DamageModifier": 0,
+            "DamageMultiplier": 100
+        },
+        "3000000000": {
+            "10Mile": [
+                1500,
+                5000
+            ],
+            "100Mile": [
+                150,
+                500
+            ],
+            "1000Mile": [
+                15,
+                50
+            ],
+            "10000Mile": [
+                2,
+                5
+            ],
+            "DamageDice": 3,
+            "DamageModifier": 0,
+            "DamageMultiplier": 100
+        },
+        "10000000000": {
+            "10Mile": [
+                1500,
+                5000
+            ],
+            "100Mile": [
+                150,
+                500
+            ],
+            "1000Mile": [
+                15,
+                50
+            ],
+            "10000Mile": [
+                2,
+                5
+            ],
+            "DamageDice": 4,
+            "DamageModifier": 0,
+            "DamageMultiplier": 100
+        },
+        "30000000000": {
+            "10Mile": [
+                1500,
+                5000
+            ],
+            "100Mile": [
+                150,
+                500
+            ],
+            "1000Mile": [
+                15,
+                50
+            ],
+            "10000Mile": [
+                2,
+                5
+            ],
+            "DamageDice": 6,
+            "DamageModifier": 0,
+            "DamageMultiplier": 100
+        },
+        "100000000000": {
+            "10Mile": [
+                3000,
+                10000
+            ],
+            "100Mile": [
+                300,
+                1000
+            ],
+            "1000Mile": [
+                30,
+                100
+            ],
+            "10000Mile": [
+                3,
+                10
+            ],
+            "DamageDice": 2,
+            "DamageModifier": 0,
+            "DamageMultiplier": 500
+        },
+        "300000000000": {
+            "10Mile": [
+                3000,
+                10000
+            ],
+            "100Mile": [
+                300,
+                1000
+            ],
+            "1000Mile": [
+                30,
+                100
+            ],
+            "10000Mile": [
+                3,
+                10
+            ],
+            "DamageDice": 3,
+            "DamageModifier": 0,
+            "DamageMultiplier": 500
+        },
+        "1000000000000": {
+            "10Mile": [
+                3000,
+                10000
+            ],
+            "100Mile": [
+                300,
+                1000
+            ],
+            "1000Mile": [
+                30,
+                100
+            ],
+            "10000Mile": [
+                3,
+                10
+            ],
+            "DamageDice": 2,
+            "DamageModifier": 0,
+            "DamageMultiplier": 1000
+        },
+        "3000000000000": {
+            "10Mile": [
+                5000,
+                15000
+            ],
+            "100Mile": [
+                300,
+                1000
+            ],
+            "1000Mile": [
+                30,
+                100
+            ],
+            "10000Mile": [
+                3,
+                10
+            ],
+            "DamageDice": 3,
+            "DamageModifier": 0,
+            "DamageMultiplier": 1000
+        }
+    },
+    "GraserUvXrayLaserTable": {
+        "3": {
+            "10Mile": [
+                30,
+                100
+            ],
+            "100Mile": [
+                3,
+                10
+            ],
+            "1000Mile": [
+                0,
+                1
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 1,
+            "DamageModifier": -4,
+            "DamageMultiplier": 0
+        },
+        "10": {
+            "10Mile": [
+                30,
+                100
+            ],
+            "100Mile": [
+                3,
+                10
+            ],
+            "1000Mile": [
+                0,
+                1
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 1,
+            "DamageModifier": -3,
+            "DamageMultiplier": 0
+        },
+        "30": {
+            "10Mile": [
+                30,
+                100
+            ],
+            "100Mile": [
+                3,
+                10
+            ],
+            "1000Mile": [
+                0,
+                1
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 1,
+            "DamageModifier": -2,
+            "DamageMultiplier": 0
+        },
+        "100": {
+            "10Mile": [
+                70,
+                200
+            ],
+            "100Mile": [
+                7,
+                20
+            ],
+            "1000Mile": [
+                1,
+                2
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 1,
+            "DamageModifier": 0,
+            "DamageMultiplier": 0
+        },
+        "300": {
+            "10Mile": [
+                70,
+                200
+            ],
+            "100Mile": [
+                7,
+                20
+            ],
+            "1000Mile": [
+                1,
+                2
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 1,
+            "DamageModifier": 2,
+            "DamageMultiplier": 0
+        },
+        "1000": {
+            "10Mile": [
+                70,
+                200
+            ],
+            "100Mile": [
+                7,
+                20
+            ],
+            "1000Mile": [
+                1,
+                2
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 2,
+            "DamageModifier": 0,
+            "DamageMultiplier": 0
+        },
+        "3000": {
+            "10Mile": [
+                150,
+                500
+            ],
+            "100Mile": [
+                15,
+                50
+            ],
+            "1000Mile": [
+                2,
+                5
+            ],
+            "10000Mile": [
+                0,
+                1
+            ],
+            "DamageDice": 3,
+            "DamageModifier": 0,
+            "DamageMultiplier": 0
+        },
+        "10000": {
+            "10Mile": [
+                150,
+                500
+            ],
+            "100Mile": [
+                15,
+                50
+            ],
+            "1000Mile": [
+                2,
+                5
+            ],
+            "10000Mile": [
+                0,
+                1
+            ],
+            "DamageDice": 4,
+            "DamageModifier": 0,
+            "DamageMultiplier": 0
+        },
+        "30000": {
+            "10Mile": [
+                150,
+                500
+            ],
+            "100Mile": [
+                15,
+                50
+            ],
+            "1000Mile": [
+                2,
+                5
+            ],
+            "10000Mile": [
+                0,
+                1
+            ],
+            "DamageDice": 6,
+            "DamageModifier": 0,
+            "DamageMultiplier": 0
+        },
+        "100000": {
+            "10Mile": [
+                300,
+                1000
+            ],
+            "100Mile": [
+                30,
+                100
+            ],
+            "1000Mile": [
+                3,
+                10
+            ],
+            "10000Mile": [
+                0,
+                1
+            ],
+            "DamageDice": 2,
+            "DamageModifier": 0,
+            "DamageMultiplier": 5
+        },
+        "300000": {
+            "10Mile": [
+                300,
+                1000
+            ],
+            "100Mile": [
+                30,
+                100
+            ],
+            "1000Mile": [
+                3,
+                10
+            ],
+            "10000Mile": [
+                0,
+                1
+            ],
+            "DamageDice": 3,
+            "DamageModifier": 0,
+            "DamageMultiplier": 5
+        },
+        "1000000": {
+            "10Mile": [
+                300,
+                1000
+            ],
+            "100Mile": [
+                30,
+                100
+            ],
+            "1000Mile": [
+                3,
+                10
+            ],
+            "10000Mile": [
+                0,
+                1
+            ],
+            "DamageDice": 4,
+            "DamageModifier": 0,
+            "DamageMultiplier": 5
+        },
+        "3000000": {
+            "10Mile": [
+                700,
+                2000
+            ],
+            "100Mile": [
+                70,
+                200
+            ],
+            "1000Mile": [
+                7,
+                20
+            ],
+            "10000Mile": [
+                1,
+                2
+            ],
+            "DamageDice": 3,
+            "DamageModifier": 0,
+            "DamageMultiplier": 10
+        },
+        "10000000": {
+            "10Mile": [
+                700,
+                2000
+            ],
+            "100Mile": [
+                70,
+                200
+            ],
+            "1000Mile": [
+                7,
+                20
+            ],
+            "10000Mile": [
+                1,
+                2
+            ],
+            "DamageDice": 4,
+            "DamageModifier": 0,
+            "DamageMultiplier": 10
+        },
+        "30000000": {
+            "10Mile": [
+                700,
+                2000
+            ],
+            "100Mile": [
+                70,
+                200
+            ],
+            "1000Mile": [
+                7,
+                20
+            ],
+            "10000Mile": [
+                1,
+                2
+            ],
+            "DamageDice": 6,
+            "DamageModifier": 0,
+            "DamageMultiplier": 10
+        },
+        "100000000": {
+            "10Mile": [
+                1500,
+                5000
+            ],
+            "100Mile": [
+                150,
+                500
+            ],
+            "1000Mile": [
+                15,
+                50
+            ],
+            "10000Mile": [
+                2,
+                5
+            ],
+            "DamageDice": 2,
+            "DamageModifier": 0,
+            "DamageMultiplier": 50
+        },
+        "300000000": {
+            "10Mile": [
+                1500,
+                5000
+            ],
+            "100Mile": [
+                150,
+                500
+            ],
+            "1000Mile": [
+                15,
+                50
+            ],
+            "10000Mile": [
+                2,
+                5
+            ],
+            "DamageDice": 3,
+            "DamageModifier": 0,
+            "DamageMultiplier": 50
+        },
+        "1000000000": {
+            "10Mile": [
+                1500,
+                5000
+            ],
+            "100Mile": [
+                150,
+                500
+            ],
+            "1000Mile": [
+                15,
+                50
+            ],
+            "10000Mile": [
+                2,
+                5
+            ],
+            "DamageDice": 2,
+            "DamageModifier": 0,
+            "DamageMultiplier": 100
+        },
+        "3000000000": {
+            "10Mile": [
+                3000,
+                10000
+            ],
+            "100Mile": [
+                300,
+                1000
+            ],
+            "1000Mile": [
+                30,
+                100
+            ],
+            "10000Mile": [
+                3,
+                10
+            ],
+            "DamageDice": 3,
+            "DamageModifier": 0,
+            "DamageMultiplier": 100
+        },
+        "10000000000": {
+            "10Mile": [
+                3000,
+                10000
+            ],
+            "100Mile": [
+                300,
+                1000
+            ],
+            "1000Mile": [
+                30,
+                100
+            ],
+            "10000Mile": [
+                3,
+                10
+            ],
+            "DamageDice": 4,
+            "DamageModifier": 0,
+            "DamageMultiplier": 100
+        },
+        "30000000000": {
+            "10Mile": [
+                3000,
+                10000
+            ],
+            "100Mile": [
+                300,
+                1000
+            ],
+            "1000Mile": [
+                30,
+                100
+            ],
+            "10000Mile": [
+                3,
+                10
+            ],
+            "DamageDice": 6,
+            "DamageModifier": 0,
+            "DamageMultiplier": 100
+        },
+        "100000000000": {
+            "10Mile": [
+                7000,
+                20000
+            ],
+            "100Mile": [
+                700,
+                2000
+            ],
+            "1000Mile": [
+                70,
+                200
+            ],
+            "10000Mile": [
+                7,
+                20
+            ],
+            "DamageDice": 2,
+            "DamageModifier": 0,
+            "DamageMultiplier": 500
+        },
+        "300000000000": {
+            "10Mile": [
+                7000,
+                20000
+            ],
+            "100Mile": [
+                700,
+                2000
+            ],
+            "1000Mile": [
+                70,
+                200
+            ],
+            "10000Mile": [
+                7,
+                20
+            ],
+            "DamageDice": 3,
+            "DamageModifier": 0,
+            "DamageMultiplier": 500
+        },
+        "1000000000000": {
+            "10Mile": [
+                7000,
+                20000
+            ],
+            "100Mile": [
+                700,
+                2000
+            ],
+            "1000Mile": [
+                70,
+                200
+            ],
+            "10000Mile": [
+                7,
+                20
+            ],
+            "DamageDice": 2,
+            "DamageModifier": 0,
+            "DamageMultiplier": 1000
+        },
+        "3000000000000": {
+            "10Mile": [
+                15000,
+                50000
+            ],
+            "100Mile": [
+                1500,
+                5000
+            ],
+            "1000Mile": [
+                150,
+                500
+            ],
+            "10000Mile": [
+                15,
+                50
+            ],
+            "DamageDice": 3,
+            "DamageModifier": 0,
+            "DamageMultiplier": 1000
+        }
+    },
+    "GhostParticleParticleTable": {
+        "3": {
+            "10Mile": [
+                7,
+                20
+            ],
+            "100Mile": [
+                1,
+                2
+            ],
+            "1000Mile": [
+                0,
+                0
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 1,
+            "DamageModifier": -4,
+            "DamageMultiplier": 0
+        },
+        "10": {
+            "10Mile": [
+                7,
+                20
+            ],
+            "100Mile": [
+                1,
+                2
+            ],
+            "1000Mile": [
+                0,
+                0
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 1,
+            "DamageModifier": -3,
+            "DamageMultiplier": 0
+        },
+        "30": {
+            "10Mile": [
+                7,
+                20
+            ],
+            "100Mile": [
+                1,
+                2
+            ],
+            "1000Mile": [
+                0,
+                0
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 1,
+            "DamageModifier": -2,
+            "DamageMultiplier": 0
+        },
+        "100": {
+            "10Mile": [
+                15,
+                50
+            ],
+            "100Mile": [
+                2,
+                5
+            ],
+            "1000Mile": [
+                0,
+                1
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 1,
+            "DamageModifier": 0,
+            "DamageMultiplier": 0
+        },
+        "300": {
+            "10Mile": [
+                15,
+                50
+            ],
+            "100Mile": [
+                2,
+                5
+            ],
+            "1000Mile": [
+                0,
+                1
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 1,
+            "DamageModifier": 2,
+            "DamageMultiplier": 0
+        },
+        "1000": {
+            "10Mile": [
+                15,
+                50
+            ],
+            "100Mile": [
+                2,
+                5
+            ],
+            "1000Mile": [
+                0,
+                1
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 2,
+            "DamageModifier": 0,
+            "DamageMultiplier": 0
+        },
+        "3000": {
+            "10Mile": [
+                30,
+                100
+            ],
+            "100Mile": [
+                3,
+                10
+            ],
+            "1000Mile": [
+                0,
+                1
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 3,
+            "DamageModifier": 0,
+            "DamageMultiplier": 0
+        },
+        "10000": {
+            "10Mile": [
+                30,
+                100
+            ],
+            "100Mile": [
+                3,
+                10
+            ],
+            "1000Mile": [
+                0,
+                1
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 4,
+            "DamageModifier": 0,
+            "DamageMultiplier": 0
+        },
+        "30000": {
+            "10Mile": [
+                30,
+                100
+            ],
+            "100Mile": [
+                3,
+                10
+            ],
+            "1000Mile": [
+                0,
+                1
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 6,
+            "DamageModifier": 0,
+            "DamageMultiplier": 0
+        },
+        "100000": {
+            "10Mile": [
+                70,
+                200
+            ],
+            "100Mile": [
+                7,
+                20
+            ],
+            "1000Mile": [
+                1,
+                2
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 2,
+            "DamageModifier": 0,
+            "DamageMultiplier": 5
+        },
+        "300000": {
+            "10Mile": [
+                70,
+                200
+            ],
+            "100Mile": [
+                7,
+                20
+            ],
+            "1000Mile": [
+                1,
+                2
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 3,
+            "DamageModifier": 0,
+            "DamageMultiplier": 5
+        },
+        "1000000": {
+            "10Mile": [
+                70,
+                200
+            ],
+            "100Mile": [
+                7,
+                20
+            ],
+            "1000Mile": [
+                1,
+                2
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 4,
+            "DamageModifier": 0,
+            "DamageMultiplier": 5
+        },
+        "3000000": {
+            "10Mile": [
+                150,
+                500
+            ],
+            "100Mile": [
+                15,
+                50
+            ],
+            "1000Mile": [
+                2,
+                5
+            ],
+            "10000Mile": [
+                0,
+                1
+            ],
+            "DamageDice": 3,
+            "DamageModifier": 0,
+            "DamageMultiplier": 10
+        },
+        "10000000": {
+            "10Mile": [
+                150,
+                500
+            ],
+            "100Mile": [
+                15,
+                50
+            ],
+            "1000Mile": [
+                2,
+                5
+            ],
+            "10000Mile": [
+                0,
+                1
+            ],
+            "DamageDice": 4,
+            "DamageModifier": 0,
+            "DamageMultiplier": 10
+        },
+        "30000000": {
+            "10Mile": [
+                150,
+                500
+            ],
+            "100Mile": [
+                15,
+                50
+            ],
+            "1000Mile": [
+                2,
+                5
+            ],
+            "10000Mile": [
+                0,
+                1
+            ],
+            "DamageDice": 6,
+            "DamageModifier": 0,
+            "DamageMultiplier": 10
+        },
+        "100000000": {
+            "10Mile": [
+                300,
+                1000
+            ],
+            "100Mile": [
+                30,
+                100
+            ],
+            "1000Mile": [
+                3,
+                10
+            ],
+            "10000Mile": [
+                0,
+                1
+            ],
+            "DamageDice": 2,
+            "DamageModifier": 0,
+            "DamageMultiplier": 50
+        },
+        "300000000": {
+            "10Mile": [
+                300,
+                1000
+            ],
+            "100Mile": [
+                30,
+                100
+            ],
+            "1000Mile": [
+                3,
+                10
+            ],
+            "10000Mile": [
+                0,
+                1
+            ],
+            "DamageDice": 3,
+            "DamageModifier": 0,
+            "DamageMultiplier": 50
+        },
+        "1000000000": {
+            "10Mile": [
+                300,
+                1000
+            ],
+            "100Mile": [
+                30,
+                100
+            ],
+            "1000Mile": [
+                3,
+                10
+            ],
+            "10000Mile": [
+                0,
+                1
+            ],
+            "DamageDice": 2,
+            "DamageModifier": 0,
+            "DamageMultiplier": 100
+        },
+        "3000000000": {
+            "10Mile": [
+                700,
+                2000
+            ],
+            "100Mile": [
+                70,
+                200
+            ],
+            "1000Mile": [
+                7,
+                20
+            ],
+            "10000Mile": [
+                1,
+                2
+            ],
+            "DamageDice": 3,
+            "DamageModifier": 0,
+            "DamageMultiplier": 100
+        },
+        "10000000000": {
+            "10Mile": [
+                700,
+                2000
+            ],
+            "100Mile": [
+                70,
+                200
+            ],
+            "1000Mile": [
+                7,
+                20
+            ],
+            "10000Mile": [
+                1,
+                2
+            ],
+            "DamageDice": 4,
+            "DamageModifier": 0,
+            "DamageMultiplier": 100
+        },
+        "30000000000": {
+            "10Mile": [
+                700,
+                2000
+            ],
+            "100Mile": [
+                70,
+                200
+            ],
+            "1000Mile": [
+                7,
+                20
+            ],
+            "10000Mile": [
+                1,
+                2
+            ],
+            "DamageDice": 6,
+            "DamageModifier": 0,
+            "DamageMultiplier": 100
+        },
+        "100000000000": {
+            "10Mile": [
+                1500,
+                5000
+            ],
+            "100Mile": [
+                150,
+                500
+            ],
+            "1000Mile": [
+                15,
+                50
+            ],
+            "10000Mile": [
+                2,
+                5
+            ],
+            "DamageDice": 2,
+            "DamageModifier": 0,
+            "DamageMultiplier": 500
+        },
+        "300000000000": {
+            "10Mile": [
+                1500,
+                5000
+            ],
+            "100Mile": [
+                150,
+                500
+            ],
+            "1000Mile": [
+                15,
+                50
+            ],
+            "10000Mile": [
+                2,
+                5
+            ],
+            "DamageDice": 3,
+            "DamageModifier": 0,
+            "DamageMultiplier": 500
+        },
+        "1000000000000": {
+            "10Mile": [
+                1500,
+                5000
+            ],
+            "100Mile": [
+                150,
+                500
+            ],
+            "1000Mile": [
+                15,
+                50
+            ],
+            "10000Mile": [
+                2,
+                5
+            ],
+            "DamageDice": 2,
+            "DamageModifier": 0,
+            "DamageMultiplier": 1000
+        },
+        "3000000000000": {
+            "10Mile": [
+                3000,
+                10000
+            ],
+            "100Mile": [
+                300,
+                1000
+            ],
+            "1000Mile": [
+                30,
+                100
+            ],
+            "10000Mile": [
+                3,
+                10
+            ],
+            "DamageDice": 3,
+            "DamageModifier": 0,
+            "DamageMultiplier": 1000
+        }
+    },
+    "AntiParticleTable": {
+        "3": {
+            "10Mile": [
+                7,
+                20
+            ],
+            "100Mile": [
+                1,
+                2
+            ],
+            "1000Mile": [
+                0,
+                0
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 1,
+            "DamageModifier": -2,
+            "DamageMultiplier": 0
+        },
+        "10": {
+            "10Mile": [
+                7,
+                20
+            ],
+            "100Mile": [
+                1,
+                2
+            ],
+            "1000Mile": [
+                0,
+                0
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 1,
+            "DamageModifier": -1,
+            "DamageMultiplier": 0
+        },
+        "30": {
+            "10Mile": [
+                7,
+                20
+            ],
+            "100Mile": [
+                1,
+                2
+            ],
+            "1000Mile": [
+                0,
+                0
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 1,
+            "DamageModifier": 1,
+            "DamageMultiplier": 0
+        },
+        "100": {
+            "10Mile": [
+                15,
+                50
+            ],
+            "100Mile": [
+                2,
+                5
+            ],
+            "1000Mile": [
+                0,
+                1
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 2,
+            "DamageModifier": 0,
+            "DamageMultiplier": 0
+        },
+        "300": {
+            "10Mile": [
+                15,
+                50
+            ],
+            "100Mile": [
+                2,
+                5
+            ],
+            "1000Mile": [
+                0,
+                1
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 3,
+            "DamageModifier": 0,
+            "DamageMultiplier": 0
+        },
+        "1000": {
+            "10Mile": [
+                15,
+                50
+            ],
+            "100Mile": [
+                2,
+                5
+            ],
+            "1000Mile": [
+                0,
+                1
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 4,
+            "DamageModifier": 0,
+            "DamageMultiplier": 0
+        },
+        "3000": {
+            "10Mile": [
+                30,
+                100
+            ],
+            "100Mile": [
+                3,
+                10
+            ],
+            "1000Mile": [
+                0,
+                1
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 6,
+            "DamageModifier": 0,
+            "DamageMultiplier": 0
+        },
+        "10000": {
+            "10Mile": [
+                30,
+                100
+            ],
+            "100Mile": [
+                3,
+                10
+            ],
+            "1000Mile": [
+                0,
+                1
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 8,
+            "DamageModifier": 0,
+            "DamageMultiplier": 0
+        },
+        "30000": {
+            "10Mile": [
+                30,
+                100
+            ],
+            "100Mile": [
+                3,
+                10
+            ],
+            "1000Mile": [
+                0,
+                1
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 6,
+            "DamageModifier": 0,
+            "DamageMultiplier": 2
+        },
+        "100000": {
+            "10Mile": [
+                70,
+                200
+            ],
+            "100Mile": [
+                7,
+                20
+            ],
+            "1000Mile": [
+                1,
+                2
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 4,
+            "DamageModifier": 0,
+            "DamageMultiplier": 5
+        },
+        "300000": {
+            "10Mile": [
+                70,
+                200
+            ],
+            "100Mile": [
+                7,
+                20
+            ],
+            "1000Mile": [
+                1,
+                2
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 3,
+            "DamageModifier": 0,
+            "DamageMultiplier": 10
+        },
+        "1000000": {
+            "10Mile": [
+                70,
+                200
+            ],
+            "100Mile": [
+                7,
+                20
+            ],
+            "1000Mile": [
+                1,
+                2
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 4,
+            "DamageModifier": 0,
+            "DamageMultiplier": 10
+        },
+        "3000000": {
+            "10Mile": [
+                150,
+                500
+            ],
+            "100Mile": [
+                15,
+                50
+            ],
+            "1000Mile": [
+                2,
+                5
+            ],
+            "10000Mile": [
+                0,
+                1
+            ],
+            "DamageDice": 6,
+            "DamageModifier": 0,
+            "DamageMultiplier": 10
+        },
+        "10000000": {
+            "10Mile": [
+                150,
+                500
+            ],
+            "100Mile": [
+                15,
+                50
+            ],
+            "1000Mile": [
+                2,
+                5
+            ],
+            "10000Mile": [
+                0,
+                1
+            ],
+            "DamageDice": 8,
+            "DamageModifier": 0,
+            "DamageMultiplier": 10
+        },
+        "30000000": {
+            "10Mile": [
+                150,
+                500
+            ],
+            "100Mile": [
+                15,
+                50
+            ],
+            "1000Mile": [
+                2,
+                5
+            ],
+            "10000Mile": [
+                0,
+                1
+            ],
+            "DamageDice": 6,
+            "DamageModifier": 0,
+            "DamageMultiplier": 20
+        },
+        "100000000": {
+            "10Mile": [
+                300,
+                1000
+            ],
+            "100Mile": [
+                30,
+                100
+            ],
+            "1000Mile": [
+                3,
+                10
+            ],
+            "10000Mile": [
+                0,
+                1
+            ],
+            "DamageDice": 2,
+            "DamageModifier": 0,
+            "DamageMultiplier": 100
+        },
+        "300000000": {
+            "10Mile": [
+                300,
+                1000
+            ],
+            "100Mile": [
+                30,
+                100
+            ],
+            "1000Mile": [
+                3,
+                10
+            ],
+            "10000Mile": [
+                0,
+                1
+            ],
+            "DamageDice": 3,
+            "DamageModifier": 0,
+            "DamageMultiplier": 100
+        },
+        "1000000000": {
+            "10Mile": [
+                300,
+                1000
+            ],
+            "100Mile": [
+                30,
+                100
+            ],
+            "1000Mile": [
+                3,
+                10
+            ],
+            "10000Mile": [
+                0,
+                1
+            ],
+            "DamageDice": 4,
+            "DamageModifier": 0,
+            "DamageMultiplier": 100
+        },
+        "3000000000": {
+            "10Mile": [
+                700,
+                2000
+            ],
+            "100Mile": [
+                70,
+                200
+            ],
+            "1000Mile": [
+                7,
+                20
+            ],
+            "10000Mile": [
+                1,
+                2
+            ],
+            "DamageDice": 6,
+            "DamageModifier": 0,
+            "DamageMultiplier": 100
+        },
+        "10000000000": {
+            "10Mile": [
+                700,
+                2000
+            ],
+            "100Mile": [
+                70,
+                200
+            ],
+            "1000Mile": [
+                7,
+                20
+            ],
+            "10000Mile": [
+                1,
+                2
+            ],
+            "DamageDice": 8,
+            "DamageModifier": 0,
+            "DamageMultiplier": 100
+        },
+        "30000000000": {
+            "10Mile": [
+                700,
+                2000
+            ],
+            "100Mile": [
+                70,
+                200
+            ],
+            "1000Mile": [
+                7,
+                20
+            ],
+            "10000Mile": [
+                1,
+                2
+            ],
+            "DamageDice": 6,
+            "DamageModifier": 0,
+            "DamageMultiplier": 200
+        },
+        "100000000000": {
+            "10Mile": [
+                1500,
+                5000
+            ],
+            "100Mile": [
+                150,
+                500
+            ],
+            "1000Mile": [
+                15,
+                50
+            ],
+            "10000Mile": [
+                2,
+                5
+            ],
+            "DamageDice": 2,
+            "DamageModifier": 0,
+            "DamageMultiplier": 1000
+        },
+        "300000000000": {
+            "10Mile": [
+                1500,
+                5000
+            ],
+            "100Mile": [
+                150,
+                500
+            ],
+            "1000Mile": [
+                15,
+                50
+            ],
+            "10000Mile": [
+                2,
+                5
+            ],
+            "DamageDice": 3,
+            "DamageModifier": 0,
+            "DamageMultiplier": 1000
+        },
+        "1000000000000": {
+            "10Mile": [
+                1500,
+                5000
+            ],
+            "100Mile": [
+                150,
+                500
+            ],
+            "1000Mile": [
+                15,
+                50
+            ],
+            "10000Mile": [
+                2,
+                5
+            ],
+            "DamageDice": 4,
+            "DamageModifier": 0,
+            "DamageMultiplier": 1000
+        },
+        "3000000000000": {
+            "10Mile": [
+                3000,
+                10000
+            ],
+            "100Mile": [
+                300,
+                1000
+            ],
+            "1000Mile": [
+                30,
+                100
+            ],
+            "10000Mile": [
+                3,
+                10
+            ],
+            "DamageDice": 6,
+            "DamageModifier": 0,
+            "DamageMultiplier": 1000
+        }
+    },
+    "TractorGravitonTable": {
+        "3": {
+            "10Mile": [
+                7,
+                20
+            ],
+            "100Mile": [
+                1,
+                2
+            ],
+            "1000Mile": [
+                0,
+                0
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 0,
+            "DamageModifier": 0,
+            "DamageMultiplier": 0
+        },
+        "10": {
+            "10Mile": [
+                7,
+                20
+            ],
+            "100Mile": [
+                1,
+                2
+            ],
+            "1000Mile": [
+                0,
+                0
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 1,
+            "DamageModifier": -5,
+            "DamageMultiplier": 0
+        },
+        "30": {
+            "10Mile": [
+                7,
+                20
+            ],
+            "100Mile": [
+                1,
+                2
+            ],
+            "1000Mile": [
+                0,
+                0
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 1,
+            "DamageModifier": -4,
+            "DamageMultiplier": 0
+        },
+        "100": {
+            "10Mile": [
+                15,
+                50
+            ],
+            "100Mile": [
+                2,
+                5
+            ],
+            "1000Mile": [
+                0,
+                1
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 1,
+            "DamageModifier": -3,
+            "DamageMultiplier": 0
+        },
+        "300": {
+            "10Mile": [
+                15,
+                50
+            ],
+            "100Mile": [
+                2,
+                5
+            ],
+            "1000Mile": [
+                0,
+                1
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 1,
+            "DamageModifier": -2,
+            "DamageMultiplier": 0
+        },
+        "1000": {
+            "10Mile": [
+                15,
+                50
+            ],
+            "100Mile": [
+                2,
+                5
+            ],
+            "1000Mile": [
+                0,
+                1
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 1,
+            "DamageModifier": 0,
+            "DamageMultiplier": 0
+        },
+        "3000": {
+            "10Mile": [
+                30,
+                100
+            ],
+            "100Mile": [
+                3,
+                10
+            ],
+            "1000Mile": [
+                0,
+                1
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 1,
+            "DamageModifier": 2,
+            "DamageMultiplier": 0
+        },
+        "10000": {
+            "10Mile": [
+                30,
+                100
+            ],
+            "100Mile": [
+                3,
+                10
+            ],
+            "1000Mile": [
+                0,
+                1
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 2,
+            "DamageModifier": 0,
+            "DamageMultiplier": 0
+        },
+        "30000": {
+            "10Mile": [
+                30,
+                100
+            ],
+            "100Mile": [
+                3,
+                10
+            ],
+            "1000Mile": [
+                0,
+                1
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 3,
+            "DamageModifier": 0,
+            "DamageMultiplier": 0
+        },
+        "100000": {
+            "10Mile": [
+                70,
+                200
+            ],
+            "100Mile": [
+                7,
+                20
+            ],
+            "1000Mile": [
+                1,
+                2
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 4,
+            "DamageModifier": 0,
+            "DamageMultiplier": 0
+        },
+        "300000": {
+            "10Mile": [
+                70,
+                200
+            ],
+            "100Mile": [
+                7,
+                20
+            ],
+            "1000Mile": [
+                1,
+                2
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 6,
+            "DamageModifier": 0,
+            "DamageMultiplier": 0
+        },
+        "1000000": {
+            "10Mile": [
+                70,
+                200
+            ],
+            "100Mile": [
+                7,
+                20
+            ],
+            "1000Mile": [
+                1,
+                2
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 2,
+            "DamageModifier": 0,
+            "DamageMultiplier": 5
+        },
+        "3000000": {
+            "10Mile": [
+                150,
+                500
+            ],
+            "100Mile": [
+                15,
+                50
+            ],
+            "1000Mile": [
+                2,
+                5
+            ],
+            "10000Mile": [
+                0,
+                1
+            ],
+            "DamageDice": 3,
+            "DamageModifier": 0,
+            "DamageMultiplier": 5
+        },
+        "10000000": {
+            "10Mile": [
+                150,
+                500
+            ],
+            "100Mile": [
+                15,
+                50
+            ],
+            "1000Mile": [
+                2,
+                5
+            ],
+            "10000Mile": [
+                0,
+                1
+            ],
+            "DamageDice": 4,
+            "DamageModifier": 0,
+            "DamageMultiplier": 5
+        },
+        "30000000": {
+            "10Mile": [
+                150,
+                500
+            ],
+            "100Mile": [
+                15,
+                50
+            ],
+            "1000Mile": [
+                2,
+                5
+            ],
+            "10000Mile": [
+                0,
+                1
+            ],
+            "DamageDice": 3,
+            "DamageModifier": 0,
+            "DamageMultiplier": 10
+        },
+        "100000000": {
+            "10Mile": [
+                300,
+                1000
+            ],
+            "100Mile": [
+                30,
+                100
+            ],
+            "1000Mile": [
+                3,
+                10
+            ],
+            "10000Mile": [
+                0,
+                1
+            ],
+            "DamageDice": 4,
+            "DamageModifier": 0,
+            "DamageMultiplier": 10
+        },
+        "300000000": {
+            "10Mile": [
+                300,
+                1000
+            ],
+            "100Mile": [
+                30,
+                100
+            ],
+            "1000Mile": [
+                3,
+                10
+            ],
+            "10000Mile": [
+                0,
+                1
+            ],
+            "DamageDice": 6,
+            "DamageModifier": 0,
+            "DamageMultiplier": 10
+        },
+        "1000000000": {
+            "10Mile": [
+                300,
+                1000
+            ],
+            "100Mile": [
+                30,
+                100
+            ],
+            "1000Mile": [
+                3,
+                10
+            ],
+            "10000Mile": [
+                0,
+                1
+            ],
+            "DamageDice": 2,
+            "DamageModifier": 0,
+            "DamageMultiplier": 50
+        },
+        "3000000000": {
+            "10Mile": [
+                700,
+                2000
+            ],
+            "100Mile": [
+                70,
+                200
+            ],
+            "1000Mile": [
+                7,
+                20
+            ],
+            "10000Mile": [
+                1,
+                2
+            ],
+            "DamageDice": 3,
+            "DamageModifier": 0,
+            "DamageMultiplier": 50
+        },
+        "10000000000": {
+            "10Mile": [
+                700,
+                2000
+            ],
+            "100Mile": [
+                70,
+                200
+            ],
+            "1000Mile": [
+                7,
+                20
+            ],
+            "10000Mile": [
+                1,
+                2
+            ],
+            "DamageDice": 2,
+            "DamageModifier": 0,
+            "DamageMultiplier": 100
+        },
+        "30000000000": {
+            "10Mile": [
+                700,
+                2000
+            ],
+            "100Mile": [
+                70,
+                200
+            ],
+            "1000Mile": [
+                7,
+                20
+            ],
+            "10000Mile": [
+                1,
+                2
+            ],
+            "DamageDice": 3,
+            "DamageModifier": 0,
+            "DamageMultiplier": 100
+        },
+        "100000000000": {
+            "10Mile": [
+                1500,
+                5000
+            ],
+            "100Mile": [
+                150,
+                500
+            ],
+            "1000Mile": [
+                15,
+                50
+            ],
+            "10000Mile": [
+                2,
+                5
+            ],
+            "DamageDice": 4,
+            "DamageModifier": 0,
+            "DamageMultiplier": 100
+        },
+        "300000000000": {
+            "10Mile": [
+                1500,
+                5000
+            ],
+            "100Mile": [
+                150,
+                500
+            ],
+            "1000Mile": [
+                15,
+                50
+            ],
+            "10000Mile": [
+                2,
+                5
+            ],
+            "DamageDice": 6,
+            "DamageModifier": 0,
+            "DamageMultiplier": 100
+        },
+        "1000000000000": {
+            "10Mile": [
+                1500,
+                5000
+            ],
+            "100Mile": [
+                150,
+                500
+            ],
+            "1000Mile": [
+                15,
+                50
+            ],
+            "10000Mile": [
+                2,
+                5
+            ],
+            "DamageDice": 2,
+            "DamageModifier": 0,
+            "DamageMultiplier": 500
+        },
+        "3000000000000": {
+            "10Mile": [
+                3000,
+                10000
+            ],
+            "100Mile": [
+                300,
+                1000
+            ],
+            "1000Mile": [
+                30,
+                100
+            ],
+            "10000Mile": [
+                3,
+                10
+            ],
+            "DamageDice": 3,
+            "DamageModifier": 0,
+            "DamageMultiplier": 500
+        }
+    },
+    "PlasmaTable": {
+        "3": {
+            "10Mile": [
+                3,
+                10
+            ],
+            "100Mile": [
+                0,
+                1
+            ],
+            "1000Mile": [
+                0,
+                0
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 1,
+            "DamageModifier": -2,
+            "DamageMultiplier": 0
+        },
+        "10": {
+            "10Mile": [
+                3,
+                10
+            ],
+            "100Mile": [
+                0,
+                1
+            ],
+            "1000Mile": [
+                0,
+                0
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 1,
+            "DamageModifier": -1,
+            "DamageMultiplier": 0
+        },
+        "30": {
+            "10Mile": [
+                3,
+                10
+            ],
+            "100Mile": [
+                0,
+                1
+            ],
+            "1000Mile": [
+                0,
+                0
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 1,
+            "DamageModifier": 1,
+            "DamageMultiplier": 0
+        },
+        "100": {
+            "10Mile": [
+                7,
+                20
+            ],
+            "100Mile": [
+                1,
+                2
+            ],
+            "1000Mile": [
+                0,
+                0
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 2,
+            "DamageModifier": 0,
+            "DamageMultiplier": 0
+        },
+        "300": {
+            "10Mile": [
+                7,
+                20
+            ],
+            "100Mile": [
+                1,
+                2
+            ],
+            "1000Mile": [
+                0,
+                0
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 3,
+            "DamageModifier": 0,
+            "DamageMultiplier": 0
+        },
+        "1000": {
+            "10Mile": [
+                7,
+                20
+            ],
+            "100Mile": [
+                1,
+                2
+            ],
+            "1000Mile": [
+                0,
+                0
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 4,
+            "DamageModifier": 0,
+            "DamageMultiplier": 0
+        },
+        "3000": {
+            "10Mile": [
+                15,
+                50
+            ],
+            "100Mile": [
+                2,
+                5
+            ],
+            "1000Mile": [
+                0,
+                1
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 6,
+            "DamageModifier": 0,
+            "DamageMultiplier": 0
+        },
+        "10000": {
+            "10Mile": [
+                15,
+                50
+            ],
+            "100Mile": [
+                2,
+                5
+            ],
+            "1000Mile": [
+                0,
+                1
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 8,
+            "DamageModifier": 0,
+            "DamageMultiplier": 0
+        },
+        "30000": {
+            "10Mile": [
+                15,
+                50
+            ],
+            "100Mile": [
+                2,
+                5
+            ],
+            "1000Mile": [
+                0,
+                1
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 6,
+            "DamageModifier": 0,
+            "DamageMultiplier": 2
+        },
+        "100000": {
+            "10Mile": [
+                30,
+                100
+            ],
+            "100Mile": [
+                3,
+                10
+            ],
+            "1000Mile": [
+                0,
+                1
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 4,
+            "DamageModifier": 0,
+            "DamageMultiplier": 5
+        },
+        "300000": {
+            "10Mile": [
+                30,
+                100
+            ],
+            "100Mile": [
+                3,
+                10
+            ],
+            "1000Mile": [
+                0,
+                1
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 3,
+            "DamageModifier": 0,
+            "DamageMultiplier": 10
+        },
+        "1000000": {
+            "10Mile": [
+                30,
+                100
+            ],
+            "100Mile": [
+                3,
+                10
+            ],
+            "1000Mile": [
+                0,
+                1
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 4,
+            "DamageModifier": 0,
+            "DamageMultiplier": 10
+        },
+        "3000000": {
+            "10Mile": [
+                70,
+                200
+            ],
+            "100Mile": [
+                7,
+                20
+            ],
+            "1000Mile": [
+                1,
+                2
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 6,
+            "DamageModifier": 0,
+            "DamageMultiplier": 10
+        },
+        "10000000": {
+            "10Mile": [
+                70,
+                200
+            ],
+            "100Mile": [
+                7,
+                20
+            ],
+            "1000Mile": [
+                1,
+                2
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 8,
+            "DamageModifier": 0,
+            "DamageMultiplier": 10
+        },
+        "30000000": {
+            "10Mile": [
+                70,
+                200
+            ],
+            "100Mile": [
+                7,
+                20
+            ],
+            "1000Mile": [
+                1,
+                2
+            ],
+            "10000Mile": [
+                0,
+                0
+            ],
+            "DamageDice": 6,
+            "DamageModifier": 0,
+            "DamageMultiplier": 20
+        },
+        "100000000": {
+            "10Mile": [
+                150,
+                500
+            ],
+            "100Mile": [
+                15,
+                50
+            ],
+            "1000Mile": [
+                2,
+                5
+            ],
+            "10000Mile": [
+                0,
+                1
+            ],
+            "DamageDice": 2,
+            "DamageModifier": 0,
+            "DamageMultiplier": 100
+        },
+        "300000000": {
+            "10Mile": [
+                150,
+                500
+            ],
+            "100Mile": [
+                15,
+                50
+            ],
+            "1000Mile": [
+                2,
+                5
+            ],
+            "10000Mile": [
+                0,
+                1
+            ],
+            "DamageDice": 3,
+            "DamageModifier": 0,
+            "DamageMultiplier": 100
+        },
+        "1000000000": {
+            "10Mile": [
+                150,
+                500
+            ],
+            "100Mile": [
+                15,
+                50
+            ],
+            "1000Mile": [
+                2,
+                5
+            ],
+            "10000Mile": [
+                0,
+                1
+            ],
+            "DamageDice": 4,
+            "DamageModifier": 0,
+            "DamageMultiplier": 100
+        },
+        "3000000000": {
+            "10Mile": [
+                300,
+                1000
+            ],
+            "100Mile": [
+                30,
+                100
+            ],
+            "1000Mile": [
+                3,
+                10
+            ],
+            "10000Mile": [
+                0,
+                1
+            ],
+            "DamageDice": 6,
+            "DamageModifier": 0,
+            "DamageMultiplier": 100
+        },
+        "10000000000": {
+            "10Mile": [
+                300,
+                1000
+            ],
+            "100Mile": [
+                30,
+                100
+            ],
+            "1000Mile": [
+                3,
+                10
+            ],
+            "10000Mile": [
+                0,
+                1
+            ],
+            "DamageDice": 8,
+            "DamageModifier": 0,
+            "DamageMultiplier": 100
+        },
+        "30000000000": {
+            "10Mile": [
+                300,
+                1000
+            ],
+            "100Mile": [
+                30,
+                100
+            ],
+            "1000Mile": [
+                3,
+                10
+            ],
+            "10000Mile": [
+                0,
+                1
+            ],
+            "DamageDice": 6,
+            "DamageModifier": 0,
+            "DamageMultiplier": 200
+        },
+        "100000000000": {
+            "10Mile": [
+                700,
+                2000
+            ],
+            "100Mile": [
+                70,
+                200
+            ],
+            "1000Mile": [
+                7,
+                20
+            ],
+            "10000Mile": [
+                1,
+                2
+            ],
+            "DamageDice": 2,
+            "DamageModifier": 0,
+            "DamageMultiplier": 1000
+        },
+        "300000000000": {
+            "10Mile": [
+                700,
+                2000
+            ],
+            "100Mile": [
+                70,
+                200
+            ],
+            "1000Mile": [
+                7,
+                20
+            ],
+            "10000Mile": [
+                1,
+                2
+            ],
+            "DamageDice": 3,
+            "DamageModifier": 0,
+            "DamageMultiplier": 1000
+        },
+        "1000000000000": {
+            "10Mile": [
+                700,
+                2000
+            ],
+            "100Mile": [
+                70,
+                200
+            ],
+            "1000Mile": [
+                7,
+                20
+            ],
+            "10000Mile": [
+                1,
+                2
+            ],
+            "DamageDice": 4,
+            "DamageModifier": 0,
+            "DamageMultiplier": 1000
+        },
+        "3000000000000": {
+            "10Mile": [
+                1500,
+                5000
+            ],
+            "100Mile": [
+                150,
+                500
+            ],
+            "1000Mile": [
+                15,
+                50
+            ],
+            "10000Mile": [
+                2,
+                5
+            ],
+            "DamageDice": 6,
+            "DamageModifier": 0,
+            "DamageMultiplier": 1000
+        }
+    }
+}

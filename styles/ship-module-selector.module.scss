@@ -1,0 +1,75 @@
+@import '../styles/_variables.module.scss';
+
+.label {
+    color: $secondaryColor2;
+    font-size: 20px;
+}
+
+.buildLabel {
+    color: $secondaryColor2;
+    font-size: 20px;
+    align-self: center;
+    justify-self: left;
+    margin: 0px 0px 0px 5px;
+}
+
+.buildSelect {
+    width: 100%;
+    height: 20px;
+}
+
+.buildCol1 {
+    grid-column-start: 1;
+    grid-column: span 3;
+}
+
+.buildCol2 {
+    grid-column-start: 4;
+    grid-column: span 3;
+}
+
+.buildCol3 {
+    grid-column-start: 7;
+    grid-column: span 3;
+}
+
+.buildRow1 {
+    grid-row-start: 3;
+    grid-column: span 3;
+}
+
+.buildRow2 {
+    grid-row-start: 4;
+    grid-column: span 3;
+}
+
+.buildRow3 {
+    grid-row-start: 5;
+    grid-column: span 3;
+}
+
+.buildRow4 {
+    grid-row-start: 6;
+    grid-column: span 3;
+}
+
+.buildRow5 {
+    grid-row-start: 7;
+    grid-column: span 3;
+}
+
+.buildRow6 {
+    grid-row-start: 8;
+    grid-column: span 3;
+}
+
+.buildRow7 {
+    grid-row-start: 9;
+    grid-column: span 3;
+}
+
+.buildRow8 {
+    grid-row-start: 10;
+    grid-column: span 3;
+
+}

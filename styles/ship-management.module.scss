@@ -1,0 +1,31 @@
+@import '../styles/_variables.module.scss';
+
+.title {
+    color: $secondaryColor2;
+    margin: 3px 0px;
+    grid-column: span 3;
+}
+
+.containerStyle {
+    display: grid;
+    grid-template-rows: 60px repeat(11, 1fr);
+    grid-template-columns: repeat(12, 1fr);
+    background-color: $primaryColor;
+    padding: 5px;
+    border: 2px solid $secondaryColor1;
+    border-radius: 5px;
+    margin: 5px;
+    grid-column: span 12;
+}
+
+.buttonStyle {
+    color: $secondaryColor2;
+    background-color: $primaryColor;
+    font-size: 16px;
+    height: 70%;
+    border: 2px solid $secondaryColor1;
+    border-radius: 10px;
+    grid-column: span 2;
+    align-self: center;
+    justify-self: left;
+}

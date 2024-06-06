@@ -1,0 +1,25 @@
+@import '../styles/_variables.module.scss';
+
+.title {
+    color: $secondaryColor2;
+    margin: 3px 0px;
+    grid-column: span 3;
+    align-self: center;
+    justify-self: left;
+    font-size: 22px;
+}
+
+.containerStyle {
+    display: grid;
+    grid-template-rows: 30px;
+    grid-template-columns: 3fr repeat(4, 2fr);
+    grid-auto-rows: minmax(30px, 40px);
+    background-color: $primaryColor;
+    padding: 5px;
+    border: 2px solid $secondaryColor1;
+    border-radius: 5px;
+    margin: 5px;
+    grid-column: span 12;
+    grid-row: span 11;
+    overflow-y: auto;
+}

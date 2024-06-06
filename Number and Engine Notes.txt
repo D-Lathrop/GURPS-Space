@@ -1,0 +1,146 @@
+1 Million:  1000000
+10 Million: 10000000
+100 Million:100000000
+1 Billion:  1000000000
+10 Billion: 10000000000
+
+1 Megajoule (MJ) = 1,000,000 Kilojoules (kJ)
+1 Gigajoule (GJ) = 1,000,000,000 Kilojoules (kJ)
+1 Terajoule (TJ) = 1,000,000,000,000 Kilojoules (kJ)
+1 Petajoule (PJ) = 1,000,000,000,000,000 Kilojoules (kJ)
+
+    "Reaction Engine, Chemical and HEDM, Chemical": {
+        "Accel": 3,
+        "mps/tank": 0.15,
+        "SuperScience": false
+    },
+    "Reaction Engine, Chemical and HEDM, HEDM": {
+        "Accel": 2,
+        "mps/tank": 0.5,
+        "SuperScience": false
+    },
+    "Reaction Engine, Electric, Ion Drive": {
+        "Accel": 0.0005,
+        "mps/tank": 3,
+        "SuperScience": false
+    },
+    "Reaction Engine, Electric, Mass Driver": {
+        "Accel": 0.01,
+        "mps/tank": 0.3,
+        "SuperScience": false
+    },
+    "Reaction Engine, Fission, Nuclear Thermal Rocket": {
+        "Accel": 0.1,
+        "mps/tank": 0.3,
+        "SuperScience": false
+    },
+    "Reaction Engine, Fission, Nuclear Light Bulb": {
+        "Accel": 0.01,
+        "mps/tank": 0.8,
+        "SuperScience": true
+    },
+    "Reaction Engine, Fission, Nuclear Saltwater Rocket": {
+        "Accel": 2,
+        "mps/tank": 2.5,
+        "SuperScience": false
+    },
+    "Reaction Engine, Nuclear Pulse, External Pulsed Plasma": {
+        "Accel": 2,
+        "mps/tank": 2,
+        "SuperScience": false
+    },
+    "Reaction Engine, Nuclear Pulse, Fusion Pulse Drive": {
+        "Accel": 0.02,
+        "mps/tank": 5,
+        "SuperScience": false
+    },
+    "Reaction Engine, Nuclear Pulse, Advanced Fusion Pulse Drive": {
+        "Accel": 0.005,
+        "mps/tank": 20,
+        "SuperScience": false
+    },
+    "Reaction Engine, Nuclear Pulse, Super Fusion Pulse Drive": {
+        "Accel": 20,
+        "mps/tank": 350,
+        "SuperScience": true
+    },
+    "Reaction Engine, Fusion, Fusion Rocket": {
+        "Accel": 0.005,
+        "mps/tank": 12,
+        "SuperScience": false
+    },
+    "Reaction Engine, Fusion, Fusion Torch": {
+        "Accel": 0.5,
+        "mps/tank": 15,
+        "SuperScience": true
+    },
+    "Reaction Engine, Fusion, Super Fusion Torch": {
+        "Accel": 50,
+        "mps/tank": 450,
+        "SuperScience": true
+    },
+    "Reaction Engine, Total Conversion and Antimatter, Antimatter Thermal Rocket": {
+        "Accel": 0.1,
+        "mps/tank": 1.8,
+        "SuperScience": false
+    },
+    "Reaction Engine, Total Conversion and Antimatter, Antimatter Plasma Rocket": {
+        "Accel": 0.01,
+        "mps/tank": 120,
+        "SuperScience": false
+    },
+    "Reaction Engine, Total Conversion and Antimatter, Antimatter Plasma Torch": {
+        "Accel": 1,
+        "mps/tank": 120,
+        "SuperScience": true
+    },
+    "Reaction Engine, Total Conversion and Antimatter, Super Antimatter Plasma Torch": {
+        "Accel": 100,
+        "mps/tank": 360,
+        "SuperScience": true
+    },
+    "Reaction Engine, Total Conversion and Antimatter, Antimatter Pion": {
+        "Accel": 0.005,
+        "mps/tank": 3400,
+        "SuperScience": false
+    },
+    "Reaction Engine, Total Conversion and Antimatter, Antimatter Pion Torch": {
+        "Accel": 0.1,
+        "mps/tank": 3400,
+        "SuperScience": true
+    },
+    "Reaction Engine, Total Conversion and Antimatter, Total Conversion Torch": {
+        "Accel": 1,
+        "mps/tank": 10000,
+        "SuperScience": true
+    },
+    "Reaction Engine, Total Conversion and Antimatter, Super Conversion Torch": {
+        "Accel": 50,
+        "mps/tank": 10000,
+        "SuperScience": true
+    },
+    "Reactionless Engine, Rotary and Standard, Rotary Reactionless": {
+        "Accel": 0.1,
+        "mps/tank": "Infinite",
+        "SuperScience": true
+    },
+    "Reactionless Engine, Rotary and Standard, Standard Reactionless": {
+        "Accel": 0.5,
+        "mps/tank": "Infinite",
+        "SuperScience": true
+    },
+    "Reactionless Engine, Hot and Super, Hot Reactionless": {
+        "Accel": 1,
+        "mps/tank": "Infinite",
+        "SuperScience": true
+    },
+    "Reactionless Engine, Hot and Super, Super Reactionless": {
+        "Accel": 50,
+        "mps/tank": "Infinite",
+        "SuperScience": true
+    },
+    "Reactionless Engine, Subwarp, Subwarp": {
+        "Accel": 500,
+        "mps/tank": "Infinite",
+        "SuperScience": true
+    }

@@ -1,0 +1,656 @@
+@import '../styles/_variables.module.scss';
+
+%commonContainerStyles {
+    display: grid;
+    padding: 5px;
+    border: 2px solid $secondaryColor1;
+    border-radius: 5px;
+    margin: 5px;
+    overflow-y: auto;
+}
+
+%upRateDeRateCommonStyles {
+    color: $secondaryColor1;
+    background-color: $primaryColor;
+    font-size: 15px;
+    height: 80%;
+    width: 80%;
+    border: 2px solid $secondaryColor1;
+    border-radius: 10px;
+    align-self: center;
+    justify-self: center;
+    margin: 0px 5px;
+    cursor: pointer;
+}
+
+%statBlockLableCargoCommonStyles {
+    color: $secondaryColor2;
+    font-size: 14px;
+    align-self: center;
+    justify-self: right;
+    display: inline-block;
+    text-align: right;
+    margin: 0px 9px 0px 0px;
+}
+
+%statComponentButtonCommonStyles {
+    color: $secondaryColor2;
+    background-color: $primaryColor;
+    font-size: 16px;
+    height: 70%;
+    border: 2px solid $secondaryColor1;
+    border-radius: 10px;
+    align-self: center;
+    justify-self: left;
+    margin: 0px 5px;
+}
+
+%statBlockAreaCommonStyles {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    background-color: $secondaryColor2;
+    width: 100%;
+    height: 50%;
+}
+
+%infoTitleWarningCommonStyles {
+    color: $secondaryColor1;
+    text-decoration: underline;
+    cursor: pointer;
+    border: 2px solid red;
+    border-radius: 5px;
+}
+
+%habitatPowerInfoLabelCommonStyles {
+    font-size: 14px;
+    color: $secondaryColor2;
+    grid-row: span 1;
+    justify-self: left;
+    align-self: center;
+    padding: 0px 0px 0px 6px;
+}
+
+%habitatPowerInfoValueCommonStyles {
+    font-size: 14px;
+    grid-row: span 1;
+    grid-column: span 1;
+    padding: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    background-color: $secondaryColor2;
+    overflow-y: auto;
+}
+
+.title {
+    color: $secondaryColor2;
+    margin: 3px 0px;
+    grid-column: span 3;
+    align-self: center;
+    justify-self: left;
+    font-size: 22px;
+}
+
+.containerStyle {
+    @extend %commonContainerStyles;
+    grid-template-rows: 30px 80px 80px 42px 26px repeat(9, minmax(30px, 120px));
+    grid-template-columns: repeat(15, 1fr);
+    background-color: $primaryColor;
+    grid-column: span 12;
+    grid-row: span 11;
+}
+
+.label {
+    color: $secondaryColor2;
+    font-size: 20px;
+    display: block;
+}
+
+.moduleLabel {
+    color: $secondaryColor1;
+    font-size: 20px;
+    display: block;
+}
+
+.buildLabel {
+    color: $secondaryColor2;
+    font-size: 20px;
+    align-self: center;
+    justify-self: left;
+    margin: 0px 0px 0px 5px;
+}
+
+.topRow3 {
+    grid-column: span 3;
+    grid-row-start: 2;
+    padding: 4px;
+    align-self: left;
+    justify-self: left;
+    width: 100%;
+}
+
+.topRowTextArea {
+    padding: 4px;
+    width: auto;
+    align-self: left;
+    justify-self: left;
+}
+
+.topRow2 {
+    grid-column: span 2;
+    grid-row-start: 3;
+    padding: 4px;
+    align-self: center;
+    justify-self: center;
+}
+
+.topRowWarning {
+    grid-column: span 9;
+    grid-row-start: 4;
+    padding: 4px;
+    align-self: left;
+    justify-self: center;
+    color: $secondaryColor1;
+    font-size: 14px;
+    border: 2px solid red;
+    border-radius: 5px;
+}
+
+.buildSelect {
+    width: 100%;
+    height: 20px;
+}
+
+.inputCheckbox {
+    width: 20px;
+    height: 20px;
+}
+
+.buildCol1 {
+    grid-column-start: 1;
+    grid-column: span 3;
+}
+
+.buildCol2 {
+    grid-column-start: 4;
+    grid-column: span 3;
+}
+
+.buildCol3 {
+    grid-column-start: 7;
+    grid-column: span 3;
+}
+
+.buildRow1 {
+    grid-row-start: 5;
+    grid-column: span 3;
+}
+
+.buildRow2 {
+    grid-row-start: 6;
+    grid-column: span 3;
+}
+
+.buildRow3 {
+    grid-row-start: 7;
+    grid-column: span 3;
+}
+
+.buildRow4 {
+    grid-row-start: 8;
+    grid-column: span 3;
+}
+
+.buildRow5 {
+    grid-row-start: 9;
+    grid-column: span 3;
+}
+
+.buildRow6 {
+    grid-row-start: 10;
+    grid-column: span 3;
+}
+
+.buildRow7 {
+    grid-row-start: 11;
+    grid-column: span 3;
+}
+
+.buildRow8 {
+    grid-row-start: 12;
+    grid-column: span 3;
+
+}
+
+.classNotes {
+    grid-column: 1 / span 4;
+    grid-row: 13 / span 1;
+}
+
+.notesArea {
+    width: 95%;
+    height: 100%;
+    margin: 5px;
+    overflow-y: auto;
+}
+
+.cargoContainer {
+    @extend %commonContainerStyles;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    grid-column: 5 / span 5;
+    grid-row: 13 / span 3;
+
+    grid-row-start: 13;
+}
+
+.statBlockLableUPressCargo {
+    @extend %statBlockLableCargoCommonStyles;
+    grid-column: 1 / span 1;
+}
+
+.statBlockLablePressCargo {
+    @extend %statBlockLableCargoCommonStyles;
+    grid-column: 5 / span 2;
+}
+
+.statBlockAreaUPressCargo {
+    @extend %statBlockAreaCommonStyles;
+    grid-column: 2 / span 2;
+    height: 90%;
+}
+
+.statBlockAreaPressCargo {
+    @extend %statBlockAreaCommonStyles;
+    grid-column: 7 / span 2;
+    height: 90%;
+}
+
+.statBlockContainer {
+    @extend %commonContainerStyles;
+    grid-template-columns: 3fr 2fr 3fr 2fr;
+    grid-template-rows: repeat(20, 1fr);
+    grid-column: 10 / span 6;
+    grid-row: 4 / span 11;
+}
+
+.statComponentButton1 {
+    @extend %statComponentButtonCommonStyles;
+    grid-column: 10 / span 2;
+    grid-row: 3 / span 1;
+}
+
+.statComponentButton2 {
+    @extend %statComponentButtonCommonStyles;
+    grid-column: 12 / span 2;
+    grid-row: 3 / span 1;
+}
+
+.statComponentButton3 {
+    @extend %statComponentButtonCommonStyles;
+    grid-column: 14 / span 2;
+    grid-row: 3 / span 1;
+}
+
+.statTitle {
+    color: $secondaryColor2;
+    margin: 3px 0px;
+    grid-column: span 4;
+    align-self: center;
+    justify-self: center;
+    font-size: 22px;
+}
+
+.statBlockLable {
+    color: $secondaryColor2;
+    font-size: 16px;
+    align-self: center;
+    justify-self: right;
+    display: inline-block;
+    text-align: right;
+    margin: 0px 9px 0px 0px;
+}
+
+.statBlockArea {
+    @extend %statBlockAreaCommonStyles;
+}
+
+.statBlockAreaLarge {
+    @extend %statBlockAreaCommonStyles;
+    grid-column: span 3;
+    overflow-y: auto;
+}
+
+.moduleInfoSpan {
+    color: $secondaryColor2;
+    font-size: 13px;
+    display: block;
+    padding: 4px 0px;
+}
+
+.moduleInfoSpanTitle {
+    color: $secondaryColor1;
+    font-size: 13px;
+    display: block;
+    padding: 4px 0px;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.infoTitle {
+    color: $secondaryColor1;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.infoTitleWarning {
+    @extend %infoTitleWarningCommonStyles;
+}
+
+.habitatPowerContainer {
+    @extend %commonContainerStyles;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-auto-rows: minmax(30px, 50px);
+    grid-column: 10 / span 6;
+    grid-row: 4 / span 12;
+    overflow-y: auto
+}
+
+.infoTitleWarningPower {
+    @extend %infoTitleWarningCommonStyles;
+    grid-column: 1 / span 4;
+    grid-row: 2 / span 1;
+    justify-self: center;
+    align-self: center;
+    padding: 3px;
+    margin: 2px;
+}
+
+.habitatPowerInfoLabelCol1 {
+    @extend %habitatPowerInfoLabelCommonStyles;
+    grid-column: 1;
+}
+
+.habitatPowerInfoLabelCol2 {
+    @extend %habitatPowerInfoLabelCommonStyles;
+    grid-column: 3;
+}
+
+.habitatPowerInfoValueCol1 {
+    @extend %habitatPowerInfoValueCommonStyles;
+    grid-column: 2;
+}
+
+.habitatPowerInfoValueCol2 {
+    @extend %habitatPowerInfoValueCommonStyles;
+    grid-column: 4;
+}
+
+.deRateButton {
+    @extend %upRateDeRateCommonStyles;
+    grid-column: 3;
+}
+
+.upRateButton {
+    @extend %upRateDeRateCommonStyles;
+    grid-column: 4;
+}
+
+.habitatSubContainer {
+    @extend %commonContainerStyles;
+    grid-template-columns: 80px repeat(7, 1fr);
+    grid-auto-rows: minmax(40px, 70px);
+    grid-column: 1 / span 4;
+    grid-row: 3 / span 19;
+}
+
+.habitatInfoLabelCol1 {
+    @extend %habitatPowerInfoLabelCommonStyles;
+    grid-column: 1;
+}
+
+.habitatInfoLabelCol1Seats {
+    @extend %habitatPowerInfoLabelCommonStyles;
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.habitatInfoLabelCol2 {
+    @extend %habitatPowerInfoLabelCommonStyles;
+    grid-column: 4;
+}
+
+.habitatInfoLabelCol2Crew {
+    @extend %habitatPowerInfoLabelCommonStyles;
+    grid-column: 3 / span 2;
+}
+
+.habitatInfoLabelCol2TotalLife {
+    @extend %habitatPowerInfoLabelCommonStyles;
+    grid-column: 3 / span 2;
+}
+
+.habitatInfoLabelCol2Cabins {
+    @extend %habitatPowerInfoLabelCommonStyles;
+    grid-column: 3;
+}
+
+.habitatInfoLabelCol3 {
+    @extend %habitatPowerInfoLabelCommonStyles;
+    grid-column: 6;
+}
+
+.habitatInfoLabelCol3Crew {
+    @extend %habitatPowerInfoLabelCommonStyles;
+    grid-column: 6;
+}
+
+.habitatInfoLabelCol3Occupancy {
+    @extend %habitatPowerInfoLabelCommonStyles;
+    grid-column: 6;
+}
+
+.habitatInfoValueCol1 {
+    @extend %habitatPowerInfoValueCommonStyles;
+    grid-column: 2;
+}
+
+.habitatInfoValueCol1Seats {
+    @extend %habitatPowerInfoValueCommonStyles;
+    grid-column: 2;
+    grid-row: 3
+}
+
+.totalLifeSupportLabel {
+    @extend %habitatPowerInfoLabelCommonStyles;
+    grid-column: 5;
+}
+
+.habitatInfoValueCol2 {
+    @extend %habitatPowerInfoValueCommonStyles;
+    grid-column: 5;
+}
+
+.habitatInfoValueCol2Cabins {
+    @extend %habitatPowerInfoValueCommonStyles;
+    grid-column: 4 / span 2;
+}
+
+.habitatInfoValueCol3 {
+    @extend %habitatPowerInfoValueCommonStyles;
+    grid-column: 7;
+}
+
+.habitatInfoValueCol3Crew {
+    @extend %habitatPowerInfoValueCommonStyles;
+    grid-column: 7 / span 2;
+}
+
+.habitatInfoValueCol3Occupancy {
+    @extend %habitatPowerInfoValueCommonStyles;
+    grid-column: 7 / span 2;
+}
+
+.habitatMinus100 {
+    @extend %upRateDeRateCommonStyles;
+    grid-column: 2;
+}
+
+.habitatMinus10 {
+    @extend %upRateDeRateCommonStyles;
+    grid-column: 3;
+}
+
+.habitatMinus1 {
+    @extend %upRateDeRateCommonStyles;
+    grid-column: 4;
+}
+
+.habitatButton {
+    @extend %habitatPowerInfoValueCommonStyles;
+    grid-column: 5;
+}
+
+.habitatPlus1 {
+    @extend %upRateDeRateCommonStyles;
+    grid-column: 6;
+}
+
+.habitatPlus10 {
+    @extend %upRateDeRateCommonStyles;
+    grid-column: 7;
+}
+
+.habitatPlus100 {
+    @extend %upRateDeRateCommonStyles;
+    grid-column: 8;
+}
+
+.weaponStatsContainer {
+    @extend %commonContainerStyles;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-auto-rows: minmax(30px, 50px);
+    grid-column: 10 / span 6;
+    grid-row: 4 / span 12;
+    overflow-y: auto
+}
+
+.weaponLabelCol1 {
+    @extend %habitatPowerInfoLabelCommonStyles;
+    grid-column: 1;
+}
+
+.weaponValueCol1 {
+    @extend %habitatPowerInfoValueCommonStyles;
+    grid-column: 2;
+}
+
+.weaponLabelCol2 {
+    @extend %habitatPowerInfoLabelCommonStyles;
+    grid-column: 3;
+}
+
+.weaponValueCol2 {
+    @extend %habitatPowerInfoValueCommonStyles;
+    grid-column: 4;
+}
+
+.freeFillWeaponLabel {
+    @extend %habitatPowerInfoLabelCommonStyles;
+}
+
+.freeFillWeaponLabelContainer {
+    @extend %habitatPowerInfoLabelCommonStyles;
+    grid-column: 1 / span 4;
+    display: grid;
+    grid-template-rows: minmax(20px, 40px);
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.freeFillWeaponLabel1 {
+    @extend %habitatPowerInfoLabelCommonStyles;
+    grid-column: 1 / span 1
+}
+
+.freeFillWeaponLabel2 {
+    @extend %habitatPowerInfoLabelCommonStyles;
+    grid-column: 2 / span 1
+}
+
+.freeFillWeaponLabel3 {
+    @extend %habitatPowerInfoLabelCommonStyles;
+    grid-column: 3 / span 1
+}
+
+.freeFillWeaponValue {
+    @extend %habitatPowerInfoValueCommonStyles;
+}
+
+.weaponSelectLabel {
+    @extend %habitatPowerInfoLabelCommonStyles;
+    grid-column: 1
+}
+
+.weaponSelect {
+    @extend %habitatPowerInfoValueCommonStyles;
+    grid-column: 2 / span 3;
+}
+
+.addWeaponButton {
+    @extend %weaponNumberButtonCommonStyles;
+    grid-column: 1 / span 4;
+}
+
+.addWeaponsNumberButtons {
+    grid-column: 1 / span 4;
+    display: flex;
+    justify-content: center;
+}
+
+%weaponNumberButtonCommonStyles {
+    color: $secondaryColor1;
+    background-color: $primaryColor;
+    font-size: 15px;
+    border: 2px solid $secondaryColor1;
+    border-radius: 10px;
+    height: 80%;
+    margin: 0px 10px;
+    cursor: pointer;
+}
+
+.weaponNumberButtonMinusTen {
+    @extend %weaponNumberButtonCommonStyles
+}
+
+.weaponNumberButtonMinusOne {
+    @extend %weaponNumberButtonCommonStyles
+}
+
+.weaponNumberButtonOne {
+    @extend %weaponNumberButtonCommonStyles
+}
+
+.weaponNumberButtonTen {
+    @extend %weaponNumberButtonCommonStyles
+}
+
+.weaponNumberDisplay {
+    font-size: 14px;
+    width: 10%;
+    height: 70%;
+    background-color: $secondaryColor2;
+    overflow-y: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    margin: 10px;
+}
+
+.weaponExplanation {
+    @extend %statBlockLableCargoCommonStyles;
+    grid-column: 1 / span 4;
+}

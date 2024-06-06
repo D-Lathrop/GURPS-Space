@@ -1,0 +1,15 @@
+@import '../styles/_variables.module.scss';
+
+.title {
+    color: $secondaryColor2;
+    margin: 3px 0px;
+}
+
+.containerStyle {
+    background-color: $primaryColor;
+    padding: 5px;
+    border: 2px solid $secondaryColor1;
+    border-radius: 5px;
+    margin: 5px;
+    grid-column: span 12;
+}

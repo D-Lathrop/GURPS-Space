@@ -1,0 +1,90 @@
+    [
+        {
+            "SM": 5,
+            "LoadedMass": 30,
+            "Length": 45,
+            "dSTHP": 20,
+            "Hnd": 0,
+            "SR": 4
+        },
+        {
+            "SM": 6,
+            "LoadedMass": 100,
+            "Length": 60,
+            "dSTHP": 30,
+            "Hnd": 0,
+            "SR": 4
+        },
+        {
+            "SM": 7,
+            "LoadedMass": 300,
+            "Length": 90,
+            "dSTHP": 50,
+            "Hnd": -1,
+            "SR": 5
+        },
+        {
+            "SM": 8,
+            "LoadedMass": 1000,
+            "Length": 150,
+            "dSTHP": 70,
+            "Hnd": -1,
+            "SR": 5
+        },
+        {
+            "SM": 9,
+            "LoadedMass": 5000,
+            "Length": 200,
+            "dSTHP": 100,
+            "Hnd": -1,
+            "SR": 5
+        },
+        {
+            "SM": 10,
+            "LoadedMass": 10000,
+            "Length": 300,
+            "dSTHP": 150,
+            "Hnd": -2,
+            "SR": 5
+        },
+        {
+            "SM": 11,
+            "LoadedMass": 30000,
+            "Length": 450,
+            "dSTHP": 450,
+            "Hnd": -2,
+            "SR": 5
+        },
+        {
+            "SM": 12,
+            "LoadedMass": 100000,
+            "Length": 600,
+            "dSTHP": 300,
+            "Hnd": -2,
+            "SR": 5
+        },
+        {
+            "SM": 13,
+            "LoadedMass": 300000,
+            "Length": 900,
+            "dSTHP": 500,
+            "Hnd": -3,
+            "SR": 5
+        },
+        {
+            "SM": 14,
+            "LoadedMass": 1000000,
+            "Length": 1500,
+            "dSTHP": 700,
+            "Hnd": -3,
+            "SR": 5
+        },
+        {
+            "SM": 15,
+            "LoadedMass": 3000000,
+            "Length": 2000,
+            "dSTHP": 1000,
+            "Hnd": -3,
+            "SR": 5
+        }
+    ]

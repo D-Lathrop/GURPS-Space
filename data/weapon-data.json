@@ -1,0 +1,527 @@
+{
+    "Missile7-8": [
+        {
+            "Name": "Missile TL 7-8",
+            "Type": "Missile",
+            "TL": 7,
+            "SuperScience": false
+        },
+        {
+            "10MileThrust": [
+                1,
+                12,
+                120,
+                1200
+            ],
+            "100MileThrust": [
+                0.1,
+                1,
+                12,
+                120
+            ],
+            "1000MileThrust": [
+                0,
+                0,
+                1,
+                12
+            ],
+            "10000MileThrust": [
+                0,
+                0,
+                0,
+                1
+            ]
+        },
+        {
+            "10MileBurn": [
+                12,
+                36,
+                120,
+                360
+            ],
+            "100MileBurn": [
+                1,
+                4,
+                12,
+                36
+            ],
+            "1000MileBurn": [
+                0,
+                0,
+                1,
+                4
+            ],
+            "10000MileBurn": [
+                0,
+                0,
+                0,
+                0.3
+            ]
+        }
+    ],
+    "Missile9-12": [
+        {
+            "Name": "Missile TL 9-12",
+            "Type": "Missile",
+            "TL": 9,
+            "SuperScience": false
+        },
+        {
+            "10MileThrust": [
+                1,
+                10,
+                100,
+                1000
+            ],
+            "100MileThrust": [
+                0.1,
+                1,
+                10,
+                100
+            ],
+            "1000MileThrust": [
+                0,
+                0,
+                1,
+                10
+            ],
+            "10000MileThrust": [
+                0,
+                0,
+                0,
+                1
+            ]
+        },
+        {
+            "10MileBurn": [
+                20,
+                60,
+                200,
+                600
+            ],
+            "100MileBurn": [
+                2,
+                6,
+                20,
+                60
+            ],
+            "1000MileBurn": [
+                0,
+                0,
+                2,
+                6
+            ],
+            "10000MileBurn": [
+                0,
+                0,
+                0,
+                0.6
+            ]
+        }
+    ],
+    "SuperMissile": [
+        {
+            "Name": "Super Missile",
+            "Type": "Missile",
+            "TL": 11,
+            "SuperScience": true
+        },
+        {
+            "10MileThrust": [
+                100,
+                1000,
+                10000,
+                100000
+            ],
+            "100MileThrust": [
+                10,
+                100,
+                1000,
+                10000
+            ],
+            "1000MileThrust": [
+                1,
+                10,
+                100,
+                1000
+            ],
+            "10000MileThrust": [
+                0.1,
+                1,
+                10,
+                100
+            ]
+        },
+        {
+            "10MileBurn": [
+                1000,
+                3000,
+                10000,
+                30000
+            ],
+            "100MileBurn": [
+                100,
+                300,
+                1000,
+                3000
+            ],
+            "1000MileBurn": [
+                10,
+                30,
+                100,
+                300
+            ],
+            "10000MileBurn": [
+                1,
+                3,
+                10,
+                30
+            ]
+        }
+    ],
+    "WarpMissile": [
+        {
+            "Name": "Warp Missile",
+            "Type": "Missile",
+            "TL": 11,
+            "SuperScience": true
+        },
+        {
+            "WarpRange28cm": [
+                15000,
+                1500,
+                150,
+                15
+            ],
+            "WarpRange32cm": [
+                20000,
+                2000,
+                200,
+                20
+            ]
+        }
+    ],
+    "ConventionalGun": [
+        {
+            "Name": "Conventional Gun",
+            "Type": "Gun",
+            "TL": 7,
+            "SuperScience": false
+        },
+        {
+            "10MileImpulse": [
+                1,
+                3,
+                10,
+                30
+            ],
+            "100MileImpulse": [
+                0,
+                0,
+                1,
+                3
+            ],
+            "1000MileImpulse": [
+                0,
+                0,
+                0,
+                0
+            ],
+            "10000MileImpulse": [
+                0,
+                0,
+                0,
+                0
+            ]
+        }
+    ],
+    "ElectromagneticGun": [
+        {
+            "Name": "Electromagnetic Gun",
+            "Type": "Gun",
+            "TL": 9,
+            "SuperScience": false
+        },
+        {
+            "10MileImpulse": [
+                2,
+                6,
+                20,
+                60
+            ],
+            "100MileImpulse": [
+                0,
+                1,
+                2,
+                6
+            ],
+            "1000MileImpulse": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "10000MileImpulse": [
+                0,
+                0,
+                0,
+                0
+            ]
+        }
+    ],
+    "GravGun": [
+        {
+            "Name": "Grav Gun",
+            "Type": "Gun",
+            "TL": 11,
+            "SuperScience": true
+        },
+        {
+            "10MileImpulse": [
+                10,
+                30,
+                100,
+                300
+            ],
+            "100MileImpulse": [
+                1,
+                3,
+                10,
+                30
+            ],
+            "1000MileImpulse": [
+                0,
+                0,
+                1,
+                3
+            ],
+            "10000MileImpulse": [
+                0,
+                0,
+                0,
+                0
+            ]
+        }
+    ],
+    "Heat": [
+        {
+            "Name": "Heat Ray",
+            "Type": "Beam",
+            "TL": 7,
+            "SuperScience": true,
+            "TypeBurn": true,
+            "TypeCor": false,
+            "TypeCr": false,
+            "TypeSur": false,
+            "TypeExp": false,
+            "TypeRad": false,
+            "ArmorDivisor": 0,
+            "sAcc": 0,
+            "Rcl": 1
+        }
+    ],
+    "Laser": [
+        {
+            "Name": "Laser Beam",
+            "Type": "Beam",
+            "TL": 9,
+            "SuperScience": false,
+            "TypeBurn": true,
+            "TypeCor": false,
+            "TypeCr": false,
+            "TypeSur": false,
+            "TypeExp": false,
+            "TypeRad": false,
+            "ArmorDivisor": 2,
+            "sAcc": 0,
+            "Rcl": 1
+        }
+    ],
+    "Particle": [
+        {
+            "Name": "Particle Beam",
+            "Type": "Beam",
+            "TL": 10,
+            "SuperScience": false,
+            "TypeBurn": true,
+            "TypeCor": false,
+            "TypeCr": false,
+            "TypeSur": true,
+            "TypeExp": false,
+            "TypeRad": true,
+            "ArmorDivisor": 5,
+            "sAcc": -3,
+            "Rcl": 1
+        }
+    ],
+    "Plasma": [
+        {
+            "Name": "Plasma Beam",
+            "Type": "Beam",
+            "TL": 10,
+            "SuperScience": true,
+            "TypeBurn": true,
+            "TypeCor": false,
+            "TypeCr": false,
+            "TypeSur": false,
+            "TypeExp": true,
+            "TypeRad": false,
+            "ArmorDivisor": 2,
+            "sAcc": -6,
+            "Rcl": 2
+        }
+    ],
+    "UVLaser": [
+        {
+            "Name": "UV Laser",
+            "Type": "Beam",
+            "TL": 10,
+            "SuperScience": false,
+            "TypeBurn": true,
+            "TypeCor": false,
+            "TypeCr": false,
+            "TypeSur": false,
+            "TypeExp": false,
+            "TypeRad": false,
+            "ArmorDivisor": 2,
+            "sAcc": 0,
+            "Rcl": 1
+        }
+    ],
+    "Antiparticle": [
+        {
+            "Name": "Antiparticle Beam",
+            "Type": "Beam",
+            "TL": 11,
+            "SuperScience": false,
+            "TypeBurn": false,
+            "TypeCor": false,
+            "TypeCr": true,
+            "TypeSur": true,
+            "TypeExp": true,
+            "TypeRad": true,
+            "ArmorDivisor": 3,
+            "sAcc": -3,
+            "Rcl": 1
+        }
+    ],
+    "GhostParticle": [
+        {
+            "Name": "Ghost Particle Beam",
+            "Type": "Beam",
+            "TL": 11,
+            "SuperScience": true,
+            "TypeBurn": false,
+            "TypeCor": false,
+            "TypeCr": true,
+            "TypeSur": false,
+            "TypeExp": true,
+            "TypeRad": false,
+            "ArmorDivisor": "Infinity",
+            "sAcc": -3,
+            "Rcl": 1
+        }
+    ],
+    "Tractor": [
+        {
+            "Name": "Tractor Beam",
+            "Type": "Beam",
+            "TL": 11,
+            "SuperScience": true,
+            "TypeBurn": false,
+            "TypeCor": false,
+            "TypeCr": false,
+            "TypeSur": false,
+            "TypeExp": false,
+            "TypeRad": false,
+            "ArmorDivisor": 0,
+            "sAcc": 0,
+            "Rcl": 1
+        }
+    ],
+    "XRayLaser": [
+        {
+            "Name": "X-Ray Laser",
+            "Type": "Beam",
+            "TL": 11,
+            "SuperScience": false,
+            "TypeBurn": true,
+            "TypeCor": false,
+            "TypeCr": false,
+            "TypeSur": true,
+            "TypeExp": false,
+            "TypeRad": false,
+            "ArmorDivisor": 5,
+            "sAcc": 0,
+            "Rcl": 1
+        }
+    ],
+    "Graviton": [
+        {
+            "Name": "Graviton Beam",
+            "Type": "Beam",
+            "TL": 11,
+            "SuperScience": true,
+            "TypeBurn": false,
+            "TypeCor": false,
+            "TypeCr": true,
+            "TypeSur": false,
+            "TypeExp": false,
+            "TypeRad": false,
+            "ArmorDivisor": "Infinity",
+            "sAcc": 0,
+            "Rcl": 1
+        }
+    ],
+    "Conversion": [
+        {
+            "Name": "Conversion Beam",
+            "Type": "Beam",
+            "TL": 12,
+            "SuperScience": true,
+            "TypeBurn": false,
+            "TypeCor": true,
+            "TypeCr": false,
+            "TypeSur": false,
+            "TypeExp": false,
+            "TypeRad": false,
+            "ArmorDivisor": 10,
+            "sAcc": 0,
+            "Rcl": 1
+        }
+    ],
+    "Graser": [
+        {
+            "Name": "Graser Beam",
+            "Type": "Beam",
+            "TL": 12,
+            "SuperScience": false,
+            "TypeBurn": true,
+            "TypeCor": false,
+            "TypeCr": false,
+            "TypeSur": true,
+            "TypeExp": false,
+            "TypeRad": false,
+            "ArmorDivisor": 10,
+            "sAcc": 0,
+            "Rcl": 1
+        }
+    ],
+    "Disintegrator": [
+        {
+            "Name": "Disintegrator Beam",
+            "Type": "Beam",
+            "TL": 12,
+            "SuperScience": true,
+            "TypeBurn": false,
+            "TypeCor": true,
+            "TypeCr": false,
+            "TypeSur": false,
+            "TypeExp": false,
+            "TypeRad": false,
+            "ArmorDivisor": "Infinity",
+            "sAcc": 0,
+            "Rcl": 1
+        }
+    ]
+}

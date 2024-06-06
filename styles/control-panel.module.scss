@@ -1,0 +1,45 @@
+@import '../styles/_variables.module.scss';
+
+.controlPanel {
+    background-color: $primaryColor;
+    position: fixed;
+    top: 0;
+    right: 0;
+    overflow-y: scroll;
+    width: 25vw;
+    height: 100vh;
+    display: grid;
+    grid-template-rows: 1fr 11fr;
+    grid-template-columns: repeat(12, 1fr);
+    padding: 5px;
+}
+
+.expanded {
+    background-color: $primaryColor;
+    position: fixed;
+    top: 0;
+    right: 0;
+    overflow-y: scroll;
+    width: 80vw;
+    height: 100vh;
+    display: grid;
+    grid-template-rows: 1fr 11fr;
+    grid-template-columns: repeat(12, 1fr);
+    padding: 5px;
+}
+
+.title {
+    grid-column: span 2;
+    color: $secondaryColor1;
+}
+
+.controlPanelButton {
+    color: $secondaryColor1;
+    background-color: $primaryColor;
+    height: 50%;
+    border: 2px solid $secondaryColor1;
+    border-radius: 10px;
+    align-self: center;
+    justify-self: center;
+    grid-column: span 2;
+}

@@ -1,0 +1,6216 @@
+{
+    "Armor, Ice": [
+        {
+            "Category": "Armor and Survivability",
+            "RepairSkill": "Armoury (Vehicle Armor) -4",
+            "Location": "hull",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "SuperScience": false,
+            "TL": 0
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "USdDR": null,
+            "SdDR": null,
+            "cost": 0
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "USdDR": null,
+            "SdDR": null,
+            "cost": 0
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "USdDR": null,
+            "SdDR": null,
+            "cost": 0
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "USdDR": 1,
+            "SdDR": 0,
+            "cost": 0
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "USdDR": 2,
+            "SdDR": 0,
+            "cost": 0
+        },
+        {
+            "SM": 10,
+            "Workspaces": 0,
+            "USdDR": 2,
+            "SdDR": 0,
+            "cost": 0
+        },
+        {
+            "SM": 11,
+            "Workspaces": 0,
+            "USdDR": 3,
+            "SdDR": 0,
+            "cost": 0
+        },
+        {
+            "SM": 12,
+            "Workspaces": 0,
+            "USdDR": 5,
+            "SdDR": 0,
+            "cost": 0
+        },
+        {
+            "SM": 13,
+            "Workspaces": 0,
+            "USdDR": 7,
+            "SdDR": 0,
+            "cost": 0
+        },
+        {
+            "SM": 14,
+            "Workspaces": 0,
+            "USdDR": 10,
+            "SdDR": 0,
+            "cost": 0
+        },
+        {
+            "SM": 15,
+            "Workspaces": 0,
+            "USdDR": 15,
+            "SdDR": 0,
+            "cost": 0
+        }
+    ],
+    "Armor, Stone": [
+        {
+            "Category": "Armor and Survivability",
+            "RepairSkill": "Masonry",
+            "Location": "hull",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "SuperScience": false,
+            "TL": 0
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "USdDR": null,
+            "SdDR": null,
+            "cost": 0
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "USdDR": null,
+            "SdDR": null,
+            "cost": 0
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "USdDR": 1,
+            "SdDR": 0,
+            "cost": 0
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "USdDR": 2,
+            "SdDR": 0,
+            "cost": 0
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "USdDR": 2,
+            "SdDR": 0,
+            "cost": 0
+        },
+        {
+            "SM": 10,
+            "Workspaces": 0,
+            "USdDR": 3,
+            "SdDR": 0,
+            "cost": 0
+        },
+        {
+            "SM": 11,
+            "Workspaces": 0,
+            "USdDR": 5,
+            "SdDR": 0,
+            "cost": 0
+        },
+        {
+            "SM": 12,
+            "Workspaces": 0,
+            "USdDR": 7,
+            "SdDR": 0,
+            "cost": 0
+        },
+        {
+            "SM": 13,
+            "Workspaces": 0,
+            "USdDR": 10,
+            "SdDR": 0,
+            "cost": 0
+        },
+        {
+            "SM": 14,
+            "Workspaces": 0,
+            "USdDR": 15,
+            "SdDR": 0,
+            "cost": 0
+        },
+        {
+            "SM": 15,
+            "Workspaces": 0,
+            "USdDR": 20,
+            "SdDR": 0,
+            "cost": 0
+        }
+    ],
+    "Armor, Steel": [
+        {
+            "Category": "Armor and Survivability",
+            "RepairSkill": "Armoury (Vehicle Armor)",
+            "Location": "hull",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "SuperScience": false,
+            "TL": 7
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "USdDR": 1,
+            "SdDR": 0,
+            "cost": 6000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "USdDR": 2,
+            "SdDR": 1,
+            "cost": 20000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "USdDR": 3,
+            "SdDR": 2,
+            "cost": 60000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "USdDR": 5,
+            "SdDR": 3,
+            "cost": 200000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "USdDR": 7,
+            "SdDR": 5,
+            "cost": 600000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 0,
+            "USdDR": 10,
+            "SdDR": 7,
+            "cost": 2000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 0,
+            "USdDR": 15,
+            "SdDR": 10,
+            "cost": 6000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 0,
+            "USdDR": 20,
+            "SdDR": 15,
+            "cost": 20000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 0,
+            "USdDR": 30,
+            "SdDR": 20,
+            "cost": 60000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 0,
+            "USdDR": 50,
+            "SdDR": 30,
+            "cost": 200000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 0,
+            "USdDR": 70,
+            "SdDR": 50,
+            "cost": 600000000
+        }
+    ],
+    "Armor, Light Alloy": [
+        {
+            "Category": "Armor and Survivability",
+            "RepairSkill": "Armoury (Vehicle Armor)",
+            "Location": "hull",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "SuperScience": false,
+            "TL": 7
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "USdDR": 2,
+            "SdDR": 1,
+            "cost": 15000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "USdDR": 3,
+            "SdDR": 2,
+            "cost": 50000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "USdDR": 5,
+            "SdDR": 3,
+            "cost": 150000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "USdDR": 7,
+            "SdDR": 5,
+            "cost": 500000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "USdDR": 10,
+            "SdDR": 7,
+            "cost": 1500000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 0,
+            "USdDR": 15,
+            "SdDR": 10,
+            "cost": 5000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 0,
+            "USdDR": 20,
+            "SdDR": 15,
+            "cost": 15000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 0,
+            "USdDR": 30,
+            "SdDR": 20,
+            "cost": 50000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 0,
+            "USdDR": 50,
+            "SdDR": 30,
+            "cost": 150000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 0,
+            "USdDR": 70,
+            "SdDR": 50,
+            "cost": 500000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 0,
+            "USdDR": 100,
+            "SdDR": 70,
+            "cost": 1500000000
+        }
+    ],
+    "Armor, Metallic Laminate": [
+        {
+            "Category": "Armor and Survivability",
+            "RepairSkill": "Armoury (Vehicle Armor)",
+            "Location": "hull",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "SuperScience": false,
+            "TL": 8
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "USdDR": 3,
+            "SdDR": 2,
+            "cost": 30000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "USdDR": 5,
+            "SdDR": 3,
+            "cost": 100000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "USdDR": 7,
+            "SdDR": 5,
+            "cost": 300000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "USdDR": 10,
+            "SdDR": 7,
+            "cost": 1000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "USdDR": 15,
+            "SdDR": 10,
+            "cost": 3000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 0,
+            "USdDR": 20,
+            "SdDR": 15,
+            "cost": 10000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 0,
+            "USdDR": 30,
+            "SdDR": 20,
+            "cost": 30000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 0,
+            "USdDR": 50,
+            "SdDR": 30,
+            "cost": 100000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 0,
+            "USdDR": 70,
+            "SdDR": 50,
+            "cost": 300000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 0,
+            "USdDR": 100,
+            "SdDR": 70,
+            "cost": 1000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 0,
+            "USdDR": 150,
+            "SdDR": 100,
+            "cost": 3000000000
+        }
+    ],
+    "Armor, Advanced Metallic Laminate": [
+        {
+            "Category": "Armor and Survivability",
+            "RepairSkill": "Armoury (Vehicle Armor)",
+            "Location": "hull",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "SuperScience": false,
+            "TL": 9
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "USdDR": 5,
+            "SdDR": 3,
+            "cost": 60000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "USdDR": 7,
+            "SdDR": 5,
+            "cost": 200000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "USdDR": 10,
+            "SdDR": 7,
+            "cost": 600000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "USdDR": 15,
+            "SdDR": 10,
+            "cost": 2000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "USdDR": 20,
+            "SdDR": 15,
+            "cost": 6000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 0,
+            "USdDR": 30,
+            "SdDR": 20,
+            "cost": 20000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 0,
+            "USdDR": 50,
+            "SdDR": 30,
+            "cost": 60000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 0,
+            "USdDR": 70,
+            "SdDR": 50,
+            "cost": 200000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 0,
+            "USdDR": 100,
+            "SdDR": 70,
+            "cost": 600000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 0,
+            "USdDR": 150,
+            "SdDR": 100,
+            "cost": 2000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 0,
+            "USdDR": 200,
+            "SdDR": 150,
+            "cost": 6000000000
+        }
+    ],
+    "Armor, Nanocomposite": [
+        {
+            "Category": "Armor and Survivability",
+            "RepairSkill": "Armoury (Vehicle Armor)",
+            "Location": "hull",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "SuperScience": false,
+            "TL": 10
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "USdDR": 7,
+            "SdDR": 5,
+            "cost": 150000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "USdDR": 10,
+            "SdDR": 7,
+            "cost": 500000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "USdDR": 15,
+            "SdDR": 10,
+            "cost": 1500000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "USdDR": 20,
+            "SdDR": 15,
+            "cost": 5000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "USdDR": 30,
+            "SdDR": 20,
+            "cost": 15000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 0,
+            "USdDR": 50,
+            "SdDR": 30,
+            "cost": 50000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 0,
+            "USdDR": 70,
+            "SdDR": 50,
+            "cost": 150000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 0,
+            "USdDR": 100,
+            "SdDR": 70,
+            "cost": 500000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 0,
+            "USdDR": 150,
+            "SdDR": 100,
+            "cost": 1500000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 0,
+            "USdDR": 300,
+            "SdDR": 200,
+            "cost": 15000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 0,
+            "USdDR": 200,
+            "SdDR": 150,
+            "cost": 6000000000
+        }
+    ],
+    "Armor, Organic": [
+        {
+            "Category": "Armor and Survivability",
+            "RepairSkill": "Carpentry, Biotechnology (Tissue Engineering), Veterinary",
+            "Location": "hull",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "SuperScience": false,
+            "TL": 10
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "USdDR": 2,
+            "SdDR": 1,
+            "cost": 10000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "USdDR": 3,
+            "SdDR": 2,
+            "cost": 30000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "USdDR": 5,
+            "SdDR": 3,
+            "cost": 100000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "USdDR": 7,
+            "SdDR": 5,
+            "cost": 300000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "USdDR": 10,
+            "SdDR": 7,
+            "cost": 1000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 0,
+            "USdDR": 15,
+            "SdDR": 10,
+            "cost": 3000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 0,
+            "USdDR": 20,
+            "SdDR": 15,
+            "cost": 10000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 0,
+            "USdDR": 30,
+            "SdDR": 20,
+            "cost": 30000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 0,
+            "USdDR": 50,
+            "SdDR": 30,
+            "cost": 100000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 0,
+            "USdDR": 70,
+            "SdDR": 50,
+            "cost": 300000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 0,
+            "USdDR": 100,
+            "SdDR": 70,
+            "cost": 1000000000
+        }
+    ],
+    "Armor, Diamondoid": [
+        {
+            "Category": "Armor and Survivability",
+            "RepairSkill": "Armoury (Vehicle Armor)",
+            "Location": "hull",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "SuperScience": false,
+            "TL": 11
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "USdDR": 10,
+            "SdDR": 7,
+            "cost": 300000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "USdDR": 15,
+            "SdDR": 10,
+            "cost": 1000000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "USdDR": 20,
+            "SdDR": 15,
+            "cost": 3000000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "USdDR": 30,
+            "SdDR": 20,
+            "cost": 10000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "USdDR": 50,
+            "SdDR": 30,
+            "cost": 30000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 0,
+            "USdDR": 70,
+            "SdDR": 50,
+            "cost": 100000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 0,
+            "USdDR": 100,
+            "SdDR": 70,
+            "cost": 300000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 0,
+            "USdDR": 150,
+            "SdDR": 100,
+            "cost": 1000000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 0,
+            "USdDR": 200,
+            "SdDR": 150,
+            "cost": 3000000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 0,
+            "USdDR": 300,
+            "SdDR": 200,
+            "cost": 10000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 0,
+            "USdDR": 500,
+            "SdDR": 300,
+            "cost": 30000000000
+        }
+    ],
+    "Armor, Exotic Laminate": [
+        {
+            "Category": "Armor and Survivability",
+            "RepairSkill": "Armoury (Vehicle Armor)",
+            "Location": "hull",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "SuperScience": false,
+            "TL": 12
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "USdDR": 15,
+            "SdDR": 10,
+            "cost": 600000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "USdDR": 20,
+            "SdDR": 15,
+            "cost": 2000000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "USdDR": 30,
+            "SdDR": 20,
+            "cost": 6000000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "USdDR": 50,
+            "SdDR": 30,
+            "cost": 20000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "USdDR": 70,
+            "SdDR": 50,
+            "cost": 60000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 0,
+            "USdDR": 100,
+            "SdDR": 70,
+            "cost": 200000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 0,
+            "USdDR": 150,
+            "SdDR": 100,
+            "cost": 600000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 0,
+            "USdDR": 200,
+            "SdDR": 150,
+            "cost": 2000000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 0,
+            "USdDR": 300,
+            "SdDR": 200,
+            "cost": 6000000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 0,
+            "USdDR": 500,
+            "SdDR": 300,
+            "cost": 20000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 0,
+            "USdDR": 700,
+            "SdDR": 500,
+            "cost": 60000000000
+        }
+    ],
+    "Cargo Hold": [
+        {
+            "Category": "Utility",
+            "RepairSkill": "Mechanic (Vehicle Type)",
+            "Location": "any",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "SuperScience": false,
+            "TL": 7
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "LoadUPr": 1.5,
+            "cost": 0
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "LoadUPr": 5,
+            "cost": 0
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "LoadUPr": 15,
+            "cost": 0
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "LoadUPr": 50,
+            "cost": 0
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "LoadUPr": 150,
+            "cost": 0
+        },
+        {
+            "SM": 10,
+            "Workspaces": 0,
+            "LoadUPr": 500,
+            "cost": 0
+        },
+        {
+            "SM": 11,
+            "Workspaces": 0,
+            "LoadUPr": 1500,
+            "cost": 0
+        },
+        {
+            "SM": 12,
+            "Workspaces": 0,
+            "LoadUPr": 5000,
+            "cost": 0
+        },
+        {
+            "SM": 13,
+            "Workspaces": 0,
+            "LoadUPr": 15000,
+            "cost": 0
+        },
+        {
+            "SM": 14,
+            "Workspaces": 0,
+            "LoadUPr": 50000,
+            "cost": 0
+        },
+        {
+            "SM": 15,
+            "Workspaces": 0,
+            "LoadUPr": 150000,
+            "cost": 0
+        }
+    ],
+    "Contragravity Lifter": [
+        {
+            "Category": "Propulsion",
+            "RepairSkill": "Mechanic (Contragravity)",
+            "Location": "any",
+            "PowerGeneration": 0,
+            "PowerDemand": 1,
+            "SuperScience": true,
+            "TL": 7
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 300000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 1000000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 3000000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 10000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 30000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 100000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 300000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 1000000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 3000000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 10000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 30000000000
+        }
+    ],
+    "Control Room": [
+        {
+            "Category": "Engineering",
+            "RepairSkill": "Electronics Repair (Computers), Computer Programming, and Electrician",
+            "Location": "any",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "SuperScience": false,
+            "TL": 7
+        },
+        {
+            "SM": 5,
+            "Complexity": 6,
+            "ControlStations": 1,
+            "Workspaces": 0,
+            "cost": 60000
+        },
+        {
+            "SM": 6,
+            "Complexity": 7,
+            "ControlStations": 2,
+            "Workspaces": 0,
+            "cost": 200000
+        },
+        {
+            "SM": 7,
+            "Complexity": 7,
+            "ControlStations": 3,
+            "Workspaces": 0,
+            "cost": 600000
+        },
+        {
+            "SM": 8,
+            "Complexity": 8,
+            "ControlStations": 4,
+            "Workspaces": 0,
+            "cost": 2000000
+        },
+        {
+            "SM": 9,
+            "Complexity": 8,
+            "ControlStations": 6,
+            "Workspaces": 0,
+            "cost": 6000000
+        },
+        {
+            "SM": 10,
+            "Complexity": 9,
+            "ControlStations": 10,
+            "Workspaces": 1,
+            "cost": 20000000
+        },
+        {
+            "SM": 11,
+            "Complexity": 9,
+            "ControlStations": 15,
+            "Workspaces": 3,
+            "cost": 60000000
+        },
+        {
+            "SM": 12,
+            "Complexity": 10,
+            "ControlStations": 20,
+            "Workspaces": 10,
+            "cost": 200000000
+        },
+        {
+            "SM": 13,
+            "Complexity": 10,
+            "ControlStations": 30,
+            "Workspaces": 30,
+            "cost": 600000000
+        },
+        {
+            "SM": 14,
+            "Complexity": 11,
+            "ControlStations": 40,
+            "Workspaces": 100,
+            "cost": 2000000000
+        },
+        {
+            "SM": 15,
+            "Complexity": 11,
+            "ControlStations": 60,
+            "Workspaces": 300,
+            "cost": 6000000000
+        }
+    ],
+    "Defensive ECM": [
+        {
+            "Category": "Armor and Survivability",
+            "RepairSkill": "Electronics Repair (EW)",
+            "Location": "any",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "SuperScience": false,
+            "TL": 7
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 300000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 1000000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 3000000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 10000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 30000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 100000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 300000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 1000000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 3000000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 10000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 30000000000
+        }
+    ],
+    "Engine Room": [
+        {
+            "Category": "Engineering",
+            "RepairSkill": "Mechanic (Vehicle Type)",
+            "Location": "any",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "SuperScience": false,
+            "TL": 7
+        },
+        {
+            "SM": 5,
+            "Workspaces": 1,
+            "cost": 15000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 1,
+            "cost": 30000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 1,
+            "cost": 100000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 1,
+            "cost": 300000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 2,
+            "cost": 1000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 0,
+            "cost": 0
+        },
+        {
+            "SM": 11,
+            "Workspaces": 0,
+            "cost": 0
+        },
+        {
+            "SM": 12,
+            "Workspaces": 0,
+            "cost": 0
+        },
+        {
+            "SM": 13,
+            "Workspaces": 0,
+            "cost": 0
+        },
+        {
+            "SM": 14,
+            "Workspaces": 0,
+            "cost": 0
+        },
+        {
+            "SM": 15,
+            "Workspaces": 0,
+            "cost": 0
+        }
+    ],
+    "Sensor Array, Enhanced": [
+        {
+            "Category": "Utility",
+            "RepairSkill": "Electronics Repair (Communications AND Sensors)",
+            "Location": "hull",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "SuperScience": false,
+            "TL": 7
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 60000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 200000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 600000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 2000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 6000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 20000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 60000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 200000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 600000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 2000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 6000000000
+        }
+    ],
+    "Sensor Array, Tactical": [
+        {
+            "Category": "Utility",
+            "RepairSkill": "Electronics Repair (Communications AND Sensors)",
+            "Location": "hull",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "SuperScience": false,
+            "TL": 7
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 300000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 1000000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 3000000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 10000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 30000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 100000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 300000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 1000000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 3000000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 10000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 30000000000
+        }
+    ],
+    "Sensor Array, Science": [
+        {
+            "Category": "Utility",
+            "RepairSkill": "Electronics Repair (Communications AND Sensors)",
+            "Location": "hull",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "SuperScience": false,
+            "TL": 7
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 300000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 1000000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 3000000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 10000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 30000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 100000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 300000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 1000000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 3000000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 10000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 30000000000
+        }
+    ],
+    "Sensor Array, Multipurpose": [
+        {
+            "Category": "Utility",
+            "RepairSkill": "Electronics Repair (Communications AND Sensors)",
+            "Location": "hull",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "SuperScience": false,
+            "TL": 7
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 600000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 2000000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 6000000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 20000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 60000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 200000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 600000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 2000000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 6000000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 20000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 60000000000
+        }
+    ],
+    "External Clamp": [
+        {
+            "Category": "Utility",
+            "RepairSkill": "Mechanic (Vehicle Type)",
+            "Location": "hull",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "SuperScience": false,
+            "TL": 7
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 3000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 10000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 30000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 100000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 300000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 0,
+            "cost": 1000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 0,
+            "cost": 3000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 0,
+            "cost": 10000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 0,
+            "cost": 30000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 0,
+            "cost": 100000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 0,
+            "cost": 300000000
+        }
+    ],
+    "Factory, Fabricator": [
+        {
+            "Category": "Utility",
+            "RepairSkill": "Mechanic (Machine Tools)",
+            "Location": "any",
+            "PowerGeneration": 0,
+            "PowerDemand": 1,
+            "SuperScience": false,
+            "TL": 8
+        },
+        {
+            "SM": 5,
+            "$Hr": null,
+            "Workspaces": 0,
+            "cost": 0
+        },
+        {
+            "SM": 6,
+            "$Hr": 5000,
+            "Workspaces": 0,
+            "cost": 5000000
+        },
+        {
+            "SM": 7,
+            "$Hr": 15000,
+            "Workspaces": 0,
+            "cost": 15000000
+        },
+        {
+            "SM": 8,
+            "$Hr": 50000,
+            "Workspaces": 0,
+            "cost": 50000000
+        },
+        {
+            "SM": 9,
+            "$Hr": 150000,
+            "Workspaces": 0,
+            "cost": 150000000
+        },
+        {
+            "SM": 10,
+            "$Hr": 500000,
+            "Workspaces": 1,
+            "cost": 500000000
+        },
+        {
+            "SM": 11,
+            "$Hr": 1500000,
+            "Workspaces": 3,
+            "cost": 1500000000
+        },
+        {
+            "SM": 12,
+            "$Hr": 5000000,
+            "Workspaces": 10,
+            "cost": 5000000000
+        },
+        {
+            "SM": 13,
+            "$Hr": 15000000,
+            "Workspaces": 30,
+            "cost": 15000000000
+        },
+        {
+            "SM": 14,
+            "$Hr": 50000000,
+            "Workspaces": 100,
+            "cost": 50000000000
+        },
+        {
+            "SM": 15,
+            "$Hr": 150000000,
+            "Workspaces": 300,
+            "cost": 150000000000
+        }
+    ],
+    "Factory, Robofac": [
+        {
+            "Category": "Utility",
+            "RepairSkill": "Mechanic (Robots)",
+            "Location": "any",
+            "PowerGeneration": 0,
+            "PowerDemand": 1,
+            "SuperScience": false,
+            "TL": 10
+        },
+        {
+            "SM": 5,
+            "$Hr": null,
+            "Workspaces": 0,
+            "cost": 0
+        },
+        {
+            "SM": 6,
+            "$Hr": 10000,
+            "Workspaces": 0,
+            "cost": 10000000
+        },
+        {
+            "SM": 7,
+            "$Hr": 30000,
+            "Workspaces": 0,
+            "cost": 30000000
+        },
+        {
+            "SM": 8,
+            "$Hr": 100000,
+            "Workspaces": 0,
+            "cost": 100000000
+        },
+        {
+            "SM": 9,
+            "$Hr": 300000,
+            "Workspaces": 0,
+            "cost": 300000000
+        },
+        {
+            "SM": 10,
+            "$Hr": 1000000,
+            "Workspaces": 1,
+            "cost": 1000000000
+        },
+        {
+            "SM": 11,
+            "$Hr": 3000000,
+            "Workspaces": 3,
+            "cost": 3000000000
+        },
+        {
+            "SM": 12,
+            "$Hr": 10000000,
+            "Workspaces": 10,
+            "cost": 10000000000
+        },
+        {
+            "SM": 13,
+            "$Hr": 30000000,
+            "Workspaces": 30,
+            "cost": 30000000000
+        },
+        {
+            "SM": 14,
+            "$Hr": 100000000,
+            "Workspaces": 100,
+            "cost": 100000000000
+        },
+        {
+            "SM": 15,
+            "$Hr": 300000000,
+            "Workspaces": 300,
+            "cost": 300000000000
+        }
+    ],
+    "Factory, Nanofactory": [
+        {
+            "Category": "Utility",
+            "RepairSkill": "Mechanic (Nanomachines)",
+            "Location": "any",
+            "PowerGeneration": 0,
+            "PowerDemand": 1,
+            "SuperScience": false,
+            "TL": 11
+        },
+        {
+            "SM": 5,
+            "$Hr": null,
+            "Workspaces": 0,
+            "cost": 0
+        },
+        {
+            "SM": 6,
+            "$Hr": 100000,
+            "Workspaces": 0,
+            "cost": 20000000
+        },
+        {
+            "SM": 7,
+            "$Hr": 300000,
+            "Workspaces": 0,
+            "cost": 60000000
+        },
+        {
+            "SM": 8,
+            "$Hr": 1000000,
+            "Workspaces": 0,
+            "cost": 200000000
+        },
+        {
+            "SM": 9,
+            "$Hr": 3000000,
+            "Workspaces": 0,
+            "cost": 600000000
+        },
+        {
+            "SM": 10,
+            "$Hr": 10000000,
+            "Workspaces": 1,
+            "cost": 2000000000
+        },
+        {
+            "SM": 11,
+            "$Hr": 30000000,
+            "Workspaces": 3,
+            "cost": 6000000000
+        },
+        {
+            "SM": 12,
+            "$Hr": 100000000,
+            "Workspaces": 10,
+            "cost": 20000000000
+        },
+        {
+            "SM": 13,
+            "$Hr": 300000000,
+            "Workspaces": 30,
+            "cost": 60000000000
+        },
+        {
+            "SM": 14,
+            "$Hr": 1000000000,
+            "Workspaces": 100,
+            "cost": 200000000000
+        },
+        {
+            "SM": 15,
+            "$Hr": 3000000000,
+            "Workspaces": 300,
+            "cost": 600000000000
+        }
+    ],
+    "Factory, Replicator": [
+        {
+            "Category": "Utility",
+            "RepairSkill": "Electronics Repair (MT)",
+            "Location": "any",
+            "PowerGeneration": 0,
+            "PowerDemand": 1,
+            "SuperScience": true,
+            "TL": 12
+        },
+        {
+            "SM": 5,
+            "lbsHr": null,
+            "Workspaces": 0,
+            "cost": 0
+        },
+        {
+            "SM": 6,
+            "lbsHr": 0.5,
+            "Workspaces": 0,
+            "cost": 100000000
+        },
+        {
+            "SM": 7,
+            "lbsHr": 1.5,
+            "Workspaces": 0,
+            "cost": 300000000
+        },
+        {
+            "SM": 8,
+            "lbsHr": 5,
+            "Workspaces": 0,
+            "cost": 1000000000
+        },
+        {
+            "SM": 9,
+            "lbsHr": 15,
+            "Workspaces": 0,
+            "cost": 3000000000
+        },
+        {
+            "SM": 10,
+            "lbsHr": 50,
+            "Workspaces": 1,
+            "cost": 10000000000
+        },
+        {
+            "SM": 11,
+            "lbsHr": 150,
+            "Workspaces": 3,
+            "cost": 30000000000
+        },
+        {
+            "SM": 12,
+            "lbsHr": 500,
+            "Workspaces": 10,
+            "cost": 100000000000
+        },
+        {
+            "SM": 13,
+            "lbsHr": 1500,
+            "Workspaces": 30,
+            "cost": 300000000000
+        },
+        {
+            "SM": 14,
+            "lbsHr": 5000,
+            "Workspaces": 100,
+            "cost": 1000000000000
+        },
+        {
+            "SM": 15,
+            "lbsHr": 15000,
+            "Workspaces": 300,
+            "cost": 3000000000000
+        }
+    ],
+    "Force Screen, TL11 Light": [
+        {
+            "Category": "Armor and Survivability",
+            "RepairSkill": "Armoury (Force Shields)",
+            "Location": "any",
+            "PowerGeneration": 0,
+            "PowerDemand": 1,
+            "SuperScience": true,
+            "TL": 11
+        },
+        {
+            "SM": 5,
+            "dDr": 20,
+            "Workspaces": 0,
+            "cost": 500000
+        },
+        {
+            "SM": 6,
+            "dDr": 30,
+            "Workspaces": 0,
+            "cost": 1500000
+        },
+        {
+            "SM": 7,
+            "dDr": 50,
+            "Workspaces": 0,
+            "cost": 5000000
+        },
+        {
+            "SM": 8,
+            "dDr": 70,
+            "Workspaces": 0,
+            "cost": 15000000
+        },
+        {
+            "SM": 9,
+            "dDr": 100,
+            "Workspaces": 0,
+            "cost": 50000000
+        },
+        {
+            "SM": 10,
+            "dDr": 150,
+            "Workspaces": 1,
+            "cost": 150000000
+        },
+        {
+            "SM": 11,
+            "dDr": 200,
+            "Workspaces": 3,
+            "cost": 500000000
+        },
+        {
+            "SM": 12,
+            "dDr": 300,
+            "Workspaces": 10,
+            "cost": 1500000000
+        },
+        {
+            "SM": 13,
+            "dDr": 500,
+            "Workspaces": 30,
+            "cost": 5000000000
+        },
+        {
+            "SM": 14,
+            "dDr": 700,
+            "Workspaces": 100,
+            "cost": 15000000000
+        },
+        {
+            "SM": 15,
+            "dDr": 1000,
+            "Workspaces": 300,
+            "cost": 50000000000
+        }
+    ],
+    "Force Screen, TL11 Heavy": [
+        {
+            "Category": "Armor and Survivability",
+            "RepairSkill": "Armoury (Force Shields)",
+            "Location": "any",
+            "PowerGeneration": 0,
+            "PowerDemand": 2,
+            "SuperScience": true,
+            "TL": 11
+        },
+        {
+            "SM": 5,
+            "dDr": 20,
+            "Workspaces": 0,
+            "cost": 1500000
+        },
+        {
+            "SM": 6,
+            "dDr": 30,
+            "Workspaces": 0,
+            "cost": 5000000
+        },
+        {
+            "SM": 7,
+            "dDr": 50,
+            "Workspaces": 0,
+            "cost": 15000000
+        },
+        {
+            "SM": 8,
+            "dDr": 70,
+            "Workspaces": 0,
+            "cost": 50000000
+        },
+        {
+            "SM": 9,
+            "dDr": 100,
+            "Workspaces": 0,
+            "cost": 150000000
+        },
+        {
+            "SM": 10,
+            "dDr": 150,
+            "Workspaces": 1,
+            "cost": 500000000
+        },
+        {
+            "SM": 11,
+            "dDr": 200,
+            "Workspaces": 3,
+            "cost": 1500000000
+        },
+        {
+            "SM": 12,
+            "dDr": 300,
+            "Workspaces": 10,
+            "cost": 5000000000
+        },
+        {
+            "SM": 13,
+            "dDr": 500,
+            "Workspaces": 30,
+            "cost": 15000000000
+        },
+        {
+            "SM": 14,
+            "dDr": 700,
+            "Workspaces": 100,
+            "cost": 50000000000
+        },
+        {
+            "SM": 15,
+            "dDr": 1000,
+            "Workspaces": 300,
+            "cost": 150000000000
+        }
+    ],
+    "Force Screen, TL12 Light": [
+        {
+            "Category": "Armor and Survivability",
+            "RepairSkill": "Armoury (Force Shields)",
+            "Location": "any",
+            "PowerGeneration": 0,
+            "PowerDemand": 1,
+            "SuperScience": true,
+            "TL": 12
+        },
+        {
+            "SM": 5,
+            "dDr": 30,
+            "Workspaces": 0,
+            "cost": 500000
+        },
+        {
+            "SM": 6,
+            "dDr": 50,
+            "Workspaces": 0,
+            "cost": 1500000
+        },
+        {
+            "SM": 7,
+            "dDr": 70,
+            "Workspaces": 0,
+            "cost": 5000000
+        },
+        {
+            "SM": 8,
+            "dDr": 100,
+            "Workspaces": 0,
+            "cost": 15000000
+        },
+        {
+            "SM": 9,
+            "dDr": 150,
+            "Workspaces": 0,
+            "cost": 50000000
+        },
+        {
+            "SM": 10,
+            "dDr": 200,
+            "Workspaces": 1,
+            "cost": 150000000
+        },
+        {
+            "SM": 11,
+            "dDr": 300,
+            "Workspaces": 3,
+            "cost": 500000000
+        },
+        {
+            "SM": 12,
+            "dDr": 500,
+            "Workspaces": 10,
+            "cost": 1500000000
+        },
+        {
+            "SM": 13,
+            "dDr": 700,
+            "Workspaces": 30,
+            "cost": 5000000000
+        },
+        {
+            "SM": 14,
+            "dDr": 1000,
+            "Workspaces": 100,
+            "cost": 15000000000
+        },
+        {
+            "SM": 15,
+            "dDr": 1500,
+            "Workspaces": 300,
+            "cost": 50000000000
+        }
+    ],
+    "Force Screen, TL12 Heavy": [
+        {
+            "Category": "Armor and Survivability",
+            "RepairSkill": "Armoury (Force Shields)",
+            "Location": "any",
+            "PowerGeneration": 0,
+            "PowerDemand": 2,
+            "SuperScience": true,
+            "TL": 12
+        },
+        {
+            "SM": 5,
+            "dDr": 30,
+            "Workspaces": 0,
+            "cost": 1500000
+        },
+        {
+            "SM": 6,
+            "dDr": 50,
+            "Workspaces": 0,
+            "cost": 5000000
+        },
+        {
+            "SM": 7,
+            "dDr": 70,
+            "Workspaces": 0,
+            "cost": 15000000
+        },
+        {
+            "SM": 8,
+            "dDr": 100,
+            "Workspaces": 0,
+            "cost": 50000000
+        },
+        {
+            "SM": 9,
+            "dDr": 150,
+            "Workspaces": 0,
+            "cost": 150000000
+        },
+        {
+            "SM": 10,
+            "dDr": 200,
+            "Workspaces": 1,
+            "cost": 500000000
+        },
+        {
+            "SM": 11,
+            "dDr": 300,
+            "Workspaces": 3,
+            "cost": 1500000000
+        },
+        {
+            "SM": 12,
+            "dDr": 500,
+            "Workspaces": 10,
+            "cost": 5000000000
+        },
+        {
+            "SM": 13,
+            "dDr": 700,
+            "Workspaces": 30,
+            "cost": 15000000000
+        },
+        {
+            "SM": 14,
+            "dDr": 1000,
+            "Workspaces": 100,
+            "cost": 50000000000
+        },
+        {
+            "SM": 15,
+            "dDr": 1500,
+            "Workspaces": 300,
+            "cost": 150000000000
+        }
+    ],
+    "Fuel Tank": [
+        {
+            "Category": "Propulsion",
+            "RepairSkill": "Mechanic (Vehicle Type)",
+            "Location": "any",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "SuperScience": false,
+            "TL": 7
+        },
+        {
+            "SM": 5,
+            "Fuel": 1.5,
+            "cost": 10000,
+            "Workspaces": 0
+        },
+        {
+            "SM": 6,
+            "Fuel": 5,
+            "cost": 30000,
+            "Workspaces": 0
+        },
+        {
+            "SM": 7,
+            "Fuel": 15,
+            "cost": 100000,
+            "Workspaces": 0
+        },
+        {
+            "SM": 8,
+            "Fuel": 50,
+            "cost": 300000,
+            "Workspaces": 0
+        },
+        {
+            "SM": 9,
+            "Fuel": 150,
+            "cost": 1000000,
+            "Workspaces": 0
+        },
+        {
+            "SM": 10,
+            "Fuel": 500,
+            "cost": 3000000,
+            "Workspaces": 0
+        },
+        {
+            "SM": 11,
+            "Fuel": 1500,
+            "cost": 10000000,
+            "Workspaces": 0
+        },
+        {
+            "SM": 12,
+            "Fuel": 5000,
+            "cost": 30000000,
+            "Workspaces": 0
+        },
+        {
+            "SM": 13,
+            "Fuel": 15000,
+            "cost": 100000000,
+            "Workspaces": 0
+        },
+        {
+            "SM": 14,
+            "Fuel": 50000,
+            "cost": 300000000,
+            "Workspaces": 0
+        },
+        {
+            "SM": 15,
+            "Fuel": 150000,
+            "cost": 1000000000,
+            "Workspaces": 0
+        }
+    ],
+    "Habitat": [
+        {
+            "Category": "Crew",
+            "RepairSkill": "Mechanic (Life Support), see rules for total life support.",
+            "Location": "any",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "SuperScience": false,
+            "TL": 7
+        },
+        {
+            "SM": 5,
+            "Cabins": null,
+            "Workspaces": 0,
+            "cost": 0
+        },
+        {
+            "SM": 6,
+            "Cabins": 1,
+            "Workspaces": 0,
+            "cost": 100000
+        },
+        {
+            "SM": 7,
+            "Cabins": 2,
+            "Workspaces": 0,
+            "cost": 300000
+        },
+        {
+            "SM": 8,
+            "Cabins": 6,
+            "Workspaces": 0,
+            "cost": 1000000
+        },
+        {
+            "SM": 9,
+            "Cabins": 20,
+            "Workspaces": 0,
+            "cost": 3000000
+        },
+        {
+            "SM": 10,
+            "Cabins": 60,
+            "Workspaces": 1,
+            "cost": 10000000
+        },
+        {
+            "SM": 11,
+            "Cabins": 200,
+            "Workspaces": 3,
+            "cost": 30000000
+        },
+        {
+            "SM": 12,
+            "Cabins": 600,
+            "Workspaces": 10,
+            "cost": 100000000
+        },
+        {
+            "SM": 13,
+            "Cabins": 2000,
+            "Workspaces": 30,
+            "cost": 300000000
+        },
+        {
+            "SM": 14,
+            "Cabins": 6000,
+            "Workspaces": 100,
+            "cost": 1000000000
+        },
+        {
+            "SM": 15,
+            "Cabins": 20000,
+            "Workspaces": 300,
+            "cost": 3000000000
+        }
+    ],
+    "Hangar Bay": [
+        {
+            "Category": "Utility",
+            "RepairSkill": "Mechanic (Vehicle Type)",
+            "Location": "hull",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "SuperScience": false,
+            "TL": 7
+        },
+        {
+            "SM": 5,
+            "Capacity": 1,
+            "LaunchRate": 1,
+            "Workspaces": 0,
+            "cost": 3000
+        },
+        {
+            "SM": 6,
+            "Capacity": 3,
+            "LaunchRate": 3,
+            "Workspaces": 0,
+            "cost": 10000
+        },
+        {
+            "SM": 7,
+            "Capacity": 10,
+            "LaunchRate": 10,
+            "Workspaces": 0,
+            "cost": 30000
+        },
+        {
+            "SM": 8,
+            "Capacity": 30,
+            "LaunchRate": 20,
+            "Workspaces": 0,
+            "cost": 100000
+        },
+        {
+            "SM": 9,
+            "Capacity": 100,
+            "LaunchRate": 50,
+            "Workspaces": 0,
+            "cost": 300000
+        },
+        {
+            "SM": 10,
+            "Capacity": 300,
+            "LaunchRate": 100,
+            "Workspaces": 1,
+            "cost": 1000000
+        },
+        {
+            "SM": 11,
+            "Capacity": 1000,
+            "LaunchRate": 200,
+            "Workspaces": 3,
+            "cost": 3000000
+        },
+        {
+            "SM": 12,
+            "Capacity": 3000,
+            "LaunchRate": 500,
+            "Workspaces": 10,
+            "cost": 10000000
+        },
+        {
+            "SM": 13,
+            "Capacity": 10000,
+            "LaunchRate": 1000,
+            "Workspaces": 30,
+            "cost": 30000000
+        },
+        {
+            "SM": 14,
+            "Capacity": 30000,
+            "LaunchRate": 2000,
+            "Workspaces": 100,
+            "cost": 100000000
+        },
+        {
+            "SM": 15,
+            "Capacity": 100000,
+            "LaunchRate": 5000,
+            "Workspaces": 300,
+            "cost": 300000000
+        }
+    ],
+    "Jet Engine": [
+        {
+            "Category": "Propulsion",
+            "RepairSkill": "Mechanic (Aerospace or Jet Engines)",
+            "Location": "rear",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "SuperScience": false,
+            "TL": 7
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 300000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 1000000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 3000000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 10000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 30000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 100000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 300000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 1000000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 3000000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 10000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 30000000000
+        }
+    ],
+    "Jump Gate": [
+        {
+            "Category": "Propulsion",
+            "RepairSkill": "Electronics Repair (MT)",
+            "Location": "hull",
+            "PowerGeneration": 0,
+            "PowerDemand": 1,
+            "SuperScience": true,
+            "TL": 7
+        },
+        {
+            "SM": 5,
+            "Max tonnage": null,
+            "Workspaces": null,
+            "cost": null
+        },
+        {
+            "SM": 6,
+            "MaxTonnage": null,
+            "Workspaces": null,
+            "cost": null
+        },
+        {
+            "SM": 7,
+            "MaxTonnage": null,
+            "Workspaces": null,
+            "cost": 3000000
+        },
+        {
+            "SM": 8,
+            "MaxTonnage": null,
+            "Workspaces": null,
+            "cost": null
+        },
+        {
+            "SM": 9,
+            "MaxTonnage": 100,
+            "Workspaces": 0,
+            "cost": 150000000
+        },
+        {
+            "SM": 10,
+            "MaxTonnage": 300,
+            "Workspaces": 1,
+            "cost": 500000000
+        },
+        {
+            "SM": 11,
+            "MaxTonnage": 1000,
+            "Workspaces": 3,
+            "cost": 1500000000
+        },
+        {
+            "SM": 12,
+            "MaxTonnage": 3000,
+            "Workspaces": 10,
+            "cost": 5000000000
+        },
+        {
+            "SM": 13,
+            "MaxTonnage": 10000,
+            "Workspaces": 30,
+            "cost": 15000000000
+        },
+        {
+            "SM": 14,
+            "MaxTonnage": 30000,
+            "Workspaces": 100,
+            "cost": 50000000000
+        },
+        {
+            "SM": 15,
+            "MaxTonnage": 100000,
+            "Workspaces": 300,
+            "cost": 150000000000
+        }
+    ],
+    "Mining and Refinery": [
+        {
+            "Category": "Utility",
+            "RepairSkill": "Mechanic (Mining or Refineries)",
+            "Location": "any",
+            "PowerGeneration": 0,
+            "PowerDemand": 1,
+            "SuperScience": false,
+            "TL": 7
+        },
+        {
+            "SM": 5,
+            "TonsHrMining": 0.15,
+            "TonsHrRefinery": 0.5,
+            "Workspaces": 0,
+            "cost": 30000
+        },
+        {
+            "SM": 6,
+            "TonsHrMining": 0.5,
+            "TonsHrRefinery": 1.5,
+            "Workspaces": 0,
+            "cost": 100000
+        },
+        {
+            "SM": 7,
+            "TonsHrMining": 1.5,
+            "TonsHrRefinery": 5,
+            "Workspaces": 0,
+            "cost": 300000
+        },
+        {
+            "SM": 8,
+            "TonsHrMining": 5,
+            "TonsHrRefinery": 15,
+            "Workspaces": 0,
+            "cost": 1000000
+        },
+        {
+            "SM": 9,
+            "TonsHrMining": 15,
+            "TonsHrRefinery": 50,
+            "Workspaces": 0,
+            "cost": 3000000
+        },
+        {
+            "SM": 10,
+            "TonsHrMining": 50,
+            "TonsHrRefinery": 150,
+            "Workspaces": 1,
+            "cost": 10000000
+        },
+        {
+            "SM": 11,
+            "TonsHrMining": 150,
+            "TonsHrRefinery": 500,
+            "Workspaces": 3,
+            "cost": 30000000
+        },
+        {
+            "SM": 12,
+            "TonsHrMining": 500,
+            "TonsHrRefinery": 1500,
+            "Workspaces": 10,
+            "cost": 100000000
+        },
+        {
+            "SM": 13,
+            "TonsHrMining": 1500,
+            "TonsHrRefinery": 5000,
+            "Workspaces": 30,
+            "cost": 300000000
+        },
+        {
+            "SM": 14,
+            "TonsHrMining": 5000,
+            "TonsHrRefinery": 15000,
+            "Workspaces": 100,
+            "cost": 1000000000
+        },
+        {
+            "SM": 15,
+            "TonsHrMining": 15000,
+            "TonsHrRefinery": 50000,
+            "Workspaces": 300,
+            "cost": 3000000000
+        }
+    ],
+    "Open Space": [
+        {
+            "Category": "Crew",
+            "RepairSkill": "Housekeeping, or if used to grow food, Gardening or Farming",
+            "Location": "any",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "SuperScience": false,
+            "TL": 7
+        },
+        {
+            "SM": 5,
+            "Areas": null,
+            "Workspaces": 0,
+            "cost": 0
+        },
+        {
+            "SM": 6,
+            "Areas": null,
+            "Workspaces": 0,
+            "cost": 0
+        },
+        {
+            "SM": 7,
+            "Areas": null,
+            "Workspaces": 0,
+            "cost": 0
+        },
+        {
+            "SM": 8,
+            "Areas": 1,
+            "Workspaces": 0,
+            "cost": 100000
+        },
+        {
+            "SM": 9,
+            "Areas": 2,
+            "Workspaces": 0,
+            "cost": 200000
+        },
+        {
+            "SM": 10,
+            "Areas": 5,
+            "Workspaces": 1,
+            "cost": 500000
+        },
+        {
+            "SM": 11,
+            "Areas": 10,
+            "Workspaces": 3,
+            "cost": 1000000
+        },
+        {
+            "SM": 12,
+            "Areas": 20,
+            "Workspaces": 10,
+            "cost": 2000000
+        },
+        {
+            "SM": 13,
+            "Areas": 50,
+            "Workspaces": 30,
+            "cost": 5000000
+        },
+        {
+            "SM": 14,
+            "Areas": 100,
+            "Workspaces": 100,
+            "cost": 10000000
+        },
+        {
+            "SM": 15,
+            "Areas": 200,
+            "Workspaces": 300,
+            "cost": 20000000
+        }
+    ],
+    "Passenger Seating": [
+        {
+            "Category": "Crew",
+            "RepairSkill": "Mechanic (Life Support)",
+            "Location": "any",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "SuperScience": false,
+            "TL": 7
+        },
+        {
+            "SM": 5,
+            "Seats": 2,
+            "cost": 10000,
+            "Workspaces": 0
+        },
+        {
+            "SM": 6,
+            "Seats": 6,
+            "cost": 30000,
+            "Workspaces": 0
+        },
+        {
+            "SM": 7,
+            "Seats": 20,
+            "cost": 100000,
+            "Workspaces": 0
+        },
+        {
+            "SM": 8,
+            "Seats": 60,
+            "cost": 300000,
+            "Workspaces": 0
+        },
+        {
+            "SM": 9,
+            "Seats": 200,
+            "cost": 1000000,
+            "Workspaces": 0
+        },
+        {
+            "SM": 10,
+            "Seats": 600,
+            "cost": 3000000,
+            "Workspaces": 0
+        },
+        {
+            "SM": 11,
+            "Seats": 2000,
+            "cost": 10000000,
+            "Workspaces": 0
+        },
+        {
+            "SM": 12,
+            "Seats": 6000,
+            "cost": 30000000,
+            "Workspaces": 0
+        },
+        {
+            "SM": 13,
+            "Seats": 20000,
+            "cost": 100000000,
+            "Workspaces": 0
+        },
+        {
+            "SM": 14,
+            "Seats": 60000,
+            "cost": 300000000,
+            "Workspaces": 0
+        },
+        {
+            "SM": 15,
+            "Seats": 200000,
+            "cost": 1000000000,
+            "Workspaces": 0
+        }
+    ],
+    "Chemical, Fuel Cell": [
+        {
+            "Category": "Power",
+            "RepairSkill": "Mechanic (Fuel Cell)",
+            "Location": "any",
+            "PowerGeneration": 1,
+            "PowerDemand": 0,
+            "SuperScience": false,
+            "TL": 7
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 15000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 50000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 150000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 500000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 1500000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 5000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 15000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 50000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 150000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 500000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 1500000000
+        }
+    ],
+    "Chemical, MHD Turbine": [
+        {
+            "Category": "Power",
+            "RepairSkill": "Mechanic (MHD Turbine)",
+            "Location": "any",
+            "PowerGeneration": 2,
+            "PowerDemand": 0,
+            "SuperScience": false,
+            "TL": 9
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 30000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 100000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 300000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 1000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 3000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 10000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 30000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 100000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 300000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 1000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 3000000000
+        }
+    ],
+    "Reactor, Fission": [
+        {
+            "Category": "Power",
+            "RepairSkill": "Mechanic (Fission)",
+            "Location": "any",
+            "PowerGeneration": 1,
+            "PowerDemand": 0,
+            "SuperScience": false,
+            "TL": 8
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 100000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 300000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 1000000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 3000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 10000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 30000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 100000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 300000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 1000000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 3000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 10000000000
+        }
+    ],
+    "Reactor, Fusion": [
+        {
+            "Category": "Power",
+            "RepairSkill": "Mechanic (Fusion)",
+            "Location": "any",
+            "PowerGeneration": 2,
+            "PowerDemand": 0,
+            "SuperScience": false,
+            "TL": 9
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 300000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 1000000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 3000000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 10000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 30000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 100000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 300000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 1000000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 3000000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 10000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 30000000000
+        }
+    ],
+    "Reactor, Antimatter": [
+        {
+            "Category": "Power",
+            "RepairSkill": "Mechanic (Antimatter)",
+            "Location": "any",
+            "PowerGeneration": 4,
+            "PowerDemand": 0,
+            "SuperScience": false,
+            "TL": 10
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 600000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 2000000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 6000000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 20000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 60000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 200000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 600000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 2000000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 6000000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 20000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 60000000000
+        }
+    ],
+    "Reactor, Super Fusion": [
+        {
+            "Category": "Power",
+            "RepairSkill": "Mechanic (Fusion)",
+            "Location": "any",
+            "PowerGeneration": 4,
+            "PowerDemand": 0,
+            "SuperScience": false,
+            "TL": 11
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 1000000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 3000000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 10000000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 30000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 100000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 300000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 1000000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 3000000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 10000000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 30000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 100000000000
+        }
+    ],
+    "Reactor, Total Conversion": [
+        {
+            "Category": "Power",
+            "RepairSkill": "Mechanic (Total Conversion)",
+            "Location": "any",
+            "PowerGeneration": 5,
+            "PowerDemand": 0,
+            "SuperScience": true,
+            "TL": 12
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 2000000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 6000000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 20000000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 60000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 200000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 600000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 2000000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 6000000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 20000000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 60000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 200000000000
+        }
+    ],
+    "Ramscoop": [
+        {
+            "Category": "Propulsion",
+            "RepairSkill": "Mechanic (Vehicle Type)",
+            "Location": "front",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "SuperScience": false,
+            "TL": 10
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 3000000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 10000000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 30000000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 100000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 300000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 1000000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 3000000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 10000000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 30000000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 100000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 300000000000
+        }
+    ],
+    "Chemical": [
+        {
+            "Category": "Engine, Chemical & HEDM",
+            "RepairSkill": "Mechanic (High-Performance Spacecraft of Rockets)",
+            "Location": "rear",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "TL": 7,
+            "Accel": 3,
+            "mpsTank": 0.15,
+            "SuperScience": false
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 60000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 200000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 600000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 2000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 6000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 20000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 60000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 200000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 600000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 2000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 6000000000
+        }
+    ],
+    "HEDM": [
+        {
+            "Category": "Engine, Chemical & HEDM",
+            "RepairSkill": "Mechanic (High-Performance Spacecraft of Rockets)",
+            "Location": "rear",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "TL": 9,
+            "Accel": 2,
+            "mpsTank": 0.5,
+            "SuperScience": false
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 90000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 300000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 900000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 3000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 9000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 30000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 90000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 300000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 900000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 3000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 9000000000
+        }
+    ],
+    "Ion Drive": [
+        {
+            "Category": "Engine, Electric",
+            "RepairSkill": "Mechanic (Low Performance Spacecraft)",
+            "Location": "rear",
+            "PowerGeneration": 0,
+            "PowerDemand": 1,
+            "TL": 8,
+            "Accel": 0.0005,
+            "mpsTank": 3,
+            "SuperScience": false
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 100000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 300000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 1000000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 3000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 10000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 30000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 100000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 300000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 1000000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 3000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 10000000000
+        }
+    ],
+    "Mass Driver": [
+        {
+            "Category": "Engine, Electric",
+            "RepairSkill": "Mechanic (Low Performance Spacecraft)",
+            "Location": "rear",
+            "PowerGeneration": 0,
+            "PowerDemand": 1,
+            "TL": 9,
+            "Accel": 0.01,
+            "mpsTank": 0.3,
+            "SuperScience": false
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 100000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 300000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 1000000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 3000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 10000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 30000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 100000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 300000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 1000000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 3000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 10000000000
+        }
+    ],
+    "Nuclear Thermal Rocket": [
+        {
+            "Category": "Engine, Fission",
+            "RepairSkill": "Mechanic (Fission Engine)",
+            "Location": "rear",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "TL": 7,
+            "Accel": 0.1,
+            "mpsTank": 0.3,
+            "SuperScience": false
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 150000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 500000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 1500000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 5000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 15000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 50000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 150000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 500000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 1500000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 5000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 15000000000
+        }
+    ],
+    "Nuclear Light Bulb": [
+        {
+            "Category": "Engine, Fission",
+            "RepairSkill": "Mechanic (Fission Engine)",
+            "Location": "rear",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "TL": 9,
+            "Accel": 0.01,
+            "mpsTank": 0.8,
+            "SuperScience": false
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 150000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 500000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 1500000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 5000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 15000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 50000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 150000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 500000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 1500000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 5000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 15000000000
+        }
+    ],
+    "Nuclear Saltwater Rocket": [
+        {
+            "Category": "Engine, Fission",
+            "RepairSkill": "Mechanic (Fission Engine)",
+            "Location": "rear",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "TL": 9,
+            "Accel": 2,
+            "mpsTank": 2.5,
+            "SuperScience": true
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 150000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 500000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 1500000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 5000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 15000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 50000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 150000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 500000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 1500000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 5000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 15000000000
+        }
+    ],
+    "External Pulsed Plasma": [
+        {
+            "Category": "Engine, Fission",
+            "RepairSkill": "Mechanic (Nuclear Pulse Engine)",
+            "Location": "rear",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "TL": 7,
+            "Accel": 2,
+            "mpsTank": 2,
+            "SuperScience": false
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 300000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 1000000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 3000000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 10000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 30000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 100000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 300000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 1000000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 3000000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 10000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 30000000000
+        }
+    ],
+    "Fusion Pulse Drive": [
+        {
+            "Category": "Engine, Nuclear Pulse",
+            "RepairSkill": "Mechanic (Nuclear Pulse Engine)",
+            "Location": "rear",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "TL": 9,
+            "Accel": 0.02,
+            "mpsTank": 5,
+            "SuperScience": false
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 300000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 1000000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 3000000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 10000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 30000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 100000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 300000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 1000000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 3000000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 10000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 30000000000
+        }
+    ],
+    "Advanced Fusion Pulse Drive": [
+        {
+            "Category": "Engine, Nuclear Pulse",
+            "RepairSkill": "Mechanic (Nuclear Pulse Engine)",
+            "Location": "rear",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "TL": 9,
+            "Accel": 0.005,
+            "mpsTank": 20,
+            "SuperScience": false
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 600000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 2000000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 6000000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 20000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 60000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 200000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 600000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 2000000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 6000000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 20000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 60000000000
+        }
+    ],
+    "Super Fusion Pulse Drive": [
+        {
+            "Category": "Engine, Nuclear Pulse",
+            "RepairSkill": "Mechanic (Nuclear Pulse Engine)",
+            "Location": "rear",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "TL": 11,
+            "Accel": 20,
+            "mpsTank": 350,
+            "SuperScience": true
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 1200000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 4000000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 12000000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 40000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 120000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 400000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 1200000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 4000000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 12000000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 40000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 120000000000
+        }
+    ],
+    "Fusion Rocket": [
+        {
+            "Category": "Engine, Fusion",
+            "RepairSkill": "Mechanic (Fusion Engine)",
+            "Location": "rear",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "TL": 9,
+            "Accel": 0.005,
+            "mpsTank": 12,
+            "SuperScience": false
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 300000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 1000000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 3000000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 10000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 30000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 100000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 300000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 1000000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 3000000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 10000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 30000000000
+        }
+    ],
+    "Fusion Torch": [
+        {
+            "Category": "Engine, Fusion",
+            "RepairSkill": "Mechanic (Fusion Engine)",
+            "Location": "rear",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "TL": 10,
+            "Accel": 0.5,
+            "mpsTank": 15,
+            "SuperScience": true
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 600000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 2000000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 6000000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 20000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 60000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 200000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 600000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 2000000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 6000000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 20000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 60000000000
+        }
+    ],
+    "Super Fusion Torch": [
+        {
+            "Category": "Engine, Fusion",
+            "RepairSkill": "Mechanic (Fusion Engine)",
+            "Location": "rear",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "TL": 11,
+            "Accel": 50,
+            "mpsTank": 450,
+            "SuperScience": true
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 1200000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 4000000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 12000000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 40000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 120000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 400000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 1200000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 4000000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 12000000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 40000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 120000000000
+        }
+    ],
+    "Antimatter Thermal Rocket": [
+        {
+            "Category": "Engine, TotalConv. & Antimatter",
+            "RepairSkill": "Mechanic (Antimatter or Total Conversion Engine)",
+            "Location": "rear",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "TL": 9,
+            "Accel": 0.1,
+            "mpsTank": 1.8,
+            "SuperScience": false
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 150000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 500000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 1500000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 5000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 15000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 50000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 150000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 500000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 1500000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 5000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 15000000000
+        }
+    ],
+    "Antimatter Plasma Rocket": [
+        {
+            "Category": "Engine, TotalConv. & Antimatter",
+            "RepairSkill": "Mechanic (Antimatter or Total Conversion Engine)",
+            "Location": "rear",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "TL": 10,
+            "Accel": 0.01,
+            "mpsTank": 120,
+            "SuperScience": false
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 150000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 500000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 1500000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 5000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 15000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 50000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 150000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 500000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 1500000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 5000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 15000000000
+        }
+    ],
+    "Antimatter Plasma Torch": [
+        {
+            "Category": "Engine, TotalConv. & Antimatter",
+            "RepairSkill": "Mechanic (Antimatter or Total Conversion Engine)",
+            "Location": "rear",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "TL": 10,
+            "Accel": 1,
+            "mpsTank": 120,
+            "SuperScience": true
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 300000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 1000000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 3000000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 10000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 30000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 100000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 300000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 1000000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 3000000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 10000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 30000000000
+        }
+    ],
+    "Super Antimatter Plasma Torch": [
+        {
+            "Category": "Engine, TotalConv. & Antimatter",
+            "RepairSkill": "Mechanic (Antimatter or Total Conversion Engine)",
+            "Location": "rear",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "TL": 11,
+            "Accel": 100,
+            "mpsTank": 360,
+            "SuperScience": true
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 600000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 2000000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 6000000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 20000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 60000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 200000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 600000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 2000000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 6000000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 20000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 60000000000
+        }
+    ],
+    "Antimatter Pion": [
+        {
+            "Category": "Engine, TotalConv. & Antimatter",
+            "RepairSkill": "Mechanic (Antimatter or Total Conversion Engine)",
+            "Location": "rear",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "TL": 11,
+            "Accel": 0.005,
+            "mpsTank": 3400,
+            "SuperScience": false
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 300000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 1000000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 3000000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 10000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 30000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 100000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 300000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 1000000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 3000000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 10000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 30000000000
+        }
+    ],
+    "Antimatter Pion Torch": [
+        {
+            "Category": "Engine, TotalConv. & Antimatter",
+            "RepairSkill": "Mechanic (Antimatter or Total Conversion Engine)",
+            "Location": "rear",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "TL": 11,
+            "Accel": 0.1,
+            "mpsTank": 3400,
+            "SuperScience": true
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 600000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 2000000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 6000000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 20000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 60000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 200000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 600000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 2000000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 6000000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 20000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 60000000000
+        }
+    ],
+    "Total Conversion Torch": [
+        {
+            "Category": "Engine, TotalConv. & Antimatter",
+            "RepairSkill": "Mechanic (Antimatter or Total Conversion Engine)",
+            "Location": "rear",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "TL": 12,
+            "Accel": 1,
+            "mpsTank": 10000,
+            "SuperScience": true
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 600000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 2000000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 6000000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 20000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 60000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 200000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 600000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 2000000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 6000000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 20000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 60000000000
+        }
+    ],
+    "Super Conversion Torch": [
+        {
+            "Category": "Engine, TotalConv. & Antimatter",
+            "RepairSkill": "Mechanic (Antimatter or Total Conversion Engine)",
+            "Location": "rear",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "TL": 12,
+            "Accel": 50,
+            "mpsTank": 10000,
+            "SuperScience": true
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 1500000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 5000000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 15000000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 50000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 150000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 500000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 1500000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 5000000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 15000000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 50000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 150000000000
+        }
+    ],
+    "Rotary": [
+        {
+            "Category": "Reactionless Engine",
+            "RepairSkill": "Mechanic (Reactionless Drive)",
+            "Location": "rear",
+            "PowerGeneration": 0,
+            "PowerDemand": 1,
+            "TL": 7,
+            "Accel": 0.1,
+            "mpsTank": "Infinite",
+            "SuperScience": true
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 15000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 50000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 150000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 500000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 1500000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 5000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 15000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 50000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 150000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 500000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 1500000000
+        }
+    ],
+    "Standard": [
+        {
+            "Category": "Reactionless Engine",
+            "RepairSkill": "Mechanic (Reactionless Drive)",
+            "Location": "rear",
+            "PowerGeneration": 0,
+            "PowerDemand": 1,
+            "TL": 10,
+            "Accel": 0.5,
+            "mpsTank": "Infinite",
+            "SuperScience": true
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 30000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 100000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 300000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 1000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 3000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 10000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 30000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 100000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 300000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 1000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 3000000000
+        }
+    ],
+    "Hot Reactionless": [
+        {
+            "Category": "Reactionless Engine",
+            "RepairSkill": "Mechanic (Reactionless Drive)",
+            "Location": "rear",
+            "PowerGeneration": 0,
+            "PowerDemand": 1,
+            "TL": 10,
+            "Accel": 1,
+            "mpsTank": "Infinite",
+            "SuperScience": true
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 100000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 300000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 1000000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 3000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 10000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 30000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 100000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 300000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 1000000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 3000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 10000000000
+        }
+    ],
+    "Super Reactionless": [
+        {
+            "Category": "Reactionless Engine",
+            "RepairSkill": "Mechanic (Reactionless Drive)",
+            "Location": "rear",
+            "PowerGeneration": 0,
+            "PowerDemand": 1,
+            "TL": 11,
+            "Accel": 50,
+            "mpsTank": "Infinite",
+            "SuperScience": true
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 200000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 600000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 2000000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 6000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 20000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 60000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 200000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 600000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 2000000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 6000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 20000000000
+        }
+    ],
+    "Subwarp": [
+        {
+            "Category": "Reactionless Engine",
+            "RepairSkill": "Mechanic (Reactionless Drive)",
+            "Location": "rear",
+            "PowerGeneration": 0,
+            "PowerDemand": 1,
+            "TL": 7,
+            "Accel": 500,
+            "mpsTank": "Infinite",
+            "SuperScience": true
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 300000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 1000000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 3000000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 10000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 30000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 100000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 300000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 1000000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 3000000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 10000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 30000000000
+        }
+    ],
+    "Robot Arm": [
+        {
+            "Category": "Utility",
+            "RepairSkill": "Mechanic (Robotics or Mecha)",
+            "Location": "hull",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "SuperScience": false,
+            "TL": 8
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 300000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 1000000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 3000000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 10000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 30000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 100000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 300000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 1000000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 3000000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 10000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 30000000000
+        }
+    ],
+    "Soft-Landing System": [
+        {
+            "Category": "Utility",
+            "RepairSkill": "None, destroyed after use.",
+            "Location": "hull",
+            "PowerGeneration": 0,
+            "PowerDemand": 0,
+            "SuperScience": false,
+            "TL": 7
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 50000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 100000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 200000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 500000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 1000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 0,
+            "cost": 2000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 0,
+            "cost": 5000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 0,
+            "cost": 10000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 0,
+            "cost": 20000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 0,
+            "cost": 50000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 0,
+            "cost": 100000000
+        }
+    ],
+    "Solar Panel Array": [
+        {
+            "Category": "Power",
+            "RepairSkill": "Electrician",
+            "Location": "hull",
+            "PowerGeneration": 1,
+            "PowerDemand": 0,
+            "SuperScience": false,
+            "TL": 7
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 150000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 500000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 1500000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 5000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 15000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 50000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 150000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 500000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 1500000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 5000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 15000000000
+        }
+    ],
+    "Stardrive Engine": [
+        {
+            "Category": "Propulsion",
+            "RepairSkill": "Mechanic (Stardrive)",
+            "Location": "any",
+            "PowerGeneration": 0,
+            "PowerDemand": 1,
+            "SuperScience": true,
+            "TL": 7
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 300000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 1000000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 3000000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 10000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 30000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 100000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 300000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 1000000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 3000000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 10000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 30000000000
+        }
+    ],
+    "Super Stardrive Engine": [
+        {
+            "Category": "Propulsion",
+            "RepairSkill": "Mechanic (Stardrive)",
+            "Location": "any",
+            "PowerGeneration": 0,
+            "PowerDemand": 2,
+            "SuperScience": true,
+            "TL": 7
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 1500000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 5000000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 15000000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 50000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 150000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 500000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 1500000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 5000000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 15000000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 50000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 150000000000
+        }
+    ],
+    "Stasis Web": [
+        {
+            "Category": "Armor and Survivability",
+            "RepairSkill": "Armoury or Electronics Repair (Force Shields)",
+            "Location": "any",
+            "PowerGeneration": 0,
+            "PowerDemand": 1,
+            "SuperScience": true,
+            "TL": 12
+        },
+        {
+            "SM": 5,
+            "Workspaces": 0,
+            "cost": 2000000
+        },
+        {
+            "SM": 6,
+            "Workspaces": 0,
+            "cost": 5000000
+        },
+        {
+            "SM": 7,
+            "Workspaces": 0,
+            "cost": 10000000
+        },
+        {
+            "SM": 8,
+            "Workspaces": 0,
+            "cost": 20000000
+        },
+        {
+            "SM": 9,
+            "Workspaces": 0,
+            "cost": 50000000
+        },
+        {
+            "SM": 10,
+            "Workspaces": 1,
+            "cost": 100000000
+        },
+        {
+            "SM": 11,
+            "Workspaces": 3,
+            "cost": 200000000
+        },
+        {
+            "SM": 12,
+            "Workspaces": 10,
+            "cost": 500000000
+        },
+        {
+            "SM": 13,
+            "Workspaces": 30,
+            "cost": 1000000000
+        },
+        {
+            "SM": 14,
+            "Workspaces": 100,
+            "cost": 2000000000
+        },
+        {
+            "SM": 15,
+            "Workspaces": 300,
+            "cost": 5000000000
+        }
+    ],
+    "Major Battery": [
+        {
+            "Category": "Weapons",
+            "RepairSkill": "Armoury (Heavy Weapons)",
+            "Location": "hull",
+            "PowerGeneration": 0,
+            "PowerDemand": 1,
+            "SuperScience": false,
+            "TL": 7
+        },
+        {
+            "SM": 5,
+            "Beam/kj": 10000,
+            "Gun": 10,
+            "Launcher": 20,
+            "Gun Shots": 70,
+            "Launcher Shots": 7,
+            "Workspaces": 0,
+            "cost": 150000
+        },
+        {
+            "SM": 6,
+            "Beam/kj": 30000,
+            "Gun": 12,
+            "Launcher": 24,
+            "Gun Shots": 100,
+            "Launcher Shots": 10,
+            "Workspaces": 0,
+            "cost": 600000
+        },
+        {
+            "SM": 7,
+            "Beam/kj": 100000,
+            "Gun": 14,
+            "Launcher": 28,
+            "Gun Shots": 150,
+            "Launcher Shots": 15,
+            "Workspaces": 0,
+            "cost": 1500000
+        },
+        {
+            "SM": 8,
+            "Beam/kj": 300000,
+            "Gun": 16,
+            "Launcher": 32,
+            "Gun Shots": 200,
+            "Launcher Shots": 20,
+            "Workspaces": 0,
+            "cost": 6000000
+        },
+        {
+            "SM": 9,
+            "Beam/kj": 1000000,
+            "Gun": 20,
+            "Launcher": 40,
+            "Gun Shots": 300,
+            "Launcher Shots": 30,
+            "Workspaces": 0,
+            "cost": 15000000
+        },
+        {
+            "SM": 10,
+            "Beam/kj": 3000000,
+            "Gun": 24,
+            "Launcher": 48,
+            "Gun Shots": 500,
+            "Launcher Shots": 50,
+            "Workspaces": 1,
+            "cost": 60000000
+        },
+        {
+            "SM": 11,
+            "Beam/kj": 10000000,
+            "Gun": 28,
+            "Launcher": 56,
+            "Gun Shots": 700,
+            "Launcher Shots": 70,
+            "Workspaces": 3,
+            "cost": 150000000
+        },
+        {
+            "SM": 12,
+            "Beam/kj": 30000000,
+            "Gun": 32,
+            "Launcher": 64,
+            "Gun Shots": 1000,
+            "Launcher Shots": 100,
+            "Workspaces": 10,
+            "cost": 600000000
+        },
+        {
+            "SM": 13,
+            "Beam/kj": 100000000,
+            "Gun": 40,
+            "Launcher": 80,
+            "Gun Shots": 1500,
+            "Launcher Shots": 150,
+            "Workspaces": 30,
+            "cost": 1500000000
+        },
+        {
+            "SM": 14,
+            "Beam/kj": 300000000,
+            "Gun": 48,
+            "Launcher": 96,
+            "Gun Shots": 2000,
+            "Launcher Shots": 200,
+            "Workspaces": 100,
+            "cost": 6000000000
+        },
+        {
+            "SM": 15,
+            "Beam/kj": 1000000000,
+            "Gun": 56,
+            "Launcher": 112,
+            "Gun Shots": 3000,
+            "Launcher Shots": 300,
+            "Workspaces": 300,
+            "cost": 15000000000
+        }
+    ],
+    "Medium Battery": [
+        {
+            "Category": "Weapons",
+            "RepairSkill": "Armoury (Heavy Weapons)",
+            "Location": "hull",
+            "PowerGeneration": 0,
+            "PowerDemand": 1,
+            "SuperScience": false,
+            "TL": 7
+        },
+        {
+            "SM": 5,
+            "Beam/kj": 3000,
+            "Gun": 8,
+            "Launcher": 16,
+            "Gun Shots": 50,
+            "Launcher Shots": 5,
+            "Uninstalled": 0.5,
+            "Workspaces": 0,
+            "cost": 150000
+        },
+        {
+            "SM": 6,
+            "Beam/kj": 10000,
+            "Gun": 10,
+            "Launcher": 20,
+            "Gun Shots": 70,
+            "Launcher Shots": 7,
+            "Uninstalled": 1.5,
+            "Workspaces": 0,
+            "cost": 600000
+        },
+        {
+            "SM": 7,
+            "Beam/kj": 30000,
+            "Gun": 12,
+            "Launcher": 24,
+            "Gun Shots": 100,
+            "Launcher Shots": 10,
+            "Uninstalled": 5,
+            "Workspaces": 0,
+            "cost": 1500000
+        },
+        {
+            "SM": 8,
+            "Beam/kj": 100000,
+            "Gun": 14,
+            "Launcher": 28,
+            "Gun Shots": 150,
+            "Launcher Shots": 15,
+            "Uninstalled": 15,
+            "Workspaces": 0,
+            "cost": 6000000
+        },
+        {
+            "SM": 9,
+            "Beam/kj": 300000,
+            "Gun": 16,
+            "Launcher": 32,
+            "Gun Shots": 200,
+            "Launcher Shots": 20,
+            "Uninstalled": 50,
+            "Workspaces": 0,
+            "cost": 15000000
+        },
+        {
+            "SM": 10,
+            "Beam/kj": 1000000,
+            "Gun": 20,
+            "Launcher": 40,
+            "Gun Shots": 300,
+            "Launcher Shots": 30,
+            "Uninstalled": 150,
+            "Workspaces": 1,
+            "cost": 60000000
+        },
+        {
+            "SM": 11,
+            "Beam/kj": 3000000,
+            "Gun": 24,
+            "Launcher": 48,
+            "Gun Shots": 500,
+            "Launcher Shots": 50,
+            "Uninstalled": 500,
+            "Workspaces": 3,
+            "cost": 150000000
+        },
+        {
+            "SM": 12,
+            "Beam/kj": 10000000,
+            "Gun": 28,
+            "Launcher": 56,
+            "Gun Shots": 700,
+            "Launcher Shots": 70,
+            "Uninstalled": 1500,
+            "Workspaces": 10,
+            "cost": 600000000
+        },
+        {
+            "SM": 13,
+            "Beam/kj": 30000000,
+            "Gun": 32,
+            "Launcher": 64,
+            "Gun Shots": 1000,
+            "Launcher Shots": 100,
+            "Uninstalled": 5000,
+            "Workspaces": 30,
+            "cost": 1500000000
+        },
+        {
+            "SM": 14,
+            "Beam/kj": 100000000,
+            "Gun": 40,
+            "Launcher": 80,
+            "Gun Shots": 1500,
+            "Launcher Shots": 150,
+            "Uninstalled": 15000,
+            "Workspaces": 100,
+            "cost": 6000000000
+        },
+        {
+            "SM": 15,
+            "Beam/kj": 300000000,
+            "Gun": 48,
+            "Launcher": 96,
+            "Gun Shots": 2000,
+            "Launcher Shots": 200,
+            "Uninstalled": 50000,
+            "Workspaces": 300,
+            "cost": 15000000000
+        }
+    ],
+    "Secondary Battery": [
+        {
+            "Category": "Weapons",
+            "RepairSkill": "Armoury (Heavy Weapons)",
+            "Location": "hull",
+            "PowerGeneration": 0,
+            "PowerDemand": 1,
+            "SuperScience": false,
+            "TL": 7
+        },
+        {
+            "SM": 5,
+            "Beam/kj": null,
+            "Gun": null,
+            "Launcher": null,
+            "Gun Shots": 0,
+            "Launcher Shots": 0,
+            "Uninstalled": 0,
+            "Workspaces": 0,
+            "cost": 0
+        },
+        {
+            "SM": 6,
+            "Beam/kj": 3000,
+            "Gun": 8,
+            "Launcher": 16,
+            "Gun Shots": 50,
+            "Launcher Shots": 5,
+            "Uninstalled": 0.5,
+            "Workspaces": 0,
+            "cost": 600000
+        },
+        {
+            "SM": 7,
+            "Beam/kj": 10000,
+            "Gun": 10,
+            "Launcher": 20,
+            "Gun Shots": 70,
+            "Launcher Shots": 7,
+            "Uninstalled": 1.5,
+            "Workspaces": 0,
+            "cost": 1500000
+        },
+        {
+            "SM": 8,
+            "Beam/kj": 30000,
+            "Gun": 12,
+            "Launcher": 24,
+            "Gun Shots": 100,
+            "Launcher Shots": 10,
+            "Uninstalled": 5,
+            "Workspaces": 0,
+            "cost": 6000000
+        },
+        {
+            "SM": 9,
+            "Beam/kj": 100000,
+            "Gun": 14,
+            "Launcher": 28,
+            "Gun Shots": 150,
+            "Launcher Shots": 15,
+            "Uninstalled": 15,
+            "Workspaces": 0,
+            "cost": 15000000
+        },
+        {
+            "SM": 10,
+            "Beam/kj": 300000,
+            "Gun": 16,
+            "Launcher": 32,
+            "Gun Shots": 200,
+            "Launcher Shots": 20,
+            "Uninstalled": 50,
+            "Workspaces": 1,
+            "cost": 60000000
+        },
+        {
+            "SM": 11,
+            "Beam/kj": 1000000,
+            "Gun": 20,
+            "Launcher": 40,
+            "Gun Shots": 300,
+            "Launcher Shots": 30,
+            "Uninstalled": 150,
+            "Workspaces": 3,
+            "cost": 150000000
+        },
+        {
+            "SM": 12,
+            "Beam/kj": 3000000,
+            "Gun": 24,
+            "Launcher": 48,
+            "Gun Shots": 500,
+            "Launcher Shots": 50,
+            "Uninstalled": 500,
+            "Workspaces": 10,
+            "cost": 600000000
+        },
+        {
+            "SM": 13,
+            "Beam/kj": 10000000,
+            "Gun": 28,
+            "Launcher": 56,
+            "Gun Shots": 700,
+            "Launcher Shots": 70,
+            "Uninstalled": 1500,
+            "Workspaces": 30,
+            "cost": 1500000000
+        },
+        {
+            "SM": 14,
+            "Beam/kj": 30000000,
+            "Gun": 32,
+            "Launcher": 64,
+            "Gun Shots": 1000,
+            "Launcher Shots": 100,
+            "Uninstalled": 5000,
+            "Workspaces": 100,
+            "cost": 6000000000
+        },
+        {
+            "SM": 15,
+            "Beam/kj": 100000000,
+            "Gun": 40,
+            "Launcher": 80,
+            "Gun Shots": 1500,
+            "Launcher Shots": 150,
+            "Uninstalled": 15000,
+            "Workspaces": 300,
+            "cost": 15000000000
+        }
+    ],
+    "Tertiary Battery": [
+        {
+            "Category": "Weapons",
+            "RepairSkill": "Armoury (Heavy Weapons)",
+            "Location": "hull",
+            "PowerGeneration": 0,
+            "PowerDemand": 1,
+            "SuperScience": false,
+            "TL": 7
+        },
+        {
+            "SM": 5,
+            "Beam/kj": null,
+            "Gun": null,
+            "Launcher": null,
+            "Gun Shots": null,
+            "Launcher Shots": null,
+            "Uninstalled": null,
+            "Workspaces": null,
+            "cost": null
+        },
+        {
+            "SM": 6,
+            "Beam/kj": null,
+            "Gun": null,
+            "Launcher": null,
+            "Gun Shots": null,
+            "Launcher Shots": null,
+            "Uninstalled": null,
+            "Workspaces": null,
+            "cost": null
+        },
+        {
+            "SM": 7,
+            "Beam/kj": 3000,
+            "Gun": 8,
+            "Launcher": 16,
+            "Gun Shots": 50,
+            "Launcher Shots": 5,
+            "Uninstalled": 0.5,
+            "Workspaces": 0,
+            "cost": 1500000
+        },
+        {
+            "SM": 8,
+            "Beam/kj": 10000,
+            "Gun": 10,
+            "Launcher": 20,
+            "Gun Shots": 70,
+            "Launcher Shots": 7,
+            "Uninstalled": 1.5,
+            "Workspaces": 0,
+            "cost": 6000000
+        },
+        {
+            "SM": 9,
+            "Beam/kj": 30000,
+            "Gun": 12,
+            "Launcher": 24,
+            "Gun Shots": 100,
+            "Launcher Shots": 10,
+            "Uninstalled": 5,
+            "Workspaces": 0,
+            "cost": 15000000
+        },
+        {
+            "SM": 10,
+            "Beam/kj": 100000,
+            "Gun": 14,
+            "Launcher": 28,
+            "Gun Shots": 150,
+            "Launcher Shots": 15,
+            "Uninstalled": 15,
+            "Workspaces": 1,
+            "cost": 60000000
+        },
+        {
+            "SM": 11,
+            "Beam/kj": 300000,
+            "Gun": 16,
+            "Launcher": 32,
+            "Gun Shots": 200,
+            "Launcher Shots": 20,
+            "Uninstalled": 50,
+            "Workspaces": 3,
+            "cost": 150000000
+        },
+        {
+            "SM": 12,
+            "Beam/kj": 1000000,
+            "Gun": 20,
+            "Launcher": 40,
+            "Gun Shots": 300,
+            "Launcher Shots": 30,
+            "Uninstalled": 150,
+            "Workspaces": 10,
+            "cost": 600000000
+        },
+        {
+            "SM": 13,
+            "Beam/kj": 3000000,
+            "Gun": 24,
+            "Launcher": 48,
+            "Gun Shots": 500,
+            "Launcher Shots": 50,
+            "Uninstalled": 500,
+            "Workspaces": 30,
+            "cost": 1500000000
+        },
+        {
+            "SM": 14,
+            "Beam/kj": 10000000,
+            "Gun": 28,
+            "Launcher": 56,
+            "Gun Shots": 700,
+            "Launcher Shots": 70,
+            "Uninstalled": 1500,
+            "Workspaces": 100,
+            "cost": 6000000000
+        },
+        {
+            "SM": 15,
+            "Beam/kj": 30000000,
+            "Gun": 32,
+            "Launcher": 64,
+            "Gun Shots": 1000,
+            "Launcher Shots": 100,
+            "Uninstalled": 5000,
+            "Workspaces": 300,
+            "cost": 15000000000
+        }
+    ],
+    "Spinal Battery": [
+        {
+            "Category": "Weapons",
+            "RepairSkill": "Armoury (Heavy Weapons)",
+            "Location": "any",
+            "PowerGeneration": 0,
+            "PowerDemand": 3,
+            "SuperScience": false,
+            "TL": 7
+        },
+        {
+            "SM": 5,
+            "Beam/kj": 30000,
+            "Gun": 12,
+            "Launcher": 24,
+            "Gun Shots": 70,
+            "Launcher Shots": 7,
+            "Workspaces": 0,
+            "cost": 500000
+        },
+        {
+            "SM": 6,
+            "Beam/kj": 100000,
+            "Gun": 14,
+            "Launcher": 28,
+            "Gun Shots": 100,
+            "Launcher Shots": 10,
+            "Workspaces": 0,
+            "cost": 1500000
+        },
+        {
+            "SM": 7,
+            "Beam/kj": 300000,
+            "Gun": 16,
+            "Launcher": 32,
+            "Gun Shots": 150,
+            "Launcher Shots": 15,
+            "Workspaces": 0,
+            "cost": 5000000
+        },
+        {
+            "SM": 8,
+            "Beam/kj": 1000000,
+            "Gun": 20,
+            "Launcher": 40,
+            "Gun Shots": 200,
+            "Launcher Shots": 20,
+            "Workspaces": 0,
+            "cost": 15000000
+        },
+        {
+            "SM": 9,
+            "Beam/kj": 3000000,
+            "Gun": 24,
+            "Launcher": 48,
+            "Gun Shots": 300,
+            "Launcher Shots": 30,
+            "Workspaces": 0,
+            "cost": 50000000
+        },
+        {
+            "SM": 10,
+            "Beam/kj": 10000000,
+            "Gun": 28,
+            "Launcher": 56,
+            "Gun Shots": 500,
+            "Launcher Shots": 50,
+            "Workspaces": 3,
+            "cost": 150000000
+        },
+        {
+            "SM": 11,
+            "Beam/kj": 30000000,
+            "Gun": 32,
+            "Launcher": 64,
+            "Gun Shots": 700,
+            "Launcher Shots": 70,
+            "Workspaces": 9,
+            "cost": 500000000
+        },
+        {
+            "SM": 12,
+            "Beam/kj": 100000000,
+            "Gun": 40,
+            "Launcher": 80,
+            "Gun Shots": 1000,
+            "Launcher Shots": 100,
+            "Workspaces": 30,
+            "cost": 1500000000
+        },
+        {
+            "SM": 13,
+            "Beam/kj": 300000000,
+            "Gun": 48,
+            "Launcher": 96,
+            "Gun Shots": 1500,
+            "Launcher Shots": 150,
+            "Workspaces": 90,
+            "cost": 5000000000
+        },
+        {
+            "SM": 14,
+            "Beam/kj": 1000000000,
+            "Gun": 56,
+            "Launcher": 112,
+            "Gun Shots": 2000,
+            "Launcher Shots": 200,
+            "Workspaces": 300,
+            "cost": 15000000000
+        },
+        {
+            "SM": 15,
+            "Beam/kj": 3000000000,
+            "Gun": 64,
+            "Launcher": 112,
+            "Gun Shots": 3000,
+            "Launcher Shots": 300,
+            "Workspaces": 900,
+            "cost": 50000000000
+        }
+    ]
+}
