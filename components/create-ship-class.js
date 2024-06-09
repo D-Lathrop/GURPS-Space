@@ -61,21 +61,18 @@ const CreateShipClass = () => {
 
     // Ship Weapon Selection State Variables
     const [shipUnusedSpinalMounts, setUnusedSpinalMounts] = useState(0);
-    const [shipMajorMountLocation, setMajorMountLocation] = useState([0, 0, 0]);
-    const [shipUnusedMajorMounts, setUnusedMajorMounts] = useState(0);
-    const [shipMajorMountLocationCount, setMajorMountLocationCount] = useState([[0], [0], [0]]);
-    const [shipMediumMountLocation, setMediumMountLocation] = useState([0, 0, 0]);
-    const [shipUnusedMediumMounts, setUnusedMediumMounts] = useState(0);
-    const [shipMediumMountLocationCount, setMediumMountLocationCount] = useState([[0], [0], [0]]);
-    const [shipSecondaryMountLocation, setSecondaryMountLocation] = useState([0, 0, 0]);
-    const [shipUnusedSecondaryMounts, setUnusedSecondaryMounts] = useState(0);
-    const [shipSecondaryMountLocationCount, setSecondaryMountLocationCount] = useState([[0], [0], [0]]);
-    const [shipTertiaryMountLocation, setTertiaryMountLocation] = useState([0, 0, 0]);
-    const [shipUnusedTertiaryMounts, setUnusedTertiaryMounts] = useState(0);
-    const [shipTertiaryMountLocationCount, setTertiaryMountLocationCount] = useState([[0], [0], [0]]);
+    // This tracks the number of weapon mounts in each location, [0] is front, [1] is middle, and [2] is rear.
+    // The number of values in each subarray is the number of mounts in that location.
+    const [shipMajorMountLocation, setMajorMountLocation] = useState([[0], [0], [0]]);
+    const [shipUnusedMajorWeapons, setUnusedMajorWeapons] = useState(0);  // This tracks the total number of unused major mounts.
+    const [shipMediumMountLocation, setMediumMountLocation] = useState([[0], [0], [0]]);
+    const [shipUnusedMediumWeapons, setUnusedMediumWeapons] = useState(0);
+    const [shipSecondaryMountLocation, setSecondaryMountLocation] = useState([[0], [0], [0]]);
+    const [shipUnusedSecondaryWeapons, setUnusedSecondaryWeapons] = useState(0);
+    const [shipTertiaryMountLocation, setTertiaryMountLocation] = useState([[0], [0], [0]]);
+    const [shipUnusedTertiaryWeapons, setUnusedTertiaryWeapons] = useState(0);
     const [shipWeaponsCost, setWeaponsCost] = useState(0);
     const [unusedWeaponMountList, setUnusedWeaponMountList] = useState([])
-    const [unusedWeaponMountListDisplay, setUnusedWeaponMountListDisplay] = useState([])
     const [shipWeaponMountCargo, setWeaponMountCargo] = useState(0);
     const [selectedUninstalledCargo, setSelectedUninstalledCargo] = useState(0);
     const [selectedMountCostChange, setSelectedMountCostChange] = useState(0);
@@ -86,7 +83,7 @@ const CreateShipClass = () => {
 
 
     // Weapon Stat State Variables
-    const [weaponList, setWeaponList] = useState([{ weaponType: "Null" }]);
+    const [weaponList, setWeaponList] = useState([]);
     const [selectedWeaponCount, setSelectedWeaponCount] = useState(0);
     const [selectedWeaponSize, setSelectedWeaponSize] = useState(0);
     const [selectedWeaponFixed, setSelectedWeaponFixed] = useState(false);
@@ -2032,16 +2029,16 @@ const CreateShipClass = () => {
         let refineryCapacity = 0
         let spinalMounts = 0
         let majorMounts = 0
-        let majorMountLocation = [0, 0, 0]
+        let majorMountLocation = [[0], [0], [0]]
         let unusedMajorMounts = 0
         let mediumMounts = 0
-        let mediumMountLocation = [0, 0, 0]
+        let mediumMountLocation = [[0], [0], [0]]
         let unusedMediumMounts = 0
         let secondaryMounts = 0
-        let secondaryMountLocation = [0, 0, 0]
+        let secondaryMountLocation = [[0], [0], [0]]
         let unusedSecondaryMounts = 0
         let tertiaryMounts = 0
-        let tertiaryMountLocation = [0, 0, 0]
+        let tertiaryMountLocation = [[0], [0], [0]]
         let unusedTertiaryMounts = 0
         let frontSpinal = false
         let midSpinal = false
@@ -2080,16 +2077,16 @@ const CreateShipClass = () => {
             refineryCapacity = 0
             spinalMounts = 0
             majorMounts = 0
-            majorMountLocation = [0, 0, 0]
+            majorMountLocation = [[0], [0], [0]]
             unusedMajorMounts = 0
             mediumMounts = 0
-            mediumMountLocation = [0, 0, 0]
+            mediumMountLocation = [[0], [0], [0]]
             unusedMediumMounts = 0
             secondaryMounts = 0
-            secondaryMountLocation = [0, 0, 0]
+            secondaryMountLocation = [[0], [0], [0]]
             unusedSecondaryMounts = 0
             tertiaryMounts = 0
-            tertiaryMountLocation = [0, 0, 0]
+            tertiaryMountLocation = [[0], [0], [0]]
             unusedTertiaryMounts = 0
             frontSpinal = false
             midSpinal = false
@@ -2119,6 +2116,7 @@ const CreateShipClass = () => {
             powerDemand += modulePowerDemand;
             powerGeneration += modulePowerGeneration;
             shortOccupancyCrew += SMData.Workspaces
+
             switch (moduleCategory) {
                 case 'Armor and Survivability':
                     if (currentModuleKey.includes('Armor')) {
@@ -2286,97 +2284,95 @@ const CreateShipClass = () => {
                     break;
 
                 case 'Weapons':
+
+                    function handleWeaponLocationEmpty(mountLocationArray, index) {
+                        if (mountLocationArray[index][0] === 0) {
+                            mountLocationArray[index][0] = 1
+                        } else {
+                            mountLocationArray[index].push(1)
+                        }
+                    }
+
                     if (currentModuleKey === 'Major Battery') {
                         majorMounts += 1
                         unusedMajorMounts += 1
                         switch (currentModuleLocation) {
                             case 'front':
-                                majorMountLocation[0] += 1
+                                handleWeaponLocationEmpty(majorMountLocation, 0)
                                 break;
                             case 'middle':
-                                majorMountLocation[1] += 1
+                                handleWeaponLocationEmpty(majorMountLocation, 1)
                                 break;
                             case 'rear':
-                                majorMountLocation[2] += 1
+                                handleWeaponLocationEmpty(majorMountLocation, 2)
                                 break;
-
                             default:
                                 break;
                         }
                     }
                     if (currentModuleKey === 'Medium Battery') {
-                        mediumMounts += 3
+                        mediumMounts += 1
                         unusedMediumMounts += 3
                         switch (currentModuleLocation) {
                             case 'front':
-                                mediumMountLocation[0] += 3
+                                handleWeaponLocationEmpty(mediumMountLocation, 0)
                                 break;
                             case 'middle':
-                                mediumMountLocation[1] += 3
+                                handleWeaponLocationEmpty(mediumMountLocation, 1)
                                 break;
                             case 'rear':
-                                mediumMountLocation[2] += 3
+                                handleWeaponLocationEmpty(mediumMountLocation, 2)
                                 break;
-
                             default:
                                 break;
                         }
                     }
                     if (currentModuleKey === 'Secondary Battery') {
-                        secondaryMounts += 10
+                        secondaryMounts += 1
                         unusedSecondaryMounts += 10
                         switch (currentModuleLocation) {
                             case 'front':
-                                secondaryMountLocation[0] += 10
+                                handleWeaponLocationEmpty(secondaryMountLocation, 0)
                                 break;
                             case 'middle':
-                                secondaryMountLocation[1] += 10
+                                handleWeaponLocationEmpty(secondaryMountLocation, 1)
                                 break;
                             case 'rear':
-                                secondaryMountLocation[2] += 10
+                                handleWeaponLocationEmpty(secondaryMountLocation, 2)
                                 break;
-
                             default:
                                 break;
                         }
                     }
                     if (currentModuleKey === 'Tertiary Battery') {
-                        tertiaryMounts += 30
+                        tertiaryMounts += 1
                         unusedTertiaryMounts += 30
                         switch (currentModuleLocation) {
                             case 'front':
-                                tertiaryMountLocation[0] += 30
+                                handleWeaponLocationEmpty(tertiaryMountLocation, 0)
                                 break;
                             case 'middle':
-                                tertiaryMountLocation[1] += 30
+                                handleWeaponLocationEmpty(tertiaryMountLocation, 1)
                                 break;
                             case 'rear':
-                                tertiaryMountLocation[2] += 30
+                                handleWeaponLocationEmpty(tertiaryMountLocation, 2)
                                 break;
-
                             default:
                                 break;
                         }
                     }
                     if (currentModuleKey === 'Spinal Battery') {
                         if (currentModuleLocation === 'front') {
-                            frontSpinal = true
+                            frontSpinal = true;
                         } else if (currentModuleLocation === 'middle') {
-                            midSpinal = true
+                            midSpinal = true;
                         } else if (currentModuleLocation === 'rear') {
-                            rearSpinal = true
+                            rearSpinal = true;
                         }
-
-                        if (frontSpinal && midSpinal && rearSpinal) {
-                            spinalMounts = 1
-                        } else if (frontSpinal) {
-                            spinalMounts += 0.33
-                        } else if (midSpinal) {
-                            spinalMounts += 0.33
-                        } else if (rearSpinal) {
-                            spinalMounts += 0.33
-                        }
-
+                        spinalMounts = 0;
+                        if (frontSpinal) spinalMounts += 0.33;
+                        if (midSpinal) spinalMounts += 0.33;
+                        if (rearSpinal) spinalMounts += 0.33;
                     }
 
                     break;
@@ -2418,51 +2414,52 @@ const CreateShipClass = () => {
                     break;
             }
 
+            setFrontdDR(frontdDR)
+            setMiddDR(middDR)
+            setReardDR(reardDR)
+            setShipDefensiveECMBonus(defensiveECMBonus)
+            setShipDefensiveECMTL(defensiveECMTL)
+            setTotalModulesCost(cost)
+            setWorkspaces(workspaces)
+            setCabinsCapacity(cabinsCapacity)
+            setLongOccupancy(longOccupancy)
+            setShortOccupancy(shortOccupancyCrew + shortOccupancyPassengers)
+            setShortOccupancyCrew(shortOccupancyCrew)
+            setShortOccupancyPassengers(shortOccupancyPassengers)
+            setShipCabins(cabinsCapacity)
+            setShipAreas(areas)
+            setShipSeats(seats)
+            setPowerDemand(powerDemand)
+            setPowerGen(powerGeneration)
+            setControlStations(controlStations)
+            setFuelLoad(fuelLoad)
+            setJumpGateMax(jumpGate)
+            setMaxFTL(maxFTL)
+            setUPressCargo(uPressCargo)
+            setUPressCargoCapacity(uPressCargo)
+            setFacValueHour(facValueHour)
+            setFacWeightHour(facWeightHour)
+            setShipLaunchRate(launchRate)
+            setShipHangarCapacity(hangarCapacity)
+            setMiningCapacity(miningCapacity)
+            setRefineryCapacity(refineryCapacity)
+            setSpinalMounts(spinalMounts)
+            setUnusedSpinalMounts(spinalMounts)
+            setMajorMounts(majorMounts)
+            setMediumMounts(mediumMounts)
+            setSecondaryMounts(secondaryMounts)
+            setTertiaryMounts(tertiaryMounts)
+            setMajorMountLocation(majorMountLocation)
+            setMediumMountLocation(mediumMountLocation)
+            setSecondaryMountLocation(secondaryMountLocation)
+            setTertiaryMountLocation(tertiaryMountLocation)
+            setUnusedMajorWeapons(unusedMajorMounts)
+            setUnusedMediumWeapons(unusedMediumMounts)
+            setUnusedSecondaryWeapons(unusedSecondaryMounts)
+            setUnusedTertiaryWeapons(unusedTertiaryMounts)
+            setAccel(accel)
+            setDeltaV(deltaV)
         }
-        setFrontdDR(frontdDR)
-        setMiddDR(middDR)
-        setReardDR(reardDR)
-        setShipDefensiveECMBonus(defensiveECMBonus)
-        setShipDefensiveECMTL(defensiveECMTL)
-        setTotalModulesCost(cost)
-        setWorkspaces(workspaces)
-        setCabinsCapacity(cabinsCapacity)
-        setLongOccupancy(longOccupancy)
-        setShortOccupancy(shortOccupancyCrew + shortOccupancyPassengers)
-        setShortOccupancyCrew(shortOccupancyCrew)
-        setShortOccupancyPassengers(shortOccupancyPassengers)
-        setShipCabins(cabinsCapacity)
-        setShipAreas(areas)
-        setShipSeats(seats)
-        setPowerDemand(powerDemand)
-        setPowerGen(powerGeneration)
-        setControlStations(controlStations)
-        setFuelLoad(fuelLoad)
-        setJumpGateMax(jumpGate)
-        setMaxFTL(maxFTL)
-        setUPressCargo(uPressCargo)
-        setUPressCargoCapacity(uPressCargo)
-        setFacValueHour(facValueHour)
-        setFacWeightHour(facWeightHour)
-        setShipLaunchRate(launchRate)
-        setShipHangarCapacity(hangarCapacity)
-        setMiningCapacity(miningCapacity)
-        setRefineryCapacity(refineryCapacity)
-        setSpinalMounts(spinalMounts)
-        setMajorMounts(majorMounts)
-        setMediumMounts(mediumMounts)
-        setSecondaryMounts(secondaryMounts)
-        setTertiaryMounts(tertiaryMounts)
-        setMajorMountLocation(majorMountLocation)
-        setMediumMountLocation(mediumMountLocation)
-        setSecondaryMountLocation(secondaryMountLocation)
-        setTertiaryMountLocation(tertiaryMountLocation)
-        setUnusedMajorMounts(unusedMajorMounts)
-        setUnusedMediumMounts(unusedMediumMounts)
-        setUnusedSecondaryMounts(unusedSecondaryMounts)
-        setUnusedTertiaryMounts(unusedTertiaryMounts)
-        setAccel(accel)
-        setDeltaV(deltaV)
     }, [shipModules, shipStreamlinedUn, shipTL, shipSM, superScienceChecked, shipTotalModulesCost]);
 
     // This useEffect handles changes to the shipdDR values to update the displaydDR value.
@@ -2518,6 +2515,7 @@ const CreateShipClass = () => {
     }
 
     function resetWeaponStats() {
+        setWeaponList([])
         setSelectedWeaponCount(0);
         setSelectedWeaponSize(0);
         setSelectedWeaponRangeArray([[0, 0], [0, 0], [0, 0], [0, 0]]);
@@ -2538,10 +2536,15 @@ const CreateShipClass = () => {
         setSelectedWeaponRapidFire(false);
         setSelectedWeaponVeryRapidFire(false);
         setSelectedWeaponType('')
-        setMajorMountLocationCount([0], [0], [0])
-        setMediumMountLocationCount([0], [0], [0])
-        setSecondaryMountLocationCount([0], [0], [0])
-        setTertiaryMountLocationCount([0], [0], [0])
+        setCurrentMediumCountFront(0);
+        setCurrentSecondaryCountFront(0);
+        setCurrentTertiaryCountFront(0);
+        setCurrentMediumCountMid(0);
+        setCurrentSecondaryCountMid(0);
+        setCurrentTertiaryCountMid(0);
+        setCurrentMediumCountRear(0);
+        setCurrentSecondaryCountRear(0);
+        setCurrentTertiaryCountRear(0);
     }
 
     function weaponSizeDisplayConverter(weaponSize) {
@@ -2569,23 +2572,6 @@ const CreateShipClass = () => {
         }
     }
 
-    // This useEffect updates the unusedWeaponMountList based on the ship's spinal, major, medium, 
-    // secondary, and tertiary mounts.  The first[0] value in the array is the spinal mount count.
-    // The next three values in the array are the number of major mounts in the front, middle, and 
-    // rear, then the number of medium mounts in the front, middle, and rear, and so on.
-    useEffect(() => {
-        let spinalMounts = 0
-        if (shipSpinalMounts === 1) {
-            spinalMounts = 1
-        }
-        let newMountList = [spinalMounts,
-            ...shipMajorMountLocation,
-            ...shipMediumMountLocation,
-            ...shipSecondaryMountLocation,
-            ...shipTertiaryMountLocation]
-        setUnusedWeaponMountList(newMountList)
-    }, [shipSpinalMounts, shipMajorMountLocation, shipMediumMountLocation, shipSecondaryMountLocation, shipTertiaryMountLocation])
-
     function resetCounts() {
         setCurrentMediumCountFront(0);
         setCurrentSecondaryCountFront(0);
@@ -2597,31 +2583,6 @@ const CreateShipClass = () => {
         setCurrentSecondaryCountRear(0);
         setCurrentTertiaryCountRear(0);
     }
-
-    useEffect(() => {
-        const mountNames = [
-            'Spinal Mount',
-            'Major (Front)',
-            'Major (Middle)',
-            'Major (Rear)',
-            'Medium (Front)',
-            'Medium (Middle)',
-            'Medium (Rear)',
-            'Secondary (Front)',
-            'Secondary (Middle)',
-            'Secondary (Rear)',
-            'Tertiary (Front)',
-            'Tertiary (Middle)',
-            'Tertiary (Rear)'
-        ];
-
-        let displayMountList = unusedWeaponMountList
-            .map((value, index) => value > 0 ? mountNames[index] : null)
-            .filter(item => item !== null);
-
-        setUnusedWeaponMountListDisplay(displayMountList);
-        // resetWeaponStats();
-    }, [unusedWeaponMountList])
 
     // This useEffect determines the valid weapon sub types based on ship TL, selectedWeaponType, and superScience.
     useEffect(() => {
@@ -3418,12 +3379,60 @@ const CreateShipClass = () => {
         }
     }
 
+    // This useEffect updates the unusedWeaponMountList based on the ship's spinal, major, medium, 
+    // secondary, and tertiary mounts.  The first[0] value in the array is the spinal mount count.
+    // The next three values in the array are the number of major mounts in the front, middle, and 
+    // rear, then the number of medium mounts in the front, middle, and rear, and so on.
+    useEffect(() => {
+        let newMountList = []
+        if (shipUnusedSpinalMounts === 1) {
+            newMountList.push('Spinal Mount')
+        }
+        if (shipMajorMountLocation[0].find(value => value === 1)) {
+            newMountList.push('Major (Front)')
+        }
+        if (shipMajorMountLocation[1].find(value => value === 1)) {
+            newMountList.push('Major (Middle)')
+        }
+        if (shipMajorMountLocation[2].find(value => value === 1)) {
+            newMountList.push('Major (Rear)')
+        }
+        if (shipMediumMountLocation[0].find(value => value === 1)) {
+            newMountList.push('Medium (Front)')
+        }
+        if (shipMediumMountLocation[1].find(value => value === 1)) {
+            newMountList.push('Medium (Middle)')
+        }
+        if (shipMediumMountLocation[2].find(value => value === 1)) {
+            newMountList.push('Medium (Rear)')
+        }
+        if (shipSecondaryMountLocation[0].find(value => value === 1)) {
+            newMountList.push('Secondary (Front)')
+        }
+        if (shipSecondaryMountLocation[1].find(value => value === 1)) {
+            newMountList.push('Secondary (Middle)')
+        }
+        if (shipSecondaryMountLocation[2].find(value => value === 1)) {
+            newMountList.push('Secondary (Rear)')
+        }
+        if (shipTertiaryMountLocation[0].find(value => value === 1)) {
+            newMountList.push('Tertiary (Front)')
+        }
+        if (shipTertiaryMountLocation[1].find(value => value === 1)) {
+            newMountList.push('Tertiary (Middle)')
+        }
+        if (shipTertiaryMountLocation[2].find(value => value === 1)) {
+            newMountList.push('Tertiary (Rear)')
+        }
+
+        setUnusedWeaponMountList(newMountList)
+    }, [shipUnusedSpinalMounts, shipMajorMountLocation, shipMediumMountLocation, shipSecondaryMountLocation, shipTertiaryMountLocation])
+
     // Needs to update the unusedWeaponMountList based on the selectedMountType and the current count of each mount type, 
     // update unusedMounts, and reset all 'selectedWeapon...' state variables.
     function handleAddWeapon() {
+        let newWeaponList = weaponList.slice()
         if (selectedWeaponCount > 0) {
-
-
             let weapon = {}
 
             function handleWeaponMissile() {
@@ -3444,7 +3453,7 @@ const CreateShipClass = () => {
                         dmgTypes: selectedWeaponDamageTypes,
                         range: warpMissileRange,
                         count: selectedWeaponCount,
-                        locationCount: 0
+                        moduleNumber: 0
                     }
                 } else {
                     weapon = {
@@ -3464,7 +3473,7 @@ const CreateShipClass = () => {
                         thrust: selectedWeaponThrust,
                         burn: selectedWeaponBurn,
                         count: selectedWeaponCount,
-                        locationCount: 0
+                        moduleNumber: 0
                     }
                 }
             }
@@ -3489,7 +3498,7 @@ const CreateShipClass = () => {
                     veryRapidFire: selectedWeaponVeryRapidFire,
                     improved: selectedWeaponImproved,
                     count: selectedWeaponCount,
-                    locationCount: 0
+                    moduleNumber: 0
                 }
             }
 
@@ -3513,14 +3522,14 @@ const CreateShipClass = () => {
                     veryRapidFire: selectedWeaponVeryRapidFire,
                     improved: selectedWeaponImproved,
                     count: selectedWeaponCount,
-                    locationCount: 0
+                    moduleNumber: 0
                 }
             }
 
             function handleWeaponUninstalled() {
                 let finalCargo = selectedUninstalledCargo * selectedWeaponCount
                 let finalCost = (selectedMountCostChange * selectedWeaponCount) * -1
-                let newShipWeaponsCost = shipWeaponsCost + selectedCostChange
+                let newShipWeaponsCost = shipWeaponsCost + finalCost
 
                 weapon = {
                     mountType: selectedMountType,
@@ -3528,7 +3537,7 @@ const CreateShipClass = () => {
                     cargo: finalCargo,
                     cost: finalCost,
                     count: selectedWeaponCount,
-                    locationCount: 0
+                    moduleNumber: 0
                 }
 
                 setWeaponsCost(newShipWeaponsCost)
@@ -3565,209 +3574,208 @@ const CreateShipClass = () => {
                     break;
             }
 
+            // Each mountLocation array is [[0],[0],[0]] where each array is one section of the ship.  
+            // The first array is the front, the second is the middle, and the third is the rear.
+            // As weapon mounts are selected values will be added to each sub array.
+            // A zero value means there is no mount in that section.
+            // A value of 1 means the mount is present but not filled.
+            // A value of 2 means the mount is filled
+            // For example, if the ship has 2 full major front mounts and 2 empty major rear mounts 
+            // shipMajorMountLocation would be [[2, 2], [0], [1, 1]].
+            // The moduleNumber value (that shows which module the weapon is associated with) of each weapon object 
+            // will be incremented based on the index of the mountLocation array.
+            // The end result is that the moduleNumbmer value of each weapon object will be its index value plus 1.
+
             function resetWeaponSelection() {
                 setSelectedMountType('')
                 setSelectedWeaponType('')
                 setWeaponSubType('')
             }
 
-            // Update update currentCount, selectedWeaponCount, unusedWeaponMountList, and reset all 'selectedWeapon...' state variables.
-            let newUnusedMountList = unusedWeaponMountList.slice();
-            let newCount = 0;
-
-            function updateMounts(locationIndex, setUnusedMountType, unusedMountType) {
-                newUnusedMountList[locationIndex] = newUnusedMountList[locationIndex] - selectedWeaponCount;
-                setUnusedWeaponMountList(newUnusedMountList);
-                setUnusedMountType(unusedMountType - selectedWeaponCount);
-                resetWeaponSelection()
-                setSelectedWeaponCount(0)
+            function updateSelectedLocationCount(shipLocationCount, setLocationCount) {
+                let locationCount = shipLocationCount + selectedWeaponCount
+                setLocationCount(locationCount)
             }
 
-            // Each locationCountArray is [[0],[0],[0]] where each array is one section of the ship.  
-            // The first array is the front, the second is the middle, and the third is the rear.
-            // As weapon mounts are filled in values will be added to each sub array.
-            // A zero value means the mount is empty or is in the process of being filled.
-            // A value of 1 means the mount is filled.
-            // For example, if the ship has 2 full major front mounts and 1 full major rear mount 
-            // shipMajorMountLocationCount would be [[1, 1], [0], [1]].
-            // The locationCount value of each weapon object will be incremented based on the index of the locationCountArray.
-            // The end result is that the locationCount value of each weapon object will be its index value plus 1.
-            function updateLocationCount(locationCountArrayIndex, locationCountArray, setLocationCountArray) {
+            function updateTotalUnusedWeapons(shipUnusedWeapons, setUnusedWeapons) {
+                let newUnusedWeapons = shipUnusedWeapons - selectedWeaponCount
+                setUnusedWeapons(newUnusedWeapons)
+            }
 
-                let newLocationCountArray = locationCountArray.slice()
+            function updateWeaponModuleNumber(weaponLocationArray) {
+                let newModuleNumber = weaponLocationArray.findIndex(value => value === 1)
+                return newModuleNumber + 1
+            }
 
-                newLocationCountArray[locationCountArrayIndex] = 1
-                newLocationCountArray.push(0)
-
-                setLocationCountArray(newLocationCountArray)
+            function updateMountLocation(mountLocationArray, mountIndex, setMountLocationArray) {
+                let newLocationArray = mountLocationArray.slice()
+                let emptyMountIndex = newLocationArray[mountIndex].findIndex(value => value === 1)
+                newLocationArray[mountIndex][emptyMountIndex] = 2
+                setMountLocationArray(newLocationArray)
             }
 
             switch (selectedMountType) {
                 case 'Spinal Mount':
-                    updateMounts(0, setUnusedSpinalMounts, shipUnusedSpinalMounts)
+                    setShipUnusedSpinalMounts(0)
+                    resetWeaponSelection()
+                    setSelectedWeaponCount(0)
                     break;
+
                 case 'Major (Front)':
-                    updateMounts(1, setUnusedMajorMounts, shipUnusedMajorMounts)
-                    weapon.locationCount = shipMajorMountLocationCount[0]
-                    updateLocationCount(0, shipMajorMountLocationCount, setMajorMountLocationCount)
+                    updateTotalUnusedWeapons(shipUnusedMajorWeapons, setUnusedMajorWeapons)
+                    weapon.moduleNumber = updateWeaponModuleNumber(shipMajorMountLocation[0])
+                    updateMountLocation(shipMajorMountLocation, 0, setMajorMountLocation)
+                    resetWeaponSelection()
+                    setSelectedWeaponCount(0)
                     break;
+
                 case 'Major (Middle)':
-                    updateMounts(2, setUnusedMajorMounts, shipUnusedMajorMounts)
-                    weapon.locationCount = shipMajorMountLocationCount[1]
-                    updateLocationCount(1, shipMajorMountLocationCount, setMajorMountLocationCount)
+                    updateTotalUnusedWeapons(shipUnusedMajorWeapons, setUnusedMajorWeapons)
+                    weapon.moduleNumber = updateWeaponModuleNumber(shipMajorMountLocation[1])
+                    updateMountLocation(shipMajorMountLocation, 1, setMajorMountLocation)
+                    resetWeaponSelection()
+                    setSelectedWeaponCount(0)
                     break;
                 case 'Major (Rear)':
-                    updateMounts(3, setUnusedMajorMounts, shipUnusedMajorMounts)
-                    weapon.locationCount = shipMajorMountLocationCount[2]
-                    updateLocationCount(2, shipMajorMountLocationCount, setMajorMountLocationCount)
+                    updateTotalUnusedWeapons(shipUnusedMajorWeapons, setUnusedMajorWeapons)
+                    weapon.moduleNumber = updateWeaponModuleNumber(shipMajorMountLocation[2])
+                    updateMountLocation(shipMajorMountLocation, 2, setMajorMountLocation)
+                    resetWeaponSelection()
+                    setSelectedWeaponCount(0)
                     break;
+
                 case 'Medium (Front)':
-                    newCount = currentMediumCountFront + selectedWeaponCount
-
-                    if (newCount === 3) {
-                        updateMounts(4, setUnusedMediumMounts, shipUnusedMediumMounts)
+                    weapon.moduleNumber = updateWeaponModuleNumber(shipMediumMountLocation[0])
+                    updateTotalUnusedWeapons(shipUnusedMediumWeapons, setUnusedMediumWeapons)
+                    if (selectedWeaponCount + currentMediumCountFront === 3) {
+                        updateMountLocation(shipMediumMountLocation, 0, setMediumMountLocation)
                         setCurrentMediumCountFront(0)
-                        weapon.locationCount = shipMediumMountLocationCount[0]
-                        updateLocationCount(0, shipMediumMountLocationCount, setMediumMountLocationCount)
                     } else {
-                        setCurrentMediumCountFront(newCount)
-                        weapon.locationCount = shipMediumMountLocationCount[0]
-                        updateMounts(4, setUnusedMediumMounts, shipUnusedMediumMounts)
+                        updateSelectedLocationCount(currentMediumCountFront, setCurrentMediumCountFront)
                     }
-
+                    resetWeaponSelection()
+                    setSelectedWeaponCount(0)
                     break;
+
                 case 'Medium (Middle)':
-                    newCount = currentMediumCountMid + selectedWeaponCount
-
-                    if (newCount === 3) {
-                        updateMounts(5, setUnusedMediumMounts, shipUnusedMediumMounts)
+                    weapon.moduleNumber = updateWeaponModuleNumber(shipMediumMountLocation[1])
+                    updateTotalUnusedWeapons(shipUnusedMediumWeapons, setUnusedMediumWeapons)
+                    if (selectedWeaponCount + currentMediumCountMid === 3) {
+                        updateMountLocation(shipMediumMountLocation, 1, setMediumMountLocation)
                         setCurrentMediumCountMid(0)
-                        weapon.locationCount = shipMediumMountLocationCount[1]
-                        updateLocationCount(1, shipMediumMountLocationCount, setMediumMountLocationCount)
                     } else {
-                        setCurrentMediumCountMid(newCount)
-                        weapon.locationCount = shipMediumMountLocationCount[1]
-                        updateMounts(5, setUnusedMediumMounts, shipUnusedMediumMounts)
+                        updateSelectedLocationCount(currentMediumCountMid, setCurrentMediumCountMid)
                     }
+                    resetWeaponSelection()
+                    setSelectedWeaponCount(0)
                     break;
+
                 case 'Medium (Rear)':
-                    newCount = currentMediumCountRear + selectedWeaponCount
-
-                    if (newCount === 3) {
-                        updateMounts(6, setUnusedMediumMounts, shipUnusedMediumMounts)
+                    weapon.moduleNumber = updateWeaponModuleNumber(shipMediumMountLocation[2])
+                    updateTotalUnusedWeapons(shipUnusedMediumWeapons, setUnusedMediumWeapons)
+                    if (selectedWeaponCount + currentMediumCountRear === 3) {
+                        updateMountLocation(shipMediumMountLocation, 2, setMediumMountLocation)
                         setCurrentMediumCountRear(0)
-                        weapon.locationCount = shipMediumMountLocationCount[2]
-                        updateLocationCount(2, shipMediumMountLocationCount, setMediumMountLocationCount)
                     } else {
-                        setCurrentMediumCountRear(newCount)
-                        weapon.locationCount = shipMediumMountLocationCount[2]
-                        updateMounts(6, setUnusedMediumMounts, shipUnusedMediumMounts)
+                        updateSelectedLocationCount(currentMediumCountRear, setCurrentMediumCountRear)
                     }
+                    resetWeaponSelection()
+                    setSelectedWeaponCount(0)
                     break;
+
                 case 'Secondary (Front)':
-                    newCount = currentSecondaryCountFront + selectedWeaponCount
-
-                    if (newCount === 10) {
-                        updateMounts(7, setUnusedSecondaryMounts, shipUnusedSecondaryMounts)
+                    weapon.moduleNumber = updateWeaponModuleNumber(shipSecondaryMountLocation[0])
+                    updateTotalUnusedWeapons(shipUnusedSecondaryWeapons, setUnusedSecondaryWeapons)
+                    if (selectedWeaponCount + currentSecondaryCountFront === 10) {
+                        updateMountLocation(shipSecondaryMountLocation, 0, setSecondaryMountLocation)
                         setCurrentSecondaryCountFront(0)
-                        weapon.locationCount = shipSecondaryMountLocationCount[0]
-                        updateLocationCount(0, shipSecondaryMountLocationCount, setSecondaryMountLocationCount)
                     } else {
-                        setCurrentSecondaryCountFront(newCount)
-                        weapon.locationCount = shipSecondaryMountLocationCount[0]
-                        updateMounts(7, setUnusedSecondaryMounts, shipUnusedSecondaryMounts)
+                        updateSelectedLocationCount(currentSecondaryCountFront, setCurrentSecondaryCountFront)
                     }
+                    resetWeaponSelection()
+                    setSelectedWeaponCount(0)
                     break;
+
                 case 'Secondary (Middle)':
-                    newCount = currentSecondaryCountMid + selectedWeaponCount
-
-                    if (newCount === 10) {
-                        updateMounts(8, setUnusedSecondaryMounts, shipUnusedSecondaryMounts)
+                    weapon.moduleNumber = updateWeaponModuleNumber(shipSecondaryMountLocation[1])
+                    updateTotalUnusedWeapons(shipUnusedSecondaryWeapons, setUnusedSecondaryWeapons)
+                    if (selectedWeaponCount + currentSecondaryCountMid === 10) {
+                        updateMountLocation(shipSecondaryMountLocation, 1, setSecondaryMountLocation)
                         setCurrentSecondaryCountMid(0)
-                        weapon.locationCount = shipSecondaryMountLocationCount[1]
-                        updateLocationCount(1, shipSecondaryMountLocationCount, setSecondaryMountLocationCount)
                     } else {
-                        setCurrentSecondaryCountMid(newCount)
-                        weapon.locationCount = shipSecondaryMountLocationCount[1]
-                        updateMounts(8, setUnusedSecondaryMounts, shipUnusedSecondaryMounts)
+                        updateSelectedLocationCount(currentSecondaryCountMid, setCurrentSecondaryCountMid)
                     }
+                    resetWeaponSelection()
+                    setSelectedWeaponCount(0)
                     break;
+
                 case 'Secondary (Rear)':
-                    newCount = currentSecondaryCountRear + selectedWeaponCount
-
-                    if (newCount === 10) {
-                        updateMounts(9, setUnusedSecondaryMounts, shipUnusedSecondaryMounts)
+                    weapon.moduleNumber = updateWeaponModuleNumber(shipSecondaryMountLocation[2])
+                    updateTotalUnusedWeapons(shipUnusedSecondaryWeapons, setUnusedSecondaryWeapons)
+                    if (selectedWeaponCount + currentSecondaryCountRear === 10) {
+                        updateMountLocation(shipSecondaryMountLocation, 2, setSecondaryMountLocation)
                         setCurrentSecondaryCountRear(0)
-                        weapon.locationCount = shipSecondaryMountLocationCount[2]
-                        updateLocationCount(2, shipSecondaryMountLocationCount, setSecondaryMountLocationCount)
                     } else {
-                        setCurrentSecondaryCountRear(newCount)
-                        weapon.locationCount = shipSecondaryMountLocationCount[2]
-                        updateMounts(9, setUnusedSecondaryMounts, shipUnusedSecondaryMounts)
+                        updateSelectedLocationCount(currentSecondaryCountRear, setCurrentSecondaryCountRear)
                     }
+                    resetWeaponSelection()
+                    setSelectedWeaponCount(0)
                     break;
+
                 case 'Tertiary (Front)':
-                    newCount = currentTertiaryCountFront + selectedWeaponCount
-
-                    if (newCount === 30) {
-                        updateMounts(10, setUnusedTertiaryMounts, shipUnusedTertiaryMounts)
+                    weapon.moduleNumber = updateWeaponModuleNumber(shipTertiaryMountLocation[0])
+                    updateTotalUnusedWeapons(shipUnusedTertiaryWeapons, setUnusedTertiaryWeapons)
+                    if (selectedWeaponCount + currentTertiaryCountFront === 30) {
+                        updateMountLocation(shipTertiaryMountLocation, 0, setTertiaryMountLocation)
                         setCurrentTertiaryCountFront(0)
-                        weapon.locationCount = shipTertiaryMountLocationCount[0]
-                        updateLocationCount(0, shipTertiaryMountLocationCount, setTertiaryMountLocationCount)
                     } else {
-                        setCurrentTertiaryCountFront(newCount)
-                        weapon.locationCount = shipTertiaryMountLocationCount[0]
-                        updateMounts(10, setUnusedTertiaryMounts, shipUnusedTertiaryMounts)
+                        updateSelectedLocationCount(currentTertiaryCountFront, setCurrentTertiaryCountFront)
                     }
+                    resetWeaponSelection()
+                    setSelectedWeaponCount(0)
                     break;
+
                 case 'Tertiary (Middle)':
-                    newCount = currentTertiaryCountMid + selectedWeaponCount
-
-                    if (newCount === 30) {
-                        updateMounts(11, setUnusedTertiaryMounts, shipUnusedTertiaryMounts)
+                    weapon.moduleNumber = updateWeaponModuleNumber(shipTertiaryMountLocation[1])
+                    updateTotalUnusedWeapons(shipUnusedTertiaryWeapons, setUnusedTertiaryWeapons)
+                    if (selectedWeaponCount + currentTertiaryCountMid === 30) {
+                        updateMountLocation(shipTertiaryMountLocation, 1, setTertiaryMountLocation)
                         setCurrentTertiaryCountMid(0)
-                        weapon.locationCount = shipTertiaryMountLocationCount[1]
-                        updateLocationCount(1, shipTertiaryMountLocationCount, setTertiaryMountLocationCount)
                     } else {
-                        setCurrentTertiaryCountMid(newCount)
-                        weapon.locationCount = shipTertiaryMountLocationCount[1]
-                        updateMounts(11, setUnusedTertiaryMounts, shipUnusedTertiaryMounts)
+                        updateSelectedLocationCount(currentTertiaryCountMid, setCurrentTertiaryCountMid)
                     }
+                    resetWeaponSelection()
+                    setSelectedWeaponCount(0)
                     break;
-                case 'Tertiary (Rear)':
-                    newCount = currentTertiaryCountRear + selectedWeaponCount
 
-                    if (newCount === 30) {
-                        updateMounts(12, setUnusedTertiaryMounts, shipUnusedTertiaryMounts)
+                case 'Tertiary (Rear)':
+                    weapon.moduleNumber = updateWeaponModuleNumber(shipTertiaryMountLocation[2])
+                    updateTotalUnusedWeapons(shipUnusedTertiaryWeapons, setUnusedTertiaryWeapons)
+                    if (selectedWeaponCount + currentTertiaryCountRear === 30) {
+                        updateMountLocation(shipTertiaryMountLocation, 2, setTertiaryMountLocation)
                         setCurrentTertiaryCountRear(0)
-                        weapon.locationCount = shipTertiaryMountLocationCount[2]
-                        updateLocationCount(2, shipTertiaryMountLocationCount, setTertiaryMountLocationCount)
                     } else {
-                        setCurrentTertiaryCountRear(newCount)
-                        weapon.locationCount = shipTertiaryMountLocationCount[2]
-                        updateMounts(12, setUnusedTertiaryMounts, shipUnusedTertiaryMounts)
+                        updateSelectedLocationCount(currentTertiaryCountRear, setCurrentTertiaryCountRear)
                     }
+                    resetWeaponSelection()
+                    setSelectedWeaponCount(0)
                     break;
 
                 default:
                     break;
             }
 
-            if (selectedWeaponType === "GunSpinalFront" || selectedWeaponType === "GunSpinalRear"
-                || selectedWeaponType === "GunTurret" || selectedWeaponType === "GunFixed") {
-                console.log(`Mount Type: ${weapon.mountType}, Weapon Type: ${weapon.weaponType}, Weapon: ${weapon.weapon}, Fixed: ${weapon.fixed}, Size: ${weapon.size}, Shots: ${weapon.shots}, Damage Dice: ${weapon.dmgDice}, Damage Modifier: ${weapon.dmgMod}, Damage Multiplier: ${weapon.dmgMulti}, SAcc: ${weapon.sAcc}, RC L: ${weapon.rcL}, ROF: ${weapon.roF}, Impulse: ${weapon.impulse}, Damage Types: ${weapon.dmgTypes}, Rapid Fire: ${weapon.rapidFire}, Very Rapid Fire: ${weapon.veryRapidFire}, Improved: ${weapon.improved}, Count: ${weapon.count}, Location Count: ${weapon.locationCount}`);
-            }
-            setWeaponList(weaponList => weaponList.concat(weapon));
+            // if (selectedWeaponType === "GunSpinalFront" || selectedWeaponType === "GunSpinalRear"
+            //     || selectedWeaponType === "GunTurret" || selectedWeaponType === "GunFixed") {
+            //     console.log(`Mount Type: ${weapon.mountType}, Weapon Type: ${weapon.weaponType}, Weapon: ${weapon.weapon}, Fixed: ${weapon.fixed}, Size: ${weapon.size}, Shots: ${weapon.shots}, Damage Dice: ${weapon.dmgDice}, Damage Modifier: ${weapon.dmgMod}, Damage Multiplier: ${weapon.dmgMulti}, SAcc: ${weapon.sAcc}, RC L: ${weapon.rcL}, ROF: ${weapon.roF}, Impulse: ${weapon.impulse}, Damage Types: ${weapon.dmgTypes}, Rapid Fire: ${weapon.rapidFire}, Very Rapid Fire: ${weapon.veryRapidFire}, Improved: ${weapon.improved}, Count: ${weapon.count}, Module Number: ${weapon.moduleNumber}`);
+            // }
+            newWeaponList.push(weapon)
+            console.log(`Weapon List [0]: ${newWeaponList[0]}`)
+            setWeaponList(newWeaponList);
         } else {
             // Add a message saying selectedWeaponCount must be at least 1 here later.
         }
     }
-
-    useEffect(() => {
-        if (weaponList.length > 0) {
-            console.log(weaponList[0].weaponType);
-        }
-    }, [weaponList]);
 
     // This function displays the Weapon Stats component.
     function weaponStatsDisplay() {
@@ -3777,23 +3785,23 @@ const CreateShipClass = () => {
                 <p className={styles.weaponExplanation}>Unconventional warheads can be added and missile types changed when deploying
                     your ship to the battle map (with TL and Super Science restrictions). Selections at this stage represent the
                     default shell and missile type.</p>
-                <span className={styles.weaponLabelCol1}>Spinal Mounts:</span>
+                <span className={styles.weaponLabelCol1}>Unused Spinal Mounts:</span>
                 <span className={styles.weaponValueCol1}>{shipUnusedSpinalMounts}</span>
                 <span className={styles.weaponLabelCol2}>Unused Major Mounts:</span>
-                <span className={styles.weaponValueCol2}>{shipUnusedMajorMounts}</span>
+                <span className={styles.weaponValueCol2}>{shipUnusedMajorWeapons}</span>
                 <span className={styles.weaponLabelCol1}>Unused Medium Mounts:</span>
-                <span className={styles.weaponValueCol1}>{shipUnusedMediumMounts}</span>
+                <span className={styles.weaponValueCol1}>{shipUnusedMediumWeapons}</span>
                 <span className={styles.weaponLabelCol2}>Unused Secondary Mounts:</span>
-                <span className={styles.weaponValueCol2}>{shipUnusedSecondaryMounts}</span>
+                <span className={styles.weaponValueCol2}>{shipUnusedSecondaryWeapons}</span>
                 <span className={styles.weaponLabelCol1}>Unused Tertiary Mounts:</span>
-                <span className={styles.weaponValueCol1}>{shipUnusedTertiaryMounts}</span>
+                <span className={styles.weaponValueCol1}>{shipUnusedTertiaryWeapons}</span>
                 <span className={styles.weaponLabelCol2}>Weapon Mount Cargo:</span>
                 <span className={styles.weaponValueCol2}>{shipWeaponMountCargo}</span>
 
                 <span className={styles.weaponSelectLabel} >Mount: </span>
                 <select className={styles.weaponSelect} value={selectedMountType} onChange={handleWeaponMountChange}>
                     <option value="">Select Weapon Mount</option>
-                    {unusedWeaponMountListDisplay.map((mountType) => (
+                    {unusedWeaponMountList.map((mountType) => (
                         <option key={mountType} value={mountType}>{mountType}</option>
                     ))}
                 </select>
@@ -3839,7 +3847,8 @@ const CreateShipClass = () => {
                         <span className={styles.statTitle}>{weaponSubType}</span>
 
                         <span className={styles.freeFillWeaponLabel}>Size: </span>
-                        <span className={styles.freeFillWeaponValue}>{`${weaponSizeDisplayConverter(selectedWeaponSize).toLocaleString()}`}</span>
+                        {selectedWeaponType !== "Uninstalled" && <span className={styles.freeFillWeaponValue}>{`${weaponSizeDisplayConverter(selectedWeaponSize).toLocaleString()}`}</span>}
+                        {selectedWeaponType === "Uninstalled" && <span className={styles.freeFillWeaponValue}>{`${selectedUninstalledCargo.toLocaleString()} tons`}</span>}
 
                         {(selectedWeaponType === "GunSpinalFront" || selectedWeaponType === "GunSpinalRear" || selectedWeaponType === "GunTurret" || selectedWeaponType === "GunFixed" || selectedWeaponType === "MissileSpinalFront" || selectedWeaponType === "MissileSpinalRear" || selectedWeaponType === "MissileTurret" || selectedWeaponType === "MissileFixed") &&
                             <span className={styles.freeFillWeaponLabel}>Shots: </span>}
@@ -3861,22 +3870,21 @@ const CreateShipClass = () => {
                         {weaponSubType === "Warp Missile" && <span className={styles.freeFillWeaponValue}>
                             {`${warpMissileRange[0].toLocaleString()}/${warpMissileRange[1].toLocaleString()}/${warpMissileRange[2].toLocaleString()}/${warpMissileRange[3].toLocaleString()}`}</span>}
 
-                        <span className={styles.freeFillWeaponLabel}>Rate of Fire (20s /1m /3m /10m): </span>
-                        <span className={styles.freeFillWeaponValue}>{`${selectedWeaponRoF[0]}/${selectedWeaponRoF[1]}/${selectedWeaponRoF[2]}/${selectedWeaponRoF[3]}`}</span>
+                        {selectedWeaponType !== "Uninstalled" && <span className={styles.freeFillWeaponLabel}>Rate of Fire (20s /1m /3m /10m): </span>}
+                        {selectedWeaponType !== "Uninstalled" && <span className={styles.freeFillWeaponValue}>{`${selectedWeaponRoF[0]}/${selectedWeaponRoF[1]}/${selectedWeaponRoF[2]}/${selectedWeaponRoF[3]}`}</span>}
 
-                        <span className={styles.freeFillWeaponLabel}>Recoil: </span>
-                        <span className={styles.freeFillWeaponValue}>{selectedWeaponRcl}</span>
+                        {selectedWeaponType !== "Uninstalled" && <span className={styles.freeFillWeaponLabel}>Recoil: </span>}
+                        {selectedWeaponType !== "Uninstalled" && <span className={styles.freeFillWeaponValue}>{selectedWeaponRcl}</span>}
 
-                        <span className={styles.freeFillWeaponLabel}>Damage Type: </span>
-                        <span className={styles.freeFillWeaponValue}>{selectedWeaponDamageTypes.join(', ')}</span>
+                        {selectedWeaponType !== "Uninstalled" && <span className={styles.freeFillWeaponLabel}>Damage Type: </span>}
+                        {selectedWeaponType !== "Uninstalled" && <span className={styles.freeFillWeaponValue}>{selectedWeaponDamageTypes.join(', ')}</span>}
 
-                        <span className={styles.freeFillWeaponLabel}>
-                            Base Damage: </span>
-                        <span className={styles.freeFillWeaponValue}>
-                            {`${selectedWeaponDmgDice + 'd'}${selectedWeaponDmgMod !== 0 || selectedWeaponDmgMulti !== 0 ? (selectedWeaponDmgMod !== 0 ? selectedWeaponDmgMod : 'x' + selectedWeaponDmgMulti) : '+0'} / ${selectedWeaponArmorDiv}`}</span>
+                        {selectedWeaponType !== "Uninstalled" && <span className={styles.freeFillWeaponLabel}>Base Damage: </span>}
+                        {selectedWeaponType !== "Uninstalled" && <span className={styles.freeFillWeaponValue}>
+                            {`${selectedWeaponDmgDice + 'd'}${selectedWeaponDmgMod !== 0 || selectedWeaponDmgMulti !== 0 ? (selectedWeaponDmgMod !== 0 ? selectedWeaponDmgMod : 'x' + selectedWeaponDmgMulti) : '+0'} / ${selectedWeaponArmorDiv}`}</span>}
 
-                        <span className={styles.freeFillWeaponLabel}>Space Accuracy: </span>
-                        <span className={styles.freeFillWeaponValue}>{selectedWeaponSAcc}</span>
+                        {selectedWeaponType !== "Uninstalled" && <span className={styles.freeFillWeaponLabel}>Space Accuracy: </span>}
+                        {selectedWeaponType !== "Uninstalled" && <span className={styles.freeFillWeaponValue}>{selectedWeaponSAcc}</span>}
 
                         {(weaponSubType !== "Warp Missile" && (selectedWeaponType === "MissileSpinalFront" || selectedWeaponType === "MissileSpinalRear" || selectedWeaponType === "MissileTurret" || selectedWeaponType === "MissileFixed")) &&
                             <span className={styles.freeFillWeaponLabel1}>Thrust (10 Mile) (20s /1m /3m /10m): </span>}
@@ -3967,8 +3975,25 @@ const CreateShipClass = () => {
                         </div>
 
                         <button className={styles.addWeaponButton} onClick={handleAddWeapon}>Add Weapon(s)</button>
+
+
                     </>
                 )}
+                {weaponList && <div>
+                    {weaponList.map((weapon, weaponIndex) => (
+
+                        <div key={weaponIndex}>
+                            <span>Mount Type:</span>
+                            <span>{weapon.mountType}</span>
+                            <span>Module Number:</span>
+                            <span>{weapon.moduleNumber}</span>
+                            <span>Weapon Type:</span>
+                            <span>{weapon.weaponType}</span>
+                            <span>Weapon Count:</span>
+                            <span>{weapon.count}</span>
+                        </div>
+                    ))}
+                </div>}
             </div>
         )
     }
