@@ -3765,16 +3765,63 @@ const CreateShipClass = () => {
                     break;
             }
 
-            // if (selectedWeaponType === "GunSpinalFront" || selectedWeaponType === "GunSpinalRear"
-            //     || selectedWeaponType === "GunTurret" || selectedWeaponType === "GunFixed") {
-            //     console.log(`Mount Type: ${weapon.mountType}, Weapon Type: ${weapon.weaponType}, Weapon: ${weapon.weapon}, Fixed: ${weapon.fixed}, Size: ${weapon.size}, Shots: ${weapon.shots}, Damage Dice: ${weapon.dmgDice}, Damage Modifier: ${weapon.dmgMod}, Damage Multiplier: ${weapon.dmgMulti}, SAcc: ${weapon.sAcc}, RC L: ${weapon.rcL}, ROF: ${weapon.roF}, Impulse: ${weapon.impulse}, Damage Types: ${weapon.dmgTypes}, Rapid Fire: ${weapon.rapidFire}, Very Rapid Fire: ${weapon.veryRapidFire}, Improved: ${weapon.improved}, Count: ${weapon.count}, Module Number: ${weapon.moduleNumber}`);
-            // }
-            newWeaponList.push(weapon)
-            console.log(`Weapon List [0]: ${newWeaponList[0]}`)
+            newWeaponList.push(weapon);
             setWeaponList(newWeaponList);
-        } else {
-            // Add a message saying selectedWeaponCount must be at least 1 here later.
         }
+    }
+
+    function handleDeleteWeaponClick(weapon, weaponIndex) {
+
+        function updateWeaponList() {
+            let newWeaponList = weaponList.slice()
+            newWeaponList.splice(weaponIndex, 1)
+            setWeaponList(newWeaponList)
+        }
+
+        function deleteWeapon(setMountCount, mountLocationArray, mountIndex, setMountLocationArray) {
+            if (weaponCount !== 0) {
+
+            } else {
+                weapon.moduleNumber - 1
+                setMountCount(0)
+                updateWeaponList()
+            }
+
+
+        }
+
+        switch (weapon.mountType) {
+            case 'Spinal Mount':
+                break;
+            case 'Major (Front)':
+                break;
+            case 'Major (Middle)':
+                break;
+            case 'Major (Rear)':
+                break;
+            case 'Medium (Front)':
+                break;
+            case 'Medium (Middle)':
+                break;
+            case 'Medium (Rear)':
+                break;
+            case 'Secondary (Front)':
+                break;
+            case 'Secondary (Middle)':
+                break;
+            case 'Secondary (Rear)':
+                break;
+            case 'Tertiary (Front)':
+                break;
+            case 'Tertiary (Middle)':
+                break;
+            case 'Tertiary (Rear)':
+                break;
+
+            default:
+                break;
+        }
+
     }
 
     // This function displays the Weapon Stats component.
@@ -3979,21 +4026,22 @@ const CreateShipClass = () => {
 
                     </>
                 )}
-                {weaponList && <div>
+                {weaponList && <>
                     {weaponList.map((weapon, weaponIndex) => (
 
-                        <div key={weaponIndex}>
-                            <span>Mount Type:</span>
-                            <span>{weapon.mountType}</span>
-                            <span>Module Number:</span>
-                            <span>{weapon.moduleNumber}</span>
-                            <span>Weapon Type:</span>
-                            <span>{weapon.weaponType}</span>
-                            <span>Weapon Count:</span>
-                            <span>{weapon.count}</span>
+                        <div className={styles.weaponInfoContainer} key={weaponIndex}>
+                            <span className={styles.weaponInfoLabel1}>Mount Type:</span>
+                            <span className={styles.weaponInfoValue}>{weapon.mountType}</span>
+                            <span className={styles.weaponInfoLabel2}>Module Number:</span>
+                            <span className={styles.weaponInfoValue}>{weapon.moduleNumber}</span>
+                            <span className={styles.weaponInfoLabel1}>Weapon Type:</span>
+                            <span className={styles.weaponInfoValue}>{weapon.weaponType}</span>
+                            <span className={styles.weaponInfoLabel2}>Weapon Count:</span>
+                            <span className={styles.weaponInfoValue}>{weapon.count}</span>
+                            <button className={styles.addWeaponButton} onClick={() => handleDeleteWeaponClick(weapon, weaponIndex)}>Delete</button>
                         </div>
                     ))}
-                </div>}
+                </>}
             </div>
         )
     }
