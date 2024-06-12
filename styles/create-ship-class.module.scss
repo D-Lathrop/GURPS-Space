@@ -682,3 +682,12 @@
     grid-row: span 3;
     overflow-y: auto
 }
+
+.weaponDeleteWarning {
+    @extend %habitatPowerInfoLabelCommonStyles;
+    grid-column: 1 / span 4;
+    color: $secondaryColor2;
+    padding: 2px 4px;
+    justify-self: center;
+    border: 2px solid red;
+}

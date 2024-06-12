@@ -84,7 +84,7 @@ const CreateShipClass = () => {
 
     // Weapon Stat State Variables
     const [weaponList, setWeaponList] = useState([]);
-    const [selectedWeaponCount, setSelectedWeaponCount] = useState(0);
+    const [selectedWeaponCount, setSelectedWeaponCount] = useState(1);
     const [selectedWeaponSize, setSelectedWeaponSize] = useState(0);
     const [selectedWeaponFixed, setSelectedWeaponFixed] = useState(false);
     const [selectedWeaponLargestWarhead, setSelectedWeaponLargestWarhead] = useState(["None", "None"]);
@@ -2370,9 +2370,14 @@ const CreateShipClass = () => {
                             rearSpinal = true;
                         }
                         spinalMounts = 0;
-                        if (frontSpinal) spinalMounts += 0.33;
-                        if (midSpinal) spinalMounts += 0.33;
-                        if (rearSpinal) spinalMounts += 0.33;
+                        if (frontSpinal && midSpinal && rearSpinal) {
+                            spinalMounts = 1
+                        } else {
+                            if (frontSpinal) spinalMounts += 0.33;
+                            if (midSpinal) spinalMounts += 0.33;
+                            if (rearSpinal) spinalMounts += 0.33;
+                        }
+
                     }
 
                     break;
@@ -3616,7 +3621,7 @@ const CreateShipClass = () => {
 
             switch (selectedMountType) {
                 case 'Spinal Mount':
-                    setShipUnusedSpinalMounts(0)
+                    setUnusedSpinalMounts(0)
                     resetWeaponSelection()
                     setSelectedWeaponCount(0)
                     break;
@@ -3770,55 +3775,104 @@ const CreateShipClass = () => {
         }
     }
 
-    function handleDeleteWeaponClick(weapon, weaponIndex) {
+    function handleDeleteWeapon(weapon, weaponIndex) {
 
-        function updateWeaponList() {
+        function updateWeaponListSingle() {
             let newWeaponList = weaponList.slice()
             newWeaponList.splice(weaponIndex, 1)
             setWeaponList(newWeaponList)
         }
 
-        function deleteWeapon(setMountCount, mountLocationArray, mountIndex, setMountLocationArray) {
-            if (weaponCount !== 0) {
+        function updateWeaponListMulti() {
+            let newWeaponList = weaponList.slice()
+            const deletedWeaponMount = { moduleNumber: weapon.moduleNumber, mountType: weapon.mountType }
 
-            } else {
-                weapon.moduleNumber - 1
-                setMountCount(0)
-                updateWeaponList()
+            function findMatchingWeapons(deletedWeaponMount) {
+                return newWeaponList.filter(weapon =>
+                    weapon.moduleNumber === deletedWeaponMount.moduleNumber &&
+                    weapon.mountType === deletedWeaponMount.mountType
+                );
             }
 
+            const deleteTheseWeapons = findMatchingWeapons(deletedWeaponMount)
 
+            deleteTheseWeapons.forEach(deletedWeapon => {
+                const index = newWeaponList.findIndex(weapon =>
+                    weapon.moduleNumber === deletedWeapon.moduleNumber &&
+                    weapon.mountType === deletedWeapon.mountType
+                );
+                if (index !== -1) {
+                    newWeaponList.splice(index, 1);
+                }
+            });
+
+            setWeaponList(newWeaponList)
+        }
+
+        function updateLocationArray(arrayIndex, hullSection, mountLocationArray, setMountLocationArray) {
+            let newLocationArray = mountLocationArray.slice()
+            newLocationArray[hullSection][arrayIndex] = 1
+            setMountLocationArray(newLocationArray)
+        }
+
+        function deleteSingleWeapon(hullSection, mountLocationArray, setMountLocationArray) {
+            updateLocationArray(weapon.moduleNumber - 1, hullSection, mountLocationArray, setMountLocationArray)
+            updateWeaponListSingle()
+        }
+
+        function deleteMultiWeapon(weaponCount, hullSection, mountLocationArray, setMountLocationArray) {
+            if (weaponCount !== 0) {
+                // Do nothing, add an error message saying the current mount cannot be partially filled.
+            } else {
+                updateLocationArray(weapon.moduleNumber - 1, hullSection, mountLocationArray, setMountLocationArray)
+                updateWeaponListMulti()
+            }
         }
 
         switch (weapon.mountType) {
             case 'Spinal Mount':
+                updateWeaponListSingle()
+                setUnusedSpinalMounts(1)
                 break;
             case 'Major (Front)':
+                deleteSingleWeapon(0, shipMajorMountLocation, setMajorMountLocation)
                 break;
             case 'Major (Middle)':
+                deleteSingleWeapon(1, shipMajorMountLocation, setMajorMountLocation)
                 break;
             case 'Major (Rear)':
+                deleteSingleWeapon(2, shipMajorMountLocation, setMajorMountLocation)
                 break;
             case 'Medium (Front)':
+                deleteMultiWeapon(currentMediumCountFront, 0, shipMediumMountLocation, setMediumMountLocation)
                 break;
             case 'Medium (Middle)':
+                deleteMultiWeapon(currentMediumCountMid, 1, shipMediumMountLocation, setMediumMountLocation)
                 break;
             case 'Medium (Rear)':
+                deleteMultiWeapon(currentMediumCountRear, 2, shipMediumMountLocation, setMediumMountLocation)
                 break;
             case 'Secondary (Front)':
+                deleteMultiWeapon(currentSecondaryCountFront, 0, shipSecondaryMountLocation, setSecondaryMountLocation)
                 break;
             case 'Secondary (Middle)':
+                deleteMultiWeapon(currentSecondaryCountMid, 1, shipSecondaryMountLocation, setSecondaryMountLocation)
                 break;
             case 'Secondary (Rear)':
+                deleteMultiWeapon(currentSecondaryCountRear, 2, shipSecondaryMountLocation, setSecondaryMountLocation)
                 break;
             case 'Tertiary (Front)':
+                deleteMultiWeapon(currentTertiaryCountFront, 0, shipTertiaryMountLocation, setTertiaryMountLocation)
                 break;
             case 'Tertiary (Middle)':
+                deleteMultiWeapon(currentTertiaryCountMid, 1, shipTertiaryMountLocation, setTertiaryMountLocation)
                 break;
             case 'Tertiary (Rear)':
+                deleteMultiWeapon(currentTertiaryCountRear, 2, shipTertiaryMountLocation, setTertiaryMountLocation)
                 break;
 
             default:
+                console.log("handleDeleteWeaponClick error.")
                 break;
         }
 
@@ -4038,7 +4092,8 @@ const CreateShipClass = () => {
                             <span className={styles.weaponInfoValue}>{weapon.weaponType}</span>
                             <span className={styles.weaponInfoLabel2}>Weapon Count:</span>
                             <span className={styles.weaponInfoValue}>{weapon.count}</span>
-                            <button className={styles.addWeaponButton} onClick={() => handleDeleteWeaponClick(weapon, weaponIndex)}>Delete</button>
+                            <span className={styles.weaponDeleteWarning}>Only weapons in a full mount can be removed.</span>
+                            <button className={styles.addWeaponButton} onClick={() => handleDeleteWeapon(weapon, weaponIndex)}>Remove</button>
                         </div>
                     ))}
                 </>}
