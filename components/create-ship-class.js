@@ -8,6 +8,7 @@ import ShipModuleSelector from "./ship-module-selector.js";
 import ShipClassStatBlock from "./ship-class-statblock.js";
 import ShipClassHabitatPower from "./ship-class-habitatpower.js";
 import ShipClassWeaponStats from "./ship-class-weaponstats.js";
+import ShipDesign from "./ship-design.js";
 
 
 const CreateShipClass = () => {
@@ -168,6 +169,11 @@ const CreateShipClass = () => {
     const [shipRefineryCapacity, setRefineryCapacity] = useState(0);
     const [shipFacValueHour, setFacValueHour] = useState(0);
     const [shipFacWeightHour, setFacWeightHour] = useState(0);
+
+    // Design Switch and Feature State Variables
+    const [shipDesignSwitchArray, setDesignSwitchArray] = useState([]);
+    const [shipDesignFeatureArray, setDesignFeatureArray] = useState([]);
+    const [shipDesignCost, setDesignCost] = useState(0)
 
     const engineKeys = ['Chemical', 'HEDM', 'Ion Drive', 'Mass Driver', 'Nuclear Thermal Rocket',
         'Nuclear Light Bulb', 'Nuclear Saltwater Rocket', 'External Pulsed Plasma', 'Fusion Pulse Drive',
@@ -335,10 +341,10 @@ const CreateShipClass = () => {
     // This useEffect handles changes to the cost state variables to update the total cost.
     useEffect(() => {
         let totalCost = 0
-        totalCost = shipTotalModulesCost + shipHabitatPowerCost + shipWeaponsCost
+        totalCost = shipTotalModulesCost + shipHabitatPowerCost + shipWeaponsCost + shipDesignCost
         setDisplayCost(totalCost.toLocaleString())
         setTotalCost(totalCost)
-    }, [shipTotalModulesCost, shipHabitatPowerCost, shipWeaponsCost])
+    }, [shipTotalModulesCost, shipHabitatPowerCost, shipWeaponsCost, shipDesignCost])
 
     // This function handles changes to the habitatPowerCost value and updates the state variable.
     function handleHabitatPowerCost(cost) {
@@ -2518,6 +2524,9 @@ const CreateShipClass = () => {
     const handleWeaponClick = () => {
         setStatCurrentComponent('shipWeaponStats');
     }
+    const handleShipDesignClick = () => {
+        setStatCurrentComponent('shipDesign');
+    }
 
     function resetWeaponStats() {
         setWeaponList([])
@@ -3535,6 +3544,7 @@ const CreateShipClass = () => {
                 let finalCargo = selectedUninstalledCargo * selectedWeaponCount
                 let finalCost = (selectedMountCostChange * selectedWeaponCount) * -1
                 let newShipWeaponsCost = shipWeaponsCost + finalCost
+                let newShipWeaponsCargo = shipWeaponMountCargo + finalCargo
 
                 weapon = {
                     mountType: selectedMountType,
@@ -3546,7 +3556,7 @@ const CreateShipClass = () => {
                 }
 
                 setWeaponsCost(newShipWeaponsCost)
-                setWeaponMountCargo(finalCargo)
+                setWeaponMountCargo(newShipWeaponsCargo)
             }
 
             switch (selectedWeaponType) {
@@ -3786,6 +3796,9 @@ const CreateShipClass = () => {
         function updateWeaponListMulti() {
             let newWeaponList = weaponList.slice()
             const deletedWeaponMount = { moduleNumber: weapon.moduleNumber, mountType: weapon.mountType }
+            const deleteTheseWeapons = findMatchingWeapons(deletedWeaponMount)
+            let newWeaponsCost = shipWeaponsCost
+            let newWeaponsCargo = shipWeaponMountCargo
 
             function findMatchingWeapons(deletedWeaponMount) {
                 return newWeaponList.filter(weapon =>
@@ -3794,9 +3807,12 @@ const CreateShipClass = () => {
                 );
             }
 
-            const deleteTheseWeapons = findMatchingWeapons(deletedWeaponMount)
-
             deleteTheseWeapons.forEach(deletedWeapon => {
+                if (deletedWeapon.weaponType === "Uninstalled") {
+                    newWeaponsCost += deletedWeapon.cost * -1
+                    newWeaponsCargo += deletedWeapon.cargo * -1
+                }
+
                 const index = newWeaponList.findIndex(weapon =>
                     weapon.moduleNumber === deletedWeapon.moduleNumber &&
                     weapon.mountType === deletedWeapon.mountType
@@ -3806,6 +3822,8 @@ const CreateShipClass = () => {
                 }
             });
 
+            setWeaponMountCargo(newWeaponsCargo)
+            setWeaponsCost(newWeaponsCost)
             setWeaponList(newWeaponList)
         }
 
@@ -4101,6 +4119,20 @@ const CreateShipClass = () => {
         )
     }
 
+
+    function designDisplay() {
+
+        return (
+            <div className={styles.statBlockContainer}>
+                <h2 className={styles.statTitle}>Ship Design</h2>
+                <p className={styles.weaponExplanation}>Some design features and switches are not implemented in this
+                    version of the website.</p>
+                <span>Design Features:</span>
+            </div>
+        )
+    }
+
+
     return (
         <div className={styles.containerStyle}>
             <h2 className={styles.title}>Create Ship Class</h2>
@@ -4170,9 +4202,12 @@ const CreateShipClass = () => {
 
             <span className={styles.topRowWarning}>WARNING: Changing the TL, SM, Super Science, or Un/Streamlined will reset all modules. &nbsp;WARNING: Some actions and modules allowed in the rules are not allowed in this version.  Mouse over to see details.</span>
 
-            <button className={styles.statComponentButton1} onClick={handleBasicStatsClick}>Basic Stats</button>
-            <button className={styles.statComponentButton2} onClick={handleHabitatPowerClick}>Habitat and Power Stats</button>
-            <button className={styles.statComponentButton3} onClick={handleWeaponClick}>Weapon Stats</button>
+            <div className={styles.statComponentButtonContainer}>
+                <button className={styles.statComponentButton} onClick={handleBasicStatsClick}>Basic Stats</button>
+                <button className={styles.statComponentButton} onClick={handleHabitatPowerClick}>Habs & Power</button>
+                <button className={styles.statComponentButton} onClick={handleWeaponClick}>Weapons</button>
+                <button className={styles.statComponentButton} onClick={handleShipDesignClick}>Ship Design</button>
+            </div>
 
             <span className={`${styles.buildLabel} ${styles.buildCol1} ${styles.buildRow1}`}>Front</span>
             <span className={`${styles.buildLabel} ${styles.buildCol2} ${styles.buildRow1}`}>Middle</span>
@@ -4261,6 +4296,10 @@ const CreateShipClass = () => {
                 shipTotalCargoAllTypes={shipTotalCargoAllTypes.toLocaleString()}
                 shipHangarCapacity={shipHangarCapacity.toLocaleString()}
                 shipLaunchRateDisplay={shipLaunchRate.toLocaleString()}
+            />}
+            {currentStatComponent === 'shipDesign' && <ShipDesign
+                styles={styles}
+                designDisplay={designDisplay}
             />}
 
             <div className={styles.classNotes}>
