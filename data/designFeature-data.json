@@ -1,0 +1,106 @@
+{
+    "ArtificialGrav": {
+        "SuperScience": true,
+        "SM-5": 30000,
+        "SM-6": 100000,
+        "SM-7": 300000,
+        "SM-8": 1000000,
+        "SM-9": 3000000,
+        "SM-10": 10000000,
+        "SM-11": 30000000,
+        "SM-12": 100000000,
+        "SM-13": 300000000,
+        "SM-14": 1000000000,
+        "SM-15": 3000000000
+    },
+    "GravCompensator": {
+        "SuperScience": true,
+        "SM-5": 30000,
+        "SM-6": 100000,
+        "SM-7": 300000,
+        "SM-8": 1000000,
+        "SM-9": 3000000,
+        "SM-10": 10000000,
+        "SM-11": 30000000,
+        "SM-12": 100000000,
+        "SM-13": 300000000,
+        "SM-14": 1000000000,
+        "SM-15": 3000000000
+    },
+    "HighAutomation": {
+        "SuperScience": false
+    },
+    "TotalAutomation": {
+        "SuperScience": false
+    },
+    "EmergencyEjection": {
+        "SuperScience": false
+    },
+    "HardenedArmor": {
+        "SuperScience": false
+    },
+    "IndestructibleArmor": {
+        "SuperScience": false
+    },
+    "RamRockets": {
+        "SuperScience": false
+    },
+    "SpinGrav": {
+        "SuperScience": false,
+        "SM-8G": 0.1,
+        "SM-8Cost": 100000,
+        "SM-9G": 0.15,
+        "SM-9Cost": 300000,
+        "SM-10G": 0.2,
+        "SM-10Cost": 1000000,
+        "SM-11G": 0.3,
+        "SM-11Cost": 3000000,
+        "SM-12G": 0.5,
+        "SM-12Cost": 10000000,
+        "SM-13G": 0.7,
+        "SM-13Cost": 30000000,
+        "SM-14G": 1,
+        "SM-14Cost": 100000000,
+        "SM-15G": 1.5,
+        "SM-15Cost": 300000000
+    },
+    "Chameleon": {
+        "SuperScience": false,
+        "SM-5": 180000,
+        "SM-6": 350000,
+        "SM-7": 700000,
+        "SM-8": 1500000,
+        "SM-9": 3500000,
+        "SM-10": 7000000,
+        "SM-11": 15000000,
+        "SM-12": 35000000,
+        "SM-13": 70000000,
+        "SM-14": 150000000,
+        "SM-15": 350000000
+    },
+    "Stealth": {
+        "SuperScience": false,
+        "SM-5": 200000,
+        "SM-6": 500000,
+        "SM-7": 1000000,
+        "SM-8": 2000000,
+        "SM-9": 5000000,
+        "SM-10": 10000000,
+        "SM-11": 20000000,
+        "SM-12": 50000000,
+        "SM-13": 100000000,
+        "SM-14": 200000000,
+        "SM-15": 500000000
+    },
+    "Winged": {
+        "SuperScience": false,
+        "SM-5": 150000,
+        "SM-6": 500000,
+        "SM-7": 1500000,
+        "SM-8": 5000000,
+        "SM-9": 15000000,
+        "SM-10": 50000000,
+        "SM-11": 150000000,
+        "SM-12": 500000000
+    }
+}

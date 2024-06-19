@@ -3,6 +3,8 @@ import shipData from "../data/ship-data.json"
 import SMData from "../data/shipSM-data.json"
 import weaponData from "../data/weapon-data.json"
 import weaponTables from "../data/weapon-tables.json"
+import designFeature from "../data/designFeature-data.json"
+import designSwitch from "../data/designSwitch-data.json"
 import React, { useState, useEffect } from 'react';
 import ShipModuleSelector from "./ship-module-selector.js";
 import ShipClassStatBlock from "./ship-class-statblock.js";
@@ -4119,9 +4121,95 @@ const CreateShipClass = () => {
         )
     }
 
+    // This useEffect updates valid design features and switches based on SM, TL, and Super Science.
+    useEffect(() => {
+        let newValidDesignFeatures = []
+        let newValidSwitches = []
 
+        if (shipModules.length < 20) {
+            newValidDesignFeatures.push("Select all modules.");
+            newValidDesignSwitches.push("Select all modules.");
+        } else {
+            for (const key in designFeature) {
+                switch (key) {
+                    case "ArtificialGrav":
+                    case "GravCompensator":
+                        if (superScienceChecked === true) {
+                            newValidDesignFeatures.push(key)
+                        }
+                        break;
+                    case "HighAutomation":
+                        if (shipSM >= 12) {
+                            newValidDesignFeatures.push(key)
+                        }
+                        break;
+                    case "TotalAutomation":
+                        newValidDesignFeatures.push(key)
+                        break;
+                    case "EmergencyEjection":
+                        const validEjectionControlRoom = shipModules.filter(shipModule =>
+                            shipModule[moduleKey] === "Control Room" && shipModule[moduleLocation2] != "core"
+                        );
+                        if (validEjectionControlRoom.length > 0 && shipSM <= 8) {
+                            newValidDesignFeatures.push(key)
+                        }
+                        break;
+                    case "HardenedArmor":
+                    case "IndestructibleArmor":
+                        const notArmorArray = ["Stasis Web", "Force Screen, TL12 Heavy", "Force Screen, TL12 Light", "Force Screen, TL11 Heavy", "Force Screen, TL11 Light", "Defensive ECM"]
+                        const armorPresentArray = shipModules.filter(shipModule =>
+                            shipModule[moduleCategory] === "Armor and Survivability" && !notArmorArray.includes(shipModule[moduleKey])
+                        );
+                        if (armorPresentArray.length > 0) {
+                            if (key === "IndestructibleArmor" && superScienceChecked) {
+                                newValidDesignFeatures.push(key)
+                            } else if (key === "HardenedArmor") {
+                                newValidDesignFeatures.push(key)
+                            }
+                        }
+                        break;
+                    case "RamRockets":
+                        const validEngineArray = ["Super Antimatter Plasma Torch", "Antimatter Plasma Torch", "Antimatter Thermal Rocket", "Super Fusion Torch", "Fusion Torch", "Nuclear Thermal Rocket"]
+                        const validEnginePresentArray = shipModules.filter(shipModule =>
+                            validEngineArray.includes(shipModule[moduleKey])
+                        );
+                        if (validEnginePresentArray.length > 0) {
+                            newValidDesignFeatures.push(key)
+                        }
+                        break;
+                    case "SpinGrav":
+                        if (shipStreamlinedUn === "unstreamlined" && shipSM >= 8) {
+                            newValidDesignFeatures.push(key)
+                        }
+                        break;
+                    case "Chameleon":
+                        if (shipTL >= 8) {
+                            newValidDesignFeatures.push(key)
+                        }
+                        break;
+                    case "Stealth":
+                        if (shipTL >= 10) {
+                            newValidDesignFeatures.push(key)
+                        }
+                        break;
+                    case "Winged":
+                        if (shipStreamlinedUn === "streamlined" && shipSM <= 12) {
+                            newValidDesignFeatures.push(key)
+                        }
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+        }
+
+        setDesignFeatureArray(newValidDesignFeatures)
+        setDesignSwitchArray(newValidDesignSwitches)
+    }, [shipSM, shipTL, superScienceChecked, shipModules, shipStreamlinedUn])
+
+    // This function displays the design features and switches component.
     function designDisplay() {
-
         return (
             <div className={styles.statBlockContainer}>
                 <h2 className={styles.statTitle}>Ship Design</h2>
@@ -4131,7 +4219,6 @@ const CreateShipClass = () => {
             </div>
         )
     }
-
 
     return (
         <div className={styles.containerStyle}>
