@@ -1,20 +1,9 @@
 {
-    "ElectroMechanicalComputers": {
-        "SuperScience": false
-    },
-    "FTLCommSensor": {
-        "SuperScience": true
-    },
-    "MultiScanner": {
-        "SuperScience": true
-    },
-    "PseudoVelocity": {
-        "SuperScience": false
-    },
-    "SingularityDrive": {
-        "SuperScience": false
-    },
-    "ReactionlessStardrive": {
-        "SuperScience": false
-    }
+    "Electro-Mechanical Computers": {},
+    "FTL Comms": {},
+    "FTL Sensors": {},
+    "Multi Scanner": {},
+    "Pseudo Velocity": {},
+    "Singularity Drive": {},
+    "Reactionless Stardrive": {}
 }

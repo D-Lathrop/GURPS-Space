@@ -4126,63 +4126,73 @@ const CreateShipClass = () => {
         let newValidDesignFeatures = []
         let newValidSwitches = []
 
+        const notArmorArray = ["Stasis Web", "Force Screen, TL12 Heavy", "Force Screen, TL12 Light", "Force Screen, TL11 Heavy", "Force Screen, TL11 Light", "Defensive ECM"]
+        const armorPresentArray = shipModules.filter(shipModule =>
+            shipModule.moduleCategory === "Armor and Survivability" && !notArmorArray.includes(shipModule.moduleKey)
+        );
+
+        function checkShipModulesIncludes(referenceArray) {
+            return shipModules.filter(shipModule => referenceArray.includes(shipModule.moduleKey))
+        }
+
+        const validRamEngineArray = ["Super Antimatter Plasma Torch", "Antimatter Plasma Torch", "Antimatter Thermal Rocket", "Super Fusion Torch", "Fusion Torch", "Nuclear Thermal Rocket"]
+        const validScannerArray = ["Sensor Array, Multipurpose", "Sensor Array, Science"]
+        const validPseudoEngineArray = ["Super Stardrive Engine", "Stardrive Engine", "Subwarp", "Super Reactionless", "Hot Reactionless", "Standard", "Rotary"]
+        const validStardriveArray = ["Super Stardrive Engine", "Stardrive Engine"]
+        const validRamEnginePresentArray = checkShipModulesIncludes(validRamEngineArray)
+        const validScannerPresentArray = checkShipModulesIncludes(validScannerArray);
+        const validPseudoEnginePresentArray = checkShipModulesIncludes(validPseudoEngineArray);
+        const validStardrivePresentArray = checkShipModulesIncludes(validStardriveArray);
+
         if (shipModules.length < 20) {
             newValidDesignFeatures.push("Select all modules.");
-            newValidDesignSwitches.push("Select all modules.");
+            newValidSwitches.push("Select all modules.");
         } else {
             for (const key in designFeature) {
                 switch (key) {
-                    case "ArtificialGrav":
-                    case "GravCompensator":
+                    case "Artificial Grav":
+                    case "Grav Compensator":
                         if (superScienceChecked === true) {
                             newValidDesignFeatures.push(key)
                         }
                         break;
-                    case "HighAutomation":
+                    case "High Automation":
                         if (shipSM >= 12) {
                             newValidDesignFeatures.push(key)
                         }
                         break;
-                    case "TotalAutomation":
+                    case "Total Automation":
                         newValidDesignFeatures.push(key)
                         break;
-                    case "EmergencyEjection":
+                    case "Emergency Ejection":
                         const validEjectionControlRoom = shipModules.filter(shipModule =>
-                            shipModule[moduleKey] === "Control Room" && shipModule[moduleLocation2] != "core"
+                            shipModule.moduleKey === "Control Room" && shipModule.moduleLocation2 != "core"
                         );
                         if (validEjectionControlRoom.length > 0 && shipSM <= 8) {
                             newValidDesignFeatures.push(key)
                         }
                         break;
-                    case "HardenedArmor":
-                    case "IndestructibleArmor":
-                        const notArmorArray = ["Stasis Web", "Force Screen, TL12 Heavy", "Force Screen, TL12 Light", "Force Screen, TL11 Heavy", "Force Screen, TL11 Light", "Defensive ECM"]
-                        const armorPresentArray = shipModules.filter(shipModule =>
-                            shipModule[moduleCategory] === "Armor and Survivability" && !notArmorArray.includes(shipModule[moduleKey])
-                        );
+                    case "Hardened Armor":
+                    case "Indestructible Armor":
                         if (armorPresentArray.length > 0) {
-                            if (key === "IndestructibleArmor" && superScienceChecked) {
+                            if (key === "Indestructible Armor" && superScienceChecked) {
                                 newValidDesignFeatures.push(key)
-                            } else if (key === "HardenedArmor") {
+                            } else if (key === "Hardened Armor") {
                                 newValidDesignFeatures.push(key)
                             }
                         }
                         break;
-                    case "RamRockets":
-                        const validEngineArray = ["Super Antimatter Plasma Torch", "Antimatter Plasma Torch", "Antimatter Thermal Rocket", "Super Fusion Torch", "Fusion Torch", "Nuclear Thermal Rocket"]
-                        const validEnginePresentArray = shipModules.filter(shipModule =>
-                            validEngineArray.includes(shipModule[moduleKey])
-                        );
-                        if (validEnginePresentArray.length > 0) {
+                    case "Ram Rockets":
+                        if (validRamEnginePresentArray.length > 0) {
                             newValidDesignFeatures.push(key)
                         }
                         break;
-                    case "SpinGrav":
+                    case "Spin Grav":
                         if (shipStreamlinedUn === "unstreamlined" && shipSM >= 8) {
                             newValidDesignFeatures.push(key)
                         }
                         break;
-                    case "Chameleon":
+                    case "Dynamic Chameleon":
                         if (shipTL >= 8) {
                             newValidDesignFeatures.push(key)
                         }
@@ -4198,15 +4208,59 @@ const CreateShipClass = () => {
                         }
                         break;
                     default:
+                        newValidDesignFeatures.push("Error.")
                         break;
                 }
-
+            }
+            for (const key in designSwitch) {
+                switch (key) {
+                    case "Electro-Mechanical Computers":
+                        newValidSwitches.push(key)
+                        break;
+                    case "FTL Comms":
+                    case "FTL Sensors":
+                        if (superScienceChecked) {
+                            newValidSwitches.push(key)
+                        }
+                        break;
+                    case "Multi Scanner":
+                        if (validScannerPresentArray.length > 0 && superScienceChecked) {
+                            newValidSwitches.push(key)
+                        }
+                        break;
+                    case "Pseudo Velocity":
+                        if (validPseudoEnginePresentArray.length > 0) {
+                            newValidSwitches.push(key)
+                        }
+                        break;
+                    case "Singularity Drive":
+                        if (validPseudoEngineArray.length > 0 && shipSM >= shipTL - 22) {
+                            newValidSwitches.push(key)
+                        }
+                        break;
+                    case "Reactionless Stardrive":
+                        if (validStardrivePresentArray.length > 0) {
+                            newValidSwitches.push(key)
+                        }
+                        break;
+                    default:
+                        newValidSwitches.push("Error.")
+                        break;
+                }
             }
         }
 
         setDesignFeatureArray(newValidDesignFeatures)
-        setDesignSwitchArray(newValidDesignSwitches)
+        setDesignSwitchArray(newValidSwitches)
     }, [shipSM, shipTL, superScienceChecked, shipModules, shipStreamlinedUn])
+
+    function handleDesignFeatureChange(event) {
+
+    }
+
+    function handleDesignSwitchChange(event) {
+
+    }
 
     // This function displays the design features and switches component.
     function designDisplay() {
@@ -4216,6 +4270,19 @@ const CreateShipClass = () => {
                 <p className={styles.weaponExplanation}>Some design features and switches are not implemented in this
                     version of the website.</p>
                 <span>Design Features:</span>
+                <select className={styles.weaponSelect} value={designFeature} onChange={handleDesignFeatureChange}>
+                    <option value="">Select Design Feature</option>
+                    {shipDesignFeatureArray.map((designFeature) => (
+                        <option key={designFeature} value={designFeature}>{designFeature}</option>
+                    ))}
+                </select>
+                <span>Design Switches:</span>
+                <select className={styles.weaponSelect} value={designSwitch} onChange={handleDesignSwitchChange}>
+                    <option value="">Select Design Switch</option>
+                    {shipDesignSwitchArray.map((designSwitch) => (
+                        <option key={designSwitch} value={designSwitch}>{designSwitch}</option>
+                    ))}
+                </select>
             </div>
         )
     }

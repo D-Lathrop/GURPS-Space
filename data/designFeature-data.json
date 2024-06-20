@@ -1,6 +1,5 @@
 {
-    "ArtificialGrav": {
-        "SuperScience": true,
+    "Artificial Grav": {
         "SM-5": 30000,
         "SM-6": 100000,
         "SM-7": 300000,
@@ -13,8 +12,7 @@
         "SM-14": 1000000000,
         "SM-15": 3000000000
     },
-    "GravCompensator": {
-        "SuperScience": true,
+    "Grav Compensator": {
         "SM-5": 30000,
         "SM-6": 100000,
         "SM-7": 300000,
@@ -27,26 +25,13 @@
         "SM-14": 1000000000,
         "SM-15": 3000000000
     },
-    "HighAutomation": {
-        "SuperScience": false
-    },
-    "TotalAutomation": {
-        "SuperScience": false
-    },
-    "EmergencyEjection": {
-        "SuperScience": false
-    },
-    "HardenedArmor": {
-        "SuperScience": false
-    },
-    "IndestructibleArmor": {
-        "SuperScience": false
-    },
-    "RamRockets": {
-        "SuperScience": false
-    },
-    "SpinGrav": {
-        "SuperScience": false,
+    "High Automation": {},
+    "Total Automation": {},
+    "Emergency Ejection": {},
+    "Hardened Armor": {},
+    "Indestructible Armor": {},
+    "Ram Rockets": {},
+    "Spin Grav": {
         "SM-8G": 0.1,
         "SM-8Cost": 100000,
         "SM-9G": 0.15,
@@ -64,8 +49,7 @@
         "SM-15G": 1.5,
         "SM-15Cost": 300000000
     },
-    "Chameleon": {
-        "SuperScience": false,
+    "Dynamic Chameleon": {
         "SM-5": 180000,
         "SM-6": 350000,
         "SM-7": 700000,
@@ -79,7 +63,6 @@
         "SM-15": 350000000
     },
     "Stealth": {
-        "SuperScience": false,
         "SM-5": 200000,
         "SM-6": 500000,
         "SM-7": 1000000,
@@ -93,7 +76,6 @@
         "SM-15": 500000000
     },
     "Winged": {
-        "SuperScience": false,
         "SM-5": 150000,
         "SM-6": 500000,
         "SM-7": 1500000,
