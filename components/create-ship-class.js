@@ -132,7 +132,7 @@ const CreateShipClass = () => {
     const [shipOccupancy, setShipOccupancy] = useState(0);
     const [shipLongOccupancy, setLongOccupancy] = useState(0);
     const [shipShortOccupancy, setShortOccupancy] = useState(0);
-    const [shipShortOccupancyCrew, setShortOccupancyCrew] = useState(0); // This value also works as the total crew compliment including non-essential personelle like stewards, waiters, etc.
+    const [shipShortOccupancyCrew, setShortOccupancyCrew] = useState(0); // This value also works as the total crew compliment including non-essential personnele like stewards, waiters, etc.
     const [shipShortOccupancyPassengers, setShortOccupancyPassengers] = useState(0);
     const [shipCabinsCapacity, setCabinsCapacity] = useState(0);
     const [shipTotalLifeSupport, setTotalLifeSupport] = useState(false);
@@ -175,6 +175,8 @@ const CreateShipClass = () => {
     // Design Switch and Feature State Variables
     const [shipDesignSwitchArray, setDesignSwitchArray] = useState([]);
     const [shipDesignFeatureArray, setDesignFeatureArray] = useState([]);
+    const [shipSelectedFeaturesArray, setSelectedFeatures] = useState([]);
+    const [shipSelectedSwitchesArray, setSelectedSwitches] = useState([]);
     const [shipDesignCost, setDesignCost] = useState(0)
 
     const engineKeys = ['Chemical', 'HEDM', 'Ion Drive', 'Mass Driver', 'Nuclear Thermal Rocket',
@@ -4126,7 +4128,7 @@ const CreateShipClass = () => {
         let newValidDesignFeatures = []
         let newValidSwitches = []
 
-        const notArmorArray = ["Stasis Web", "Force Screen, TL12 Heavy", "Force Screen, TL12 Light", "Force Screen, TL11 Heavy", "Force Screen, TL11 Light", "Defensive ECM"]
+        const notArmorArray = ["Armor, Ice", "Armor, Stone", "Armor, Organic", "Stasis Web", "Force Screen, TL12 Heavy", "Force Screen, TL12 Light", "Force Screen, TL11 Heavy", "Force Screen, TL11 Light", "Defensive ECM"]
         const armorPresentArray = shipModules.filter(shipModule =>
             shipModule.moduleCategory === "Armor and Survivability" && !notArmorArray.includes(shipModule.moduleKey)
         );
@@ -4254,8 +4256,72 @@ const CreateShipClass = () => {
         setDesignSwitchArray(newValidSwitches)
     }, [shipSM, shipTL, superScienceChecked, shipModules, shipStreamlinedUn])
 
-    function handleDesignFeatureChange(event) {
+    function addDesignFeature(key) {
+        let newFeatureArray = shipSelectedFeaturesArray.slice();
+        newFeatureArray.push(key)
 
+        function removeFromValidFeatures(key) {
+            let index = newValidDesignFeatures.indexOf(key)
+            newValidDesignFeatures.splice(index, 1);
+        }
+
+        let newValidDesignFeatures = shipDesignFeatureArray.slice();
+        let newDesignCost = shipDesignCost
+        const keyObject = designFeature[key]
+        const SMCostIndex = shipSM - 5
+        let newWorkspaces = shipWorkspaces
+        switch (key) {
+            case "Artificial Grav":
+            case "Grav Compensator":
+                newDesignCost += keyObject[SMCostIndex]
+                removeFromValidFeatures(key)
+                break;
+            case "High Automation":
+                newWorkspaces = newWorkspaces / 10
+                removeFromValidFeatures(key)
+                removeFromValidFeatures("Total Automation")
+                newDesignCost += shipWorkspaces * 1000000
+                break;
+            case "Total Automation":
+                newWorkspaces = 0
+                removeFromValidFeatures(key)
+                removeFromValidFeatures("High Automation")
+                newDesignCost += shipWorkspaces * 5000000
+                break;
+            case "Emergency Ejection":
+                removeFromValidFeatures(key)
+                newDesignCost += 500000
+                break;
+            case "Hardened Armor":
+            case "Indestructible Armor":
+
+                break;
+            case "Ram Rockets":
+
+                break;
+            case "Spin Grav":
+
+                break;
+            case "Dynamic Chameleon":
+
+                break;
+            case "Stealth":
+
+                break;
+            case "Winged":
+
+                break;
+            default:
+
+                break;
+        }
+        setDesignFeatureArray(newValidDesignFeatures)
+        setSelectedFeatures(newFeatureArray)
+        setWorkspaces(newWorkspaces)
+    }
+
+    function handleDesignFeatureChange(event) {
+        addDesignFeature(event.target.value)
     }
 
     function handleDesignSwitchChange(event) {
