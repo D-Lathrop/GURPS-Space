@@ -30,6 +30,7 @@ const CreateShipClass = () => {
     const [shipCommSensorLvl, setCommSensorLvl] = useState(0);
     const [shipMass, setMass] = useState(0);
     const [shipLength, setLength] = useState(0);
+    const [shipMaxGravity, setMaxGravity] = useState(0);
     const [shipComplexity, setComplexity] = useState(0);
     const [shipModules, setModules] = useState([]);
     const [classNotes, setClassNotes] = useState('Input any notes about the class here.');
@@ -173,6 +174,8 @@ const CreateShipClass = () => {
     const [shipFacWeightHour, setFacWeightHour] = useState(0);
 
     // Design Switch and Feature State Variables
+    const [shipHardenedArmorCost, setHardenedArmorCost] = useState(0);
+    const [shipRamRocketCost, setRamRocketCost] = useState(0);
     const [shipDesignSwitchArray, setDesignSwitchArray] = useState([]);
     const [shipDesignFeatureArray, setDesignFeatureArray] = useState([]);
     const [shipSelectedFeaturesArray, setSelectedFeatures] = useState([]);
@@ -2008,10 +2011,14 @@ const CreateShipClass = () => {
     useEffect(() => {
         const modulesUseEffect = shipModules;
         const modulesUseEffectData = shipData
+        const excludedArmors = ["Armor, Ice", "Armor, Stone", "Armor, Organic"];
+        const validRamEngineArray = ["Super Antimatter Plasma Torch", "Antimatter Plasma Torch", "Antimatter Thermal Rocket", "Super Fusion Torch", "Fusion Torch", "Nuclear Thermal Rocket"]
         let tankCount = shipModules.filter(module => module.moduleKey === 'Fuel Tank').length;
         let frontdDR = 0
         let middDR = 0
         let reardDR = 0
+        let hardenedArmorCost = 0
+        let ramRocketCost = 0
         let cost = 0
         let workspaces = 0
         let defensiveECMTL = 0
@@ -2060,6 +2067,8 @@ const CreateShipClass = () => {
             frontdDR = 0
             middDR = 0
             reardDR = 0
+            hardenedArmorCost = 0
+            ramRocketCost = 0
             cost = 0
             workspaces = 0
             defensiveECMTL = 0
@@ -2105,6 +2114,30 @@ const CreateShipClass = () => {
             deltaV = 0
             tankCount = 0
         }
+
+        function updatedDR(currentModuleLocation, dDRValue) {
+            if (currentModuleLocation === 'front') {
+                frontdDR += dDRValue
+            } else if (currentModuleLocation === 'middle') {
+                middDR += dDRValue
+            } else if (currentModuleLocation === 'rear') {
+                reardDR += dDRValue
+            }
+        }
+
+        function updateHardenedArmorCost(currentModuleKey, moduleCost) {
+            if (!excludedArmors.includes(currentModuleKey)) {
+                hardenedArmorCost += moduleCost
+            }
+        }
+
+        function updateRamRocketCost(currentModuleKey, moduleCost) {
+            if (validRamEngineArray.includes(currentModuleKey)) {
+                ramRocketCost += moduleCost
+            }
+
+        }
+
         for (let i = 0; i < modulesUseEffect.length; i++) {
             let currentModuleKey = modulesUseEffect[i].moduleKey;
             let currentModuleLocation = modulesUseEffect[i].moduleLocation1;
@@ -2120,7 +2153,6 @@ const CreateShipClass = () => {
             let moduleCost = SMData.cost;
             let moduleWorkspaces = SMData.Workspaces;
 
-
             cost += moduleCost;
             workspaces += moduleWorkspaces;
             powerDemand += modulePowerDemand;
@@ -2132,29 +2164,23 @@ const CreateShipClass = () => {
                     if (currentModuleKey.includes('Armor')) {
                         let unStreamlineddDR = SMData.USdDR
                         let streamlineddDR = SMData.SdDR
+
                         switch (shipStreamlinedUn) {
                             case 'streamlined':
-                                if (currentModuleLocation === 'front') {
-                                    frontdDR += streamlineddDR
-                                } else if (currentModuleLocation === 'middle') {
-                                    middDR += streamlineddDR
-                                } else if (currentModuleLocation === 'rear') {
-                                    reardDR += streamlineddDR
-                                }
+                                updatedDR(currentModuleLocation, streamlineddDR)
+                                updateHardenedArmorCost(currentModuleKey, moduleCost)
                                 break;
                             case 'unstreamlined':
-                                if (currentModuleLocation === 'front') {
-                                    frontdDR += unStreamlineddDR
-                                } else if (currentModuleLocation === 'middle') {
-                                    middDR += unStreamlineddDR
-                                } else if (currentModuleLocation === 'rear') {
-                                    reardDR += unStreamlineddDR
-                                }
+                                updatedDR(currentModuleLocation, unStreamlineddDR)
+                                updateHardenedArmorCost(currentModuleKey, moduleCost)
                                 break;
                             default:
                                 frontdDR = 'System Error'
                                 middDR = 'System Error'
                                 reardDR = 'System Error'
+                                hardenedFrontdDR = 'System Error'
+                                hardenedMiddDR = 'System Error'
+                                hardenedReardDR = 'System Error'
                                 break;
                         }
                         break;
@@ -2405,20 +2431,24 @@ const CreateShipClass = () => {
                 case 'Engine, Fission':
                     accel += moduleKeyObj[0].Accel
                     deltaV = deltaVMultiplier(moduleKeyObj[0].mpsTank, tankCount)
+                    updateRamRocketCost(currentModuleKey, moduleCost)
                     break;
 
                 case 'Engine, Nuclear Pulse':
                     accel += moduleKeyObj[0].Accel
                     deltaV = deltaVMultiplier(moduleKeyObj[0].mpsTank, tankCount)
+                    updateRamRocketCost(currentModuleKey, moduleCost)
                     break;
 
                 case 'Engine, Fusion':
                     accel += moduleKeyObj[0].Accel
                     deltaV = deltaVMultiplier(moduleKeyObj[0].mpsTank, tankCount)
+                    updateRamRocketCost(currentModuleKey, moduleCost)
                     break;
                 case 'Engine, TotalConv. & Antimatter':
                     accel += moduleKeyObj[0].Accel
                     deltaV = deltaVMultiplier(moduleKeyObj[0].mpsTank, tankCount)
+                    updateRamRocketCost(currentModuleKey, moduleCost)
                     break;
 
                 case 'Reactionless Engine':
@@ -2432,6 +2462,7 @@ const CreateShipClass = () => {
             setFrontdDR(frontdDR)
             setMiddDR(middDR)
             setReardDR(reardDR)
+            setHardenedArmorCost(hardenedArmorCost)
             setShipDefensiveECMBonus(defensiveECMBonus)
             setShipDefensiveECMTL(defensiveECMTL)
             setTotalModulesCost(cost)
@@ -2474,6 +2505,7 @@ const CreateShipClass = () => {
             setUnusedTertiaryWeapons(unusedTertiaryMounts)
             setAccel(accel)
             setDeltaV(deltaV)
+            setRamRocketCost(ramRocketCost)
         }
     }, [shipModules, shipStreamlinedUn, shipTL, shipSM, superScienceChecked, shipTotalModulesCost]);
 
@@ -4257,6 +4289,13 @@ const CreateShipClass = () => {
     }, [shipSM, shipTL, superScienceChecked, shipModules, shipStreamlinedUn])
 
     function addDesignFeature(key) {
+        let newValidDesignFeatures = shipDesignFeatureArray.slice();
+        let newDesignCost = shipDesignCost
+        const keyObject = designFeature[key]
+        const SMCostIndex = shipSM - 5
+        let newWorkspaces = shipWorkspaces
+        let newMaxGrav = shipMaxGravity
+
         let newFeatureArray = shipSelectedFeaturesArray.slice();
         newFeatureArray.push(key)
 
@@ -4265,59 +4304,67 @@ const CreateShipClass = () => {
             newValidDesignFeatures.splice(index, 1);
         }
 
-        let newValidDesignFeatures = shipDesignFeatureArray.slice();
-        let newDesignCost = shipDesignCost
-        const keyObject = designFeature[key]
-        const SMCostIndex = shipSM - 5
-        let newWorkspaces = shipWorkspaces
+        removeFromValidFeatures(key)
         switch (key) {
             case "Artificial Grav":
+                newDesignCost += keyObject[SMCostIndex]
+                newMaxGrav = 3
+                break;
             case "Grav Compensator":
                 newDesignCost += keyObject[SMCostIndex]
-                removeFromValidFeatures(key)
                 break;
             case "High Automation":
                 newWorkspaces = newWorkspaces / 10
-                removeFromValidFeatures(key)
                 removeFromValidFeatures("Total Automation")
                 newDesignCost += shipWorkspaces * 1000000
                 break;
             case "Total Automation":
                 newWorkspaces = 0
-                removeFromValidFeatures(key)
                 removeFromValidFeatures("High Automation")
                 newDesignCost += shipWorkspaces * 5000000
                 break;
             case "Emergency Ejection":
-                removeFromValidFeatures(key)
                 newDesignCost += 500000
                 break;
             case "Hardened Armor":
+                removeFromValidFeatures("Indestructible Armor")
+                newDesignCost += shipHardenedArmorCost
+                break;
             case "Indestructible Armor":
-
+                removeFromValidFeatures("Hardened Armor")
+                newDesignCost += shipHardenedArmorCost * 9
+                setFrontdDR(Infinity)
+                setMiddDR(Infinity)
+                setReardDR(Infinity)
                 break;
             case "Ram Rockets":
-
+                newDesignCost += shipRamRocketCost * 4
                 break;
             case "Spin Grav":
-
+                const spinGravCostIndex = shipSM - 8
+                newDesignCost += keyObject[0][spinGravCostIndex]
+                if (!newFeatureArray.includes("Artificial Grav")) {
+                    newMaxGrav = keyObject[1][spinGravCostIndex]
+                }
                 break;
             case "Dynamic Chameleon":
-
+                newDesignCost += keyObject[SMCostIndex]
                 break;
             case "Stealth":
-
+                newDesignCost += keyObject[SMCostIndex]
                 break;
             case "Winged":
-
+                newDesignCost += keyObject[SMCostIndex]
                 break;
             default:
-
                 break;
         }
         setDesignFeatureArray(newValidDesignFeatures)
         setSelectedFeatures(newFeatureArray)
         setWorkspaces(newWorkspaces)
+        setDesignCost(newDesignCost)
+        setMaxGravity(newMaxGrav)
+        console.log(`Max Gravity: ${newMaxGrav}`)
     }
 
     function handleDesignFeatureChange(event) {
