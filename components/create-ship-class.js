@@ -176,6 +176,7 @@ const CreateShipClass = () => {
     // Design Switch and Feature State Variables
     const [shipHardenedArmorCost, setHardenedArmorCost] = useState(0);
     const [shipRamRocketCost, setRamRocketCost] = useState(0);
+    const [shipSingularityDriveCost, setSingularityDriveCost] = useState(0);
     const [shipDesignSwitchArray, setDesignSwitchArray] = useState([]);
     const [shipDesignFeatureArray, setDesignFeatureArray] = useState([]);
     const [shipSelectedFeaturesArray, setSelectedFeatures] = useState([]);
@@ -2019,6 +2020,7 @@ const CreateShipClass = () => {
         let reardDR = 0
         let hardenedArmorCost = 0
         let ramRocketCost = 0
+        let singularityDriveCost = 0
         let cost = 0
         let workspaces = 0
         let defensiveECMTL = 0
@@ -2069,6 +2071,7 @@ const CreateShipClass = () => {
             reardDR = 0
             hardenedArmorCost = 0
             ramRocketCost = 0
+            singularityDriveCost = 0
             cost = 0
             workspaces = 0
             defensiveECMTL = 0
@@ -2135,7 +2138,6 @@ const CreateShipClass = () => {
             if (validRamEngineArray.includes(currentModuleKey)) {
                 ramRocketCost += moduleCost
             }
-
         }
 
         for (let i = 0; i < modulesUseEffect.length; i++) {
@@ -2247,9 +2249,11 @@ const CreateShipClass = () => {
                     }
                     if (currentModuleKey === 'Stardrive Engine') {
                         maxFTL += 1
+                        singularityDriveCost += moduleCost
                     }
                     if (currentModuleKey === 'Super Stardrive Engine') {
                         maxFTL += 2
+                        singularityDriveCost += moduleCost
                     }
                     break;
 
@@ -2454,6 +2458,7 @@ const CreateShipClass = () => {
                 case 'Reactionless Engine':
                     accel += moduleKeyObj[0].Accel
                     deltaV = Infinity
+                    singularityDriveCost += moduleCost
                     break;
                 default:
                     break;
@@ -2506,6 +2511,7 @@ const CreateShipClass = () => {
             setAccel(accel)
             setDeltaV(deltaV)
             setRamRocketCost(ramRocketCost)
+            setSingularityDriveCost(singularityDriveCost)
         }
     }, [shipModules, shipStreamlinedUn, shipTL, shipSM, superScienceChecked, shipTotalModulesCost]);
 
@@ -4290,14 +4296,14 @@ const CreateShipClass = () => {
 
     function addDesignFeature(key) {
         let newValidDesignFeatures = shipDesignFeatureArray.slice();
-        let newDesignCost = shipDesignCost
-        const keyObject = designFeature[key]
-        const SMCostIndex = shipSM - 5
-        let newWorkspaces = shipWorkspaces
-        let newMaxGrav = shipMaxGravity
+        let newDesignCost = shipDesignCost;
+        const keyObject = designFeature[key];
+        const SMCostIndex = shipSM - 5;
+        let newWorkspaces = shipWorkspaces;
+        let newMaxGrav = shipMaxGravity;
 
         let newFeatureArray = shipSelectedFeaturesArray.slice();
-        newFeatureArray.push(key)
+        newFeatureArray.push(key);
 
         function removeFromValidFeatures(key) {
             let index = newValidDesignFeatures.indexOf(key)
@@ -4357,6 +4363,7 @@ const CreateShipClass = () => {
                 newDesignCost += keyObject[SMCostIndex]
                 break;
             default:
+                console.log("addDesignFeature Error.")
                 break;
         }
         setDesignFeatureArray(newValidDesignFeatures)
@@ -4371,8 +4378,69 @@ const CreateShipClass = () => {
         addDesignFeature(event.target.value)
     }
 
-    function handleDesignSwitchChange(event) {
+    function addDesignSwitch(key) {
+        let newValidDesignSwitches = shipDesignSwitchArray.slice();
+        const keyObject = designSwitch[key]
+        let newDesignCost = shipDesignCost;
 
+        let newSwitchArray = shipSelectedSwitchesArray.slice();
+        newSwitchArray.push(key)
+
+        function removeFromValidSwitches(key) {
+            let index = newValidDesignSwitches.indexOf(key)
+            newValidDesignSwitches.splice(index, 1);
+        }
+
+        removeFromValidSwitches(key)
+
+        switch (technology) {
+            case "Electro-Mechanical Computers":
+                switch (shipTL) {
+                    case 7:
+                        newComplexity = newComplexity - 1
+                        break;
+                    case 8:
+                        newComplexity = newComplexity - 2
+                        break;
+                    case 9:
+                        newComplexity = newComplexity - 3
+                        break;
+                    case 10:
+                    case 11:
+                    case 12:
+                    case 13:
+                    case 14:
+                    case 15:
+                        newComplexity = newComplexity - 4
+                        break;
+                    default:
+                        break;
+                }
+                break;
+
+            case "Singularity Drive":
+                newDesignCost += shipSingularityDriveCost * 4
+                break;
+            case "FTL Comms":
+            case "FTL Sensors":
+            case "Multi Scanner":
+            case "Pseudo Velocity":
+            case "Reactionless Stardrive":
+                console.log("FTL Comms, FTL Sensors, Multi Scanner, Pseudo Velocity, or Reactionless Stardrive design switches triggered.")
+                break;
+            default:
+                console.log("addDesignSwitch Error.")
+                break;
+        }
+
+        setDesignSwitchArray(newValidDesignSwitches)
+        setSelectedSwitches(newSwitchArray)
+        setComplexity(newComplexity)
+        setDesignCost(newDesignCost)
+    }
+
+    function handleDesignSwitchChange(event) {
+        addDesignSwitch(event.target.value)
     }
 
     // This function displays the design features and switches component.
