@@ -4380,8 +4380,8 @@ const CreateShipClass = () => {
 
     function addDesignSwitch(key) {
         let newValidDesignSwitches = shipDesignSwitchArray.slice();
-        const keyObject = designSwitch[key]
         let newDesignCost = shipDesignCost;
+        let newComplexity = shipComplexity;
 
         let newSwitchArray = shipSelectedSwitchesArray.slice();
         newSwitchArray.push(key)
@@ -4393,7 +4393,7 @@ const CreateShipClass = () => {
 
         removeFromValidSwitches(key)
 
-        switch (technology) {
+        switch (switchKey) {
             case "Electro-Mechanical Computers":
                 switch (shipTL) {
                     case 7:
