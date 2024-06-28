@@ -684,3 +684,20 @@
     justify-self: center;
     border: 2px solid red;
 }
+
+.featureInfoContainer {
+    @extend %commonContainerStyles;
+    grid-template-columns: 1fr 4fr;
+    grid-auto-rows: minmax(30px, 50px);
+    grid-column: 1 / span 4;
+    grid-row: span 2;
+    overflow-y: auto
+}
+
+.featureInfoValue {
+    @extend %habitatPowerInfoValueCommonStyles;
+    background-color: $primaryColor;
+    color: $secondaryColor2;
+    font-size: 24px;
+    overflow: hidden;
+}

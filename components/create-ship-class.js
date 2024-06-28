@@ -52,8 +52,11 @@ const CreateShipClass = () => {
 
     // Ship Weapon, ECM, and dDR State Variables
     const [shipDisplaydDR, setDisplaydDR] = useState('0/0/0');
+    const [shipBaseFrontdDR, setBaseFrontdDR] = useState(0);
     const [shipFrontdDR, setFrontdDR] = useState(0);
+    const [shipBaseMiddDR, setBaseMiddDR] = useState(0);
     const [shipMiddDR, setMiddDR] = useState(0);
+    const [shipBaseReardDR, setBaseReardDR] = useState(0);
     const [shipReardDR, setReardDR] = useState(0);
     const [shipDefensiveECMTL, setShipDefensiveECMTL] = useState(0);
     const [shipDefensiveECMBonus, setShipDefensiveECMBonus] = useState(0);
@@ -159,6 +162,7 @@ const CreateShipClass = () => {
     const [shipTeleportProjectors, setTeleportProjectors] = useState(0);
     const [shipTeleportProjectorsSendReceive, setTeleportProjectorsSendReceive] = useState(0);
     const [shipWorkspaces, setWorkspaces] = useState(0);
+    const [shipBaseWorkspaces, setBaseWorkspaces] = useState(0);
     const [shipControlStations, setControlStations] = useState(0);
     const [shipHabitatPowerCost, setHabitatPowerCost] = useState(0);
 
@@ -177,8 +181,8 @@ const CreateShipClass = () => {
     const [shipHardenedArmorCost, setHardenedArmorCost] = useState(0);
     const [shipRamRocketCost, setRamRocketCost] = useState(0);
     const [shipSingularityDriveCost, setSingularityDriveCost] = useState(0);
-    const [shipDesignSwitchArray, setDesignSwitchArray] = useState([]);
-    const [shipDesignFeatureArray, setDesignFeatureArray] = useState([]);
+    const [shipValidDesignSwitchArray, setValidDesignSwitchArray] = useState([]);
+    const [shipValidDesignFeatureArray, setValidDesignFeatureArray] = useState([]);
     const [shipSelectedFeaturesArray, setSelectedFeatures] = useState([]);
     const [shipSelectedSwitchesArray, setSelectedSwitches] = useState([]);
     const [shipDesignCost, setDesignCost] = useState(0)
@@ -778,28 +782,6 @@ const CreateShipClass = () => {
         ))
     }
 
-    // This useEffect resets the various habitat state variables when a module is changed.
-    useEffect(() => {
-        setTotalLifeSupport(false)
-        setBunkrooms(0)
-        setCells(0)
-        setLuxuryCabins(0)
-        setBriefingRooms(0)
-        setEstablishments(0)
-        setHibernationChambers(0)
-        setLabs(0)
-        setPhysicsLabs(0)
-        setSuperScienceLabs(0)
-        setMiniFabricators(0)
-        setMiniNanoFacs(0)
-        setMiniRoboFacs(0)
-        setMiniReplicators(0)
-        setOffices(0)
-        setSickBays(0)
-        setTeleportProjectors(0)
-        setSteerageCargo(0)
-    }, [shipModules])
-
     // This function sets shipCabinsCapacity, and shipLongOccupancy when the total life support checkbox is changed.
     // It also resets all habitat state variables because the cabins and cabins capacity are fundamental variables the habitat 
     // variables depend on.
@@ -845,7 +827,7 @@ const CreateShipClass = () => {
         setShortOccupancy(shortOccupancy)
     }, [shipShortOccupancyCrew, shipShortOccupancyPassengers, shipLongOccupancy])
 
-    // This useEffect resets the ship cargo and selected weapon state variables when the shipModules state variable changes.
+    // This useEffect resets the ship cargo, habitat, and selected weapon state variables when the shipModules state variable changes.
     useEffect(() => {
         setRefrigeratedCargo(0)
         setShieldedCargo(0)
@@ -857,6 +839,24 @@ const CreateShipClass = () => {
         resetCounts()
         setWeaponList([])
         resetWeaponStats()
+        setTotalLifeSupport(false)
+        setBunkrooms(0)
+        setCells(0)
+        setLuxuryCabins(0)
+        setBriefingRooms(0)
+        setEstablishments(0)
+        setHibernationChambers(0)
+        setLabs(0)
+        setPhysicsLabs(0)
+        setSuperScienceLabs(0)
+        setMiniFabricators(0)
+        setMiniNanoFacs(0)
+        setMiniRoboFacs(0)
+        setMiniReplicators(0)
+        setOffices(0)
+        setSickBays(0)
+        setTeleportProjectors(0)
+        setSteerageCargo(0)
     }, [shipModules])
 
     // This useEffect updates the shipUPressCargoCapacity, shipRefrigeratedCargo, and shipShieldedCargo state variables when the user 
@@ -2465,13 +2465,17 @@ const CreateShipClass = () => {
             }
 
             setFrontdDR(frontdDR)
+            setBaseFrontdDR(frontdDR)
             setMiddDR(middDR)
+            setBaseMiddDR(middDR)
             setReardDR(reardDR)
+            setBaseReardDR(reardDR)
             setHardenedArmorCost(hardenedArmorCost)
             setShipDefensiveECMBonus(defensiveECMBonus)
             setShipDefensiveECMTL(defensiveECMTL)
             setTotalModulesCost(cost)
             setWorkspaces(workspaces)
+            setBaseWorkspaces(workspaces)
             setCabinsCapacity(cabinsCapacity)
             setLongOccupancy(longOccupancy)
             setShortOccupancy(shortOccupancyCrew + shortOccupancyPassengers)
@@ -2552,9 +2556,10 @@ const CreateShipClass = () => {
         setModules(newModuleList);
     }
 
-    const handleResetModules = () => {
+    // This useEffect resets the selected modules array state variable when one of the dependencies change.
+    useEffect(() => {
         setModules([]);
-    }
+    }, [shipSM, shipTL, superScienceChecked, shipStreamlinedUn])
 
     // These three functions handle changes to the currentStatComponent state variable to display the correct component.
     const handleBasicStatsClick = () => {
@@ -2693,7 +2698,7 @@ const CreateShipClass = () => {
         }
 
         setValidWeaponTypeList(validWeaponTypeList)
-    }, [selectedWeaponType, shipTL, shipSM, superScienceChecked])
+    }, [selectedWeaponType, shipTL, shipSM, superScienceChecked, selectedUninstalledCargo])
 
     // This useEffect determines uninstalled cargo based on mount type and SM.
     useEffect(() => {
@@ -4290,17 +4295,36 @@ const CreateShipClass = () => {
             }
         }
 
-        setDesignFeatureArray(newValidDesignFeatures)
-        setDesignSwitchArray(newValidSwitches)
+        setValidDesignFeatureArray(newValidDesignFeatures)
+        setValidDesignSwitchArray(newValidSwitches)
+        setSelectedFeatures([])
+        setSelectedSwitches([])
     }, [shipSM, shipTL, superScienceChecked, shipModules, shipStreamlinedUn])
 
+    // This useEffect updated shipMaxGravity based on the presence of gravity related features in the selectedFeaturesArray.
+    useEffect(() => {
+        const spinGravObject = designFeature["Spin Grav"]
+        const spinGravCostIndex = shipSM - 8
+        let shipMaxGrav = 0
+        let maxSpinGrav = 0
+        maxSpinGrav = spinGravObject[1][spinGravCostIndex]
+
+        if (shipSelectedFeaturesArray.includes("Artificial Grav")) {
+            shipMaxGrav = 3
+        } else if (shipSelectedFeaturesArray.includes("Spin Grav")) {
+            shipMaxGrav = maxSpinGrav
+        } else {
+            shipMaxGrav = 0
+        }
+        setMaxGravity(shipMaxGrav)
+    }, [shipSelectedFeaturesArray, shipSM])
+
     function addDesignFeature(key) {
-        let newValidDesignFeatures = shipDesignFeatureArray.slice();
+        let newValidDesignFeatures = shipValidDesignFeatureArray.slice();
         let newDesignCost = shipDesignCost;
         const keyObject = designFeature[key];
         const SMCostIndex = shipSM - 5;
         let newWorkspaces = shipWorkspaces;
-        let newMaxGrav = shipMaxGravity;
 
         let newFeatureArray = shipSelectedFeaturesArray.slice();
         newFeatureArray.push(key);
@@ -4314,20 +4338,19 @@ const CreateShipClass = () => {
         switch (key) {
             case "Artificial Grav":
                 newDesignCost += keyObject[SMCostIndex]
-                newMaxGrav = 3
                 break;
             case "Grav Compensator":
                 newDesignCost += keyObject[SMCostIndex]
                 break;
             case "High Automation":
-                newWorkspaces = newWorkspaces / 10
+                newWorkspaces = shipBaseWorkspaces / 10
                 removeFromValidFeatures("Total Automation")
-                newDesignCost += shipWorkspaces * 1000000
+                newDesignCost += shipBaseWorkspaces * 1000000
                 break;
             case "Total Automation":
                 newWorkspaces = 0
                 removeFromValidFeatures("High Automation")
-                newDesignCost += shipWorkspaces * 5000000
+                newDesignCost += shipBaseWorkspaces * 5000000
                 break;
             case "Emergency Ejection":
                 newDesignCost += 500000
@@ -4349,9 +4372,6 @@ const CreateShipClass = () => {
             case "Spin Grav":
                 const spinGravCostIndex = shipSM - 8
                 newDesignCost += keyObject[0][spinGravCostIndex]
-                if (!newFeatureArray.includes("Artificial Grav")) {
-                    newMaxGrav = keyObject[1][spinGravCostIndex]
-                }
                 break;
             case "Dynamic Chameleon":
                 newDesignCost += keyObject[SMCostIndex]
@@ -4366,12 +4386,10 @@ const CreateShipClass = () => {
                 console.log("addDesignFeature Error.")
                 break;
         }
-        setDesignFeatureArray(newValidDesignFeatures)
+        setValidDesignFeatureArray(newValidDesignFeatures)
         setSelectedFeatures(newFeatureArray)
         setWorkspaces(newWorkspaces)
         setDesignCost(newDesignCost)
-        setMaxGravity(newMaxGrav)
-        console.log(`Max Gravity: ${newMaxGrav}`)
     }
 
     function handleDesignFeatureChange(event) {
@@ -4379,7 +4397,7 @@ const CreateShipClass = () => {
     }
 
     function addDesignSwitch(key) {
-        let newValidDesignSwitches = shipDesignSwitchArray.slice();
+        let newValidDesignSwitches = shipValidDesignSwitchArray.slice();
         let newDesignCost = shipDesignCost;
         let newComplexity = shipComplexity;
 
@@ -4393,7 +4411,7 @@ const CreateShipClass = () => {
 
         removeFromValidSwitches(key)
 
-        switch (switchKey) {
+        switch (key) {
             case "Electro-Mechanical Computers":
                 switch (shipTL) {
                     case 7:
@@ -4433,7 +4451,7 @@ const CreateShipClass = () => {
                 break;
         }
 
-        setDesignSwitchArray(newValidDesignSwitches)
+        setValidDesignSwitchArray(newValidDesignSwitches)
         setSelectedSwitches(newSwitchArray)
         setComplexity(newComplexity)
         setDesignCost(newDesignCost)
@@ -4443,6 +4461,141 @@ const CreateShipClass = () => {
         addDesignSwitch(event.target.value)
     }
 
+
+    function handleDeleteFeature(feature, featureIndex) {
+        let newValidDesignFeatures = shipValidDesignFeatureArray.slice();
+        let newDesignCost = shipDesignCost;
+        const keyObject = designFeature[feature];
+        const SMCostIndex = shipSM - 5;
+        let newWorkspaces = shipWorkspaces;
+        let newMaxGrav = shipMaxGravity;
+
+        let newFeatureArray = shipSelectedFeaturesArray.slice();
+        newFeatureArray.splice(featureIndex, 1);
+
+        function pushToValidFeatures(feature) {
+            newValidDesignFeatures.push(feature);
+        }
+
+        pushToValidFeatures(feature)
+        switch (feature) {
+            case "Artificial Grav":
+                newDesignCost -= keyObject[SMCostIndex]
+                break;
+            case "Grav Compensator":
+                newDesignCost -= keyObject[SMCostIndex]
+                break;
+            case "High Automation":
+                newDesignCost -= shipBaseWorkspaces * 1000000
+                newWorkspaces = shipBaseWorkspaces * 10
+                pushToValidFeatures("Total Automation")
+                break;
+            case "Total Automation":
+                newWorkspaces = shipBaseWorkspaces
+                pushToValidFeatures("High Automation")
+                newDesignCost -= shipBaseWorkspaces * 5000000
+                break;
+            case "Emergency Ejection":
+                newDesignCost -= 500000
+                break;
+            case "Hardened Armor":
+                pushToValidFeatures("Indestructible Armor")
+                newDesignCost -= shipHardenedArmorCost
+                break;
+            case "Indestructible Armor":
+                pushToValidFeatures("Hardened Armor")
+                newDesignCost -= shipHardenedArmorCost * 9
+                setFrontdDR(shipBaseFrontdDR)
+                setMiddDR(shipBaseMiddDR)
+                setReardDR(shipBaseReardDR)
+                break;
+            case "Ram Rockets":
+                newDesignCost -= shipRamRocketCost * 4
+                break;
+            case "Spin Grav":
+                const spinGravCostIndex = shipSM - 8
+                newDesignCost -= keyObject[0][spinGravCostIndex]
+                break;
+            case "Dynamic Chameleon":
+                newDesignCost -= keyObject[SMCostIndex]
+                break;
+            case "Stealth":
+                newDesignCost -= keyObject[SMCostIndex]
+                break;
+            case "Winged":
+                newDesignCost -= keyObject[SMCostIndex]
+                break;
+            default:
+                console.log("deleteDesignFeature Error.")
+                break;
+        }
+        setValidDesignFeatureArray(newValidDesignFeatures)
+        setSelectedFeatures(newFeatureArray)
+        setWorkspaces(newWorkspaces)
+        setDesignCost(newDesignCost)
+        setMaxGravity(newMaxGrav)
+    }
+
+    function handleDeleteSwitch(designSwitch, switchIndex) {
+        let newValidDesignSwitches = shipValidDesignSwitchArray.slice();
+        let newDesignCost = shipDesignCost;
+        let newComplexity = shipComplexity;
+
+        let newSwitchArray = shipSelectedSwitchesArray.slice();
+        newSwitchArray.splice(switchIndex, 1)
+
+        function pushToValidSwitches(designSwitch) {
+            newValidDesignSwitches.push(designSwitch);
+        }
+
+        pushToValidSwitches(designSwitch)
+
+        switch (designSwitch) {
+            case "Electro-Mechanical Computers":
+                switch (shipTL) {
+                    case 7:
+                        newComplexity = newComplexity + 1
+                        break;
+                    case 8:
+                        newComplexity = newComplexity + 2
+                        break;
+                    case 9:
+                        newComplexity = newComplexity + 3
+                        break;
+                    case 10:
+                    case 11:
+                    case 12:
+                    case 13:
+                    case 14:
+                    case 15:
+                        newComplexity = newComplexity + 4
+                        break;
+                    default:
+                        break;
+                }
+                break;
+
+            case "Singularity Drive":
+                newDesignCost -= shipSingularityDriveCost * 4
+                break;
+            case "FTL Comms":
+            case "FTL Sensors":
+            case "Multi Scanner":
+            case "Pseudo Velocity":
+            case "Reactionless Stardrive":
+                console.log("FTL Comms, FTL Sensors, Multi Scanner, Pseudo Velocity, or Reactionless Stardrive design switches triggered.")
+                break;
+            default:
+                console.log("addDesignSwitch Error.")
+                break;
+        }
+
+        setValidDesignSwitchArray(newValidDesignSwitches)
+        setSelectedSwitches(newSwitchArray)
+        setComplexity(newComplexity)
+        setDesignCost(newDesignCost)
+    }
+
     // This function displays the design features and switches component.
     function designDisplay() {
         return (
@@ -4450,20 +4603,40 @@ const CreateShipClass = () => {
                 <h2 className={styles.statTitle}>Ship Design</h2>
                 <p className={styles.weaponExplanation}>Some design features and switches are not implemented in this
                     version of the website.</p>
-                <span>Design Features:</span>
+                <span className={styles.freeFillWeaponLabel}>Design Features:</span>
                 <select className={styles.weaponSelect} value={designFeature} onChange={handleDesignFeatureChange}>
                     <option value="">Select Design Feature</option>
-                    {shipDesignFeatureArray.map((designFeature) => (
+                    {shipValidDesignFeatureArray.map((designFeature) => (
                         <option key={designFeature} value={designFeature}>{designFeature}</option>
                     ))}
                 </select>
-                <span>Design Switches:</span>
+                <span className={styles.freeFillWeaponLabel}>Design Switches:</span>
                 <select className={styles.weaponSelect} value={designSwitch} onChange={handleDesignSwitchChange}>
                     <option value="">Select Design Switch</option>
-                    {shipDesignSwitchArray.map((designSwitch) => (
+                    {shipValidDesignSwitchArray.map((designSwitch) => (
                         <option key={designSwitch} value={designSwitch}>{designSwitch}</option>
                     ))}
                 </select>
+                {shipSelectedFeaturesArray && <>
+                    {shipSelectedFeaturesArray.map((feature, featureIndex) => (
+
+                        <div className={styles.featureInfoContainer} key={featureIndex}>
+                            <span className={styles.featureInfoValue}>Feature: </span>
+                            <span className={styles.featureInfoValue}>{feature}</span>
+                            <button className={styles.addWeaponButton} onClick={() => handleDeleteFeature(feature, featureIndex)}>Remove</button>
+                        </div>
+                    ))}
+                </>}
+                {shipSelectedSwitchesArray && <>
+                    {shipSelectedSwitchesArray.map((designSwitch, switchIndex) => (
+
+                        <div className={styles.featureInfoContainer} key={switchIndex}>
+                            <span className={styles.featureInfoValue}>Switch: </span>
+                            <span className={styles.featureInfoValue}>{designSwitch}</span>
+                            <button className={styles.addWeaponButton} onClick={() => handleDeleteSwitch(designSwitch, switchIndex)}>Remove</button>
+                        </div>
+                    ))}
+                </>}
             </div>
         )
     }
@@ -4548,29 +4721,29 @@ const CreateShipClass = () => {
             <span className={`${styles.buildLabel} ${styles.buildCol2} ${styles.buildRow1}`}>Middle</span>
             <span className={`${styles.buildLabel} ${styles.buildCol3} ${styles.buildRow1}`}>Rear</span>
 
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} handleResetModules={handleResetModules} styles={styles} buildCol={styles.buildCol1} buildRow={styles.buildRow2} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'front'} moduleLocation2={'hull'} moduleNumber={1} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} handleResetModules={handleResetModules} styles={styles} buildCol={styles.buildCol1} buildRow={styles.buildRow3} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'front'} moduleLocation2={'hull'} moduleNumber={2} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} handleResetModules={handleResetModules} styles={styles} buildCol={styles.buildCol1} buildRow={styles.buildRow4} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'front'} moduleLocation2={'hull'} moduleNumber={3} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} handleResetModules={handleResetModules} styles={styles} buildCol={styles.buildCol1} buildRow={styles.buildRow5} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'front'} moduleLocation2={'hull'} moduleNumber={4} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} handleResetModules={handleResetModules} styles={styles} buildCol={styles.buildCol1} buildRow={styles.buildRow6} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'front'} moduleLocation2={'hull'} moduleNumber={5} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} handleResetModules={handleResetModules} styles={styles} buildCol={styles.buildCol1} buildRow={styles.buildRow7} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'front'} moduleLocation2={'hull'} moduleNumber={6} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} handleResetModules={handleResetModules} styles={styles} buildCol={styles.buildCol1} buildRow={styles.buildRow8} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'front'} moduleLocation2={'core'} moduleNumber={'CoreFront'} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
+            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={styles.buildCol1} buildRow={styles.buildRow2} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'front'} moduleLocation2={'hull'} moduleNumber={1} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
+            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={styles.buildCol1} buildRow={styles.buildRow3} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'front'} moduleLocation2={'hull'} moduleNumber={2} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
+            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={styles.buildCol1} buildRow={styles.buildRow4} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'front'} moduleLocation2={'hull'} moduleNumber={3} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
+            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={styles.buildCol1} buildRow={styles.buildRow5} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'front'} moduleLocation2={'hull'} moduleNumber={4} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
+            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={styles.buildCol1} buildRow={styles.buildRow6} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'front'} moduleLocation2={'hull'} moduleNumber={5} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
+            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={styles.buildCol1} buildRow={styles.buildRow7} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'front'} moduleLocation2={'hull'} moduleNumber={6} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
+            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={styles.buildCol1} buildRow={styles.buildRow8} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'front'} moduleLocation2={'core'} moduleNumber={'CoreFront'} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
 
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} handleResetModules={handleResetModules} styles={styles} buildCol={styles.buildCol2} buildRow={styles.buildRow2} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'middle'} moduleLocation2={'hull'} moduleNumber={1} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} handleResetModules={handleResetModules} styles={styles} buildCol={styles.buildCol2} buildRow={styles.buildRow3} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'middle'} moduleLocation2={'hull'} moduleNumber={2} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} handleResetModules={handleResetModules} styles={styles} buildCol={styles.buildCol2} buildRow={styles.buildRow4} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'middle'} moduleLocation2={'hull'} moduleNumber={3} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} handleResetModules={handleResetModules} styles={styles} buildCol={styles.buildCol2} buildRow={styles.buildRow5} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'middle'} moduleLocation2={'hull'} moduleNumber={4} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} handleResetModules={handleResetModules} styles={styles} buildCol={styles.buildCol2} buildRow={styles.buildRow6} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'middle'} moduleLocation2={'hull'} moduleNumber={5} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} handleResetModules={handleResetModules} styles={styles} buildCol={styles.buildCol2} buildRow={styles.buildRow7} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'middle'} moduleLocation2={'hull'} moduleNumber={6} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} handleResetModules={handleResetModules} styles={styles} buildCol={styles.buildCol2} buildRow={styles.buildRow8} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'middle'} moduleLocation2={'core'} moduleNumber={'CoreMid'} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
+            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={styles.buildCol2} buildRow={styles.buildRow2} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'middle'} moduleLocation2={'hull'} moduleNumber={1} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
+            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={styles.buildCol2} buildRow={styles.buildRow3} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'middle'} moduleLocation2={'hull'} moduleNumber={2} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
+            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={styles.buildCol2} buildRow={styles.buildRow4} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'middle'} moduleLocation2={'hull'} moduleNumber={3} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
+            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={styles.buildCol2} buildRow={styles.buildRow5} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'middle'} moduleLocation2={'hull'} moduleNumber={4} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
+            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={styles.buildCol2} buildRow={styles.buildRow6} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'middle'} moduleLocation2={'hull'} moduleNumber={5} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
+            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={styles.buildCol2} buildRow={styles.buildRow7} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'middle'} moduleLocation2={'hull'} moduleNumber={6} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
+            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={styles.buildCol2} buildRow={styles.buildRow8} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'middle'} moduleLocation2={'core'} moduleNumber={'CoreMid'} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
 
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} handleResetModules={handleResetModules} styles={styles} buildCol={styles.buildCol3} buildRow={styles.buildRow2} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'rear'} moduleLocation2={'hull'} moduleNumber={1} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} handleResetModules={handleResetModules} styles={styles} buildCol={styles.buildCol3} buildRow={styles.buildRow3} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'rear'} moduleLocation2={'hull'} moduleNumber={2} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} handleResetModules={handleResetModules} styles={styles} buildCol={styles.buildCol3} buildRow={styles.buildRow4} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'rear'} moduleLocation2={'hull'} moduleNumber={3} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} handleResetModules={handleResetModules} styles={styles} buildCol={styles.buildCol3} buildRow={styles.buildRow5} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'rear'} moduleLocation2={'hull'} moduleNumber={4} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} handleResetModules={handleResetModules} styles={styles} buildCol={styles.buildCol3} buildRow={styles.buildRow6} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'rear'} moduleLocation2={'hull'} moduleNumber={5} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} handleResetModules={handleResetModules} styles={styles} buildCol={styles.buildCol3} buildRow={styles.buildRow7} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'rear'} moduleLocation2={'hull'} moduleNumber={6} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} handleResetModules={handleResetModules} styles={styles} buildCol={styles.buildCol3} buildRow={styles.buildRow8} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'rear'} moduleLocation2={'core'} moduleNumber={'CoreRear'} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
+            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={styles.buildCol3} buildRow={styles.buildRow2} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'rear'} moduleLocation2={'hull'} moduleNumber={1} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
+            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={styles.buildCol3} buildRow={styles.buildRow3} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'rear'} moduleLocation2={'hull'} moduleNumber={2} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
+            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={styles.buildCol3} buildRow={styles.buildRow4} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'rear'} moduleLocation2={'hull'} moduleNumber={3} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
+            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={styles.buildCol3} buildRow={styles.buildRow5} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'rear'} moduleLocation2={'hull'} moduleNumber={4} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
+            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={styles.buildCol3} buildRow={styles.buildRow6} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'rear'} moduleLocation2={'hull'} moduleNumber={5} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
+            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={styles.buildCol3} buildRow={styles.buildRow7} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'rear'} moduleLocation2={'hull'} moduleNumber={6} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
+            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={styles.buildCol3} buildRow={styles.buildRow8} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'rear'} moduleLocation2={'core'} moduleNumber={'CoreRear'} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
 
             {currentStatComponent === 'shipHabitatPowerStats' && <ShipClassHabitatPower
                 styles={styles}

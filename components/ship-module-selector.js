@@ -2,7 +2,7 @@ import shipData from "../data/ship-data.json"
 import React, { useState, useEffect } from 'react';
 
 
-const ShipModuleSelector = ({ handleSetModules, handleSelectedEngine, selectedEngine, engineKeys, handleResetModules, styles, buildCol, buildRow, shipModules, shipStreamlinedUn, moduleLocation1, moduleLocation2, moduleNumber, shipSM, shipTL, superScience }) => {
+const ShipModuleSelector = ({ handleSetModules, handleSelectedEngine, selectedEngine, engineKeys, styles, buildCol, buildRow, shipModules, shipStreamlinedUn, moduleLocation1, moduleLocation2, moduleNumber, shipSM, shipTL, superScience }) => {
     const [category, setCategory] = useState('');
     const [module, setModule] = useState('');
     const [moduleList, setModuleList] = useState([])
@@ -162,7 +162,6 @@ const ShipModuleSelector = ({ handleSetModules, handleSelectedEngine, selectedEn
     // work for now.
     useEffect(() => {
         setModule('');
-        handleResetModules()
     }, [shipSM, shipTL, superScience, shipStreamlinedUn])
 
     return (
