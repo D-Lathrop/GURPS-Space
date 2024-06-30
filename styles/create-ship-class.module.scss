@@ -85,7 +85,7 @@
     overflow-y: auto;
 }
 
-.title {
+%commonTitleStyles {
     color: $secondaryColor2;
     margin: 3px 0px;
     grid-column: span 3;
@@ -94,13 +94,65 @@
     font-size: 22px;
 }
 
-.containerStyle {
+.titleCollapsed {
+    @extend %commonTitleStyles;
+}
+
+.titleExpanded {
+    @extend %commonTitleStyles;
+}
+
+.containerStyleExpanded {
     @extend %commonContainerStyles;
     grid-template-rows: 30px 80px 80px 42px 26px repeat(9, minmax(30px, 120px));
     grid-template-columns: repeat(15, 1fr);
     background-color: $primaryColor;
     grid-column: span 12;
     grid-row: span 11;
+}
+
+.containerStyleCollapsed {
+    @extend %commonContainerStyles;
+    grid-auto-rows: minmax(40px, 80px);
+    grid-template-columns: repeat(8, 1fr);
+    background-color: $primaryColor;
+    grid-column: span 12;
+    grid-row: span 11;
+}
+
+%topRow3CommonStyles {
+    grid-column: span 3;
+    padding: 4px;
+    align-self: left;
+    justify-self: left;
+    width: 100%;
+}
+
+.topRow3Collapsed {
+    @extend %topRow3CommonStyles;
+    grid-column: 1 / span 8;
+}
+
+.topRow3Expanded {
+    @extend %topRow3CommonStyles;
+    grid-row-start: 2;
+}
+
+%topRow2CommonStyles {
+    grid-column: span 2;
+    padding: 4px;
+    align-self: center;
+    justify-self: center;
+}
+
+.topRow2Collapsed {
+    @extend %topRow2CommonStyles;
+    grid-column: span 4;
+}
+
+.topRow2Expanded {
+    @extend %topRow2CommonStyles;
+    grid-row-start: 3;
 }
 
 .label {
@@ -123,15 +175,6 @@
     margin: 0px 0px 0px 5px;
 }
 
-.topRow3 {
-    grid-column: span 3;
-    grid-row-start: 2;
-    padding: 4px;
-    align-self: left;
-    justify-self: left;
-    width: 100%;
-}
-
 .topRowTextArea {
     padding: 4px;
     width: auto;
@@ -139,16 +182,7 @@
     justify-self: left;
 }
 
-.topRow2 {
-    grid-column: span 2;
-    grid-row-start: 3;
-    padding: 4px;
-    align-self: center;
-    justify-self: center;
-}
-
-.topRowWarning {
-    grid-column: span 9;
+%topRowWarningCommonStyles {
     grid-row-start: 4;
     padding: 4px;
     align-self: left;
@@ -157,6 +191,16 @@
     font-size: 14px;
     border: 2px solid red;
     border-radius: 5px;
+}
+
+.topRowWarningCollapsed {
+    @extend %topRowWarningCommonStyles;
+    grid-column: span 8;
+}
+
+.topRowWarningExpanded {
+    @extend %topRowWarningCommonStyles;
+    grid-column: span 9;
 }
 
 .buildSelect {
@@ -168,6 +212,13 @@
     width: 20px;
     height: 20px;
 }
+
+.buildColCollapsed {
+    grid-column-start: 1;
+    grid-column: span 8;
+}
+
+// .buildRowCollapsed{}
 
 .buildCol1 {
     grid-column-start: 1;
@@ -222,12 +273,16 @@
 .buildRow8 {
     grid-row-start: 12;
     grid-column: span 3;
-
 }
 
-.classNotes {
+.classNotesExpanded {
     grid-column: 1 / span 4;
     grid-row: 13 / span 1;
+}
+
+.classNotesCollapsed {
+    grid-column: 1 / span 8;
+    grid-row: span 1;
 }
 
 .notesArea {
@@ -237,13 +292,21 @@
     overflow-y: auto;
 }
 
-.cargoContainer {
+%cargoContainerCommonStyles {
     @extend %commonContainerStyles;
     grid-template-columns: repeat(8, 1fr);
     grid-template-rows: repeat(6, 1fr);
+}
+
+.cargoContainerCollapsed {
+    @extend %cargoContainerCommonStyles;
+    grid-column: span 8;
+}
+
+.cargoContainerExpanded {
+    @extend %cargoContainerCommonStyles;
     grid-column: 5 / span 5;
     grid-row: 13 / span 3;
-
     grid-row-start: 13;
 }
 
@@ -269,19 +332,39 @@
     height: 90%;
 }
 
-.statBlockContainer {
+%statBlockContainer {
     @extend %commonContainerStyles;
     grid-template-columns: 3fr 2fr 3fr 2fr;
     grid-template-rows: repeat(20, 1fr);
+
+}
+
+.statBlockContainerCollapsed {
+    @extend %statBlockContainer;
+    grid-column: 1 / span 8;
+    grid-row: span 11;
+}
+
+.statBlockContainerExpanded {
+    @extend %statBlockContainer;
     grid-column: 10 / span 6;
     grid-row: 4 / span 11;
 }
 
-.statComponentButtonContainer {
+%statComponentButtonContainerCommonStyles {
     display: flex;
     justify-content: space-between;
-    grid-column: 10 / span 6;
+}
+
+.statComponentButtonContainerCollapsed {
+    @extend %statComponentButtonContainerCommonStyles;
+    grid-column: 1 / span 8;
+}
+
+.statComponentButtonContainerExpanded {
+    @extend %statComponentButtonContainerCommonStyles;
     grid-row: 3 / span 1;
+    grid-column: 10 / span 6;
 }
 
 .statComponentButton {
@@ -343,13 +426,24 @@
     @extend %infoTitleWarningCommonStyles;
 }
 
-.habitatPowerContainer {
+%habitatPowerContainerCommonStyles {
     @extend %commonContainerStyles;
     grid-template-columns: 1fr 1fr 1fr 1fr;
+    overflow-y: auto
+}
+
+.habitatPowerContainerCollapsed {
+    @extend %habitatPowerContainerCommonStyles;
+    grid-auto-rows: 40px 70px minmax(30px, 55px);
+    grid-column: 1 / span 8;
+    grid-row: span 13;
+}
+
+.habitatPowerContainerExpanded {
+    @extend %habitatPowerContainerCommonStyles;
     grid-auto-rows: minmax(30px, 50px);
     grid-column: 10 / span 6;
     grid-row: 4 / span 12;
-    overflow-y: auto
 }
 
 .infoTitleWarningPower {
@@ -522,13 +616,25 @@
     grid-column: 8;
 }
 
-.weaponStatsContainer {
+%weaponStatsContainerCommonStyles {
     @extend %commonContainerStyles;
     grid-template-columns: 1fr 1fr 1fr 1fr;
+
+    overflow-y: auto
+}
+
+.weaponStatsContainerCollapsed {
+    @extend %weaponStatsContainerCommonStyles;
+    grid-auto-rows: minmax(30px, 60px);
+    grid-column: 1 / span 8;
+    grid-row: span 12;
+}
+
+.weaponStatsContainerExpanded {
+    @extend %weaponStatsContainerCommonStyles;
     grid-auto-rows: minmax(30px, 50px);
     grid-column: 10 / span 6;
     grid-row: 4 / span 12;
-    overflow-y: auto
 }
 
 .weaponLabelCol1 {

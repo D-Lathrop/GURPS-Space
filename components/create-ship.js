@@ -2,11 +2,11 @@ import styles from "../styles/create-ship.module.scss"
 
 
 
-const CreateShip = () => {
+const CreateShip = ({ isExpanded }) => {
 
     return (
-        <div className={styles.containerStyle}>
-            <h2 className={styles.title}>Create New Ship</h2>
+        <div className={isExpanded ? styles.containerStyleExpanded : styles.containerStyleCollapsed}>
+            <h2 className={isExpanded ? styles.titleExpanded : styles.titleCollapsed}>Create New Ship</h2>
         </div>
     )
 }

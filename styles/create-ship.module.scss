@@ -1,6 +1,6 @@
 @import '../styles/_variables.module.scss';
 
-.title {
+%commonTitleStyles {
     color: $secondaryColor2;
     margin: 3px 0px;
     grid-column: span 3;
@@ -9,7 +9,15 @@
     font-size: 22px;
 }
 
-.containerStyle {
+.titleCollapsed {
+    @extend %commonTitleStyles;
+}
+
+.titleExpanded {
+    @extend %commonTitleStyles;
+}
+
+%commonContainerStyles {
     display: grid;
     grid-template-rows: 30px;
     grid-template-columns: 3fr repeat(4, 2fr);
@@ -22,4 +30,12 @@
     grid-column: span 12;
     grid-row: span 11;
     overflow-y: auto;
+}
+
+.containerStyleCollapsed {
+    @extend %commonContainerStyles;
+}
+
+.containerStyleExpanded {
+    @extend %commonContainerStyles;
 }

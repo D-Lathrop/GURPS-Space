@@ -1,8 +1,8 @@
 import styles from "../styles/roll-resolve-combat.module.scss"
-const RollResolveCombat = () => {
+const RollResolveCombat = ({ isExpanded }) => {
 
     return (
-        <div className={styles.containerStyle}>
+        <div className={isExpanded ? styles.containerStyleExpanded : styles.containerStyleCollapsed}>
             <h2 className={styles.title}>Combat</h2>
         </div>
     );

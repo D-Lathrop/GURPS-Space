@@ -1,6 +1,6 @@
 @import '../styles/_variables.module.scss';
 
-.controlPanel {
+%commonControlPanelStyles {
     background-color: $primaryColor;
     position: fixed;
     top: 0;
@@ -9,31 +9,34 @@
     width: 25vw;
     height: 100vh;
     display: grid;
-    grid-template-rows: 1fr 11fr;
     grid-template-columns: repeat(12, 1fr);
     padding: 5px;
 }
 
-.expanded {
-    background-color: $primaryColor;
-    position: fixed;
-    top: 0;
-    right: 0;
-    overflow-y: scroll;
+.controlPanelCollapsed {
+    @extend %commonControlPanelStyles;
+    grid-template-rows: 75px 45px 11fr;
+}
+
+.controlPanelExpanded {
+    @extend %commonControlPanelStyles;
     width: 80vw;
-    height: 100vh;
-    display: grid;
     grid-template-rows: 1fr 11fr;
-    grid-template-columns: repeat(12, 1fr);
-    padding: 5px;
 }
 
-.title {
+.titleCollapsed {
+    grid-column: span 3;
+    color: $secondaryColor1;
+    align-self: center;
+    justify-self: center;
+}
+
+.titleExpanded {
     grid-column: span 2;
     color: $secondaryColor1;
 }
 
-.controlPanelButton {
+%controlPanelButtonStyles {
     color: $secondaryColor1;
     background-color: $primaryColor;
     height: 50%;
@@ -41,5 +44,15 @@
     border-radius: 10px;
     align-self: center;
     justify-self: center;
+
+}
+
+.controlPanelButtonCollapsed {
+    @extend %controlPanelButtonStyles;
+    grid-column: span 3;
+}
+
+.controlPanelButtonExpanded {
+    @extend %controlPanelButtonStyles;
     grid-column: span 2;
 }

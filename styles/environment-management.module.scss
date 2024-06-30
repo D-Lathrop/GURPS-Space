@@ -5,11 +5,19 @@
     margin: 3px 0px;
 }
 
-.containerStyle {
+%commonContainerStyles {
     background-color: $primaryColor;
     padding: 5px;
     border: 2px solid $secondaryColor1;
     border-radius: 5px;
     margin: 5px;
     grid-column: span 12;
+}
+
+.containerStyleCollapsed {
+    @extend %commonContainerStyles;
+}
+
+.containerStyleExpanded {
+    @extend %commonContainerStyles;
 }

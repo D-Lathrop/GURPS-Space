@@ -1,9 +1,9 @@
 import styles from "../styles/environment-management.module.scss"
 
-const EnvironmentManagement = () => {
+const EnvironmentManagement = ({ isExpanded }) => {
 
     return (
-        <div className={styles.containerStyle}>
+        <div className={isExpanded ? styles.containerStyleExpanded : styles.containerStyleCollapsed}>
             <h2 className={styles.title}>Environment Management</h2>
         </div>
     )

@@ -2,11 +2,11 @@ import styles from "../styles/ship-class-list.module.scss"
 
 
 
-const ShipClassList = () => {
+const ShipClassList = ({ isExpanded }) => {
 
     return (
-        <div className={styles.containerStyle}>
-            <h2 className={styles.title}>Ship Class List</h2>
+        <div className={isExpanded ? styles.containerStyleExpanded : styles.containerStyleCollapsed}>
+            <h2 className={isExpanded ? styles.titleExpanded : styles.titleCollapsed}>Ship Class List</h2>
         </div>
     )
 }

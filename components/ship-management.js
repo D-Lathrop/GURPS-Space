@@ -5,7 +5,7 @@ import CreateShip from './create-ship.js';
 import CreateShipClass from './create-ship-class.js';
 import ShipClassList from './ship-class-list';
 
-const ShipManagement = () => {
+const ShipManagement = ({ isExpanded }) => {
     const [currentComponent, setCurrentComponent] = useState('ship-list');
 
     const handleCreateShipClick = () => {
@@ -25,16 +25,16 @@ const ShipManagement = () => {
     }
 
     return (
-        <div className={styles.containerStyle}>
-            <h2 className={styles.title}>Ship Management</h2>
-            <button className={styles.buttonStyle} onClick={handleShipListClick}>Ship List</button>
-            <button className={styles.buttonStyle} onClick={handleCreateShipClick}>Create New Ship</button>
-            <button className={styles.buttonStyle} onClick={handleShipClassListClick}>Ship Class List</button>
-            <button className={styles.buttonStyle} onClick={handleCreateShipClassClick}>Create New Ship Class</button>
-            {currentComponent === 'ship-list' && <ShipList />}
-            {currentComponent === 'create-ship' && <CreateShip />}
-            {currentComponent === 'create-ship-class' && <CreateShipClass />}
-            {currentComponent === 'ship-class-list' && <ShipClassList />}
+        <div className={isExpanded ? styles.containerStyleExpanded : styles.containerStyleCollapsed}>
+            <h2 className={isExpanded ? styles.titleExpanded : styles.titleCollapsed}>Ship Management</h2>
+            <button className={isExpanded ? styles.buttonStyleExpanded : styles.buttonStyleCollapsed} onClick={handleShipListClick}>Ship List</button>
+            <button className={isExpanded ? styles.buttonStyleExpanded : styles.buttonStyleCollapsed} onClick={handleCreateShipClick}>Create New Ship</button>
+            <button className={isExpanded ? styles.buttonStyleExpanded : styles.buttonStyleCollapsed} onClick={handleShipClassListClick}>Ship Class List</button>
+            <button className={isExpanded ? styles.buttonStyleExpanded : styles.buttonStyleCollapsed} onClick={handleCreateShipClassClick}>Create New Ship Class</button>
+            {currentComponent === 'ship-list' && <ShipList isExpanded={isExpanded} />}
+            {currentComponent === 'create-ship' && <CreateShip isExpanded={isExpanded} />}
+            {currentComponent === 'create-ship-class' && <CreateShipClass isExpanded={isExpanded} />}
+            {currentComponent === 'ship-class-list' && <ShipClassList isExpanded={isExpanded} />}
         </div>
     )
 }

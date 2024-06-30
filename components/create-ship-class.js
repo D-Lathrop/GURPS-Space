@@ -13,7 +13,7 @@ import ShipClassWeaponStats from "./ship-class-weaponstats.js";
 import ShipDesign from "./ship-design.js";
 
 
-const CreateShipClass = () => {
+const CreateShipClass = ({ isExpanded }) => {
     // Basic Ship Class State Variables
     const [currentStatComponent, setStatCurrentComponent] = useState('shipClassStatBlock')
     const [superScienceChecked, setSuperScienceChecked] = useState(false);
@@ -3946,7 +3946,7 @@ const CreateShipClass = () => {
     // This function displays the Weapon Stats component.
     function weaponStatsDisplay() {
         return (
-            <div className={styles.weaponStatsContainer}>
+            <div className={isExpanded ? styles.weaponStatsContainerExpanded : styles.weaponStatsContainerCollapsed}>
                 <h2 className={styles.statTitle}>Weapon Stat Block</h2>
                 <p className={styles.weaponExplanation}>Unconventional warheads can be added and missile types changed when deploying
                     your ship to the battle map (with TL and Super Science restrictions). Selections at this stage represent the
@@ -4599,7 +4599,7 @@ const CreateShipClass = () => {
     // This function displays the design features and switches component.
     function designDisplay() {
         return (
-            <div className={styles.statBlockContainer}>
+            <div className={isExpanded ? styles.statBlockContainerExpanded : styles.statBlockContainerCollapsed}>
                 <h2 className={styles.statTitle}>Ship Design</h2>
                 <p className={styles.weaponExplanation}>Some design features and switches are not implemented in this
                     version of the website.</p>
@@ -4642,25 +4642,25 @@ const CreateShipClass = () => {
     }
 
     return (
-        <div className={styles.containerStyle}>
-            <h2 className={styles.title}>Create Ship Class</h2>
-            <div className={styles.topRow3}>
+        <div className={isExpanded ? styles.containerStyleExpanded : styles.containerStyleCollapsed}>
+            <h2 className={isExpanded ? styles.titleExpanded : styles.titleCollapsed}>Create Ship Class</h2>
+            <div className={isExpanded ? styles.topRow3Expanded : styles.topRow3Collapsed}>
                 <span className={styles.label}>Ship Class Name:&nbsp;</span>
                 <textarea value={shipClassName} onChange={handleClassNameChange} />
             </div>
-            <div className={styles.topRow3}>
+            <div className={isExpanded ? styles.topRow3Expanded : styles.topRow3Collapsed}>
                 <span className={styles.label}>Classification:&nbsp;</span>
                 <textarea className={styles.topRowTextArea} value={shipClassClassification} onChange={handleClassificationChange} />
             </div>
-            <div className={styles.topRow3}>
+            <div className={isExpanded ? styles.topRow3Expanded : styles.topRow3Collapsed}>
                 <span className={styles.label}>Ship Class Designer:&nbsp;</span>
                 <textarea value={shipClassDesigner} onChange={handleDesignerChange} />
             </div>
-            <div className={styles.topRow3}>
+            <div className={isExpanded ? styles.topRow3Expanded : styles.topRow3Collapsed}>
                 <span className={styles.label}>Ship Manufacturer:&nbsp;</span>
                 <textarea value={shipClassManufacturer} onChange={handleManufacturerChange} />
             </div>
-            <div className={styles.topRow2}>
+            <div className={isExpanded ? styles.topRow2Expanded : styles.topRow2Collapsed}>
                 <span className={styles.label}>TL: </span>
                 <select onChange={handleTLChange}>
                     <option value="7" selected>7</option>
@@ -4674,7 +4674,7 @@ const CreateShipClass = () => {
                     <option value="15">15</option>
                 </select>
             </div>
-            <div className={styles.topRow2}>
+            <div className={isExpanded ? styles.topRow2Expanded : styles.topRow2Collapsed}>
                 <span className={styles.label}>SM: </span>
                 <select onChange={handleSMChange}>
                     <option value="5" selected>5</option>
@@ -4690,7 +4690,7 @@ const CreateShipClass = () => {
                     <option value="15">15</option>
                 </select>
             </div>
-            <div className={styles.topRow2}>
+            <div className={isExpanded ? styles.topRow2Expanded : styles.topRow2Collapsed}>
                 <label className={styles.label}>
                     Super Science:&nbsp;
                     <input className={styles.inputCheckbox}
@@ -4700,7 +4700,7 @@ const CreateShipClass = () => {
                     />
                 </label>
             </div>
-            <div className={styles.topRow2}>
+            <div className={isExpanded ? styles.topRow2Expanded : styles.topRow2Collapsed}>
                 <span className={styles.label}>Un/ Streamlined:</span>
                 <select onChange={handleStreamlinedUnChange}>
                     <option value="unstreamlined" selected>Unstreamlined</option>
@@ -4708,44 +4708,44 @@ const CreateShipClass = () => {
                 </select>
             </div>
 
-            <span className={styles.topRowWarning}>WARNING: Changing the TL, SM, Super Science, or Un/Streamlined will reset all modules. &nbsp;WARNING: Some actions and modules allowed in the rules are not allowed in this version.  Mouse over to see details.</span>
+            <span className={isExpanded ? styles.topRowWarningExpanded : styles.topRowWarningCollapsed}>WARNING: Changing the TL, SM, Super Science, or Un/Streamlined will reset all modules. &nbsp;WARNING: Some actions and modules allowed in the rules are not allowed in this version.  Mouse over to see details.</span>
 
-            <div className={styles.statComponentButtonContainer}>
+            <span className={`${styles.buildLabel} ${isExpanded ? `${styles.buildCol1} ${styles.buildRow1}` : `${styles.buildColCollapsed} ${styles.buildRowCollapsed}`}`}>Front</span>
+            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={isExpanded ? styles.buildCol1 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow2 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'front'} moduleLocation2={'hull'} moduleNumber={1} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
+            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={isExpanded ? styles.buildCol1 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow3 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'front'} moduleLocation2={'hull'} moduleNumber={2} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
+            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={isExpanded ? styles.buildCol1 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow4 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'front'} moduleLocation2={'hull'} moduleNumber={3} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
+            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={isExpanded ? styles.buildCol1 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow5 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'front'} moduleLocation2={'hull'} moduleNumber={4} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
+            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={isExpanded ? styles.buildCol1 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow6 : styles.buildRowCollapsed} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'front'} moduleLocation2={'hull'} moduleNumber={5} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
+            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={isExpanded ? styles.buildCol1 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow7 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'front'} moduleLocation2={'hull'} moduleNumber={6} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
+            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={isExpanded ? styles.buildCol1 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow8 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'front'} moduleLocation2={'core'} moduleNumber={'CoreFront'} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
+
+            <span className={`${styles.buildLabel} ${isExpanded ? `${styles.buildCol2} ${styles.buildRow1}` : `${styles.buildColCollapsed} ${styles.buildRowCollapsed}`}`}>Middle</span>
+            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={isExpanded ? styles.buildCol2 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow2 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'middle'} moduleLocation2={'hull'} moduleNumber={1} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
+            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={isExpanded ? styles.buildCol2 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow3 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'middle'} moduleLocation2={'hull'} moduleNumber={2} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
+            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={isExpanded ? styles.buildCol2 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow4 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'middle'} moduleLocation2={'hull'} moduleNumber={3} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
+            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={isExpanded ? styles.buildCol2 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow5 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'middle'} moduleLocation2={'hull'} moduleNumber={4} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
+            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={isExpanded ? styles.buildCol2 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow6 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'middle'} moduleLocation2={'hull'} moduleNumber={5} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
+            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={isExpanded ? styles.buildCol2 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow7 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'middle'} moduleLocation2={'hull'} moduleNumber={6} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
+            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={isExpanded ? styles.buildCol2 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow8 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'middle'} moduleLocation2={'core'} moduleNumber={'CoreMid'} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
+
+            <span className={`${styles.buildLabel} ${isExpanded ? `${styles.buildCol3} ${styles.buildRow1}` : `${styles.buildColCollapsed} ${styles.buildRowCollapsed}`}`}>Rear</span>
+            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={isExpanded ? styles.buildCol3 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow2 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'rear'} moduleLocation2={'hull'} moduleNumber={1} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
+            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={isExpanded ? styles.buildCol3 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow3 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'rear'} moduleLocation2={'hull'} moduleNumber={2} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
+            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={isExpanded ? styles.buildCol3 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow4 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'rear'} moduleLocation2={'hull'} moduleNumber={3} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
+            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={isExpanded ? styles.buildCol3 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow5 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'rear'} moduleLocation2={'hull'} moduleNumber={4} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
+            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={isExpanded ? styles.buildCol3 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow6 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'rear'} moduleLocation2={'hull'} moduleNumber={5} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
+            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={isExpanded ? styles.buildCol3 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow7 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'rear'} moduleLocation2={'hull'} moduleNumber={6} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
+            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={isExpanded ? styles.buildCol3 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow8 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'rear'} moduleLocation2={'core'} moduleNumber={'CoreRear'} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
+
+            <div className={isExpanded ? styles.statComponentButtonContainerExpanded : styles.statComponentButtonContainerCollapsed}>
                 <button className={styles.statComponentButton} onClick={handleBasicStatsClick}>Basic Stats</button>
                 <button className={styles.statComponentButton} onClick={handleHabitatPowerClick}>Habs & Power</button>
                 <button className={styles.statComponentButton} onClick={handleWeaponClick}>Weapons</button>
                 <button className={styles.statComponentButton} onClick={handleShipDesignClick}>Ship Design</button>
             </div>
 
-            <span className={`${styles.buildLabel} ${styles.buildCol1} ${styles.buildRow1}`}>Front</span>
-            <span className={`${styles.buildLabel} ${styles.buildCol2} ${styles.buildRow1}`}>Middle</span>
-            <span className={`${styles.buildLabel} ${styles.buildCol3} ${styles.buildRow1}`}>Rear</span>
-
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={styles.buildCol1} buildRow={styles.buildRow2} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'front'} moduleLocation2={'hull'} moduleNumber={1} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={styles.buildCol1} buildRow={styles.buildRow3} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'front'} moduleLocation2={'hull'} moduleNumber={2} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={styles.buildCol1} buildRow={styles.buildRow4} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'front'} moduleLocation2={'hull'} moduleNumber={3} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={styles.buildCol1} buildRow={styles.buildRow5} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'front'} moduleLocation2={'hull'} moduleNumber={4} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={styles.buildCol1} buildRow={styles.buildRow6} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'front'} moduleLocation2={'hull'} moduleNumber={5} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={styles.buildCol1} buildRow={styles.buildRow7} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'front'} moduleLocation2={'hull'} moduleNumber={6} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={styles.buildCol1} buildRow={styles.buildRow8} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'front'} moduleLocation2={'core'} moduleNumber={'CoreFront'} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={styles.buildCol2} buildRow={styles.buildRow2} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'middle'} moduleLocation2={'hull'} moduleNumber={1} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={styles.buildCol2} buildRow={styles.buildRow3} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'middle'} moduleLocation2={'hull'} moduleNumber={2} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={styles.buildCol2} buildRow={styles.buildRow4} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'middle'} moduleLocation2={'hull'} moduleNumber={3} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={styles.buildCol2} buildRow={styles.buildRow5} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'middle'} moduleLocation2={'hull'} moduleNumber={4} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={styles.buildCol2} buildRow={styles.buildRow6} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'middle'} moduleLocation2={'hull'} moduleNumber={5} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={styles.buildCol2} buildRow={styles.buildRow7} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'middle'} moduleLocation2={'hull'} moduleNumber={6} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={styles.buildCol2} buildRow={styles.buildRow8} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'middle'} moduleLocation2={'core'} moduleNumber={'CoreMid'} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={styles.buildCol3} buildRow={styles.buildRow2} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'rear'} moduleLocation2={'hull'} moduleNumber={1} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={styles.buildCol3} buildRow={styles.buildRow3} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'rear'} moduleLocation2={'hull'} moduleNumber={2} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={styles.buildCol3} buildRow={styles.buildRow4} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'rear'} moduleLocation2={'hull'} moduleNumber={3} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={styles.buildCol3} buildRow={styles.buildRow5} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'rear'} moduleLocation2={'hull'} moduleNumber={4} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={styles.buildCol3} buildRow={styles.buildRow6} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'rear'} moduleLocation2={'hull'} moduleNumber={5} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={styles.buildCol3} buildRow={styles.buildRow7} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'rear'} moduleLocation2={'hull'} moduleNumber={6} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={styles.buildCol3} buildRow={styles.buildRow8} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'rear'} moduleLocation2={'core'} moduleNumber={'CoreRear'} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-
             {currentStatComponent === 'shipHabitatPowerStats' && <ShipClassHabitatPower
+                isExpanded={isExpanded}
                 styles={styles}
                 shipModules={shipModules}
                 handleHabitatPowerCost={handleHabitatPowerCost}
@@ -4762,6 +4762,7 @@ const CreateShipClass = () => {
                 habitatsDisplay={habitatsDisplay}
             />}
             {currentStatComponent === 'shipWeaponStats' && <ShipClassWeaponStats
+                isExpanded={isExpanded}
                 styles={styles}
                 shipClassName={shipClassName}
                 shipClassDesigner={shipClassDesigner}
@@ -4772,6 +4773,7 @@ const CreateShipClass = () => {
 
             />}
             {currentStatComponent === 'shipClassStatBlock' && <ShipClassStatBlock
+                isExpanded={isExpanded}
                 styles={styles}
                 shipClassName={shipClassName}
                 shipClassClassification={shipClassClassification}
@@ -4806,16 +4808,17 @@ const CreateShipClass = () => {
                 shipLaunchRateDisplay={shipLaunchRate.toLocaleString()}
             />}
             {currentStatComponent === 'shipDesign' && <ShipDesign
+                isExpanded={isExpanded}
                 styles={styles}
                 designDisplay={designDisplay}
             />}
 
-            <div className={styles.classNotes}>
+            <div className={isExpanded ? styles.classNotesExpanded : styles.classNotesCollapsed}>
                 <p className={styles.label}>Class Notes:</p>
                 <textarea className={styles.notesArea} value={classNotes} onChange={(e) => setClassNotes(e.target.value)} />
             </div>
 
-            <div className={styles.cargoContainer}>
+            <div className={isExpanded ? styles.cargoContainerExpanded : styles.cargoContainerCollapsed}>
                 <span className={styles.statBlockLableUPressCargo}>Unpress. Cargo:</span>
                 <span className={styles.statBlockAreaUPressCargo}>{shipUPressCargo.toLocaleString()}</span>
                 <span className={styles.statBlockLablePressCargo}>Pressurized Cargo:</span>
@@ -4893,7 +4896,6 @@ const CreateShipClass = () => {
                     +100
                 </button>}
             </div>
-
         </div>
     )
 }
