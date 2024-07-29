@@ -113,7 +113,7 @@
 
 .containerStyleCollapsed {
     @extend %commonContainerStyles;
-    grid-auto-rows: minmax(40px, 80px);
+    grid-auto-rows: minmax(40px, 90px);
     grid-template-columns: repeat(8, 1fr);
     background-color: $primaryColor;
     grid-column: span 12;
@@ -282,14 +282,24 @@
 
 .classNotesCollapsed {
     grid-column: 1 / span 8;
-    grid-row: span 1;
+    grid-row: span 2;
 }
 
-.notesArea {
+%notesAreaCommonStyles {
     width: 95%;
-    height: 100%;
     margin: 5px;
     overflow-y: auto;
+    box-sizing: border-box;
+}
+
+.notesAreaExpanded {
+    @extend %notesAreaCommonStyles;
+    height: 100%;
+}
+
+.notesAreaCollapsed {
+    @extend %notesAreaCommonStyles;
+    height: 60%;
 }
 
 %cargoContainerCommonStyles {
@@ -301,6 +311,7 @@
 .cargoContainerCollapsed {
     @extend %cargoContainerCommonStyles;
     grid-column: span 8;
+    grid-row: span 2;
 }
 
 .cargoContainerExpanded {
@@ -313,6 +324,7 @@
 .statBlockLableUPressCargo {
     @extend %statBlockLableCargoCommonStyles;
     grid-column: 1 / span 1;
+    padding: 0px 0px 10px 0px;
 }
 
 .statBlockLablePressCargo {
@@ -336,13 +348,14 @@
     @extend %commonContainerStyles;
     grid-template-columns: 3fr 2fr 3fr 2fr;
     grid-template-rows: repeat(20, 1fr);
-
 }
 
 .statBlockContainerCollapsed {
     @extend %statBlockContainer;
     grid-column: 1 / span 8;
-    grid-row: span 11;
+    grid-row: span 16;
+    grid-template-rows: repeat(32, 1fr);
+
 }
 
 .statBlockContainerExpanded {
@@ -398,6 +411,7 @@
     @extend %statBlockAreaCommonStyles;
     grid-column: span 3;
     overflow-y: auto;
+    margin: 3px 0px;
 }
 
 .moduleInfoSpan {
