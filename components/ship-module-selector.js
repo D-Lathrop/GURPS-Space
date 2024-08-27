@@ -1,11 +1,11 @@
 import shipData from "../data/ship-data.json"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 
-const ShipModuleSelector = ({ handleSetModules, handleSelectedEngine, selectedEngine, engineKeys, styles, buildCol, buildRow, shipModules, shipStreamlinedUn, moduleLocation1, moduleLocation2, moduleNumber, shipSM, shipTL, superScience }) => {
+const ShipModuleSelector = ({ handleSetModules, styles, buildCol, buildRow, shipModules, shipStreamlinedUn, moduleLocation1, moduleLocation2, moduleNumber, shipSM, shipTL, superScience, reardDR, getModuleIndex, processShipModules }) => {
     const [category, setCategory] = useState('');
     const [module, setModule] = useState('');
-    const [moduleList, setModuleList] = useState([])
+    const [moduleList, setModuleList] = useState([''])
     const [cost, setCost] = useState(0);
     const [displayCost, setDisplayCost] = useState(0);
     const [workspaces, setWorkspaces] = useState(0);
@@ -15,14 +15,33 @@ const ShipModuleSelector = ({ handleSetModules, handleSelectedEngine, selectedEn
     const [repairSkill, setRepairSkill] = useState('');
 
     const moduleShipData = shipData;
-    let categoryList = ['Armor and Survivability', 'Crew', 'Engineering', 'Power', 'Propulsion', 'Utility',
+    const categoryList = ['Armor and Survivability', 'Crew', 'Engineering', 'Power', 'Propulsion', 'Utility',
         'Weapons', 'Engine, Chemical & HEDM', 'Engine, Electric', 'Engine, Fission', 'Engine, Nuclear Pulse',
         'Engine, Fusion', 'Engine, TotalConv. & Antimatter', 'Reactionless Engine'];
+
+    // This use effect retrieves the values for cost and workspaces from the modules array in the create-ship-class component, 
+    // this is to reflect changes caused by customization such as automation and other design features.
+    useEffect(() => {
+        const [rowIndex, colIndex] = getModuleIndex(moduleLocation1, moduleNumber);
+
+        if (shipModules[rowIndex][colIndex] !== '') {
+            const shipModule = shipModules[rowIndex][colIndex];
+            const newDisplayCost = shipModule.moduleCost ?? 0;
+            const newDisplayWorkspaces = shipModule.moduleWorkspaces ?? 0;
+
+            setDisplayCost(newDisplayCost);
+            setDisplayWorkspaces(newDisplayWorkspaces);
+        } else {
+            setDisplayCost(0);
+            setDisplayWorkspaces(0);
+        }
+
+    }, [getModuleIndex, shipModules, moduleLocation1, moduleNumber])
 
     // This function sets the selected category and updates the module list.
     const handleCategoryChange = (e) => {
         setCategory(e.target.value);
-        const newModuleList = validModuleSorter(moduleShipData, moduleLocation1, moduleLocation2, shipSM, shipTL, shipStreamlinedUn, e.target.value, superScience, shipModules);
+        const newModuleList = validModuleSorter(moduleShipData, moduleLocation1, moduleLocation2, shipSM, shipTL, shipStreamlinedUn, e.target.value, superScience, shipModules, reardDR);
         setModuleList(newModuleList);
     }
 
@@ -38,13 +57,20 @@ const ShipModuleSelector = ({ handleSetModules, handleSelectedEngine, selectedEn
 
         if (e.target.value === '') {
             setModule(e.target.value);
-            handleSetModules(e.target.value, moduleCategory, moduleLocation1, moduleLocation2, moduleNumber)
+            setCost(0);
+            setWorkspaces(0);
+            setRepairSkill('');
+            handleSetModules(e.target.value, moduleCategory, moduleLocation1, moduleLocation2, moduleNumber, 0, 0, null)
         } else {
-            setModule(e.target.value);
-            handleSetModules(e.target.value, moduleCategory, moduleLocation1, moduleLocation2, moduleNumber)
-
             let moduleKeyObj = moduleShipData[e.target.value];
             let SMData = moduleKeyObj.find(module => module.SM === shipSM);
+            let fuelTypes = null;
+            if (moduleKeyObj[0].FuelTypes !== undefined) {
+                fuelTypes = moduleKeyObj[0].FuelTypes;
+            }
+
+            setModule(e.target.value);
+            handleSetModules(e.target.value, moduleCategory, moduleLocation1, moduleLocation2, moduleNumber, SMData.cost, SMData.Workspaces, fuelTypes);
             setCost(SMData.cost);
             setWorkspaces(SMData.Workspaces);
             setRepairSkill(moduleKeyObj[0].RepairSkill);
@@ -61,49 +87,55 @@ const ShipModuleSelector = ({ handleSetModules, handleSelectedEngine, selectedEn
         }
     }, [shipSM, moduleShipData, module])
 
-    useEffect(() => {
-        if (selectedEngine && selectedEngine !== '') {
-        }
-    }, [selectedEngine])
-
     // This function filters the valid modules based on the ship's tech level, streamlined/unstreamlined, and other module requirements.
-    function validModuleSorter(moduleShipData, moduleLocation1, moduleLocation2, shipSM, shipTL, shipStreamlinedUn, category, superScience, shipModules) {
+    const validModuleSorter = useCallback((moduleShipData, moduleLocation1, moduleLocation2, shipSM, shipTL, shipStreamlinedUn, category, superScience, shipModules, reardDR) => {
         if (shipModules) {
             let newCategory = category
             let newModuleList = [];
-            let coreCount = shipModules.filter(module => module.moduleLocation2 === 'core').length;
-            let activeCore = shipModules.filter(module => module.moduleLocation2 === 'core');
+            let coreCount = 0;
+            let activeCore = [];
             let spinalFront = false
             let spinalMid = false
             let spinalRear = false
-            if (module !== '') {
-                let currentModule = module
 
-                if (currentModule && currentModule !== '') {
-                    if ((moduleShipData[currentModule][0].Category.includes('Engine,') && selectedEngine === '') || (moduleShipData[currentModule][0].Category.includes('Reactionless') && selectedEngine === '')) {
-                        handleSelectedEngine(currentModule)
+            processShipModules(shipModules, (shipModule) => {
+                if (shipModule.moduleLocation2 === 'core') {
+                    coreCount++;
+                    activeCore.push(shipModule);
+                }
+            });
+
+            for (let gridRow of shipModules) {
+                for (let shipModule of gridRow) {
+                    if (shipModule.moduleLocation1 === 'front') {
+                        spinalFront = true;
+                    } else if (shipModule.moduleLocation1 === 'middle') {
+                        spinalMid = true;
+                    } else if (shipModule.moduleLocation1 === 'rear') {
+                        spinalRear = true;
                     }
                 }
             }
 
-            shipModules.forEach(module => {
-                if (module.moduleKey === 'Spinal Battery') {
-                    if (module.moduleLocation1 === 'front') {
-                        spinalFront = true;
-                    } else if (module.moduleLocation1 === 'middle') {
-                        spinalMid = true;
-                    } else if (module.moduleLocation1 === 'rear') {
-                        spinalRear = true;
+            let defensiveECMCount = 0;
+            let engineRoomCount = 0;
+
+            for (let gridRow of shipModules) {
+                for (let shipModule of gridRow) {
+                    if (shipModule.moduleKey === 'Defensive ECM') {
+                        defensiveECMCount++;
+                    }
+                    if (shipModule.moduleKey === 'Engine Room') {
+                        engineRoomCount++;
                     }
                 }
-            });
+            }
 
             if (!activeCore.some(module => module.moduleNumber === moduleNumber) && coreCount >= 2 && moduleLocation2 === 'core') {
                 newModuleList.push('All Core Modules Already in Use');
             } else {
                 for (let key in moduleShipData) {
                     let selectedCategory = newCategory
-                    let keyIsEngineKey = engineKeys.includes(key)
 
                     if (
                         (moduleShipData[key][0].Location === moduleLocation1 || moduleShipData[key][0].Location === moduleLocation2 || moduleShipData[key][0].Location === 'any')
@@ -115,8 +147,8 @@ const ShipModuleSelector = ({ handleSetModules, handleSelectedEngine, selectedEn
                         && (key !== 'Habitat' || key === 'Habitat' && shipSM >= 6)
                         && (key !== 'Armor, Ice' || key === 'Armor, Ice' && shipSM >= 8 && shipStreamlinedUn === 'unstreamlined')
                         && (key !== 'Armor, Stone' || key === 'Armor, Stone' && shipSM >= 7 && shipStreamlinedUn === 'unstreamlined')
-                        && (key !== 'Defensive ECM' || key === 'Defensive ECM' && shipModules.filter(module => module.moduleKey === 'Defensive ECM').length < 3)
-                        && (key !== 'Engine Room' || key === 'Engine Room' && shipSM <= 9 && shipModules.filter(module => module.moduleKey === 'Engine Room').length < 1)
+                        && (key !== 'Defensive ECM' || key === 'Defensive ECM' && defensiveECMCount < 3)
+                        && (key !== 'Engine Room' || key === 'Engine Room' && shipSM <= 9 && engineRoomCount < 1)
                         && (key !== 'Jump Gate' || key === 'Jump Gate' && shipSM >= 9)
                         && (key !== 'Factory, Replicator' || key === 'Factory, Replicator' && shipSM >= 6)
                         && (key !== 'Factory, Nanofactory' || key === 'Factory, Nanofactory' && shipSM >= 6)
@@ -125,7 +157,7 @@ const ShipModuleSelector = ({ handleSetModules, handleSelectedEngine, selectedEn
                         && (key !== 'Secondary Battery' || key === 'Secondary Battery' && shipSM >= 6)
                         && (key !== 'Tertiary Battery' || key === 'Tertiary Battery' && shipSM >= 7)
                         && (key !== 'Spinal Battery' || key === 'Spinal Battery' && (spinalFront === false && moduleLocation1 === 'front' && moduleLocation2 === 'hull') || (spinalMid === false && moduleLocation1 === 'middle' && moduleLocation2 === 'core') || (spinalRear === false && moduleLocation1 === 'rear' && moduleLocation2 === 'hull'))
-                        && (keyIsEngineKey === false || (keyIsEngineKey === true && selectedEngine === '') || (keyIsEngineKey === true && key === selectedEngine))
+                        && (key !== "External Pulsed Plasma" || key === "External Pulsed Plasma" && reardDR >= 50)
                     ) {
                         newModuleList.push(key);
                     }
@@ -133,29 +165,13 @@ const ShipModuleSelector = ({ handleSetModules, handleSelectedEngine, selectedEn
             }
             return newModuleList;
         }
-    }
+    }, [moduleNumber, processShipModules])
 
     // This useEffect calls the validModuleSorter function to filter valid modules based and updates the module list.
     useEffect(() => {
-        const newModuleList = validModuleSorter(moduleShipData, moduleLocation1, moduleLocation2, shipSM, shipTL, shipStreamlinedUn, category, superScience, shipModules);
+        const newModuleList = validModuleSorter(moduleShipData, moduleLocation1, moduleLocation2, shipSM, shipTL, shipStreamlinedUn, category, superScience, shipModules, reardDR);
         setModuleList(newModuleList);
-
-    }, [shipTL, superScience, shipStreamlinedUn, shipSM, moduleLocation1, moduleLocation2, moduleShipData, category, module, shipModules, selectedEngine])
-
-    // This useEffect updates the display cost and workspaces when the cost and workspaces change.
-    useEffect(() => {
-        let displayCost = ''
-        let displayWorkspaces = ''
-        if (module === '') {
-            displayCost = '0';
-            displayWorkspaces = '0';
-        } else {
-            displayCost = cost.toLocaleString();
-            displayWorkspaces = workspaces.toLocaleString();
-        }
-        setDisplayCost(displayCost);
-        setDisplayWorkspaces(displayWorkspaces);
-    }, [cost, workspaces, module])
+    }, [validModuleSorter, moduleShipData, moduleLocation1, moduleLocation2, shipSM, shipTL, shipStreamlinedUn, category, superScience, shipModules, reardDR, moduleNumber, processShipModules])
 
     // This use effect resets the current module when the fundamental ship characteristics are changed,
     // it would be better to upgrade this to only remove them if they are no longer valid but this will 
@@ -183,7 +199,7 @@ const ShipModuleSelector = ({ handleSetModules, handleSelectedEngine, selectedEn
                 </select>
             )}
 
-            <span className={styles.moduleInfoSpanTitle} title='These are default values and will not show changes due to de-rated reactors, unused weapons, automation, etc.'>Cost: ${displayCost} Workspaces: {displayWorkspaces}</span>
+            <span className={styles.moduleInfoSpanTitle}>Cost: ${displayCost.toLocaleString()} Workspaces: {displayWorkspaces.toLocaleString()}</span>
             <span className={styles.moduleInfoSpanTitle} title={repairSkill}>Repair Skill</span>
         </div>
     )

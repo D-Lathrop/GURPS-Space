@@ -15,6 +15,7 @@
 
 .controlPanelCollapsed {
     @extend %commonControlPanelStyles;
+    width: 35vw;
     grid-template-rows: 75px 45px 11fr;
 }
 

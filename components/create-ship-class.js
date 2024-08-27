@@ -5,13 +5,12 @@ import weaponData from "../data/weapon-data.json"
 import weaponTables from "../data/weapon-tables.json"
 import designFeature from "../data/designFeature-data.json"
 import designSwitch from "../data/designSwitch-data.json"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import ShipModuleSelector from "./ship-module-selector.js";
 import ShipClassStatBlock from "./ship-class-statblock.js";
-import ShipClassHabitatPower from "./ship-class-habitatpower.js";
-import ShipClassWeaponStats from "./ship-class-weaponstats.js";
+import ShipClassHabitatPowerWeapons from "./ship-class-habitatpower.js";
+import ShipCustomization from "./ship-class-customization.js";
 import ShipDesign from "./ship-design.js";
-
 
 const CreateShipClass = ({ isExpanded }) => {
     // Basic Ship Class State Variables
@@ -32,11 +31,12 @@ const CreateShipClass = ({ isExpanded }) => {
     const [shipLength, setLength] = useState(0);
     const [shipMaxGravity, setMaxGravity] = useState(0);
     const [shipComplexity, setComplexity] = useState(0);
-    const [shipModules, setModules] = useState([]);
+    const [shipModules, setModules] = useState([[{}, {}, {}, {}, {}, {}, {}], [{}, {}, {}, {}, {}, {}, {}], [{}, {}, {}, {}, {}, {}, {}]]);
     const [classNotes, setClassNotes] = useState('Input any notes about the class here.');
     const [shipDisplayCost, setDisplayCost] = useState(0);
     const [shipTotalModulesCost, setTotalModulesCost] = useState(0);
     const [shipTotalCost, setTotalCost] = useState(0);
+
 
     // Ship Movement State Variables
     const [shipHnd, setHnd] = useState(0);
@@ -49,6 +49,7 @@ const CreateShipClass = ({ isExpanded }) => {
     const [shipJumpGateMax, setJumpGateMax] = useState(0);
     const [shipMaxFTL, setMaxFTL] = useState(0);
     const [shipFuelLoad, setFuelLoad] = useState(0);
+
 
     // Ship Weapon, ECM, and dDR State Variables
     const [shipDisplaydDR, setDisplaydDR] = useState('0/0/0');
@@ -65,6 +66,7 @@ const CreateShipClass = ({ isExpanded }) => {
     const [shipMediumMounts, setMediumMounts] = useState(0);
     const [shipSecondaryMounts, setSecondaryMounts] = useState(0);
     const [shipTertiaryMounts, setTertiaryMounts] = useState(0);
+
 
     // Ship Weapon Selection State Variables
     const [shipUnusedSpinalMounts, setUnusedSpinalMounts] = useState(0);
@@ -160,7 +162,8 @@ const CreateShipClass = ({ isExpanded }) => {
     const [shipSickBays, setSickBays] = useState(0);
     const [shipSickBaysAuto, setSickBaysAuto] = useState(0);
     const [shipTeleportProjectors, setTeleportProjectors] = useState(0);
-    const [shipTeleportProjectorsSendReceive, setTeleportProjectorsSendReceive] = useState(0);
+    const [shipTeleportProjectorsSend, setTeleportProjectorsSend] = useState(0);
+    const [shipTeleportProjectorsReceive, setTeleportProjectorsReceive] = useState(0);
     const [shipWorkspaces, setWorkspaces] = useState(0);
     const [shipBaseWorkspaces, setBaseWorkspaces] = useState(0);
     const [shipControlStations, setControlStations] = useState(0);
@@ -177,6 +180,9 @@ const CreateShipClass = ({ isExpanded }) => {
     const [shipFacValueHour, setFacValueHour] = useState(0);
     const [shipFacWeightHour, setFacWeightHour] = useState(0);
 
+    // Module Customization State Variables
+    const [shipUncustomizedModules, setUncustomizedModules] = useState([]);
+
     // Design Switch and Feature State Variables
     const [shipHardenedArmorCost, setHardenedArmorCost] = useState(0);
     const [shipRamRocketCost, setRamRocketCost] = useState(0);
@@ -186,6 +192,47 @@ const CreateShipClass = ({ isExpanded }) => {
     const [shipSelectedFeaturesArray, setSelectedFeatures] = useState([]);
     const [shipSelectedSwitchesArray, setSelectedSwitches] = useState([]);
     const [shipDesignCost, setDesignCost] = useState(0)
+
+    // This is a higher order function used to loop through the shipModules 2D Grid and apply a callback function to each module.
+    function processShipModules(shipModules, callbackFunction) {
+        for (let gridRow of shipModules) {
+            for (let shipModule of gridRow) {
+                callbackFunction(shipModule);
+            }
+        }
+    }
+
+    // This function gets the index values of a module in the 2D array based on the moduleLocation1 and moduleNumber so that module can be manipulated.
+    function getModuleIndex(moduleLocation1, moduleNumber) {
+        let rowIndex = 0;
+        let colIndex = 0;
+        const coreIndex = 6
+
+        switch (moduleLocation1) {
+            case 'front':
+                rowIndex = 0;
+                break;
+            case 'middle':
+                rowIndex = 1;
+                break;
+            case 'rear':
+                rowIndex = 2;
+                break;
+            default:
+                console.log('Unexpected value for moduleLocation1, module selector.');
+                break;
+        }
+
+        if (typeof moduleNumber === 'number') {
+            colIndex = moduleNumber - 1;
+        } else if (typeof moduleNumber === 'string') {
+            colIndex = coreIndex;
+        } else {
+            console.log('Unexpected type for moduleNumber, module selector.');
+        }
+
+        return [rowIndex, colIndex]
+    }
 
     // ****************************************************************************************************************************************************
     // ****************************************************************************************************************************************************
@@ -207,16 +254,13 @@ const CreateShipClass = ({ isExpanded }) => {
         const selectedHnd = selectedSMData.Hnd;
         const selectedSR = selectedSMData.SR;
 
-        const selectedHndLocale = selectedHnd.toLocaleString();
-        const selectedSRLocale = selectedSR.toLocaleString();
-
         setdSTHP(selecteddSTHP);
         setLength(selectedLength)
         setMass(selectedMass)
         setHnd(selectedHnd);
         setSR(selectedSR);
 
-        setDisplayHndSR(selectedHndLocale + '/' + selectedSRLocale);
+        setDisplayHndSR(selectedHnd.toLocaleString() + '/' + selectedSR.toLocaleString());
 
     }, [shipSM]);
 
@@ -256,52 +300,65 @@ const CreateShipClass = ({ isExpanded }) => {
         setComplexity(selectedSMFinalComplexity);
     }, [shipTL, shipSM]);
 
-    // This useEffect calculates the default Comm/Sensor array level based on the SM and TL.
+    // This useEffect calculates Comm/Sensor array level based on the presence of a sensor module, the SM, and the TL.
     useEffect(() => {
-        let commSensor = 0
-        let TL = shipTL
+        const TL = shipTL;
+
+        let commSensor = 0;
+        let sensorArrayPresent = false;
+
+        processShipModules(shipModules, (module) => {
+            if (module.moduleKey === "Sensor Array, Multipurpose" ||
+                module.moduleKey === "Sensor Array, Science" ||
+                module.moduleKey === "Sensor Array, Tactical" ||
+                module.moduleKey === "Sensor Array, Enhanced") {
+                sensorArrayPresent = true;
+            }
+        });
+
+        const adjustment = sensorArrayPresent ? 2 : 0;
 
         switch (shipSM) {
             case 5:
-                commSensor = TL - 6
+                commSensor = TL - (6 - adjustment);
                 break;
             case 6:
-                commSensor = TL - 5
+                commSensor = TL - (5 - adjustment);
                 break;
             case 7:
-                commSensor = TL - 4
+                commSensor = TL - (4 - adjustment);
                 break;
             case 8:
-                commSensor = TL - 3
+                commSensor = TL - (3 - adjustment);
                 break;
             case 9:
-                commSensor = TL - 2
+                commSensor = TL - (2 - adjustment);
                 break;
             case 10:
-                commSensor = TL - 1
+                commSensor = TL - (1 - adjustment);
                 break;
             case 11:
-                commSensor = TL
+                commSensor = TL + adjustment;
                 break;
             case 12:
-                commSensor = TL + 1
+                commSensor = TL + (1 + adjustment);
                 break;
             case 13:
-                commSensor = TL + 2
+                commSensor = TL + (2 + adjustment);
                 break;
             case 14:
-                commSensor = TL + 3
+                commSensor = TL + (3 + adjustment);
                 break;
             case 15:
-                commSensor = TL + 4
+                commSensor = TL + (4 + adjustment);
                 break;
-
             default:
-                commSensor = 'Error'
+                commSensor = 'Error';
                 break;
         }
-        setCommSensorLvl(commSensor)
-    }, [shipSM, shipTL]);
+
+        setCommSensorLvl(commSensor);
+    }, [shipModules, shipSM, shipTL]);
 
     // This function handles changes to the SuperScience checkbox.
     const handleSuperScienceCheckboxChange = () => {
@@ -354,31 +411,10 @@ const CreateShipClass = ({ isExpanded }) => {
         }
     }
 
-    // This function is a callback passed into the module selector to handle changes to the selected engine.
-    function handleSelectedEngine(engineString) {
-        setSelectedEngine(engineString)
-    }
-
-    // This use effect updates selectedEngine to an empty string when shipModules doesn't contain any engine.
-    useEffect(() => {
-        let shipModuleKeys = []
-        let hasEngine = false
-
-        shipModules.forEach(module => {
-            shipModuleKeys.push(module.moduleKey)
-        });
-
-        hasEngine = shipModuleKeys.some(key => engineKeys.includes(key));
-
-        if (hasEngine === false) {
-            setSelectedEngine('')
-        }
-
-    }, [shipModules])
-
     // This function calculates the deltaV multiplier based on the mpsTank and tankCount.
     function deltaVMultiplier(mpsTank, tankCount) {
-        let finalDeltaV = 0
+        let finalDeltaV = 0;
+        const deltaVMultipliers = [1.2, 1.4, 1.6, 1.8, 2, 2.2, 2.5, 3];
         switch (tankCount) {
             case 1:
             case 2:
@@ -390,32 +426,32 @@ const CreateShipClass = ({ isExpanded }) => {
             case 6:
             case 7:
             case 8:
-                finalDeltaV = (mpsTank * tankCount) * 1.2
+                finalDeltaV = (mpsTank * tankCount) * deltaVMultipliers[0]
                 break;
             case 9:
             case 10:
             case 11:
             case 12:
-                finalDeltaV = (mpsTank * tankCount) * 1.4
+                finalDeltaV = (mpsTank * tankCount) * deltaVMultipliers[1]
                 break;
             case 13:
             case 14:
-                finalDeltaV = (mpsTank * tankCount) * 1.6
+                finalDeltaV = (mpsTank * tankCount) * deltaVMultipliers[2]
                 break;
             case 15:
-                finalDeltaV = (mpsTank * tankCount) * 1.8
+                finalDeltaV = (mpsTank * tankCount) * deltaVMultipliers[3]
                 break;
             case 16:
-                finalDeltaV = (mpsTank * tankCount) * 2
+                finalDeltaV = (mpsTank * tankCount) * deltaVMultipliers[4]
                 break;
             case 17:
-                finalDeltaV = (mpsTank * tankCount) * 2.2
+                finalDeltaV = (mpsTank * tankCount) * deltaVMultipliers[5]
                 break;
             case 18:
-                finalDeltaV = (mpsTank * tankCount) * 2.5
+                finalDeltaV = (mpsTank * tankCount) * deltaVMultipliers[6]
                 break;
             case 19:
-                finalDeltaV = (mpsTank * tankCount) * 3
+                finalDeltaV = (mpsTank * tankCount) * deltaVMultipliers[7]
                 break;
             default:
                 break;
@@ -424,517 +460,6 @@ const CreateShipClass = ({ isExpanded }) => {
 
         return finalDeltaV
     }
-
-    // This useEffect handles changes to the selected module array to update overall ship statistics.
-    useEffect(() => {
-        const modulesUseEffect = shipModules;
-        const modulesUseEffectData = shipData
-        const excludedArmors = ["Armor, Ice", "Armor, Stone", "Armor, Organic"];
-        const validRamEngineArray = ["Super Antimatter Plasma Torch", "Antimatter Plasma Torch", "Antimatter Thermal Rocket", "Super Fusion Torch", "Fusion Torch", "Nuclear Thermal Rocket"]
-        let tankCount = shipModules.filter(module => module.moduleKey === 'Fuel Tank').length;
-        let frontdDR = 0
-        let middDR = 0
-        let reardDR = 0
-        let hardenedArmorCost = 0
-        let ramRocketCost = 0
-        let singularityDriveCost = 0
-        let cost = 0
-        let workspaces = 0
-        let defensiveECMTL = 0
-        let defensiveECMBonus = 0
-        let powerDemand = 0
-        let powerGeneration = 0
-        let cabinsCapacity = 0
-        let shortOccupancyCrew = 0
-        let shortOccupancyPassengers = 0
-        let longOccupancy = 0
-        let areas = 0
-        let seats = 0
-        let controlStations = 0
-        let engineRoomCount = 0
-        let fuelLoad = 0
-        let jumpGate = 0
-        let maxFTL = 0
-        let uPressCargo = 0
-        let arrayLevel = 0
-        let facValueHour = 0
-        let facWeightHour = 0
-        let launchRate = 0
-        let hangarCapacity = 0
-        let miningCapacity = 0
-        let refineryCapacity = 0
-        let spinalMounts = 0
-        let majorMounts = 0
-        let majorMountLocation = [[0], [0], [0]]
-        let unusedMajorMounts = 0
-        let mediumMounts = 0
-        let mediumMountLocation = [[0], [0], [0]]
-        let unusedMediumMounts = 0
-        let secondaryMounts = 0
-        let secondaryMountLocation = [[0], [0], [0]]
-        let unusedSecondaryMounts = 0
-        let tertiaryMounts = 0
-        let tertiaryMountLocation = [[0], [0], [0]]
-        let unusedTertiaryMounts = 0
-        let frontSpinal = false
-        let midSpinal = false
-        let rearSpinal = false
-        let accel = 0
-        let deltaV = 0
-
-        if (modulesUseEffect.length === 0) {
-            frontdDR = 0
-            middDR = 0
-            reardDR = 0
-            hardenedArmorCost = 0
-            ramRocketCost = 0
-            singularityDriveCost = 0
-            cost = 0
-            workspaces = 0
-            defensiveECMTL = 0
-            defensiveECMBonus = 0
-            powerDemand = 0
-            powerGeneration = 0
-            cabinsCapacity = 0
-            shortOccupancyCrew = 0
-            shortOccupancyPassengers = 0
-            longOccupancy = 0
-            areas = 0
-            seats = 0
-            controlStations = 0
-            engineRoomCount = 0
-            fuelLoad = 0
-            jumpGate = 0
-            maxFTL = 0
-            uPressCargo = 0
-            arrayLevel = 0
-            facValueHour = 0
-            facWeightHour = 0
-            launchRate = 0
-            hangarCapacity = 0
-            miningCapacity = 0
-            refineryCapacity = 0
-            spinalMounts = 0
-            majorMounts = 0
-            majorMountLocation = [[0], [0], [0]]
-            unusedMajorMounts = 0
-            mediumMounts = 0
-            mediumMountLocation = [[0], [0], [0]]
-            unusedMediumMounts = 0
-            secondaryMounts = 0
-            secondaryMountLocation = [[0], [0], [0]]
-            unusedSecondaryMounts = 0
-            tertiaryMounts = 0
-            tertiaryMountLocation = [[0], [0], [0]]
-            unusedTertiaryMounts = 0
-            frontSpinal = false
-            midSpinal = false
-            rearSpinal = false
-            accel = 0
-            deltaV = 0
-            tankCount = 0
-        }
-
-        function updatedDR(currentModuleLocation, dDRValue) {
-            if (currentModuleLocation === 'front') {
-                frontdDR += dDRValue
-            } else if (currentModuleLocation === 'middle') {
-                middDR += dDRValue
-            } else if (currentModuleLocation === 'rear') {
-                reardDR += dDRValue
-            }
-        }
-
-        function updateHardenedArmorCost(currentModuleKey, moduleCost) {
-            if (!excludedArmors.includes(currentModuleKey)) {
-                hardenedArmorCost += moduleCost
-            }
-        }
-
-        function updateRamRocketCost(currentModuleKey, moduleCost) {
-            if (validRamEngineArray.includes(currentModuleKey)) {
-                ramRocketCost += moduleCost
-            }
-        }
-
-        for (let i = 0; i < modulesUseEffect.length; i++) {
-            let currentModuleKey = modulesUseEffect[i].moduleKey;
-            let currentModuleLocation = modulesUseEffect[i].moduleLocation1;
-            let currentModuleLocation2 = modulesUseEffect[i].moduleLocation2;
-            let moduleKeyObj = modulesUseEffectData[currentModuleKey];
-            let moduleCategory = moduleKeyObj[0].Category;
-            let moduleRepairSkill = moduleKeyObj[0].RepairSkill;
-            let modulePowerGeneration = moduleKeyObj[0].PowerGeneration;
-            let modulePowerDemand = moduleKeyObj[0].PowerDemand;
-            let moduleLocation = moduleKeyObj[0].Location;
-            let moduleTL = moduleKeyObj[0].TL;
-            let SMData = moduleKeyObj.find(module => module.SM === shipSM);
-            let moduleCost = SMData.cost;
-            let moduleWorkspaces = SMData.Workspaces;
-
-            cost += moduleCost;
-            workspaces += moduleWorkspaces;
-            powerDemand += modulePowerDemand;
-            powerGeneration += modulePowerGeneration;
-            shortOccupancyCrew += SMData.Workspaces
-
-            switch (moduleCategory) {
-                case 'Armor and Survivability':
-                    if (currentModuleKey.includes('Armor')) {
-                        let unStreamlineddDR = SMData.USdDR
-                        let streamlineddDR = SMData.SdDR
-
-                        switch (shipStreamlinedUn) {
-                            case 'streamlined':
-                                updatedDR(currentModuleLocation, streamlineddDR)
-                                updateHardenedArmorCost(currentModuleKey, moduleCost)
-                                break;
-                            case 'unstreamlined':
-                                updatedDR(currentModuleLocation, unStreamlineddDR)
-                                updateHardenedArmorCost(currentModuleKey, moduleCost)
-                                break;
-                            default:
-                                frontdDR = 'System Error'
-                                middDR = 'System Error'
-                                reardDR = 'System Error'
-                                hardenedFrontdDR = 'System Error'
-                                hardenedMiddDR = 'System Error'
-                                hardenedReardDR = 'System Error'
-                                break;
-                        }
-                        break;
-                    }
-
-                    if (currentModuleKey === 'Defensive ECM') {
-                        defensiveECMTL = shipTL
-                        if (defensiveECMBonus >= 6) {
-                            defensiveECMBonus = 'Invalid.'
-                        } else {
-                            defensiveECMBonus += 2
-                        }
-                    }
-
-                    if (currentModuleKey.includes('Force Screen')) {
-                        let forcedDR = SMData.dDr
-                        frontdDR += forcedDR
-                        middDR += forcedDR
-                        reardDR += forcedDR
-                    }
-                    break;
-
-                case 'Crew':
-                    if (currentModuleKey === 'Habitat') {
-                        cabinsCapacity += SMData.Cabins
-                        longOccupancy += SMData.Cabins * 2
-                    }
-
-                    if (currentModuleKey === 'Open Space') {
-                        areas += SMData.Areas
-                        shortOccupancyPassengers += 100
-                    }
-
-                    if (currentModuleKey === 'Passenger Seating') {
-                        seats += SMData.Seats
-                        shortOccupancyPassengers += SMData.Seats
-                    }
-                    break;
-
-                case 'Engineering':
-                    if (currentModuleKey === 'Control Room') {
-                        controlStations = SMData.ControlStations
-                        shortOccupancyCrew += SMData.ControlStations
-                    }
-                    if (currentModuleKey === 'Engine Room') {
-                        controlStations += 1
-                        shortOccupancyCrew += 1
-                    }
-                    break;
-
-                case 'Power':
-
-                    break;
-
-                case 'Propulsion':
-                    if (currentModuleKey === 'Fuel Tank') {
-                        fuelLoad += SMData.Fuel
-                    }
-                    if (currentModuleKey === 'Jump Gate') {
-                        jumpGate += SMData.MaxTonnage
-                    }
-                    if (currentModuleKey === 'Jump Gate') {
-                        jumpGate += SMData.MaxTonnage
-                    }
-                    if (currentModuleKey === 'Stardrive Engine') {
-                        maxFTL += 1
-                        singularityDriveCost += moduleCost
-                    }
-                    if (currentModuleKey === 'Super Stardrive Engine') {
-                        maxFTL += 2
-                        singularityDriveCost += moduleCost
-                    }
-                    break;
-
-                case 'Utility':
-                    if (currentModuleKey === 'Cargo Hold') {
-                        uPressCargo += SMData.LoadUPr
-                    }
-                    if (currentModuleKey === "Sensor Array, Science"
-                        || currentModuleKey === "Sensor Array, Tactical"
-                        || currentModuleKey === "Sensor Array, Enhanced"
-                        || currentModuleKey === "Sensor Array, Multipurpose") {
-                        let TL = shipTL
-                        switch (shipSM) {
-                            case 5:
-                                arrayLevel = TL - 4
-                                break;
-                            case 6:
-                                arrayLevel = TL - 3
-                                break;
-                            case 7:
-                                arrayLevel = TL - 2
-                                break;
-                            case 8:
-                                arrayLevel = TL - 1
-                                break;
-                            case 9:
-                                arrayLevel = TL
-                                break;
-                            case 10:
-                                arrayLevel = TL + 1
-                                break;
-                            case 11:
-                                arrayLevel = TL + 2
-                                break;
-                            case 12:
-                                arrayLevel = TL + 3
-                                break;
-                            case 13:
-                                arrayLevel = TL + 4
-                                break;
-                            case 14:
-                                arrayLevel = TL + 5
-                                break;
-                            case 15:
-                                arrayLevel = TL + 6
-                                break;
-
-                            default:
-                                arrayLevel = 'Error'
-                                break;
-                        }
-                        setCommSensorLvl(arrayLevel)
-                    }
-                    if (currentModuleKey === 'Factory, Replicator') {
-                        facWeightHour += SMData.lbsHr
-
-                    } else if (currentModuleKey === 'Factory, Nanofactory' || 'Factory, Robofac' || 'Factory, Fabricator') {
-                        facValueHour += SMData.$Hr
-                    }
-                    if (currentModuleKey === 'Hangar Bay') {
-                        hangarCapacity += SMData.Capacity
-                        launchRate += SMData.LaunchRate
-                    }
-                    if (currentModuleKey === 'Mining and Refinery') {
-                        miningCapacity += SMData.TonsHrMining
-                        refineryCapacity += SMData.TonsHrRefinery
-                    }
-                    break;
-
-                case 'Weapons':
-
-                    function handleWeaponLocationEmpty(mountLocationArray, index) {
-                        if (mountLocationArray[index][0] === 0) {
-                            mountLocationArray[index][0] = 1
-                        } else {
-                            mountLocationArray[index].push(1)
-                        }
-                    }
-
-                    if (currentModuleKey === 'Major Battery') {
-                        majorMounts += 1
-                        unusedMajorMounts += 1
-                        switch (currentModuleLocation) {
-                            case 'front':
-                                handleWeaponLocationEmpty(majorMountLocation, 0)
-                                break;
-                            case 'middle':
-                                handleWeaponLocationEmpty(majorMountLocation, 1)
-                                break;
-                            case 'rear':
-                                handleWeaponLocationEmpty(majorMountLocation, 2)
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                    if (currentModuleKey === 'Medium Battery') {
-                        mediumMounts += 1
-                        unusedMediumMounts += 3
-                        switch (currentModuleLocation) {
-                            case 'front':
-                                handleWeaponLocationEmpty(mediumMountLocation, 0)
-                                break;
-                            case 'middle':
-                                handleWeaponLocationEmpty(mediumMountLocation, 1)
-                                break;
-                            case 'rear':
-                                handleWeaponLocationEmpty(mediumMountLocation, 2)
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                    if (currentModuleKey === 'Secondary Battery') {
-                        secondaryMounts += 1
-                        unusedSecondaryMounts += 10
-                        switch (currentModuleLocation) {
-                            case 'front':
-                                handleWeaponLocationEmpty(secondaryMountLocation, 0)
-                                break;
-                            case 'middle':
-                                handleWeaponLocationEmpty(secondaryMountLocation, 1)
-                                break;
-                            case 'rear':
-                                handleWeaponLocationEmpty(secondaryMountLocation, 2)
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                    if (currentModuleKey === 'Tertiary Battery') {
-                        tertiaryMounts += 1
-                        unusedTertiaryMounts += 30
-                        switch (currentModuleLocation) {
-                            case 'front':
-                                handleWeaponLocationEmpty(tertiaryMountLocation, 0)
-                                break;
-                            case 'middle':
-                                handleWeaponLocationEmpty(tertiaryMountLocation, 1)
-                                break;
-                            case 'rear':
-                                handleWeaponLocationEmpty(tertiaryMountLocation, 2)
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                    if (currentModuleKey === 'Spinal Battery') {
-                        if (currentModuleLocation === 'front') {
-                            frontSpinal = true;
-                        } else if (currentModuleLocation === 'middle') {
-                            midSpinal = true;
-                        } else if (currentModuleLocation === 'rear') {
-                            rearSpinal = true;
-                        }
-                        spinalMounts = 0;
-                        if (frontSpinal && midSpinal && rearSpinal) {
-                            spinalMounts = 1
-                        } else {
-                            if (frontSpinal) spinalMounts += 0.33;
-                            if (midSpinal) spinalMounts += 0.33;
-                            if (rearSpinal) spinalMounts += 0.33;
-                        }
-
-                    }
-
-                    break;
-
-                case 'Engine, Chemical & HEDM':
-                    accel += moduleKeyObj[0].Accel
-                    deltaV = deltaVMultiplier(moduleKeyObj[0].mpsTank, tankCount)
-                    break;
-
-                case 'Engine, Electric':
-                    accel += moduleKeyObj[0].Accel
-                    deltaV = deltaVMultiplier(moduleKeyObj[0].mpsTank, tankCount)
-                    break;
-
-                case 'Engine, Fission':
-                    accel += moduleKeyObj[0].Accel
-                    deltaV = deltaVMultiplier(moduleKeyObj[0].mpsTank, tankCount)
-                    updateRamRocketCost(currentModuleKey, moduleCost)
-                    break;
-
-                case 'Engine, Nuclear Pulse':
-                    accel += moduleKeyObj[0].Accel
-                    deltaV = deltaVMultiplier(moduleKeyObj[0].mpsTank, tankCount)
-                    updateRamRocketCost(currentModuleKey, moduleCost)
-                    break;
-
-                case 'Engine, Fusion':
-                    accel += moduleKeyObj[0].Accel
-                    deltaV = deltaVMultiplier(moduleKeyObj[0].mpsTank, tankCount)
-                    updateRamRocketCost(currentModuleKey, moduleCost)
-                    break;
-                case 'Engine, TotalConv. & Antimatter':
-                    accel += moduleKeyObj[0].Accel
-                    deltaV = deltaVMultiplier(moduleKeyObj[0].mpsTank, tankCount)
-                    updateRamRocketCost(currentModuleKey, moduleCost)
-                    break;
-
-                case 'Reactionless Engine':
-                    accel += moduleKeyObj[0].Accel
-                    deltaV = Infinity
-                    singularityDriveCost += moduleCost
-                    break;
-                default:
-                    break;
-            }
-
-            setFrontdDR(frontdDR)
-            setBaseFrontdDR(frontdDR)
-            setMiddDR(middDR)
-            setBaseMiddDR(middDR)
-            setReardDR(reardDR)
-            setBaseReardDR(reardDR)
-            setHardenedArmorCost(hardenedArmorCost)
-            setShipDefensiveECMBonus(defensiveECMBonus)
-            setShipDefensiveECMTL(defensiveECMTL)
-            setTotalModulesCost(cost)
-            setWorkspaces(workspaces)
-            setBaseWorkspaces(workspaces)
-            setCabinsCapacity(cabinsCapacity)
-            setLongOccupancy(longOccupancy)
-            setShortOccupancy(shortOccupancyCrew + shortOccupancyPassengers)
-            setShortOccupancyCrew(shortOccupancyCrew)
-            setShortOccupancyPassengers(shortOccupancyPassengers)
-            setShipCabins(cabinsCapacity)
-            setShipAreas(areas)
-            setShipSeats(seats)
-            setPowerDemand(powerDemand)
-            setPowerGen(powerGeneration)
-            setControlStations(controlStations)
-            setFuelLoad(fuelLoad)
-            setJumpGateMax(jumpGate)
-            setMaxFTL(maxFTL)
-            setUPressCargo(uPressCargo)
-            setUPressCargoCapacity(uPressCargo)
-            setFacValueHour(facValueHour)
-            setFacWeightHour(facWeightHour)
-            setShipLaunchRate(launchRate)
-            setShipHangarCapacity(hangarCapacity)
-            setMiningCapacity(miningCapacity)
-            setRefineryCapacity(refineryCapacity)
-            setSpinalMounts(spinalMounts)
-            setUnusedSpinalMounts(spinalMounts)
-            setMajorMounts(majorMounts)
-            setMediumMounts(mediumMounts)
-            setSecondaryMounts(secondaryMounts)
-            setTertiaryMounts(tertiaryMounts)
-            setMajorMountLocation(majorMountLocation)
-            setMediumMountLocation(mediumMountLocation)
-            setSecondaryMountLocation(secondaryMountLocation)
-            setTertiaryMountLocation(tertiaryMountLocation)
-            setUnusedMajorWeapons(unusedMajorMounts)
-            setUnusedMediumWeapons(unusedMediumMounts)
-            setUnusedSecondaryWeapons(unusedSecondaryMounts)
-            setUnusedTertiaryWeapons(unusedTertiaryMounts)
-            setAccel(accel)
-            setDeltaV(deltaV)
-            setRamRocketCost(ramRocketCost)
-            setSingularityDriveCost(singularityDriveCost)
-        }
-    }, [shipModules, shipStreamlinedUn, shipTL, shipSM, superScienceChecked, shipTotalModulesCost]);
 
     // This useEffect handles changes to the shipdDR values to update the displaydDR value.
     useEffect(() => {
@@ -951,32 +476,1093 @@ const CreateShipClass = ({ isExpanded }) => {
     }, [shipAccel, shipDeltaV])
 
     // This function handles changes to the shipModules array and updates the state variable.
-    const handleSetModules = (moduleKey, moduleCategory, moduleLocation1, moduleLocation2, moduleNumber) => {
+    const handleSetModules = (moduleKey, moduleCategory, moduleLocation1, moduleLocation2, moduleNumber, moduleCost, moduleWorkspaces, fuelTypes) => {
+        const [rowIndex, colIndex] = getModuleIndex(moduleLocation1, moduleNumber);
+
         let newModuleList = [...shipModules];
+
         let newModuleListObj = {
             moduleKey: moduleKey,
             moduleCategory: moduleCategory,
             moduleLocation1: moduleLocation1,
             moduleLocation2: moduleLocation2,
-            moduleNumber: moduleNumber
+            moduleNumber: moduleNumber,
+            baseModuleCost: moduleCost,
+            moduleCost: moduleCost,
+            baseModuleWorkspaces: moduleWorkspaces,
+            moduleWorkspaces: moduleWorkspaces,
+            alreadyCustomized: false
         }
-        let existingModuleIndex = newModuleList.findIndex(module => module.moduleLocation1 === moduleLocation1 && module.moduleNumber === moduleNumber);
-        if (moduleKey === '') {
-            newModuleList.splice(existingModuleIndex, 1);
-        } else {
-            if (existingModuleIndex !== -1) {
-                newModuleList.splice(existingModuleIndex, 1, newModuleListObj);
-            } else {
-                newModuleList.push(newModuleListObj);
+
+        if (fuelTypes) {
+            newModuleListObj.fuelTypes = fuelTypes
+        }
+
+        function highAndTotalAutomation() {
+            newModuleListObj.customizable = true;
+            if (moduleWorkspaces > 0) {
+                newModuleListObj.totalAutomation = false;
             }
+            if (moduleWorkspaces > 0 && shipSM >= 12) {
+                newModuleListObj.highAutomation = false;
+            }
+        }
+
+        function highAndTotalAutomationOnly() {
+            if (moduleWorkspaces > 0) {
+                newModuleListObj.totalAutomation = false;
+                newModuleListObj.customizable = true;
+                if (shipSM >= 12) {
+                    newModuleListObj.highAutomation = false;
+                }
+            } else {
+                newModuleListObj.customizable = false;
+            }
+        }
+
+        function reactorGenAndLife(powerGen, internalLifespan) {
+            newModuleListObj.powerGen = powerGen;
+            newModuleListObj.internalLifespan = internalLifespan;
+        }
+
+        function addArmorValues(unstreamlinedArmor, streamlinedArmor) {
+            newModuleListObj.baseModuleStreamlineddDR = streamlinedArmor;
+            newModuleListObj.baseModuleUnstreamlineddDR = unstreamlinedArmor;
+            newModuleListObj.moduledDR = 0;
+        }
+
+        const moduleKeyObj = shipData[moduleKey];
+        const SMData = moduleKeyObj.find(module => module.SM === shipSM);
+
+        switch (moduleKey) {
+            case "Control Room":
+                highAndTotalAutomation();
+                newModuleListObj.controlStations = SMData.ControlStations;
+                newModuleListObj.defaultControlStations = defaultNumberControlStations;
+                break;
+            case "Armor, Exotic Laminate":
+                newModuleListObj.customizable = true;
+                newModuleListObj.hardenedArmor = false;
+                newModuleListObj.indestructibleArmor = false;
+                addArmorValues(SMData.USdDR, SMData.SdDR)
+                break;
+            case "Armor, Diamondoid":
+            case "Armor, Nanocomposite":
+            case "Armor, Advanced Metallic Laminate":
+            case "Armor, Metallic Laminate":
+            case "Armor, Light Alloy":
+            case "Armor, Steel":
+                newModuleListObj.customizable = true;
+                newModuleListObj.hardenedArmor = false;
+                addArmorValues(SMData.USdDR, SMData.SdDR)
+                break;
+            case "Armor, Organic":
+            case "Armor, Stone":
+            case "Armor, Ice":
+                addArmorValues(SMData.USdDR, SMData.SdDR)
+                newModuleListObj.customizable = false;
+                break;
+            case "Spinal Battery":
+            case "Major Battery":
+            case "Medium Battery":
+            case "Secondary Battery":
+            case "Tertiary Battery":
+                highAndTotalAutomation();
+                newModuleListObj.graviticFocus = false;
+                newModuleListObj.mountedWeapons = [];
+                break;
+            case "Solar Panel Array":
+                highAndTotalAutomationOnly();
+                reactorGenAndLife(1, Infinity);
+                break;
+            case "Reactor, Super Fusion":
+                highAndTotalAutomation();
+                reactorGenAndLife(4, shipTL === 11 ? 400 : shipTL === 12 ? 1000 : 400)
+                break;
+            case "Reactor, Total Conversion":
+                highAndTotalAutomationOnly();
+                reactorGenAndLife(5, Infinity);
+                break;
+            case "Reactor, Antimatter":
+                highAndTotalAutomation();
+                reactorGenAndLife(4, shipTL === 10 ? 2 : shipTL === 11 ? 20 : 200)
+                break;
+            case "Reactor, Fusion":
+                highAndTotalAutomation();
+                reactorGenAndLife(2, shipTL === 9 ? 50 : shipTL === 10 ? 200 : shipTL === 11 ? 600 : 1500)
+                break;
+            case "Reactor, Fission":
+                highAndTotalAutomationOnly();
+                reactorGenAndLife(1, shipTL === 8 ? 25 : shipTL === 9 ? 50 : 75)
+                break;
+            case "Chemical, MHD Turbine":
+                highAndTotalAutomation();
+                newModuleListObj.powerGen = 2;
+                newModuleListObj.internalLifespan = shipTL === 9 ? 6 : shipTL === 10 ? 12 : 12;
+                break;
+            case "Chemical, Fuel Cell":
+                highAndTotalAutomation();
+                newModuleListObj.powerGen = 1;
+                newModuleListObj.internalLifespan = shipTL === 7 ? 3 : shipTL === 8 ? 6 : shipTL === 9 ? 12 : 24;
+                break;
+            case "Jump Gate":
+                highAndTotalAutomation();
+                newModuleListObj.combinedGates = 0;
+                break;
+            case "Hangar Bay":
+                highAndTotalAutomation();
+                newModuleListObj.combinedBays = 0;
+                break;
+            case "Habitat":
+                highAndTotalAutomation();
+                newModuleListObj.baseCabins = SMData.Cabins;
+                newModuleListObj.customizedCabins = {};
+                newModuleListObj.steerageCargo = 0;
+                newModuleListObj.totalLifeSupport = false;
+                break;
+            case "Open Space":
+                highAndTotalAutomation();
+                newModuleListObj.customizedAreas = {};
+                newModuleListObj.baseAreas = SMData.Areas;
+                break;
+            case "Fuel Tank":
+                newModuleListObj.customizable = true;
+                newModuleListObj.assignedContents = '';
+                newModuleListObj.fuelLoad = SMData.Fuel;
+                break;
+            case "Force Screen, TL12 Heavy":
+            case "Force Screen, TL12 Light":
+            case "Force Screen, TL11 Heavy":
+            case "Force Screen, TL11 Light":
+                highAndTotalAutomation();
+                newModuleListObj.screendDR = SMData.dDr;
+                newModuleListObj.mandatorySwitch = false;
+                newModuleListObj.adjustableScreen = false;
+                newModuleListObj.cloakingScreen = false;
+                newModuleListObj.energyScreen = false;
+                newModuleListObj.hardenedScreen = false;
+                newModuleListObj.kineticScreen = false;
+                newModuleListObj.nuclearDamperScreen = false;
+                newModuleListObj.opaqueScreen = false;
+                newModuleListObj.partialScreen = false;
+                newModuleListObj.realityStabilizedScreen = false;
+                newModuleListObj.twoWayScreen = false;
+                newModuleListObj.velocityScreen = false;
+                break;
+            case "Cargo Hold":
+                highAndTotalAutomation();
+                newModuleListObj.baseUPressCargoCapacity = SMData.LoadUPr;
+                newModuleListObj.uPressCargoCapacity = SMData.LoadUPr;
+                newModuleListObj.refrigeratedCargo = 0;
+                newModuleListObj.shieldedCargo = 0;
+                break;
+            case "Sensor Array, Multipurpose":
+            case "Sensor Array, Science":
+                highAndTotalAutomation();
+                newModuleListObj.ftlCommArray = false;
+                newModuleListObj.ftlSensorArray = false;
+                newModuleListObj.multiScannerArray = false;
+                break;
+            case "Sensor Array, Tactical":
+            case "Sensor Array, Enhanced":
+                highAndTotalAutomation();
+                newModuleListObj.ftlCommArray = false;
+                newModuleListObj.ftlSensorArray = false;
+                break;
+            case "Super Reactionless":
+            case "Hot Reactionless":
+            case "Standard":
+            case "Rotary":
+            case "Subwarp":
+                highAndTotalAutomation();
+                newModuleListObj.pseudoVelocity = false;
+                newModuleListObj.singularityDrive = false;
+                newModuleListObj.driveField = false;
+                newModuleListObj.negativeMassPropulsionDrive = false;
+                break;
+            case "Super Stardrive Engine":
+            case "Stardrive Engine":
+                highAndTotalAutomation();
+                newModuleListObj.driveField = false;
+                newModuleListObj.pseudoVelocity = false;
+                newModuleListObj.singularityDrive = false;
+                newModuleListObj.stardriveFuel = false;
+                newModuleListObj.fuelTanks = 0;
+                newModuleListObj.reactionlessEngineSuper = false;
+                newModuleListObj.reactionlessEngineHot = false;
+                newModuleListObj.reactionlessEngineStandard = false;
+                newModuleListObj.reactionlessEngineRotary = false;
+                newModuleListObj.reactionlessEngineExtraCost = false;
+                break;
+            case "Antimatter Plasma Torch":
+            case "Super Antimatter Plasma Torch":
+            case "Antimatter Thermal Rocket":
+            case "Super Fusion Torch":
+            case "Fusion Torch":
+                highAndTotalAutomation();
+                newModuleListObj.ramRocket = false;
+                newModuleListObj.highThrust = false;
+                break;
+            case "Nuclear Thermal Rocket":
+                highAndTotalAutomation();
+                newModuleListObj.ramRocket = false;
+                break;
+            case "Super Conversion Torch":
+            case "Total Conversion Torch":
+            case "Antimatter Pion Torch":
+            case "Antimatter Pion":
+            case "Antimatter Plasma Rocket":
+            case "Fusion Rocket":
+            case "Super Fusion Pulse Drive":
+            case "Advanced Fusion Pulse Drive":
+            case "Fusion Pulse Drive":
+            case "External Pulsed Plasma":
+            case "Mass Driver":
+            case "Ion Drive":
+                highAndTotalAutomation();
+                newModuleListObj.highThrust = false;
+                break;
+            case "Factory, Nanofactory":
+            case "Factory, Robofac":
+            case "Factory, Fabricator":
+                highAndTotalAutomationOnly();
+                newModuleListObj.valuePerHour = SMData.$Hr;
+                break;
+            case "Factory, Replicator":
+                highAndTotalAutomationOnly();
+                newModuleListObj.weightPerHour = SMData.lbsHr;
+                break;
+            case "Refinery":
+                newModuleListObj.tonsPerHour = SMData.TonsHrRefinery;
+                highAndTotalAutomationOnly();
+                break;
+            case "Mining":
+                newModuleListObj.tonsPerHour = SMData.TonsHrMining;
+                highAndTotalAutomationOnly();
+                break;
+            case "Nuclear Saltwater Rocket":
+            case "Nuclear Light Bulb":
+            case "Jet Engine":
+            case "HEDM":
+            case "Chemical":
+            case "Stasis Web":
+            case "Robot Arm":
+            case "Ramscoop":
+            case "Engine Room":
+            case "Defensive ECM":
+            case "Contragravity Lifter":
+                highAndTotalAutomationOnly();
+                break;
+            default:
+                newModuleListObj.customizable = false;
+                break;
+        }
+
+        if (moduleKey === '') {
+            newModuleList[rowIndex].splice(colIndex, 1, {});
+        } else {
+            newModuleList[rowIndex].splice(colIndex, 1, newModuleListObj);
         }
         setModules(newModuleList);
     }
 
-    // This useEffect resets the selected modules array state variable when one of the dependencies change.
+
+    // This useCallback checks if modules are still valid based on SM, TL, superScience and other variable and deletes the if they aren't.
+    // It then updates the cost, workspace, and other values in each module array to match new SM, TL, etc.
+    const updateShipModules = useCallback((shipModules, shipData, shipSM, shipStreamlinedUn, shipTL, shipReardDR, superScienceChecked) => {
+
+        let newShipModules = shipModules.map(row => [...row]);
+        let currentShipModules = shipModules.map(row => [...row]);
+
+        processShipModules(newShipModules, (shipModule) => {
+            const moduleKey = shipModule.moduleKey;
+            const moduleKeyObj = shipData[moduleKey];
+            const SMData = moduleKeyObj.find(module => module.SM === shipSM);
+            const [rowIndex, colIndex] = getModuleIndex(shipModule.moduleLocation1, shipModule.moduleNumber);
+
+            let isValid = false;
+
+            if (
+                (moduleKeyObj[0].SuperScience === true && superScienceChecked === true || moduleKeyObj[0].SuperScience === false)
+                && (moduleKeyObj[0].TL <= shipTL)
+                && (moduleKey !== 'Engine Room' || moduleKey === 'Engine Room' && shipSM <= 9)
+                && (moduleKey !== 'Open Space' || moduleKey === 'Open Space' && shipSM >= 8)
+                && (moduleKey !== 'Habitat' || moduleKey === 'Habitat' && shipSM >= 6)
+                && (moduleKey !== 'Armor, Ice' || moduleKey === 'Armor, Ice' && shipSM >= 8 && shipStreamlinedUn === 'unstreamlined')
+                && (moduleKey !== 'Armor, Stone' || moduleKey === 'Armor, Stone' && shipSM >= 7 && shipStreamlinedUn === 'unstreamlined')
+                && (moduleKey !== 'Engine Room' || moduleKey === 'Engine Room' && shipSM <= 9)
+                && (moduleKey !== 'Jump Gate' || moduleKey === 'Jump Gate' && shipSM >= 9)
+                && (moduleKey !== 'Factory, Replicator' || moduleKey === 'Factory, Replicator' && shipSM >= 6)
+                && (moduleKey !== 'Factory, Nanofactory' || moduleKey === 'Factory, Nanofactory' && shipSM >= 6)
+                && (moduleKey !== 'Factory, Robofac' || moduleKey === 'Factory, Robofac' && shipSM >= 6)
+                && (moduleKey !== 'Factory, Fabricator' || moduleKey === 'Factory, Fabricator' && shipSM >= 6)
+                && (moduleKey !== 'Secondary Battery' || moduleKey === 'Secondary Battery' && shipSM >= 6)
+                && (moduleKey !== 'Tertiary Battery' || moduleKey === 'Tertiary Battery' && shipSM >= 7)
+                && (moduleKey !== "External Pulsed Plasma" || moduleKey === "External Pulsed Plasma" && shipReardDR >= 50)
+            ) {
+                isValid = true;
+            } else {
+                newShipModules[rowIndex].splice(colIndex, 1, {});
+            }
+
+            function updateBaseCostAndWorkspaces() {
+                shipModule.baseModuleCost = SMData.cost;
+                shipModule.baseModuleWorkspaces = SMData.Workspaces;
+            }
+
+            if (isValid) {
+                switch (moduleKey) {
+                    case "Control Room":
+                        shipModule.defaultControlStations = SMData.ControlStations;
+                        updateBaseCostAndWorkspaces();
+                        break;
+                    case "Armor, Exotic Laminate":
+                    case "Armor, Diamondoid":
+                    case "Armor, Nanocomposite":
+                    case "Armor, Advanced Metallic Laminate":
+                    case "Armor, Metallic Laminate":
+                    case "Armor, Light Alloy":
+                    case "Armor, Steel":
+                    case "Armor, Organic":
+                    case "Armor, Stone":
+                    case "Armor, Ice":
+                        updateBaseCostAndWorkspaces()
+                        shipModule.baseModuleStreamlineddDR = SMData.SdDR;
+                        shipModule.baseModuleUnstreamlineddDR = SMData.USdDR;
+                        if (shipStreamlinedUn === 'streamlined') {
+                            shipModule.moduledDR = SMData.SdDR;
+                        } else {
+                            shipModule.moduledDR = SMData.USdDR
+                        }
+                        break;
+                    case "Spinal Battery":
+                    case "Major Battery":
+                    case "Medium Battery":
+                    case "Secondary Battery":
+                    case "Tertiary Battery":
+                        // Add logic to change weapon size based on SM here.
+                        updateBaseCostAndWorkspaces();
+                        break;
+                    case "Jump Gate":
+                        // Add logic to update gate capacity.
+                        updateBaseCostAndWorkspaces();
+                        break;
+                    case "Hangar Bay":
+                        // Add logic to update launch rate and capacity.
+                        updateBaseCostAndWorkspaces();
+                        break;
+                    case "Habitat":
+                        shipModule.baseCabins = SMData.Cabins;
+                        // Reset module if new SM has fewer cabins.
+                        updateBaseCostAndWorkspaces();
+                        break;
+                    case "Open Space":
+                        shipModule.baseAreas = SMData.Areas;
+                        // Reset module if new SM has fewer areas.
+                        updateBaseCostAndWorkspaces();
+                        break;
+                    case "Fuel Tank":
+                        shipModule.fuelLoad = SMData.Fuel;
+                        updateBaseCostAndWorkspaces();
+                        break;
+                    case "Force Screen, TL12 Heavy":
+                    case "Force Screen, TL12 Light":
+                    case "Force Screen, TL11 Heavy":
+                    case "Force Screen, TL11 Light":
+                        shipModule.screendDR = SMData.dDr;
+                        updateBaseCostAndWorkspaces();
+                        break;
+                    case "Cargo Hold":
+                        shipModule.baseUPressCargoCapacity = SMData.LoadUPr;
+                        // Reset module if new SM has less cargo space than refrigerated and shielded together.
+                        updateBaseCostAndWorkspaces();
+                        break;
+                    case "Refinery":
+                        updateBaseCostAndWorkspaces();
+                        shipModule.tonsPerHour = SMData.TonsHrRefinery;
+                        break;
+                    case "Mining":
+                        updateBaseCostAndWorkspaces();
+                        shipModule.tonsPerHour = SMData.TonsHrMining;
+                        break;
+                    case "Factory, Nanofactory":
+                    case "Factory, Robofac":
+                    case "Factory, Fabricator":
+                        updateBaseCostAndWorkspaces();
+                        shipModule.valuePerHour = SMData.$Hr;
+                        break;
+                    case "Factory, Replicator":
+                        updateBaseCostAndWorkspaces();
+                        shipModule.weightPerHour = SMData.lbsHr;
+                        break;
+                    case "Solar Panel Array":
+                    case "Reactor, Super Fusion":
+                    case "Reactor, Total Conversion":
+                    case "Reactor, Antimatter":
+                    case "Reactor, Fusion":
+                    case "Reactor, Fission":
+                    case "Chemical, MHD Turbine":
+                    case "Chemical, Fuel Cell":
+                        // Add logic to update internalLifespan.
+                        updateBaseCostAndWorkspaces();
+                        break;
+                    case "Sensor Array, Multipurpose":
+                    case "Sensor Array, Science":
+                    case "Sensor Array, Tactical":
+                    case "Sensor Array, Enhanced":
+                    case "Super Reactionless":
+                    case "Hot Reactionless":
+                    case "Standard":
+                    case "Rotary":
+                    case "Subwarp":
+                    case "Super Stardrive Engine":
+                    case "Stardrive Engine":
+                    case "Antimatter Plasma Torch":
+                    case "Super Antimatter Plasma Torch":
+                    case "Antimatter Thermal Rocket":
+                    case "Super Fusion Torch":
+                    case "Fusion Torch":
+                    case "Nuclear Thermal Rocket":
+                    case "Super Conversion Torch":
+                    case "Total Conversion Torch":
+                    case "Antimatter Pion Torch":
+                    case "Antimatter Pion":
+                    case "Antimatter Plasma Rocket":
+                    case "Fusion Rocket":
+                    case "Super Fusion Pulse Drive":
+                    case "Advanced Fusion Pulse Drive":
+                    case "Fusion Pulse Drive":
+                    case "External Pulsed Plasma":
+                    case "Mass Driver":
+                    case "Ion Drive":
+                    case "Nuclear Saltwater Rocket":
+                    case "Nuclear Light Bulb":
+                    case "Jet Engine":
+                    case "HEDM":
+                    case "Chemical":
+                    case "Stasis Web":
+                    case "Robot Arm":
+                    case "Ramscoop":
+                    case "Engine Room":
+                    case "Defensive ECM":
+                    case "Contragravity Lifter":
+                        updateBaseCostAndWorkspaces();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+        if (JSON.stringify(newShipModules) !== JSON.stringify(currentShipModules)) {
+            setShipModules(newShipModules);
+        }
+    }, []);
+
     useEffect(() => {
-        setModules([]);
-    }, [shipSM, shipTL, superScienceChecked, shipStreamlinedUn])
+        updateShipModules(shipModules, shipData, shipSM, shipStreamlinedUn, shipTL, shipReardDR, superScienceChecked)
+    }, [updateShipModules, shipModules, shipSM, shipStreamlinedUn, shipTL, shipReardDR, superScienceChecked])
+
+    // This useEffect handles changes to the selected module array to update overall ship statistics.
+    useEffect(() => {
+        const modulesUseEffect = shipModules;
+        const modulesUseEffectData = shipData;
+        let tankCount = shipModules.filter(module => module.moduleKey === 'Fuel Tank').length;
+        let frontdDR = 0;
+        let middDR = 0;
+        let reardDR = 0;
+        let cost = 0;
+        let workspaces = 0;
+        let defensiveECMTL = 0;
+        let defensiveECMBonus = 0;
+        let powerDemand = 0;
+        let powerGeneration = 0;
+        let cabinsCapacity = 0;
+        let shortOccupancyCrew = 0;
+        let shortOccupancyPassengers = 0;
+        let longOccupancy = 0;
+        let areas = 0;
+        let seats = 0;
+        let cabins = 0;
+        let bunkrooms = 0;
+        let cells = 0;
+        let luxuryCabins = 0;
+        let briefingRooms = 0;
+        let establishments = 0;
+        let offices = 0;
+        let labs = 0;
+        let physicsLabs = 0;
+        let superScienceLabs = 0;
+        let hibernationChambers = 0;
+        let fabricators = 0;
+        let roboFacs = 0;
+        let nanoFacs = 0;
+        let replicators = 0;
+        let sickbays = 0;
+        let sickbaysAuto = 0;
+        let teleProjectors = 0;
+        let teleProjectorsSend = 0;
+        let teleProjectorsReceive = 0;
+        let farms = 0;
+        let gardens = 0;
+        let pools = 0;
+        let theaters = 0;
+        let zoos = 0;
+        let gyms = 0;
+        let controlStations = 0;
+        let fuelLoad = 0;
+        let jumpGate = 0;
+        let maxFTL = 0;
+        let uPressCargo = 0;
+        let arrayLevel = 0;
+        let facValueHour = 0;
+        let facWeightHour = 0;
+        let launchRate = 0;
+        let hangarCapacity = 0;
+        let miningCapacity = 0;
+        let refineryCapacity = 0;
+        let spinalMounts = 0;
+        let majorMounts = 0;
+        let mediumMounts = 0;
+        let secondaryMounts = 0;
+        let tertiaryMounts = 0;
+        let frontSpinal = false;
+        let midSpinal = false;
+        let rearSpinal = false;
+        let accel = 0;
+        let deltaV = 0;
+
+        // if (modulesUseEffect.length === 0) {
+        //     frontdDR = 0
+        //     middDR = 0
+        //     reardDR = 0
+        //     cost = 0
+        //     workspaces = 0
+        //     defensiveECMTL = 0
+        //     defensiveECMBonus = 0
+        //     powerDemand = 0
+        //     powerGeneration = 0
+        //     cabinsCapacity = 0
+        //     shortOccupancyCrew = 0
+        //     shortOccupancyPassengers = 0
+        //     longOccupancy = 0
+        //     areas = 0
+        //     seats = 0
+        //     controlStations = 0
+        //     engineRoomCount = 0
+        //     fuelLoad = 0
+        //     jumpGate = 0
+        //     maxFTL = 0
+        //     uPressCargo = 0
+        //     arrayLevel = 0
+        //     facValueHour = 0
+        //     facWeightHour = 0
+        //     launchRate = 0
+        //     hangarCapacity = 0
+        //     miningCapacity = 0
+        //     refineryCapacity = 0
+        //     spinalMounts = 0
+        //     majorMounts = 0
+        //     majorMountLocation = [[0], [0], [0]]
+        //     unusedMajorMounts = 0
+        //     mediumMounts = 0
+        //     mediumMountLocation = [[0], [0], [0]]
+        //     unusedMediumMounts = 0
+        //     secondaryMounts = 0
+        //     secondaryMountLocation = [[0], [0], [0]]
+        //     unusedSecondaryMounts = 0
+        //     tertiaryMounts = 0
+        //     tertiaryMountLocation = [[0], [0], [0]]
+        //     unusedTertiaryMounts = 0
+        //     frontSpinal = false
+        //     midSpinal = false
+        //     rearSpinal = false
+        //     accel = 0
+        //     deltaV = 0
+        //     tankCount = 0
+        // }
+
+        function updatedDR(currentModuleLocation, dDRValue) {
+            if (currentModuleLocation === 'front') {
+                frontdDR += dDRValue
+            } else if (currentModuleLocation === 'middle') {
+                middDR += dDRValue
+            } else if (currentModuleLocation === 'rear') {
+                reardDR += dDRValue
+            }
+        }
+
+        for (let rowIndex = 0; rowIndex < modulesUseEffect.length; rowIndex++) {
+            for (let colIndex = 0; colIndex < modulesUseEffect[rowIndex].length; colIndex++) {
+                let currentModule = modulesUseEffect[rowIndex][colIndex];
+                let currentModuleKey = currentModule.moduleKey;
+                if (Object.keys(currentModule).length === 0) {
+                    continue;
+                }
+                let currentModuleLocation = currentModule.moduleLocation1;
+                let moduleKeyObj = modulesUseEffectData[currentModuleKey];
+
+                let moduleCategory = moduleKeyObj[0].Category;
+                let modulePowerGeneration = moduleKeyObj[0].PowerGeneration;
+                let modulePowerDemand = moduleKeyObj[0].PowerDemand;
+                let SMData = moduleKeyObj.find(module => module.SM === shipSM);
+                let baseModuleCost = SMData.cost;
+                let moduleCost = currentModule.moduleCost;
+                let moduleWorkspaces = SMData.Workspaces;
+
+                switch (moduleCategory) {
+                    case 'Armor and Survivability':
+                        if (currentModuleKey.includes('Armor')) {
+                            let unStreamlineddDR = SMData.USdDR
+                            let streamlineddDR = SMData.SdDR
+
+                            switch (shipStreamlinedUn) {
+                                case 'streamlined':
+                                    if (currentModuleKey === "Armor, Exotic Laminate") {
+                                        if (currentModule.hardenedArmor === true) {
+                                            moduleCost = currentModule.baseModuleCost * 2;
+                                        }
+                                        if (currentModule.indestructibleArmor === true) {
+                                            moduleCost = baseModuleCost * 10;
+                                            streamlineddDR = Infinity;
+                                        }
+                                        updatedDR(currentModuleLocation, streamlineddDR)
+                                    } else {
+                                        if (currentModule.hardenedArmor === true) {
+                                            moduleCost = baseModuleCost * 2;
+                                        }
+                                        updatedDR(currentModuleLocation, streamlineddDR)
+                                    }
+                                    break;
+                                case 'unstreamlined':
+                                    if (currentModuleKey === "Armor, Exotic Laminate") {
+                                        if (currentModule.hardenedArmor === true) {
+                                            moduleCost = baseModuleCost * 2;
+                                        }
+                                        if (currentModule.indestructibleArmor === true) {
+                                            moduleCost = baseModuleCost * 10;
+                                            streamlineddDR = Infinity;
+                                        }
+                                        updatedDR(currentModuleLocation, unStreamlineddDR)
+                                    } else {
+                                        if (currentModule.hardenedArmor === true) {
+                                            moduleCost = baseModuleCost * 2;
+                                        }
+                                        updatedDR(currentModuleLocation, unStreamlineddDR)
+                                    }
+                                    break;
+                                default:
+                                    frontdDR = 'System Error'
+                                    middDR = 'System Error'
+                                    reardDR = 'System Error'
+                                    hardenedFrontdDR = 'System Error'
+                                    hardenedMiddDR = 'System Error'
+                                    hardenedReardDR = 'System Error'
+                                    break;
+                            }
+                            break;
+                        }
+
+                        if (currentModuleKey === 'Defensive ECM') {
+                            defensiveECMTL = shipTL
+                            defensiveECMBonus += 2
+                        }
+
+                        if (currentModuleKey.includes('Force Screen')) {
+                            let forcedDR = SMData.dDr;
+                            moduleCost = baseModuleCost;
+
+                            if (currentModule.mandatorySwitch === false) {
+                                if (currentModule.adjustableScreen) {
+                                    moduleCost *= 2;
+                                }
+                                if (currentModule.cloakingScreen) {
+                                    moduleCost *= 2;
+                                }
+                                if (currentModule.energyScreen) {
+                                    moduleCost *= 0.5;
+                                }
+                                if (currentModule.hardenedScreen) {
+                                    moduleCost *= 1.5;
+                                }
+                                if (currentModule.kineticScreen) {
+                                    moduleCost *= 0.5;
+                                }
+                                if (currentModule.opaqueScreen) {
+                                    moduleCost *= 1.5;
+                                }
+                                if (currentModule.realityStabilizedScreen) {
+                                    moduleCost *= 2;
+                                }
+                                if (currentModule.twoWayScreen) {
+                                    moduleCost *= 0.6;
+                                }
+                                if (currentModule.velocityScreen) {
+                                    moduleCost *= 0.9;
+                                }
+                            }
+                            if (moduleCost < baseModuleCost * 0.1) {
+                                moduleCost = baseModuleCost * 0.1;
+                            }
+                            if (currentModule.nuclearDamperScreen) {
+                                forcedDR = 0;
+                            }
+                            if (partialScreen) {
+                                if (currentModuleLocation === 'front') {
+                                    frontdDR += forcedDR * 3;
+                                } else if (currentModuleLocation === 'middle') {
+                                    middDR += forcedDR * 3;
+                                } else if (currentModuleLocation === 'rear') {
+                                    reardDR += forcedDR * 3;
+                                } else {
+                                    console.log('Error: Invalid location for partial screen.');
+                                }
+                            } else {
+                                frontdDR += forcedDR;
+                                middDR += forcedDR;
+                                reardDR += forcedDR;
+                            }
+                        }
+                        break;
+
+                    case 'Crew':
+                        if (currentModuleKey === 'Habitat') {
+                            const defaultNumberCabins = SMData.Cabins
+                            if (Object.keys(currentModule.customizedCabins).length > 0) {
+                                longOccupancy += (currentModule.customizedCabins.cabins ?? 0) * 2;
+                                longOccupancy += (currentModule.customizedCabins.luxuryCabins ?? 0) * 2;
+                                longOccupancy += (currentModule.customizedCabins.bunkrooms ?? 0) * 4;
+                                longOccupancy += (currentModule.customizedCabins.cells ?? 0) * 4;
+                                longOccupancy += (currentModule.customizedCabins.hibernationChambers ?? 0) * 1;
+                                shortOccupancyCrew += (currentModule.customizedCabins.labs ?? 0) * 2;
+                                shortOccupancyCrew += (currentModule.customizedCabins.physicsLabs ?? 0) * 2;
+                                shortOccupancyCrew += (currentModule.customizedCabins.superScienceLabs ?? 0) * 2;
+                                shortOccupancyCrew += (currentModule.customizedCabins.establishments ?? 0) * 2;
+                                shortOccupancyCrew += (currentModule.customizedCabins.offices ?? 0) * 2;
+                                shortOccupancyPassengers += (currentModule.customizedCabins.brifingRooms ?? 0) * 10;
+                                shortOccupancyPassengers += (currentModule.customizedCabins.establishments ?? 0) * 30;
+
+                                cabins += currentModule.customizedCabins.cabins ?? 0;
+                                luxuryCabins += currentModule.customizedCabins.luxuryCabins ?? 0;
+                                bunkrooms += currentModule.customizedCabins.bunkrooms ?? 0;
+                                cells += currentModule.customizedCabins.cells ?? 0;
+                                hibernationChambers += currentModule.customizedCabins.hibernationChambers ?? 0;
+                                labs += currentModule.customizedCabins.labs ?? 0;
+                                physicsLabs += currentModule.customizedCabins.physicsLabs ?? 0;
+                                superScienceLabs += currentModule.customizedCabins.superScienceLabs ?? 0;
+                                establishments += currentModule.customizedCabins.establishments ?? 0;
+                                offices += currentModule.customizedCabins.offices ?? 0;
+                                briefingRooms += currentModule.customizedCabins.briefingRooms ?? 0;
+                                fabricators += currentModule.customizedCabins.fabricators ?? 0;
+                                roboFacs += currentModule.customizedCabins.roboFacs ?? 0;
+                                nanoFacs += currentModule.customizedCabins.nanoFacs ?? 0;
+                                replicators += currentModule.customizedCabins.replicators ?? 0;
+                                sickbays += currentModule.customizedCabins.sickbays ?? 0;
+                                sickbaysAuto += currentModule.customizedCabins.sickbaysAuto ?? 0;
+                                teleProjectors += currentModule.customizedCabins.teleProjectors ?? 0;
+                                teleProjectorsSend += currentModule.customizedCabins.teleProjectorsSend ?? 0;
+                                teleProjectorsReceive += currentModule.customizedCabins.teleProjectorsReceive ?? 0;
+
+                                moduleCost += (currentModule.customizedCabins.sickbaysAuto ?? 0) * 100000
+                                moduleCost += (currentModule.customizedCabins.teleProjectors ?? 0) * 20000000
+                                moduleCost += (currentModule.customizedCabins.teleProjectorsSend ?? 0) * 10000000
+                                moduleCost += (currentModule.customizedCabins.teleProjectorsReceive ?? 0) * 10000000
+                                moduleCost += (currentModule.customizedCabins.labs ?? 0) * 1000000
+                                moduleCost += (currentModule.customizedCabins.physicsLabs ?? 0) * 10000000
+                                moduleCost += (currentModule.customizedCabins.superScienceLabs ?? 0) * 30000000
+                            } else {
+                                longOccupancy += defaultNumberCabins * 2;
+                            }
+                        }
+
+                        if (currentModuleKey === 'Open Space') {
+                            if (Object.keys(currentModule.customizedAreas).length > 0) {
+                                farms += currentModule.customizedAreas.farms ?? 0;
+                                gardens += currentModule.customizedAreas.gardens ?? 0;
+                                pools += currentModule.customizedAreas.pools ?? 0;
+                                theaters += currentModule.customizedAreas.theaters ?? 0;
+                                zoos += currentModule.customizedAreas.zoos ?? 0;
+                                gyms += currentModule.customizedAreas.gyms ?? 0;
+                            } else {
+                                farms += SMData.Areas;
+                            }
+                            areas += SMData.Areas;
+                            shortOccupancyPassengers += 100;
+                        }
+
+                        if (currentModuleKey === 'Passenger Seating') {
+                            seats += SMData.Seats
+                            shortOccupancyPassengers += SMData.Seats
+                        }
+                        break;
+
+                    case 'Engineering':
+                        if (currentModuleKey === 'Control Room') {
+                            if (currentModule.totalAutomation === true) {
+                                controlStations += SMData.ControlStations
+                                shortOccupancyCrew += SMData.ControlStations
+                            }
+                            controlStations = SMData.ControlStations
+                            shortOccupancyCrew += SMData.ControlStations
+                        }
+                        if (currentModuleKey === 'Engine Room') {
+                            controlStations += 1
+                            shortOccupancyCrew += 1
+                        }
+                        break;
+
+                    case 'Power':
+
+                        break;
+
+                    case 'Propulsion':
+                        if (currentModuleKey === 'Fuel Tank') {
+                            fuelLoad += SMData.Fuel
+                        }
+                        if (currentModuleKey === 'Jump Gate') {
+                            jumpGate += SMData.MaxTonnage
+                        }
+                        if (currentModuleKey === 'Stardrive Engine') {
+                            maxFTL += 1
+                        }
+                        if (currentModuleKey === 'Super Stardrive Engine') {
+                            maxFTL += 2
+                        }
+                        break;
+
+                    case 'Utility':
+                        if (currentModuleKey === 'Cargo Hold') {
+                            uPressCargo += SMData.LoadUPr
+                        }
+                        if (currentModuleKey === "Sensor Array, Science"
+                            || currentModuleKey === "Sensor Array, Tactical"
+                            || currentModuleKey === "Sensor Array, Enhanced"
+                            || currentModuleKey === "Sensor Array, Multipurpose") {
+
+                        }
+                        if (currentModuleKey === 'Factory, Replicator') {
+                            facWeightHour += SMData.lbsHr
+
+                        } else if (currentModuleKey === 'Factory, Nanofactory' || 'Factory, Robofac' || 'Factory, Fabricator') {
+                            facValueHour += SMData.$Hr
+                        }
+                        if (currentModuleKey === 'Hangar Bay') {
+                            hangarCapacity += SMData.Capacity
+                            launchRate += SMData.LaunchRate
+                        }
+                        if (currentModuleKey === 'Mining') {
+                            miningCapacity += SMData.TonsHrMining
+                        }
+                        if (currentModuleKey === 'Refinery') {
+                            refineryCapacity += SMData.TonsHrRefinery
+                        }
+                        break;
+
+                    case 'Weapons':
+                        function handleWeaponLocationEmpty(mountLocationArray, index) {
+                            if (mountLocationArray[index][0] === 0) {
+                                mountLocationArray[index][0] = 1
+                            } else {
+                                mountLocationArray[index].push(1)
+                            }
+                        }
+                        if (currentModuleKey === 'Major Battery') {
+                            majorMounts += 1
+                            unusedMajorMounts += 1
+                            switch (currentModuleLocation) {
+                                case 'front':
+                                    handleWeaponLocationEmpty(majorMountLocation, 0)
+                                    break;
+                                case 'middle':
+                                    handleWeaponLocationEmpty(majorMountLocation, 1)
+                                    break;
+                                case 'rear':
+                                    handleWeaponLocationEmpty(majorMountLocation, 2)
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        if (currentModuleKey === 'Medium Battery') {
+                            mediumMounts += 1
+                            unusedMediumMounts += 3
+                            switch (currentModuleLocation) {
+                                case 'front':
+                                    handleWeaponLocationEmpty(mediumMountLocation, 0)
+                                    break;
+                                case 'middle':
+                                    handleWeaponLocationEmpty(mediumMountLocation, 1)
+                                    break;
+                                case 'rear':
+                                    handleWeaponLocationEmpty(mediumMountLocation, 2)
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        if (currentModuleKey === 'Secondary Battery') {
+                            secondaryMounts += 1
+                            unusedSecondaryMounts += 10
+                            switch (currentModuleLocation) {
+                                case 'front':
+                                    handleWeaponLocationEmpty(secondaryMountLocation, 0)
+                                    break;
+                                case 'middle':
+                                    handleWeaponLocationEmpty(secondaryMountLocation, 1)
+                                    break;
+                                case 'rear':
+                                    handleWeaponLocationEmpty(secondaryMountLocation, 2)
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        if (currentModuleKey === 'Tertiary Battery') {
+                            tertiaryMounts += 1
+                            unusedTertiaryMounts += 30
+                            switch (currentModuleLocation) {
+                                case 'front':
+                                    handleWeaponLocationEmpty(tertiaryMountLocation, 0)
+                                    break;
+                                case 'middle':
+                                    handleWeaponLocationEmpty(tertiaryMountLocation, 1)
+                                    break;
+                                case 'rear':
+                                    handleWeaponLocationEmpty(tertiaryMountLocation, 2)
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        if (currentModuleKey === 'Spinal Battery') {
+                            if (currentModuleLocation === 'front') {
+                                frontSpinal = true;
+                            } else if (currentModuleLocation === 'middle') {
+                                midSpinal = true;
+                            } else if (currentModuleLocation === 'rear') {
+                                rearSpinal = true;
+                            }
+                            spinalMounts = 0;
+                            if (frontSpinal && midSpinal && rearSpinal) {
+                                spinalMounts = 1
+                            } else {
+                                if (frontSpinal) spinalMounts += 0.33;
+                                if (midSpinal) spinalMounts += 0.33;
+                                if (rearSpinal) spinalMounts += 0.33;
+                            }
+                        }
+                        break;
+
+                    case 'Engine, Chemical & HEDM':
+                        accel += moduleKeyObj[0].Accel
+                        deltaV = deltaVMultiplier(moduleKeyObj[0].mpsTank, tankCount)
+                        break;
+
+                    case 'Engine, Electric':
+                        accel += moduleKeyObj[0].Accel
+                        deltaV = deltaVMultiplier(moduleKeyObj[0].mpsTank, tankCount)
+                        break;
+
+                    case 'Engine, Fission':
+                        accel += moduleKeyObj[0].Accel
+                        deltaV = deltaVMultiplier(moduleKeyObj[0].mpsTank, tankCount)
+                        break;
+
+                    case 'Engine, Nuclear Pulse':
+                        accel += moduleKeyObj[0].Accel
+                        deltaV = deltaVMultiplier(moduleKeyObj[0].mpsTank, tankCount)
+                        break;
+
+                    case 'Engine, Fusion':
+                        accel += moduleKeyObj[0].Accel
+                        deltaV = deltaVMultiplier(moduleKeyObj[0].mpsTank, tankCount)
+                        break;
+                    case 'Engine, TotalConv. & Antimatter':
+                        accel += moduleKeyObj[0].Accel
+                        deltaV = deltaVMultiplier(moduleKeyObj[0].mpsTank, tankCount)
+                        break;
+
+                    case 'Reactionless Engine':
+                        accel += moduleKeyObj[0].Accel
+                        deltaV = Infinity
+                        singularityDriveCost += moduleCost
+                        break;
+                    default:
+                        break;
+                }
+
+                if (currentModule.highAutomation === true) {
+                    moduleWorkspaces *= 0.1;
+                }
+                if (currentModule.totalAutomation === true) {
+                    moduleWorkspaces = 0;
+                }
+
+                cost += moduleCost;
+                workspaces += moduleWorkspaces;
+                powerDemand += modulePowerDemand;
+                powerGeneration += modulePowerGeneration;
+                shortOccupancyCrew += SMData.Workspaces
+
+                // const moduleObject = shipModules[2][0];
+
+                // if (moduleObject && typeof moduleObject === 'object') {
+                //     for (const [key, value] of Object.entries(moduleObject)) {
+                //         console.log(`${key}: ${value}`);
+                //     }
+                //     console.log('*****************************************');
+                // } else {
+                //     console.log('No valid object found at the specified coordinates.');
+                // }
+
+                setFrontdDR(frontdDR)
+                setBaseFrontdDR(frontdDR)
+                setMiddDR(middDR)
+                setBaseMiddDR(middDR)
+                setReardDR(reardDR)
+                setBaseReardDR(reardDR)
+                setShipDefensiveECMBonus(defensiveECMBonus)
+                setShipDefensiveECMTL(defensiveECMTL)
+                setTotalModulesCost(cost)
+                setWorkspaces(workspaces)
+                setBaseWorkspaces(workspaces)
+                setCabinsCapacity(cabinsCapacity)
+                setLongOccupancy(longOccupancy)
+                setShortOccupancy(shortOccupancyCrew + shortOccupancyPassengers)
+                setShortOccupancyCrew(shortOccupancyCrew)
+                setShortOccupancyPassengers(shortOccupancyPassengers)
+                setShipCabins(cabinsCapacity)
+                setShipAreas(areas)
+                setShipSeats(seats)
+                setPowerDemand(powerDemand)
+                setPowerGen(powerGeneration)
+                setControlStations(controlStations)
+                setFuelLoad(fuelLoad)
+                setJumpGateMax(jumpGate)
+                setMaxFTL(maxFTL)
+                setUPressCargo(uPressCargo)
+                setUPressCargoCapacity(uPressCargo)
+                setFacValueHour(facValueHour)
+                setFacWeightHour(facWeightHour)
+                setShipLaunchRate(launchRate)
+                setShipHangarCapacity(hangarCapacity)
+                setMiningCapacity(miningCapacity)
+                setRefineryCapacity(refineryCapacity)
+                setSpinalMounts(spinalMounts)
+                setUnusedSpinalMounts(spinalMounts)
+                setMajorMounts(majorMounts)
+                setMediumMounts(mediumMounts)
+                setSecondaryMounts(secondaryMounts)
+                setTertiaryMounts(tertiaryMounts)
+                setAccel(accel)
+                setDeltaV(deltaV)
+            }
+        }
+    }, [shipModules, shipStreamlinedUn, shipTL, shipSM, superScienceChecked, shipTotalModulesCost]);
+
+    // This useEffect resets the selected modules array state variable when one of the dependencies change.
+    // useEffect(() => {
+    //     setModules([[{}, {}, {}, {}, {}, {}, {}], [{}, {}, {}, {}, {}, {}, {}], [{}, {}, {}, {}, {}, {}, {}]]);
+    // }, [shipSM, shipTL, superScienceChecked, shipStreamlinedUn])
 
     // These four functions handle changes to the currentStatComponent state variable to display the correct component.
     const handleBasicStatsClick = () => {
@@ -985,17 +1571,18 @@ const CreateShipClass = ({ isExpanded }) => {
     const handleHabitatPowerClick = () => {
         setStatCurrentComponent('shipHabitatPowerStats');
     }
-    const handleWeaponClick = () => {
-        setStatCurrentComponent('shipWeaponStats');
+    const handleCustomizationClick = () => {
+        setStatCurrentComponent('shipCustomization');
     }
     const handleShipDesignClick = () => {
         setStatCurrentComponent('shipDesign');
     }
 
+    // This function displays the stat panel.
     function statsDisplay() {
         return (
             <div className={isExpanded ? styles.statBlockContainerExpanded : styles.statBlockContainerCollapsed}>
-                <h2 className={styles.statTitle}>Basic Stat Block</h2>
+                <h2 className={isExpanded ? styles.statTitleExpanded : styles.statTitleCollapsed}>Basic Stat Block</h2>
                 <span className={styles.statBlockLable}>Class Name:</span>
                 <span className={styles.statBlockAreaLarge}>{shipClassName}</span>
                 <span className={styles.statBlockLable}>Classification:</span>
@@ -1074,7 +1661,7 @@ const CreateShipClass = ({ isExpanded }) => {
 
     // ****************************************************************************************************************************************************
     // ****************************************************************************************************************************************************
-    // Habitat and Power - START
+    // Extra Stats - START
 
     // This useEffect handles changes to the cost state variables to update the total cost.
     useEffect(() => {
@@ -1083,11 +1670,6 @@ const CreateShipClass = ({ isExpanded }) => {
         setDisplayCost(totalCost.toLocaleString())
         setTotalCost(totalCost)
     }, [shipTotalModulesCost, shipHabitatPowerCost, shipWeaponsCost, shipDesignCost])
-
-    // This function handles changes to the habitatPowerCost value and updates the state variable.
-    function handleHabitatPowerCost(cost) {
-        setHabitatPowerCost(cost)
-    }
 
     // This useEffect updates the shipTotalCargoAllTypes state variable when the shipPressCargo, shipUPressCargo, 
     //shipShieldedCargo, shipRefrigeratedCargo, or shipSteerageCargo state variables change.
@@ -1168,346 +1750,6 @@ const CreateShipClass = ({ isExpanded }) => {
         setHabitatPowerCost(updatedCost)
     }
 
-    // This function calculates the default reactor life based on the module key and ship TL.
-    function defaultReactorLife(moduleKey, shipTL) {
-        let reactorLifeHours = 0;
-        let reactorLifeYears = 0;
-        switch (moduleKey) {
-
-            case 'Chemical, Fuel Cell':
-                switch (shipTL) {
-                    case 7:
-                        reactorLifeHours = 3;
-                        break;
-                    case 8:
-                        reactorLifeHours = 6;
-                        break;
-                    case 9:
-                        reactorLifeHours = 12;
-                        break;
-                    case 10:
-                    case 11:
-                    case 12:
-                    case 13:
-                    case 14:
-                    case 15:
-                        reactorLifeHours = 24;
-                        break;
-                    default:
-                        reactorLifeHours = 'Error';
-                        break;
-                }
-                break;
-
-            case 'Chemical, MHD Turbine':
-                switch (shipTL) {
-                    case 9:
-                        reactorLifeHours = 6;
-                        break;
-                    case 10:
-                    case 11:
-                    case 12:
-                    case 13:
-                    case 14:
-                    case 15:
-                        reactorLifeHours = 12;
-                        break;
-                    default:
-                        reactorLifeHours = 'Error';
-                        break;
-                }
-                break;
-
-            case 'Reactor, Fission':
-                switch (shipTL) {
-                    case 8:
-                        reactorLifeYears = 25;
-                        break;
-                    case 9:
-                        reactorLifeYears = 50;
-                        break;
-                    case 10:
-                    case 11:
-                    case 12:
-                    case 13:
-                    case 14:
-                    case 15:
-                        reactorLifeYears = 75;
-                        break;
-                    default:
-                        reactorLifeYears = 'Error';
-                        break;
-                }
-                break;
-
-            case 'Reactor, Fusion':
-                switch (shipTL) {
-                    case 9:
-                        reactorLifeYears = 50;
-                        break;
-                    case 10:
-                        reactorLifeYears = 200
-                        break;
-                    case 11:
-                        reactorLifeYears = 600
-                        break;
-                    case 12:
-                    case 13:
-                    case 14:
-                    case 15:
-                        reactorLifeYears = 1500
-                        break;
-                    default:
-                        reactorLifeYears = 'Error';
-                        break;
-                }
-                break;
-
-            case 'Reactor, Antimatter':
-                switch (shipTL) {
-                    case 10:
-                        reactorLifeYears = 2;
-                        break;
-                    case 11:
-                        reactorLifeYears = 20;
-                        break;
-                    case 12:
-                    case 13:
-                    case 14:
-                    case 15:
-                        reactorLifeYears = 200;
-                        break;
-                    default:
-                        reactorLifeYears = 'Error';
-                        break;
-                }
-                break;
-
-            case 'Reactor, Super Fusion':
-                switch (shipTL) {
-                    case 11:
-                        reactorLifeYears = 400;
-                        break;
-                    case 12:
-                    case 13:
-                    case 14:
-                    case 15:
-                        reactorLifeYears = 1000;
-                        break;
-                    default:
-                        reactorLifeYears = 'Error';
-                        break;
-                }
-                break;
-
-            case 'Reactor, Total Conversion':
-                switch (shipTL) {
-                    case 12:
-                    case 13:
-                    case 14:
-                    case 15:
-                        reactorLifeYears = Infinity;
-                        break;
-                    default:
-                        reactorLifeYears = 'Error';
-                        break;
-                }
-                break;
-
-            case 'Solar Panel Array':
-
-                reactorLifeYears = Infinity;
-                break;
-
-            default:
-                break;
-        }
-
-        if (reactorLifeYears > 0) {
-            return reactorLifeYears;
-        } else if (reactorLifeHours > 0) {
-            return reactorLifeHours;
-        } else {
-            return 'Error';
-        }
-    }
-
-    // This function handles the deRate click event and updates the effected power plant in the shipPowerPlants array.
-    function handleDeRatedChange(module) {
-        const moduleKey = module.powerPlantKey;
-        const defaultCost = module.defaultCost;
-        const defaultReactorLifeYears = module.defaultReactorLifeYears;
-        const moduleNumber = module.moduleNumber;
-        const maxPowerGen = module.maxPowerGeneration;
-        let finalPowerGen = maxPowerGen
-        let deRated = module.deRated;
-        let finalCost = 0
-        let finalReactorLifeYears = 0
-        const costDivisor = 1 / maxPowerGen;
-
-        function updateDeRatePower(moduleKey, moduleNumber, deRated, finalPowerGen, finalCost, finalReactorLifeYears) {
-            setShipPowerPlants(prevPowerPlants => prevPowerPlants.map((module, index) => {
-                if (module.powerPlantKey === moduleKey && module.moduleNumber === moduleNumber) {
-                    return {
-                        ...module,
-                        deRated: deRated,
-                        powerGeneration: finalPowerGen,
-                        finalCost: finalCost,
-                        reactorLifeYears: finalReactorLifeYears,
-                    };
-                } else {
-                    return module;
-                }
-            }));
-        }
-
-        switch (moduleKey) {
-            case "Reactor, Fusion":
-                if (deRated === 0) {
-                    deRated = 1;
-                    finalPowerGen = 1
-                    finalCost = defaultCost / 2
-                    finalReactorLifeYears = defaultReactorLifeYears * 2
-                    updateDeRatePower(moduleKey, moduleNumber, deRated, finalPowerGen, finalCost, finalReactorLifeYears)
-                    habitatPowerUpdateTotalCost(defaultCost, finalCost)
-                }
-                break;
-
-            case "Reactor, Antimatter":
-                if (deRated < 3) {
-                    deRated += 1;
-                    finalPowerGen = finalPowerGen - deRated
-                    finalCost = defaultCost * (1 - (costDivisor * deRated))
-                    finalReactorLifeYears = defaultReactorLifeYears * (1 + (deRated * .25))
-                    updateDeRatePower(moduleKey, moduleNumber, deRated, finalPowerGen, finalCost, finalReactorLifeYears)
-                    habitatPowerUpdateTotalCost(defaultCost, finalCost)
-                }
-                break;
-            case "Reactor, Super Fusion":
-                if (deRated < 3) {
-                    deRated += 1;
-                    finalPowerGen = finalPowerGen - deRated
-                    finalCost = defaultCost * (1 - (costDivisor * deRated))
-                    finalReactorLifeYears = defaultReactorLifeYears * (1 + (deRated * .25))
-                    updateDeRatePower(moduleKey, moduleNumber, deRated, finalPowerGen, finalCost, finalReactorLifeYears)
-                    habitatPowerUpdateTotalCost(defaultCost, finalCost)
-                }
-            default:
-                break;
-        }
-    }
-
-    // This function handles the upRate click event and updates the effected power plant in the shipPowerPlants array.
-    function handleUpRatedChange(module) {
-        const moduleKey = module.powerPlantKey;
-        const defaultCost = module.defaultCost;
-        const defaultReactorLifeYears = module.defaultReactorLifeYears;
-        const moduleNumber = module.moduleNumber;
-        const maxPowerGen = module.maxPowerGeneration;
-        let finalPowerGen = maxPowerGen
-        let deRated = module.deRated;
-        let finalCost = 0
-        let finalReactorLifeYears = 0
-        const costDivisor = 1 / maxPowerGen;
-
-        function updateUpRatePower(moduleKey, moduleNumber, deRated, finalPowerGen, finalCost, finalReactorLifeYears) {
-            setShipPowerPlants(prevPowerPlants => prevPowerPlants.map((module, index) => {
-                if (module.powerPlantKey === moduleKey && module.moduleNumber === moduleNumber) {
-                    return {
-                        ...module,
-                        deRated: deRated,
-                        powerGeneration: finalPowerGen,
-                        finalCost: finalCost,
-                        reactorLifeYears: finalReactorLifeYears,
-                    };
-                } else {
-                    return module;
-                }
-            }));
-        }
-
-        switch (moduleKey) {
-            case "Reactor, Fusion":
-                if (deRated === 1) {
-                    deRated = 0;
-                    finalPowerGen = 2
-                    finalCost = defaultCost
-                    finalReactorLifeYears = defaultReactorLifeYears
-                    updateUpRatePower(moduleKey, moduleNumber, deRated, finalPowerGen, finalCost, finalReactorLifeYears)
-                    habitatPowerUpdateTotalCost(defaultCost, finalCost)
-                }
-                break;
-
-            case "Reactor, Antimatter":
-                if (deRated > 0) {
-                    deRated -= 1;
-                    finalPowerGen = finalPowerGen - deRated
-                    finalCost = defaultCost * (1 - (costDivisor * deRated))
-                    finalReactorLifeYears = defaultReactorLifeYears * (1 + (deRated * .25))
-                    updateUpRatePower(moduleKey, moduleNumber, deRated, finalPowerGen, finalCost, finalReactorLifeYears)
-                    habitatPowerUpdateTotalCost(defaultCost, finalCost)
-                }
-                break;
-            case "Reactor, Super Fusion":
-                if (deRated > 0) {
-                    deRated -= 1;
-                    finalPowerGen = finalPowerGen - deRated
-                    finalCost = defaultCost * (1 - (costDivisor * deRated))
-                    finalReactorLifeYears = defaultReactorLifeYears * (1 + (deRated * .25))
-                    updateUpRatePower(moduleKey, moduleNumber, deRated, finalPowerGen, finalCost, finalReactorLifeYears)
-                    habitatPowerUpdateTotalCost(defaultCost, finalCost)
-                }
-            default:
-                break;
-        }
-    }
-
-    // This function is passed into the ShipClassHabitatPower component to display the power plant information.
-    function powerPlantsDisplay() {
-        return shipPowerPlants.map((module, index) => (
-            <React.Fragment key={index}>
-                <span className={styles.habitatPowerInfoLabelCol1}>
-                    Power Plant:
-                </span>
-                <span className={styles.habitatPowerInfoValueCol1}>
-                    {module.powerPlantKey}
-                </span>
-                <span className={styles.habitatPowerInfoLabelCol2}>
-                    Power Generation:
-                </span>
-                <span className={styles.habitatPowerInfoValueCol2}>
-                    {module.powerGeneration}
-                </span>
-                <span className={styles.habitatPowerInfoLabelCol1}>
-                    Reactor Life (Years):
-                </span>
-                <span className={styles.habitatPowerInfoValueCol1}>
-                    {module.reactorLifeYears}
-                </span>
-                <span className={styles.habitatPowerInfoLabelCol2}>
-                    Reactor Life (Hours):
-                </span>
-                <span className={styles.habitatPowerInfoValueCol2}>
-                    {module.reactorLifeHours}
-                </span>
-                <span className={styles.habitatPowerInfoLabelCol1}>
-                    Cost:
-                </span>
-                <span className={styles.habitatPowerInfoValueCol1}>
-                    ${module.finalCost.toLocaleString()}
-                </span>
-                {
-                    ["Reactor, Fusion", "Reactor, Antimatter", "Reactor, Super Fusion"].includes(module.powerPlantKey) &&
-                    <button className={styles.deRateButton} onClick={() => handleDeRatedChange(module)}>De-Rate</button>
-                }
-                {
-                    ["Reactor, Fusion", "Reactor, Antimatter", "Reactor, Super Fusion"].includes(module.powerPlantKey) &&
-                    <button className={styles.upRateButton} onClick={() => handleUpRatedChange(module)}>Up-Rate</button>
-                }
-            </React.Fragment>
-        ))
-    }
-
     // This function sets shipCabinsCapacity, and shipLongOccupancy when the total life support checkbox is changed.
     // It also resets all habitat state variables because the cabins and cabins capacity are fundamental variables the habitat 
     // variables depend on.
@@ -1562,7 +1804,6 @@ const CreateShipClass = ({ isExpanded }) => {
         setSelectedWeaponType('')
         setSelectedMountType('')
         setSelectedUninstalledCargo(0)
-        resetCounts()
         setWeaponList([])
         resetWeaponStats()
         setTotalLifeSupport(false)
@@ -1651,7 +1892,8 @@ const CreateShipClass = ({ isExpanded }) => {
         let newSickbays = shipSickBays
         let newSickbaysAuto = shipSickBaysAuto
         let newTeleport = shipTeleportProjectors
-        let newTeleportSendReceive = shipTeleportProjectorsSendReceive
+        let newTeleportSend = shipTeleportProjectorsSend
+        let newTeleportReceive = shipTeleportProjectorsReceive
         let newSteerage = shipSteerageCargo
         let newPressCargo = shipPressCargo
         let newFacValueHour = shipFacValueHour
@@ -1883,13 +2125,26 @@ const CreateShipClass = ({ isExpanded }) => {
                 }
                 break;
 
-            case 'Teleport Send/Receive':
-                newTeleportSendReceive += value;
+            case 'Teleport Send':
+                newTeleportSend += value;
                 newCabins = shipCabins - value;
                 newCost = value * 10000000
                 newLongOccupancy = (newCabins * 2) + (newLuxury * 2) + (newBunkrooms * 4) + (newCells * 4)
-                if (newTeleport >= 0 && value <= shipCabins) {
-                    setTeleportProjectorsSendReceive(newTeleportSendReceive);
+                if (newTeleportSend >= 0 && value <= shipCabins) {
+                    setTeleportProjectorsSend(newTeleportSend);
+                    setShipCabins(newCabins);
+                    setLongOccupancy(newLongOccupancy);
+                    habitatPowerAddCost(newCost)
+                }
+                break;
+
+            case 'Teleport Receive':
+                newTeleportReceive += value;
+                newCabins = shipCabins - value;
+                newCost = value * 10000000
+                newLongOccupancy = (newCabins * 2) + (newLuxury * 2) + (newBunkrooms * 4) + (newCells * 4)
+                if (newTeleportReceive >= 0 && value <= shipCabins) {
+                    setTeleportProjectorsReceive(newTeleportReceive);
                     setShipCabins(newCabins);
                     setLongOccupancy(newLongOccupancy);
                     habitatPowerAddCost(newCost)
@@ -1914,762 +2169,444 @@ const CreateShipClass = ({ isExpanded }) => {
         }
     }
 
+    // This function displays habitat information.
     function habitatsDisplay() {
         return (
-            <div className={styles.habitatSubContainer}>
-                <span className={styles.habitatInfoLabelCol1}>
+            <div className={styles.habitatStatsSubContainer}>
+                <h2 className={styles.habitatStatTitle}>Habitat Stat Block</h2>
+                <span className={styles.habitatStatsLabel}>
                     Workspaces:
                 </span>
-                <span className={styles.habitatInfoValueCol1}>
+                <span className={styles.habitatStatsValue}>
                     {shipWorkspaces.toLocaleString()}
                 </span>
-                <span className={styles.habitatInfoLabelCol2Crew}>
-                    Short Occ. (Crew):
-                </span>
-                <span className={styles.habitatInfoValueCol2}>
-                    {shipShortOccupancyCrew.toLocaleString()}
-                </span>
-                <span className={styles.habitatInfoLabelCol3Crew}>
-                    Short Occ. (Passengers):
-                </span>
-                <span className={styles.habitatInfoValueCol3Crew}>
-                    {shipShortOccupancyPassengers.toLocaleString()}
-                </span>
-                <span className={styles.habitatInfoLabelCol1}>
-                    Ship Seats:
-                </span>
-                <span className={styles.habitatInfoValueCol1}>
-                    {shipSeats.toLocaleString()}
-                </span>
-                {shipTL >= 9 && <span className={styles.habitatInfoLabelCol2TotalLife}>
-                    Total Life Support:
-                </span>}
-                {shipTL >= 9 && <label className={styles.totalLifeSupportLabel}>
-                    <input className={styles.inputCheckbox}
-                        type="checkbox"
-                        checked={shipTotalLifeSupport}
-                        onChange={handleTotalLifeSupportChange}
-                    />
-                </label>}
-                <span className={styles.habitatInfoLabelCol3Occupancy}>
-                    Short Term Occupancy:
-                </span>
-                <span className={styles.habitatInfoValueCol3Occupancy}>
-                    {shipShortOccupancy.toLocaleString()}
-                </span>
-                <span className={styles.habitatInfoLabelCol1}>
-                    Cabins Capacity:
-                </span>
-                <span className={styles.habitatInfoValueCol1}>
-                    {shipCabinsCapacity.toLocaleString()}
-                </span>
-                <span className={styles.habitatInfoLabelCol2Cabins}>
-                    Cabins:
-                </span>
-                <span className={styles.habitatInfoValueCol2Cabins}>
-                    {shipCabins.toLocaleString()}
-                </span>
-                <span className={styles.habitatInfoLabelCol3Occupancy}>
+                <span className={styles.habitatStatsLabel}>
                     Long Term Occupancy:
                 </span>
-                <span className={styles.habitatInfoValueCol3Occupancy}>
+                <span className={styles.habitatStatsValue}>
                     {shipLongOccupancy.toLocaleString()}
                 </span>
-                <span className={styles.habitatInfoLabelCol1}>
-                    Bunk- rooms:
+                <span className={styles.habitatStatsLabel}>
+                    Short Term Occupancy:
                 </span>
-                {shipBunkrooms >= 100 && <button
-                    onClick={() => habitatIncrementDecrement('Bunkrooms', -100)}
-                    className={styles.habitatMinus100}>
-                    -100
-                </button>}
-                {shipBunkrooms >= 10 && <button
-                    onClick={() => habitatIncrementDecrement('Bunkrooms', -10)}
-                    className={styles.habitatMinus10}>
-                    -10
-                </button>}
-                {shipBunkrooms >= 1 && <button
-                    onClick={() => habitatIncrementDecrement('Bunkrooms', -1)}
-                    className={styles.habitatMinus1}>
-                    -1
-                </button>}
-                <span className={styles.habitatButton}>
-                    {shipBunkrooms}
+                <span className={styles.habitatStatsValue}>
+                    {shipShortOccupancy.toLocaleString()}
                 </span>
-                {shipCabins >= 1 && <button
-                    onClick={() => habitatIncrementDecrement('Bunkrooms', 1)}
-                    className={styles.habitatPlus1}>
-                    +1
-                </button>}
-                {shipCabins >= 10 && <button
-                    onClick={() => habitatIncrementDecrement('Bunkrooms', 10)}
-                    className={styles.habitatPlus10}>
-                    +10
-                </button>}
-                {shipCabins >= 100 && <button
-                    onClick={() => habitatIncrementDecrement('Bunkrooms', 100)}
-                    className={styles.habitatPlus100}>
-                    +100
-                </button>}
-                <span className={styles.habitatInfoLabelCol1}>
-                    Cells:
+                <span className={styles.habitatStatsLabel}>
+                    Cabins Capacity:
                 </span>
-                {shipCells >= 100 && <button
-                    onClick={() => habitatIncrementDecrement('Cells', -100)}
-                    className={styles.habitatMinus100}>
-                    -100
-                </button>}
-                {shipCells >= 10 && <button
-                    onClick={() => habitatIncrementDecrement('Cells', -10)}
-                    className={styles.habitatMinus10}>
-                    -10
-                </button>}
-                {shipCells >= 1 && <button
-                    onClick={() => habitatIncrementDecrement('Cells', -1)}
-                    className={styles.habitatMinus1}>
-                    -1
-                </button>}
-                <span className={styles.habitatButton}>
-                    {shipCells}
+                <span className={styles.habitatStatsValue}>
+                    {shipCabinsCapacity.toLocaleString()}
                 </span>
-                {shipCabins >= 1 && <button
-                    onClick={() => habitatIncrementDecrement('Cells', 1)}
-                    className={styles.habitatPlus1}>
-                    +1
-                </button>}
-                {shipCabins >= 10 && <button
-                    onClick={() => habitatIncrementDecrement('Cells', 10)}
-                    className={styles.habitatPlus10}>
-                    +10
-                </button>}
-                {shipCabins >= 100 && <button
-                    onClick={() => habitatIncrementDecrement('Cells', 100)}
-                    className={styles.habitatPlus100}>
-                    +100
-                </button>}
-                <span className={styles.habitatInfoLabelCol1}>
-                    Luxury Cabins:
+                <span className={styles.habitatStatsLabel}>
+                    Short Occ. (Crew):
                 </span>
-                {shipLuxuryCabins >= 100 && <button
-                    onClick={() => habitatIncrementDecrement('Luxury', -100)}
-                    className={styles.habitatMinus100}>
-                    -100
-                </button>}
-                {shipLuxuryCabins >= 10 && <button
-                    onClick={() => habitatIncrementDecrement('Luxury', -10)}
-                    className={styles.habitatMinus10}>
-                    -10
-                </button>}
-                {shipLuxuryCabins >= 1 && <button
-                    onClick={() => habitatIncrementDecrement('Luxury', -1)}
-                    className={styles.habitatMinus1}>
-                    -1
-                </button>}
-                <span className={styles.habitatButton}>
-                    {shipLuxuryCabins}
+                <span className={styles.habitatStatsValue}>
+                    {shipShortOccupancyCrew.toLocaleString()}
                 </span>
-                {shipCabins >= 2 && <button
-                    onClick={() => habitatIncrementDecrement('Luxury', 1)}
-                    className={styles.habitatPlus1}>
-                    +1
-                </button>}
-                {shipCabins >= 20 && <button
-                    onClick={() => habitatIncrementDecrement('Luxury', 10)}
-                    className={styles.habitatPlus10}>
-                    +10
-                </button>}
-                {shipCabins >= 200 && <button
-                    onClick={() => habitatIncrementDecrement('Luxury', 100)}
-                    className={styles.habitatPlus100}>
-                    +100
-                </button>}
-                <span className={styles.habitatInfoLabelCol1}>
-                    Briefing Rooms:
+                <span className={styles.habitatStatsLabel}>
+                    Short Occ. (Pax.):
                 </span>
-                {shipBriefingRooms >= 100 && <button
-                    onClick={() => habitatIncrementDecrement('Briefing', -100)}
-                    className={styles.habitatMinus100}>
-                    -100
-                </button>}
-                {shipBriefingRooms >= 10 && <button
-                    onClick={() => habitatIncrementDecrement('Briefing', -10)}
-                    className={styles.habitatMinus10}>
-                    -10
-                </button>}
-                {shipBriefingRooms >= 1 && <button
-                    onClick={() => habitatIncrementDecrement('Briefing', -1)}
-                    className={styles.habitatMinus1}>
-                    -1
-                </button>}
-                <span className={styles.habitatButton}>
-                    {shipBriefingRooms}
+                <span className={styles.habitatStatsValue}>
+                    {shipShortOccupancyPassengers.toLocaleString()}
                 </span>
-                {shipCabins >= 1 && <button
-                    onClick={() => habitatIncrementDecrement('Briefing', 1)}
-                    className={styles.habitatPlus1}>
-                    +1
-                </button>}
-                {shipCabins >= 10 && <button
-                    onClick={() => habitatIncrementDecrement('Briefing', 10)}
-                    className={styles.habitatPlus10}>
-                    +10
-                </button>}
-                {shipCabins >= 100 && <button
-                    onClick={() => habitatIncrementDecrement('Briefing', 100)}
-                    className={styles.habitatPlus100}>
-                    +100
-                </button>}
-                <span className={styles.habitatInfoLabelCol1}>
-                    Establish- ments:
-                </span>
-                {shipEstablishments >= 100 && <button
-                    onClick={() => habitatIncrementDecrement('Establishment', -100)}
-                    className={styles.habitatMinus100}>
-                    -100
-                </button>}
-                {shipEstablishments >= 10 && <button
-                    onClick={() => habitatIncrementDecrement('Establishment', -10)}
-                    className={styles.habitatMinus10}>
-                    -10
-                </button>}
-                {shipEstablishments >= 1 && <button
-                    onClick={() => habitatIncrementDecrement('Establishment', -1)}
-                    className={styles.habitatMinus1}>
-                    -1
-                </button>}
-                <span className={styles.habitatButton}>
-                    {shipEstablishments}
-                </span>
-                {shipCabins >= 2 && <button
-                    onClick={() => habitatIncrementDecrement('Establishment', 1)}
-                    className={styles.habitatPlus1}>
-                    +1
-                </button>}
-                {shipCabins >= 20 && <button
-                    onClick={() => habitatIncrementDecrement('Establishment', 10)}
-                    className={styles.habitatPlus10}>
-                    +10
-                </button>}
-                {shipCabins >= 200 && <button
-                    onClick={() => habitatIncrementDecrement('Establishment', 100)}
-                    className={styles.habitatPlus100}>
-                    +100
-                </button>}
-                {shipTL >= 9 && < span className={styles.habitatInfoLabelCol1}>
+                {shipCabins > 0 && <span className={styles.habitatStatsLabel}>
+                    Cabins:
+                </span>}
+                {shipCabins > 0 && <span className={styles.habitatStatsValue}>
+                    {shipCabins.toLocaleString()}
+                </span>}
+                {shipSeats > 0 && <span className={styles.habitatStatsLabel}>
+                    Ship Seats:
+                </span>}
+                {shipSeats > 0 && <span className={styles.habitatStatsValue}>
+                    {shipSeats.toLocaleString()}
+                </span>}
+                {shipAreas > 0 && <span className={styles.habitatStatsLabel}>
+                    Areas:
+                </span>}
+                {shipAreas > 0 && <span className={styles.habitatStatsValue}>
+                    {shipAreas.toLocaleString()}
+                </span>}
+                {shipHibernationChambers > 0 && <span className={styles.habitatStatsLabel}>
                     Hibernation Chambers:
                 </span>}
-                {shipHibernationChambers >= 100 && shipTL >= 9 && <button
-                    onClick={() => habitatIncrementDecrement('Hibernation', -100)}
-                    className={styles.habitatMinus100}>
-                    -100
-                </button>}
-                {shipHibernationChambers >= 10 && shipTL >= 9 && <button
-                    onClick={() => habitatIncrementDecrement('Hibernation', -10)}
-                    className={styles.habitatMinus10}>
-                    -10
-                </button>}
-                {shipHibernationChambers >= 1 && shipTL >= 9 && <button
-                    onClick={() => habitatIncrementDecrement('Hibernation', -1)}
-                    className={styles.habitatMinus1}>
-                    -1
-                </button>}
-                {shipTL >= 9 && <span className={styles.habitatButton}>
-                    {shipHibernationChambers}
+                {shipHibernationChambers > 0 && <span className={styles.habitatStatsValue}>
+                    {shipHibernationChambers.toLocaleString()}
                 </span>}
-                {shipCabins >= 0.25 && shipTL >= 9 && <button
-                    onClick={() => habitatIncrementDecrement('Hibernation', 1)}
-                    className={styles.habitatPlus1}>
-                    +1
-                </button>}
-                {shipCabins >= 2.5 && shipTL >= 9 && <button
-                    onClick={() => habitatIncrementDecrement('Hibernation', 10)}
-                    className={styles.habitatPlus10}>
-                    +10
-                </button>}
-                {shipCabins >= 25 && shipTL >= 9 && <button
-                    onClick={() => habitatIncrementDecrement('Hibernation', 100)}
-                    className={styles.habitatPlus100}>
-                    +100
-                </button>}
-                <span className={styles.habitatInfoLabelCol1}>
-                    Labs:
-                </span>
-                {shipLabs >= 100 && <button
-                    onClick={() => habitatIncrementDecrement('Labs', -100)}
-                    className={styles.habitatMinus100}>
-                    -100
-                </button>}
-                {shipLabs >= 10 && <button
-                    onClick={() => habitatIncrementDecrement('Labs', -10)}
-                    className={styles.habitatMinus10}>
-                    -10
-                </button>}
-                {shipLabs >= 1 && <button
-                    onClick={() => habitatIncrementDecrement('Labs', -1)}
-                    className={styles.habitatMinus1}>
-                    -1
-                </button>}
-                <span className={styles.habitatButton}>
-                    {shipLabs}
-                </span>
-                {shipCabins >= 2 && <button
-                    onClick={() => habitatIncrementDecrement('Labs', 1)}
-                    className={styles.habitatPlus1}>
-                    +1
-                </button>}
-                {shipCabins >= 20 && <button
-                    onClick={() => habitatIncrementDecrement('Labs', 10)}
-                    className={styles.habitatPlus10}>
-                    +10
-                </button>}
-                {shipCabins >= 200 && <button
-                    onClick={() => habitatIncrementDecrement('Labs', 100)}
-                    className={styles.habitatPlus100}>
-                    +100
-                </button>}
-                <span className={styles.habitatInfoLabelCol1}>
-                    Physics Labs:
-                </span>
-                {shipPhysicsLabs >= 100 && <button
-                    onClick={() => habitatIncrementDecrement('Physics Labs', -100)}
-                    className={styles.habitatMinus100}>
-                    -100
-                </button>}
-                {shipPhysicsLabs >= 10 && <button
-                    onClick={() => habitatIncrementDecrement('Physics Labs', -10)}
-                    className={styles.habitatMinus10}>
-                    -10
-                </button>}
-                {shipPhysicsLabs >= 1 && <button
-                    onClick={() => habitatIncrementDecrement('Physics Labs', -1)}
-                    className={styles.habitatMinus1}>
-                    -1
-                </button>}
-                <span className={styles.habitatButton}>
-                    {shipPhysicsLabs}
-                </span>
-                {shipCabins >= 2 && <button
-                    onClick={() => habitatIncrementDecrement('Physics Labs', 1)}
-                    className={styles.habitatPlus1}>
-                    +1
-                </button>}
-                {shipCabins >= 20 && <button
-                    onClick={() => habitatIncrementDecrement('Physics Labs', 10)}
-                    className={styles.habitatPlus10}>
-                    +10
-                </button>}
-                {shipCabins >= 200 && <button
-                    onClick={() => habitatIncrementDecrement('Physics Labs', 100)}
-                    className={styles.habitatPlus100}>
-                    +100
-                </button>}
-                {superScienceChecked === true && <span className={styles.habitatInfoLabelCol1}>
-                    Science! Labs:
+                {shipLuxuryCabins > 0 && <span className={styles.habitatStatsLabel}>
+                    Luxury Cabins:
                 </span>}
-                {shipSuperScienceLabs >= 100 && superScienceChecked === true && <button
-                    onClick={() => habitatIncrementDecrement('SuperScience Labs', -100)}
-                    className={styles.habitatMinus100}>
-                    -100
-                </button>}
-                {shipSuperScienceLabs >= 10 && superScienceChecked === true && <button
-                    onClick={() => habitatIncrementDecrement('SuperScience Labs', -10)}
-                    className={styles.habitatMinus10}>
-                    -10
-                </button>}
-                {shipSuperScienceLabs >= 1 && superScienceChecked === true && <button
-                    onClick={() => habitatIncrementDecrement('SuperScience Labs', -1)}
-                    className={styles.habitatMinus1}>
-                    -1
-                </button>}
-                {superScienceChecked === true && <span className={styles.habitatButton}>
-                    {shipSuperScienceLabs}
+                {shipLuxuryCabins > 0 && <span className={styles.habitatStatsValue}>
+                    {shipLuxuryCabins.toLocaleString()}
                 </span>}
-                {shipCabins >= 2 && superScienceChecked === true && <button
-                    onClick={() => habitatIncrementDecrement('SuperScience Labs', 1)}
-                    className={styles.habitatPlus1}>
-                    +1
-                </button>}
-                {shipCabins >= 20 && superScienceChecked === true && <button
-                    onClick={() => habitatIncrementDecrement('SuperScience Labs', 10)}
-                    className={styles.habitatPlus10}>
-                    +10
-                </button>}
-                {shipCabins >= 200 && superScienceChecked === true && <button
-                    onClick={() => habitatIncrementDecrement('SuperScience Labs', 100)}
-                    className={styles.habitatPlus100}>
-                    +100
-                </button>}
-                {shipTL >= 8 && <span className={styles.habitatInfoLabelCol1}>
-                    Minifac (Fabricators):
-                </span>}
-                {shipMiniFabricators >= 100 && shipTL >= 8 && <button
-                    onClick={() => habitatIncrementDecrement('Mini Fab', -100)}
-                    className={styles.habitatMinus100}>
-                    -100
-                </button>}
-                {shipMiniFabricators >= 10 && shipTL >= 8 && <button
-                    onClick={() => habitatIncrementDecrement('Mini Fab', -10)}
-                    className={styles.habitatMinus10}>
-                    -10
-                </button>}
-                {shipMiniFabricators >= 1 && shipTL >= 8 && <button
-                    onClick={() => habitatIncrementDecrement('Mini Fab', -1)}
-                    className={styles.habitatMinus1}>
-                    -1
-                </button>}
-                {shipTL >= 8 && <span className={styles.habitatButton}>
-                    {shipMiniFabricators}
-                </span>}
-                {shipCabins >= 1 && shipTL >= 8 && <button
-                    onClick={() => habitatIncrementDecrement('Mini Fab', 1)}
-                    className={styles.habitatPlus1}>
-                    +1
-                </button>}
-                {shipCabins >= 10 && shipTL >= 8 && <button
-                    onClick={() => habitatIncrementDecrement('Mini Fab', 10)}
-                    className={styles.habitatPlus10}>
-                    +10
-                </button>}
-                {shipCabins >= 100 && shipTL >= 8 && <button
-                    onClick={() => habitatIncrementDecrement('Mini Fab', 100)}
-                    className={styles.habitatPlus100}>
-                    +100
-                </button>}
-                {shipTL >= 10 && <span className={styles.habitatInfoLabelCol1}>
-                    Minifac (RoboFacs):
-                </span>}
-                {shipMiniRoboFacs >= 100 && shipTL >= 10 && <button
-                    onClick={() => habitatIncrementDecrement('Mini Robo Fab', -100)}
-                    className={styles.habitatMinus100}>
-                    -100
-                </button>}
-                {shipMiniRoboFacs >= 10 && shipTL >= 10 && <button
-                    onClick={() => habitatIncrementDecrement('Mini Robo Fab', -10)}
-                    className={styles.habitatMinus10}>
-                    -10
-                </button>}
-                {shipMiniRoboFacs >= 1 && shipTL >= 10 && <button
-                    onClick={() => habitatIncrementDecrement('Mini Robo Fab', -1)}
-                    className={styles.habitatMinus1}>
-                    -1
-                </button>}
-                {shipTL >= 10 && <span className={styles.habitatButton}>
-                    {shipMiniRoboFacs}
-                </span>}
-                {shipCabins >= 1 && shipTL >= 10 && <button
-                    onClick={() => habitatIncrementDecrement('Mini Robo Fab', 1)}
-                    className={styles.habitatPlus1}>
-                    +1
-                </button>}
-                {shipCabins >= 10 && shipTL >= 10 && <button
-                    onClick={() => habitatIncrementDecrement('Mini Robo Fab', 10)}
-                    className={styles.habitatPlus10}>
-                    +10
-                </button>}
-                {shipCabins >= 100 && shipTL >= 10 && <button
-                    onClick={() => habitatIncrementDecrement('Mini Robo Fab', 100)}
-                    className={styles.habitatPlus100}>
-                    +100
-                </button>}
-                {shipTL >= 11 && <span className={styles.habitatInfoLabelCol1}>
-                    Minifac (NanoFacs):
-                </span>}
-                {shipMiniNanoFacs >= 100 && shipTL >= 11 && <button
-                    onClick={() => habitatIncrementDecrement('Mini Nano Fab', -100)}
-                    className={styles.habitatMinus100}>
-                    -100
-                </button>}
-                {shipMiniNanoFacs >= 10 && shipTL >= 11 && <button
-                    onClick={() => habitatIncrementDecrement('Mini Nano Fab', -10)}
-                    className={styles.habitatMinus10}>
-                    -10
-                </button>}
-                {shipMiniNanoFacs >= 1 && shipTL >= 11 && <button
-                    onClick={() => habitatIncrementDecrement('Mini Nano Fab', -1)}
-                    className={styles.habitatMinus1}>
-                    -1
-                </button>}
-                {shipTL >= 11 && <span className={styles.habitatButton}>
-                    {shipMiniNanoFacs}
-                </span>}
-                {shipCabins >= 1 && shipTL >= 11 && <button
-                    onClick={() => habitatIncrementDecrement('Mini Nano Fab', 1)}
-                    className={styles.habitatPlus1}>
-                    +1
-                </button>}
-                {shipCabins >= 10 && shipTL >= 11 && <button
-                    onClick={() => habitatIncrementDecrement('Mini Nano Fab', 10)}
-                    className={styles.habitatPlus10}>
-                    +10
-                </button>}
-                {shipCabins >= 100 && shipTL >= 11 && <button
-                    onClick={() => habitatIncrementDecrement('Mini Nano Fab', 100)}
-                    className={styles.habitatPlus100}>
-                    +100
-                </button>}
-                {shipTL >= 12 && superScienceChecked === true && <span className={styles.habitatInfoLabelCol1}>
-                    Minifac (Replicators):
-                </span>}
-                {shipMiniReplicators >= 100 && shipTL >= 12 && superScienceChecked === true && <button
-                    onClick={() => habitatIncrementDecrement('Mini Rep Fab', -100)}
-                    className={styles.habitatMinus100}>
-                    -100
-                </button>}
-                {shipMiniReplicators >= 10 && shipTL >= 12 && superScienceChecked === true && <button
-                    onClick={() => habitatIncrementDecrement('Mini Rep Fab', -10)}
-                    className={styles.habitatMinus10}>
-                    -10
-                </button>}
-                {shipMiniReplicators >= 1 && shipTL >= 12 && superScienceChecked === true && <button
-                    onClick={() => habitatIncrementDecrement('Mini Rep Fab', -1)}
-                    className={styles.habitatMinus1}>
-                    -1
-                </button>}
-                {shipTL >= 12 && superScienceChecked === true && <span className={styles.habitatButton}>
-                    {shipMiniReplicators}
-                </span>}
-                {shipCabins >= 1 && shipTL >= 12 && superScienceChecked === true && <button
-                    onClick={() => habitatIncrementDecrement('Mini Rep Fab', 1)}
-                    className={styles.habitatPlus1}>
-                    +1
-                </button>}
-                {shipCabins >= 10 && shipTL >= 12 && superScienceChecked === true && <button
-                    onClick={() => habitatIncrementDecrement('Mini Rep Fab', 10)}
-                    className={styles.habitatPlus10}>
-                    +10
-                </button>}
-                {shipCabins >= 100 && shipTL >= 12 && superScienceChecked === true && <button
-                    onClick={() => habitatIncrementDecrement('Mini Rep Fab', 100)}
-                    className={styles.habitatPlus100}>
-                    +100
-                </button>}
-                <span className={styles.habitatInfoLabelCol1}>
+                {shipOffices > 0 && <span className={styles.habitatStatsLabel}>
                     Offices:
-                </span>
-                {shipOffices >= 100 && <button
-                    onClick={() => habitatIncrementDecrement('Office', -100)}
-                    className={styles.habitatMinus100}>
-                    -100
-                </button>}
-                {shipOffices >= 10 && <button
-                    onClick={() => habitatIncrementDecrement('Office', -10)}
-                    className={styles.habitatMinus10}>
-                    -10
-                </button>}
-                {shipOffices >= 1 && <button
-                    onClick={() => habitatIncrementDecrement('Office', -1)}
-                    className={styles.habitatMinus1}>
-                    -1
-                </button>}
-                <span className={styles.habitatButton}>
-                    {shipOffices}
-                </span>
-                {shipCabins >= 1 && <button
-                    onClick={() => habitatIncrementDecrement('Office', 1)}
-                    className={styles.habitatPlus1}>
-                    +1
-                </button>}
-                {shipCabins >= 10 && <button
-                    onClick={() => habitatIncrementDecrement('Office', 10)}
-                    className={styles.habitatPlus10}>
-                    +10
-                </button>}
-                {shipCabins >= 100 && <button
-                    onClick={() => habitatIncrementDecrement('Office', 100)}
-                    className={styles.habitatPlus100}>
-                    +100
-                </button>}
-                <span className={styles.habitatInfoLabelCol1}>
-                    Sick Bays:
-                </span>
-                {shipSickBays >= 100 && <button
-                    onClick={() => habitatIncrementDecrement('Sickbay', -100)}
-                    className={styles.habitatMinus100}>
-                    -100
-                </button>}
-                {shipSickBays >= 10 && <button
-                    onClick={() => habitatIncrementDecrement('Sickbay', -10)}
-                    className={styles.habitatMinus10}>
-                    -10
-                </button>}
-                {shipSickBays >= 1 && <button
-                    onClick={() => habitatIncrementDecrement('Sickbay', -1)}
-                    className={styles.habitatMinus1}>
-                    -1
-                </button>}
-                <span className={styles.habitatButton}>
-                    {shipSickBays}
-                </span>
-                {shipCabins >= 1 && <button
-                    onClick={() => habitatIncrementDecrement('Sickbay', 1)}
-                    className={styles.habitatPlus1}>
-                    +1
-                </button>}
-                {shipCabins >= 10 && <button
-                    onClick={() => habitatIncrementDecrement('Sickbay', 10)}
-                    className={styles.habitatPlus10}>
-                    +10
-                </button>}
-                {shipCabins >= 100 && <button
-                    onClick={() => habitatIncrementDecrement('Sickbay', 100)}
-                    className={styles.habitatPlus100}>
-                    +100
-                </button>}
-                <span className={styles.habitatInfoLabelCol1}>
-                    Sick Bays (Auto):
-                </span>
-                {shipSickBaysAuto >= 100 && <button
-                    onClick={() => habitatIncrementDecrement('SickbayAuto', -100)}
-                    className={styles.habitatMinus100}>
-                    -100
-                </button>}
-                {shipSickBaysAuto >= 10 && <button
-                    onClick={() => habitatIncrementDecrement('SickbayAuto', -10)}
-                    className={styles.habitatMinus10}>
-                    -10
-                </button>}
-                {shipSickBaysAuto >= 1 && <button
-                    onClick={() => habitatIncrementDecrement('SickbayAuto', -1)}
-                    className={styles.habitatMinus1}>
-                    -1
-                </button>}
-                <span className={styles.habitatButton}>
-                    {shipSickBaysAuto}
-                </span>
-                {shipCabins >= 1 && <button
-                    onClick={() => habitatIncrementDecrement('SickbayAuto', 1)}
-                    className={styles.habitatPlus1}>
-                    +1
-                </button>}
-                {shipCabins >= 10 && <button
-                    onClick={() => habitatIncrementDecrement('SickbayAuto', 10)}
-                    className={styles.habitatPlus10}>
-                    +10
-                </button>}
-                {shipCabins >= 100 && <button
-                    onClick={() => habitatIncrementDecrement('SickbayAuto', 100)}
-                    className={styles.habitatPlus100}>
-                    +100
-                </button>}
-                {shipTL >= 12 && superScienceChecked === true && <span className={styles.habitatInfoLabelCol1}>
+                </span>}
+                {shipOffices > 0 && <span className={styles.habitatStatsValue}>
+                    {shipOffices.toLocaleString()}
+                </span>}
+                {shipEstablishments > 0 && <span className={styles.habitatStatsLabel}>
+                    Establish- ments:
+                </span>}
+                {shipEstablishments > 0 && <span className={styles.habitatStatsValue}>
+                    {shipEstablishments.toLocaleString()}
+                </span>}
+                {shipCells > 0 && <span className={styles.habitatStatsLabel}>
+                    Cells:
+                </span>}
+                {shipCells > 0 && <span className={styles.habitatStatsValue}>
+                    {shipCells.toLocaleString()}
+                </span>}
+                {shipBriefingRooms > 0 && <span className={styles.habitatStatsLabel}>
+                    Briefing Rooms:
+                </span>}
+                {shipBriefingRooms > 0 && <span className={styles.habitatStatsValue}>
+                    {shipBriefingRooms.toLocaleString()}
+                </span>}
+                {shipLabs > 0 && <span className={styles.habitatStatsLabel}>
+                    Labs:
+                </span>}
+                {shipLabs > 0 && <span className={styles.habitatStatsValue}>
+                    {shipLabs.toLocaleString()}
+                </span>}
+                {shipPhysicsLabs > 0 && <span className={styles.habitatStatsLabel}>
+                    Physics Labs:
+                </span>}
+                {shipPhysicsLabs > 0 && <span className={styles.habitatStatsValue}>
+                    {shipPhysicsLabs.toLocaleString()}
+                </span>}
+                {shipSuperScienceLabs > 0 && <span className={styles.habitatStatsLabel}>
+                    Super Science Labs:
+                </span>}
+                {shipSuperScienceLabs > 0 && <span className={styles.habitatStatsValue}>
+                    {shipSuperScienceLabs.toLocaleString()}
+                </span>}
+                {shipMiniFabricators > 0 && <span className={styles.habitatStatsLabel}>
+                    Mini- Fabs:
+                </span>}
+                {shipMiniFabricators > 0 && <span className={styles.habitatStatsValue}>
+                    {shipMiniFabricators.toLocaleString()}
+                </span>}
+                {shipMiniRoboFacs > 0 && <span className={styles.habitatStatsLabel}>
+                    Mini- Robo Fabs:
+                </span>}
+                {shipMiniRoboFacs > 0 && <span className={styles.habitatStatsValue}>
+                    {shipMiniRoboFacs.toLocaleString()}
+                </span>}
+                {shipMiniNanoFacs > 0 && <span className={styles.habitatStatsLabel}>
+                    Mini- Nano Fabs:
+                </span>}
+                {shipMiniNanoFacs > 0 && <span className={styles.habitatStatsValue}>
+                    {shipMiniNanoFacs.toLocaleString()}
+                </span>}
+                {shipSickBays > 0 && <span className={styles.habitatStatsLabel}>
+                    Sickbays:
+                </span>}
+                {shipSickBays > 0 && <span className={styles.habitatStatsValue}>
+                    {shipSickBays.toLocaleString()}
+                </span>}
+                {shipSickBaysAuto > 0 && <span className={styles.habitatStatsLabel}>
+                    Auto-Sickbays:
+                </span>}
+                {shipSickBaysAuto > 0 && <span className={styles.habitatStatsValue}>
+                    {shipSickBaysAuto.toLocaleString()}
+                </span>}
+                {shipMiniReplicators > 0 && <span className={styles.habitatStatsLabel}>
+                    Mini- Replicators:
+                </span>}
+                {shipMiniReplicators > 0 && <span className={styles.habitatStatsValue}>
+                    {shipMiniReplicators.toLocaleString()}
+                </span>}
+                {shipTeleportProjectors > 0 && <span className={styles.habitatStatsLabel}>
                     Teleport Projectors:
                 </span>}
-                {shipTeleportProjectors >= 100 && shipTL >= 12 && superScienceChecked === true && <button
-                    onClick={() => habitatIncrementDecrement('Teleport', -100)}
-                    className={styles.habitatMinus100}>
-                    -100
-                </button>}
-                {shipTeleportProjectors >= 10 && shipTL >= 12 && superScienceChecked === true && <button
-                    onClick={() => habitatIncrementDecrement('Teleport', -10)}
-                    className={styles.habitatMinus10}>
-                    -10
-                </button>}
-                {shipTeleportProjectors >= 1 && shipTL >= 12 && superScienceChecked === true && <button
-                    onClick={() => habitatIncrementDecrement('Teleport', -1)}
-                    className={styles.habitatMinus1}>
-                    -1
-                </button>}
-                {shipTL >= 12 && superScienceChecked === true && <span className={styles.habitatButton}>
-                    {shipTeleportProjectors}
+                {shipTeleportProjectors > 0 && <span className={styles.habitatStatsValue}>
+                    {shipTeleportProjectors.toLocaleString()}
                 </span>}
-                {shipCabins >= 1 && shipTL >= 12 && superScienceChecked === true && <button
-                    onClick={() => habitatIncrementDecrement('Teleport', 1)}
-                    className={styles.habitatPlus1}>
-                    +1
-                </button>}
-                {shipCabins >= 10 && shipTL >= 12 && superScienceChecked === true && <button
-                    onClick={() => habitatIncrementDecrement('Teleport', 10)}
-                    className={styles.habitatPlus10}>
-                    +10
-                </button>}
-                {shipCabins >= 100 && shipTL >= 12 && superScienceChecked === true && <button
-                    onClick={() => habitatIncrementDecrement('Teleport', 100)}
-                    className={styles.habitatPlus100}>
-                    +100
-                </button>}
-                {shipTL >= 12 && superScienceChecked === true && <span className={styles.habitatInfoLabelCol1}>
-                    Tele. Proj. (Send/Recieve):
+                {shipTeleportProjectorsSend > 0 && <span className={styles.habitatStatsLabel}>
+                    Teleport Projectors (Send):
                 </span>}
-                {shipTeleportProjectorsSendReceive >= 100 && shipTL >= 12 && superScienceChecked === true && <button
-                    onClick={() => habitatIncrementDecrement('Teleport Send/Receive', -100)}
-                    className={styles.habitatMinus100}>
-                    -100
-                </button>}
-                {shipTeleportProjectorsSendReceive >= 10 && shipTL >= 12 && superScienceChecked === true && <button
-                    onClick={() => habitatIncrementDecrement('Teleport Send/Receive', -10)}
-                    className={styles.habitatMinus10}>
-                    -10
-                </button>}
-                {shipTeleportProjectorsSendReceive >= 1 && shipTL >= 12 && superScienceChecked === true && <button
-                    onClick={() => habitatIncrementDecrement('Teleport Send/Receive', -1)}
-                    className={styles.habitatMinus1}>
-                    -1
-                </button>}
-                {shipTL >= 12 && superScienceChecked === true && <span className={styles.habitatButton}>
-                    {shipTeleportProjectorsSendReceive}
+                {shipTeleportProjectorsSend > 0 && <span className={styles.habitatStatsValue}>
+                    {shipTeleportProjectorsSend.toLocaleString()}
                 </span>}
-                {shipCabins >= 1 && shipTL >= 12 && superScienceChecked === true && <button
-                    onClick={() => habitatIncrementDecrement('Teleport Send/Receive', 1)}
-                    className={styles.habitatPlus1}>
-                    +1
-                </button>}
-                {shipCabins >= 10 && shipTL >= 12 && superScienceChecked === true && <button
-                    onClick={() => habitatIncrementDecrement('Teleport Send/Receive', 10)}
-                    className={styles.habitatPlus10}>
-                    +10
-                </button>}
-                {shipCabins >= 100 && shipTL >= 12 && superScienceChecked === true && <button
-                    onClick={() => habitatIncrementDecrement('Teleport Send/Receive', 100)}
-                    className={styles.habitatPlus100}>
-                    +100
-                </button>}
-                <span className={styles.habitatInfoLabelCol1}>
-                    Steerage Cargo:
-                </span>
-                {shipSteerageCargo >= 500 && <button
-                    onClick={() => habitatIncrementDecrement('Steerage', -100)}
-                    className={styles.habitatMinus100}>
-                    -100
-                </button>}
-                {shipSteerageCargo >= 50 && <button
-                    onClick={() => habitatIncrementDecrement('Steerage', -10)}
-                    className={styles.habitatMinus10}>
-                    -10
-                </button>}
-                {shipSteerageCargo >= 5 && <button
-                    onClick={() => habitatIncrementDecrement('Steerage', -1)}
-                    className={styles.habitatMinus1}>
-                    -1
-                </button>}
-                <span className={styles.habitatButton}>
-                    {shipSteerageCargo}
-                </span>
-                {shipCabins >= 1 && <button
-                    onClick={() => habitatIncrementDecrement('Steerage', 1)}
-                    className={styles.habitatPlus1}>
-                    +1
-                </button>}
-                {shipCabins >= 10 && <button
-                    onClick={() => habitatIncrementDecrement('Steerage', 10)}
-                    className={styles.habitatPlus10}>
-                    +10
-                </button>}
-                {shipCabins >= 100 && <button
-                    onClick={() => habitatIncrementDecrement('Steerage', 100)}
-                    className={styles.habitatPlus100}>
-                    +100
-                </button>}
+                {shipTeleportProjectorsReceive > 0 && <span className={styles.habitatStatsLabel}>
+                    Teleport Projectors (Recieve):
+                </span>}
+                {shipTeleportProjectorsReceive > 0 && <span className={styles.habitatStatsValue}>
+                    {shipTeleportProjectorsReceive.toLocaleString()}
+                </span>}
             </div >
         )
     }
 
-    // Habitat and Power - END
+    // This function displays the Weapon Stats component.
+    function weaponStatsDisplay() {
+        return (
+            <div className={isExpanded ? styles.weaponStatsContainerExpanded : styles.weaponStatsContainerCollapsed}>
+                <h2 className={isExpanded ? styles.statTitleExpanded : styles.statTitleCollapsed}>Weapon Stat Block</h2>
+                <p className={styles.weaponExplanation}>Unconventional warheads can be added and missile types changed when deploying
+                    your ship to the battle map (with TL and Super Science restrictions). Selections at this stage represent the
+                    default shell and missile type.</p>
+
+
+
+
+                {/* <span className={styles.weaponSelectLabel} >Mount: </span>
+                <select className={styles.weaponSelect} value={selectedMountType} onChange={handleWeaponMountChange}>
+                    <option value="">Select Weapon Mount</option>
+                    {unusedWeaponMountList.map((mountType) => (
+                        <option key={mountType} value={mountType}>{mountType}</option>
+                    ))}
+                </select>
+
+                <span className={styles.weaponSelectLabel} >Weapon Type: </span>
+                {selectedMountType && (
+                    <select className={styles.weaponSelect} value={selectedWeaponType} onChange={handleWeaponTypeChange}>
+                        <option value="">Select Weapon Type</option>
+
+                        {selectedMountType === 'Spinal Mount' && <option value="GunSpinalFront">Gun (Front Facing)</option>}
+                        {selectedMountType === 'Spinal Mount' && <option value="MissileSpinalFront">Missile (Front Facing)</option>}
+                        {selectedMountType === 'Spinal Mount' && (shipTL >= 9 || superScienceChecked === true) && <option value="BeamSpinalFront">Beam (Front Facing)</option>}
+                        {selectedMountType === 'Spinal Mount' && <option value="GunSpinalRear">Gun (Rear Facing)</option>}
+                        {selectedMountType === 'Spinal Mount' && <option value="MissileSpinalRear">Missile (Rear Facing)</option>}
+                        {selectedMountType === 'Spinal Mount' && (shipTL >= 9 || superScienceChecked === true) && <option value="BeamSpinalRear">Beam (Rear Facing)</option>}
+
+                        {selectedMountType !== 'Spinal Mount' && <option value="Uninstalled">Empty Mount</option>}
+                        {selectedMountType !== 'Spinal Mount' && <option value="GunTurret">Gun (Turret)</option>}
+                        {selectedMountType !== 'Spinal Mount' && <option value="GunFixed">Gun (Fixed)</option>}
+                        {selectedMountType !== 'Spinal Mount' && <option value="MissileTurret">Missile (Turret)</option>}
+                        {selectedMountType !== 'Spinal Mount' && <option value="MissileFixed">Missile (Fixed)</option>}
+                        {selectedMountType !== 'Spinal Mount' && (shipTL >= 9 || superScienceChecked === true) && <option value="BeamTurret">Beam (Turret)</option>}
+                        {selectedMountType !== 'Spinal Mount' && (shipTL >= 9 || superScienceChecked === true) && <option value="BeamFixed">Beam (Fixed)</option>}
+
+                    </select>
+                )}
+
+                <span className={styles.weaponSelectLabel} >Weapon Sub-type: </span>
+                {selectedWeaponType && (
+                    <>
+                        <select className={styles.weaponSelect} value={weaponSubType} onChange={handleSpecificTypeChange}>
+                            <option value="">Select Sub Type</option>
+                            {shipValidWeaponTypesList.map((weaponType) => (
+                                <option key={weaponType} value={weaponType}>{weaponType}</option>
+                            ))}
+                        </select>
+
+                    </>
+                )}
+
+                {weaponSubType && (
+                    <>
+                        <span className={styles.statTitle}>{weaponSubType}</span>
+
+                        <span className={styles.freeFillWeaponLabel}>Size: </span>
+                        {selectedWeaponType !== "Uninstalled" && <span className={styles.freeFillWeaponValue}>{`${weaponSizeDisplayConverter(selectedWeaponSize).toLocaleString()}`}</span>}
+                        {selectedWeaponType === "Uninstalled" && <span className={styles.freeFillWeaponValue}>{`${selectedUninstalledCargo.toLocaleString()} tons`}</span>}
+
+                        {(selectedWeaponType === "GunSpinalFront" || selectedWeaponType === "GunSpinalRear" || selectedWeaponType === "GunTurret" || selectedWeaponType === "GunFixed" || selectedWeaponType === "MissileSpinalFront" || selectedWeaponType === "MissileSpinalRear" || selectedWeaponType === "MissileTurret" || selectedWeaponType === "MissileFixed") &&
+                            <span className={styles.freeFillWeaponLabel}>Shots: </span>}
+                        {(selectedWeaponType === "GunSpinalFront" || selectedWeaponType === "GunSpinalRear" || selectedWeaponType === "GunTurret" || selectedWeaponType === "GunFixed" || selectedWeaponType === "MissileSpinalFront" || selectedWeaponType === "MissileSpinalRear" || selectedWeaponType === "MissileTurret" || selectedWeaponType === "MissileFixed") &&
+                            <span className={styles.freeFillWeaponValue}>{selectedWeaponShots}</span>}
+
+                        {(selectedWeaponType === "BeamSpinalFront" || selectedWeaponType === "BeamSpinalRear" || selectedWeaponType === "BeamTurret" || selectedWeaponType === "BeamFixed") && <span className={styles.freeFillWeaponLabel}>
+                            Range (Full Dmg) (10 /100 /1k /10k): </span>}
+                        {(selectedWeaponType === "BeamSpinalFront" || selectedWeaponType === "BeamSpinalRear" || selectedWeaponType === "BeamTurret" || selectedWeaponType === "BeamFixed") && <span className={styles.freeFillWeaponValue}>
+                            {`${selectedWeaponRangeArray[0][0]}/${selectedWeaponRangeArray[1][0]}/${selectedWeaponRangeArray[2][0]}/${selectedWeaponRangeArray[3][0]}`}</span>}
+
+                        {(selectedWeaponType === "BeamSpinalFront" || selectedWeaponType === "BeamSpinalRear" || selectedWeaponType === "BeamTurret" || selectedWeaponType === "BeamFixed") && <span className={styles.freeFillWeaponLabel}>
+                            Range (1/2 Dmg) (10 /100 /1k /10k): </span>}
+                        {(selectedWeaponType === "BeamSpinalFront" || selectedWeaponType === "BeamSpinalRear" || selectedWeaponType === "BeamTurret" || selectedWeaponType === "BeamFixed") && <span className={styles.freeFillWeaponValue}>
+                            {`${selectedWeaponRangeArray[0][1]}/${selectedWeaponRangeArray[1][1]}/${selectedWeaponRangeArray[2][1]}/${selectedWeaponRangeArray[3][1]}`}</span>}
+
+                        {weaponSubType === "Warp Missile" && <span className={styles.freeFillWeaponLabel}>
+                            Range (10 /100 /1k /10k): </span>}
+                        {weaponSubType === "Warp Missile" && <span className={styles.freeFillWeaponValue}>
+                            {`${warpMissileRange[0].toLocaleString()}/${warpMissileRange[1].toLocaleString()}/${warpMissileRange[2].toLocaleString()}/${warpMissileRange[3].toLocaleString()}`}</span>}
+
+                        {selectedWeaponType !== "Uninstalled" && <span className={styles.freeFillWeaponLabel}>Rate of Fire (20s /1m /3m /10m): </span>}
+                        {selectedWeaponType !== "Uninstalled" && <span className={styles.freeFillWeaponValue}>{`${selectedWeaponRoF[0]}/${selectedWeaponRoF[1]}/${selectedWeaponRoF[2]}/${selectedWeaponRoF[3]}`}</span>}
+
+                        {selectedWeaponType !== "Uninstalled" && <span className={styles.freeFillWeaponLabel}>Recoil: </span>}
+                        {selectedWeaponType !== "Uninstalled" && <span className={styles.freeFillWeaponValue}>{selectedWeaponRcl}</span>}
+
+                        {selectedWeaponType !== "Uninstalled" && <span className={styles.freeFillWeaponLabel}>Damage Type: </span>}
+                        {selectedWeaponType !== "Uninstalled" && <span className={styles.freeFillWeaponValue}>{selectedWeaponDamageTypes.join(', ')}</span>}
+
+                        {selectedWeaponType !== "Uninstalled" && <span className={styles.freeFillWeaponLabel}>Base Damage: </span>}
+                        {selectedWeaponType !== "Uninstalled" && <span className={styles.freeFillWeaponValue}>
+                            {`${selectedWeaponDmgDice + 'd'}${selectedWeaponDmgMod !== 0 || selectedWeaponDmgMulti !== 0 ? (selectedWeaponDmgMod !== 0 ? selectedWeaponDmgMod : 'x' + selectedWeaponDmgMulti) : '+0'} / ${selectedWeaponArmorDiv}`}</span>}
+
+                        {selectedWeaponType !== "Uninstalled" && <span className={styles.freeFillWeaponLabel}>Space Accuracy: </span>}
+                        {selectedWeaponType !== "Uninstalled" && <span className={styles.freeFillWeaponValue}>{selectedWeaponSAcc}</span>}
+
+                        {(weaponSubType !== "Warp Missile" && (selectedWeaponType === "MissileSpinalFront" || selectedWeaponType === "MissileSpinalRear" || selectedWeaponType === "MissileTurret" || selectedWeaponType === "MissileFixed")) &&
+                            <span className={styles.freeFillWeaponLabel1}>Thrust (10 Mile) (20s /1m /3m /10m): </span>}
+                        {(weaponSubType !== "Warp Missile" && (selectedWeaponType === "MissileSpinalFront" || selectedWeaponType === "MissileSpinalRear" || selectedWeaponType === "MissileTurret" || selectedWeaponType === "MissileFixed")) &&
+                            <span className={styles.freeFillWeaponValue}>{`${selectedWeaponThrust[0][0]}/${selectedWeaponThrust[0][1]}/${selectedWeaponThrust[0][2]}/${selectedWeaponThrust[0][3]}`}</span>}
+
+                        {(weaponSubType !== "Warp Missile" && (selectedWeaponType === "MissileSpinalFront" || selectedWeaponType === "MissileSpinalRear" || selectedWeaponType === "MissileTurret" || selectedWeaponType === "MissileFixed")) &&
+                            <span className={styles.freeFillWeaponLabel}>Thrust (1000 Mile) (20s /1m /3m /10m): </span>}
+                        {(weaponSubType !== "Warp Missile" && (selectedWeaponType === "MissileSpinalFront" || selectedWeaponType === "MissileSpinalRear" || selectedWeaponType === "MissileTurret" || selectedWeaponType === "MissileFixed")) &&
+                            <span className={styles.freeFillWeaponValue}>{`${selectedWeaponThrust[2][0]}/${selectedWeaponThrust[2][1]}/${selectedWeaponThrust[2][2]}/${selectedWeaponThrust[2][3]}`}</span>}
+
+                        {(weaponSubType !== "Warp Missile" && (selectedWeaponType === "MissileSpinalFront" || selectedWeaponType === "MissileSpinalRear" || selectedWeaponType === "MissileTurret" || selectedWeaponType === "MissileFixed")) &&
+                            <span className={styles.freeFillWeaponLabel}>Burn (10 Mile) (20s /1m /3m /10m): </span>}
+                        {(weaponSubType !== "Warp Missile" && (selectedWeaponType === "MissileSpinalFront" || selectedWeaponType === "MissileSpinalRear" || selectedWeaponType === "MissileTurret" || selectedWeaponType === "MissileFixed")) &&
+                            <span className={styles.freeFillWeaponValue}>{`${selectedWeaponBurn[0][0]}/${selectedWeaponBurn[0][1]}/${selectedWeaponBurn[0][2]}/${selectedWeaponBurn[0][3]}`}</span>}
+
+                        {(weaponSubType !== "Warp Missile" && (selectedWeaponType === "MissileSpinalFront" || selectedWeaponType === "MissileSpinalRear" || selectedWeaponType === "MissileTurret" || selectedWeaponType === "MissileFixed")) &&
+                            <span className={styles.freeFillWeaponLabel}>Burn (1000 Mile) (20s /1m /3m /10m): </span>}
+                        {(weaponSubType !== "Warp Missile" && (selectedWeaponType === "MissileSpinalFront" || selectedWeaponType === "MissileSpinalRear" || selectedWeaponType === "MissileTurret" || selectedWeaponType === "MissileFixed")) &&
+                            <span className={styles.freeFillWeaponValue}>{`${selectedWeaponBurn[2][0]}/${selectedWeaponBurn[2][1]}/${selectedWeaponBurn[2][2]}/${selectedWeaponBurn[2][3]}`}</span>}
+
+                        {(selectedWeaponType === "GunSpinalFront" || selectedWeaponType === "GunSpinalRear" || selectedWeaponType === "GunTurret" || selectedWeaponType === "GunFixed") &&
+                            <span className={styles.freeFillWeaponLabel}>Gun Impulse (10 Mile) (20s /1m /3m /10m): </span>}
+                        {(selectedWeaponType === "GunSpinalFront" || selectedWeaponType === "GunSpinalRear" || selectedWeaponType === "GunTurret" || selectedWeaponType === "GunFixed") &&
+                            <span className={styles.freeFillWeaponValue}>{`${selectedWeaponImpulse[0][0]} /${selectedWeaponImpulse[0][1]} /${selectedWeaponImpulse[0][2]} /${selectedWeaponImpulse[0][3]}`}</span>}
+
+                        {(selectedWeaponType === "GunSpinalFront" || selectedWeaponType === "GunSpinalRear" || selectedWeaponType === "GunTurret" || selectedWeaponType === "GunFixed") &&
+                            <span className={styles.freeFillWeaponLabel}>Gun Impulse (1000 Mile) (20s /1m /3m /10m): </span>}
+                        {(selectedWeaponType === "GunSpinalFront" || selectedWeaponType === "GunSpinalRear" || selectedWeaponType === "GunTurret" || selectedWeaponType === "GunFixed") &&
+                            <span className={styles.freeFillWeaponValue}>{`${selectedWeaponImpulse[2][0]} /${selectedWeaponImpulse[2][1]} /${selectedWeaponImpulse[2][2]} /${selectedWeaponImpulse[2][3]}`}</span>}
+
+
+                        {(selectedWeaponType === "BeamSpinalFront" || selectedWeaponType === "BeamSpinalRear" || selectedWeaponType === "BeamTurret" || selectedWeaponType === "BeamFixed" || selectedWeaponType === "GunSpinalFront" || selectedWeaponType === "GunSpinalRear" || selectedWeaponType === "GunTurret" || selectedWeaponType === "GunFixed") &&
+                            <div className={styles.freeFillWeaponLabelContainer}>
+                                {selectedWeaponVeryRapidFire !== true && weaponSubType !== 'Graviton Beam' && weaponSubType !== 'Tractor Beam' && <label className={styles.freeFillWeaponLabel1}>
+                                    Rapid Fire:&nbsp;
+                                    <input className={styles.inputCheckbox}
+                                        type="checkbox"
+                                        checked={selectedWeaponRapidFire}
+                                        onChange={handleRapidFireChange}
+                                    />
+                                </label>}
+
+                                {selectedWeaponRapidFire !== true && weaponSubType !== 'Graviton Beam' && weaponSubType !== 'Tractor Beam' && <label className={styles.freeFillWeaponLabel2}>
+                                    Very Rapid Fire:&nbsp;
+                                    <input className={styles.inputCheckbox}
+                                        type="checkbox"
+                                        checked={selectedWeaponVeryRapidFire}
+                                        onChange={handleVeryRapidFireChange}
+                                    />
+                                </label>}
+
+                                {selectedWeaponImprovedValid === true && <label className={styles.freeFillWeaponLabel3}>
+                                    Improved:&nbsp;
+                                    <input className={styles.inputCheckbox}
+                                        type="checkbox"
+                                        checked={selectedWeaponImproved}
+                                        onChange={handleImprovedChange}
+                                    />
+                                </label>}</div>}
+
+                        {(selectedWeaponLargestWarhead[0] !== "None" && (selectedWeaponType === "GunSpinalFront" || selectedWeaponType === "GunSpinalRear" || selectedWeaponType === "GunTurret" || selectedWeaponType === "GunFixed" || selectedWeaponType === "MissileSpinalFront" || selectedWeaponType === "MissileSpinalRear" || selectedWeaponType === "MissileTurret" || selectedWeaponType === "MissileFixed")) &&
+                            <span className={styles.freeFillWeaponLabel1}>Largest Warhead (Type): </span>}
+                        {(selectedWeaponLargestWarhead[0] !== "None" && (selectedWeaponType === "GunSpinalFront" || selectedWeaponType === "GunSpinalRear" || selectedWeaponType === "GunTurret" || selectedWeaponType === "GunFixed" || selectedWeaponType === "MissileSpinalFront" || selectedWeaponType === "MissileSpinalRear" || selectedWeaponType === "MissileTurret" || selectedWeaponType === "MissileFixed")) &&
+                            <span className={styles.freeFillWeaponValue}>{selectedWeaponLargestWarhead[0]}</span>}
+
+                        {(selectedWeaponLargestWarhead[0] !== "None" && (selectedWeaponType === "GunSpinalFront" || selectedWeaponType === "GunSpinalRear" || selectedWeaponType === "GunTurret" || selectedWeaponType === "GunFixed" || selectedWeaponType === "MissileSpinalFront" || selectedWeaponType === "MissileSpinalRear" || selectedWeaponType === "MissileTurret" || selectedWeaponType === "MissileFixed")) &&
+                            <span className={styles.freeFillWeaponLabel}>Largest Warhead (Size): </span>}
+                        {(selectedWeaponLargestWarhead[0] !== "None" && (selectedWeaponType === "GunSpinalFront" || selectedWeaponType === "GunSpinalRear" || selectedWeaponType === "GunTurret" || selectedWeaponType === "GunFixed" || selectedWeaponType === "MissileSpinalFront" || selectedWeaponType === "MissileSpinalRear" || selectedWeaponType === "MissileTurret" || selectedWeaponType === "MissileFixed")) &&
+                            <span className={styles.freeFillWeaponValue}>{largestWarheadDisplay(selectedWeaponLargestWarhead[1])}</span>}
+
+                        {(selectedWeaponLargestWarhead[0] !== "None" && (selectedWeaponType === "GunSpinalFront" || selectedWeaponType === "GunSpinalRear" || selectedWeaponType === "GunTurret" || selectedWeaponType === "GunFixed" || selectedWeaponType === "MissileSpinalFront" || selectedWeaponType === "MissileSpinalRear" || selectedWeaponType === "MissileTurret" || selectedWeaponType === "MissileFixed")) &&
+                            <span className={styles.freeFillWeaponLabel}>Warhead Damage: </span>}
+                        {(selectedWeaponLargestWarhead[0] !== "None" && (selectedWeaponType === "GunSpinalFront" || selectedWeaponType === "GunSpinalRear" || selectedWeaponType === "GunTurret" || selectedWeaponType === "GunFixed" || selectedWeaponType === "MissileSpinalFront" || selectedWeaponType === "MissileSpinalRear" || selectedWeaponType === "MissileTurret" || selectedWeaponType === "MissileFixed")) &&
+                            <span className={styles.freeFillWeaponValue}>{`${weaponTables["NuclearAntiMatterDmgTable"][selectedWeaponLargestWarhead[1]]["DamageDice"]}x${weaponTables["NuclearAntiMatterDmgTable"][selectedWeaponLargestWarhead[1]]["DamageMultiplier"].toLocaleString()}`}</span>}
+
+                        {(selectedWeaponLargestWarhead[0] !== "None" && (selectedWeaponType === "GunSpinalFront" || selectedWeaponType === "GunSpinalRear" || selectedWeaponType === "GunTurret" || selectedWeaponType === "GunFixed" || selectedWeaponType === "MissileSpinalFront" || selectedWeaponType === "MissileSpinalRear" || selectedWeaponType === "MissileTurret" || selectedWeaponType === "MissileFixed")) &&
+                            <span className={styles.freeFillWeaponLabel}>Warhead Linked Damage: </span>}
+                        {(selectedWeaponLargestWarhead[0] !== "None" && (selectedWeaponType === "GunSpinalFront" || selectedWeaponType === "GunSpinalRear" || selectedWeaponType === "GunTurret" || selectedWeaponType === "GunFixed" || selectedWeaponType === "MissileSpinalFront" || selectedWeaponType === "MissileSpinalRear" || selectedWeaponType === "MissileTurret" || selectedWeaponType === "MissileFixed")) &&
+                            <span className={styles.freeFillWeaponValue}>{`${weaponTables["NuclearAntiMatterDmgTable"][selectedWeaponLargestWarhead[1]]["LinkedDmgDice"]}x${weaponTables["NuclearAntiMatterDmgTable"][selectedWeaponLargestWarhead[1]]["LinkedDmgMultiplier"].toLocaleString()}`}</span>}
+
+                        <div className={styles.addWeaponsNumberButtons}>
+                            <button className={styles.weaponNumberButtonMinusTen} onClick={() => handleWeaponNumberClick(-10, selectedMountType)}>-10</button>
+                            <button className={styles.weaponNumberButtonMinusOne} onClick={() => handleWeaponNumberClick(-1, selectedMountType)}>-1</button>
+                            <span className={styles.weaponNumberDisplay}>{selectedWeaponCount}</span>
+                            <button className={styles.weaponNumberButtonOne} onClick={() => handleWeaponNumberClick(1, selectedMountType)}>1</button>
+                            <button className={styles.weaponNumberButtonTen} onClick={() => handleWeaponNumberClick(10, selectedMountType)}>10</button>
+                        </div>
+
+                        <button className={styles.addWeaponButton} onClick={handleAddWeapon}>Add Weapon(s)</button> */}
+
+
+                {/* </>
+                )}
+                {weaponList && <>
+                    {weaponList.map((weapon, weaponIndex) => (
+
+                        <div className={styles.weaponInfoContainer} key={weaponIndex}>
+                            <span className={styles.weaponInfoLabel1}>Mount Type:</span>
+                            <span className={styles.weaponInfoValue}>{weapon.mountType}</span>
+                            <span className={styles.weaponInfoLabel2}>Module Number:</span>
+                            <span className={styles.weaponInfoValue}>{weapon.moduleNumber}</span>
+                            <span className={styles.weaponInfoLabel1}>Weapon Type:</span>
+                            <span className={styles.weaponInfoValue}>{weapon.weaponType}</span>
+                            <span className={styles.weaponInfoLabel2}>Weapon Count:</span>
+                            <span className={styles.weaponInfoValue}>{weapon.count}</span>
+                            <span className={styles.weaponDeleteWarning}>Only weapons in a full mount can be removed.</span>
+                            <button className={styles.addWeaponButton} onClick={() => handleDeleteWeapon(weapon, weaponIndex)}>Remove</button>
+                        </div>
+                    ))}
+                </>} */}
+            </div>
+        )
+    }
+
+    // This function is passed into the ShipClassHabitatPower component to display the power plant information.
+    function powerPlantsDisplay() {
+        return shipPowerPlants.map((module, index) => (
+            <React.Fragment key={index}>
+                <span className={styles.habitatPowerInfoLabelCol1}>
+                    Power Plant:
+                </span>
+                <span className={styles.habitatPowerInfoValueCol1}>
+                    {module.powerPlantKey}
+                </span>
+                <span className={styles.habitatPowerInfoLabelCol2}>
+                    Power Generation:
+                </span>
+                <span className={styles.habitatPowerInfoValueCol2}>
+                    {module.powerGeneration}
+                </span>
+                <span className={styles.habitatPowerInfoLabelCol1}>
+                    Reactor Life (Years):
+                </span>
+                <span className={styles.habitatPowerInfoValueCol1}>
+                    {module.reactorLifeYears}
+                </span>
+                <span className={styles.habitatPowerInfoLabelCol2}>
+                    Reactor Life (Hours):
+                </span>
+                <span className={styles.habitatPowerInfoValueCol2}>
+                    {module.reactorLifeHours}
+                </span>
+                <span className={styles.habitatPowerInfoLabelCol1}>
+                    Cost:
+                </span>
+                <span className={styles.habitatPowerInfoValueCol1}>
+                    ${module.finalCost.toLocaleString()}
+                </span>
+                {
+                    ["Reactor, Fusion", "Reactor, Antimatter", "Reactor, Super Fusion"].includes(module.powerPlantKey) &&
+                    <button className={styles.deRateButton} onClick={() => handleDeRatedChange(module)}>De-Rate</button>
+                }
+                {
+                    ["Reactor, Fusion", "Reactor, Antimatter", "Reactor, Super Fusion"].includes(module.powerPlantKey) &&
+                    <button className={styles.upRateButton} onClick={() => handleUpRatedChange(module)}>Up-Rate</button>
+                }
+            </React.Fragment>
+        ))
+    }
+
+    // Extra Stats - END
     // ****************************************************************************************************************************************************
     // ****************************************************************************************************************************************************
 
     // ****************************************************************************************************************************************************
     // ****************************************************************************************************************************************************
-    // Weapon Stats and Options - START
+    // Customization - START
 
     // This function resets all weapon stats to avoid issues when dependencies change.
     function resetWeaponStats() {
@@ -2729,19 +2666,6 @@ const CreateShipClass = ({ isExpanded }) => {
         } else if (selectedWeaponType === 'MissileTurret' || selectedWeaponType === 'MissileFixed' || selectedWeaponType === 'MissileSpinalFront' || selectedWeaponType === 'MissileSpinalRear' || selectedWeaponType === 'GunTurret' || selectedWeaponType === 'GunFixed' || selectedWeaponType === 'GunSpinalFront' || selectedWeaponType === 'GunSpinalRear') {
             return `${weaponSize} cm`
         }
-    }
-
-    // This function resets the weapon count state variables.
-    function resetCounts() {
-        setCurrentMediumCountFront(0);
-        setCurrentSecondaryCountFront(0);
-        setCurrentTertiaryCountFront(0);
-        setCurrentMediumCountMid(0);
-        setCurrentSecondaryCountMid(0);
-        setCurrentTertiaryCountMid(0);
-        setCurrentMediumCountRear(0);
-        setCurrentSecondaryCountRear(0);
-        setCurrentTertiaryCountRear(0);
     }
 
     // This useEffect determines the valid weapon sub types based on ship TL, selectedWeaponType, and superScience.
@@ -3549,54 +3473,6 @@ const CreateShipClass = ({ isExpanded }) => {
         }
     }
 
-    // This useEffect updates the unusedWeaponMountList based on the ship's spinal, major, medium, 
-    // secondary, and tertiary mounts.  The first[0] value in the array is the spinal mount count.
-    // The next three values in the array are the number of major mounts in the front, middle, and 
-    // rear, then the number of medium mounts in the front, middle, and rear, and so on.
-    useEffect(() => {
-        let newMountList = []
-        if (shipUnusedSpinalMounts === 1) {
-            newMountList.push('Spinal Mount')
-        }
-        if (shipMajorMountLocation[0].find(value => value === 1)) {
-            newMountList.push('Major (Front)')
-        }
-        if (shipMajorMountLocation[1].find(value => value === 1)) {
-            newMountList.push('Major (Middle)')
-        }
-        if (shipMajorMountLocation[2].find(value => value === 1)) {
-            newMountList.push('Major (Rear)')
-        }
-        if (shipMediumMountLocation[0].find(value => value === 1)) {
-            newMountList.push('Medium (Front)')
-        }
-        if (shipMediumMountLocation[1].find(value => value === 1)) {
-            newMountList.push('Medium (Middle)')
-        }
-        if (shipMediumMountLocation[2].find(value => value === 1)) {
-            newMountList.push('Medium (Rear)')
-        }
-        if (shipSecondaryMountLocation[0].find(value => value === 1)) {
-            newMountList.push('Secondary (Front)')
-        }
-        if (shipSecondaryMountLocation[1].find(value => value === 1)) {
-            newMountList.push('Secondary (Middle)')
-        }
-        if (shipSecondaryMountLocation[2].find(value => value === 1)) {
-            newMountList.push('Secondary (Rear)')
-        }
-        if (shipTertiaryMountLocation[0].find(value => value === 1)) {
-            newMountList.push('Tertiary (Front)')
-        }
-        if (shipTertiaryMountLocation[1].find(value => value === 1)) {
-            newMountList.push('Tertiary (Middle)')
-        }
-        if (shipTertiaryMountLocation[2].find(value => value === 1)) {
-            newMountList.push('Tertiary (Rear)')
-        }
-
-        setUnusedWeaponMountList(newMountList)
-    }, [shipUnusedSpinalMounts, shipMajorMountLocation, shipMediumMountLocation, shipSecondaryMountLocation, shipTertiaryMountLocation])
 
     // This function creates a weapon object with all relevant states and adds it to the weaponList state variable.
     function handleAddWeapon() {
@@ -4052,230 +3928,745 @@ const CreateShipClass = ({ isExpanded }) => {
 
     }
 
-    // This function displays the Weapon Stats component.
-    function weaponStatsDisplay() {
+    function habitatCustomizationDisplay() {
         return (
-            <div className={isExpanded ? styles.weaponStatsContainerExpanded : styles.weaponStatsContainerCollapsed}>
-                <h2 className={styles.statTitle}>Weapon Stat Block</h2>
-                <p className={styles.weaponExplanation}>Unconventional warheads can be added and missile types changed when deploying
-                    your ship to the battle map (with TL and Super Science restrictions). Selections at this stage represent the
-                    default shell and missile type.</p>
-                <span className={styles.weaponLabelCol1}>Unused Spinal Mounts:</span>
-                <span className={styles.weaponValueCol1}>{shipUnusedSpinalMounts}</span>
-                <span className={styles.weaponLabelCol2}>Unused Major Mounts:</span>
-                <span className={styles.weaponValueCol2}>{shipUnusedMajorWeapons}</span>
-                <span className={styles.weaponLabelCol1}>Unused Medium Mounts:</span>
-                <span className={styles.weaponValueCol1}>{shipUnusedMediumWeapons}</span>
-                <span className={styles.weaponLabelCol2}>Unused Secondary Mounts:</span>
-                <span className={styles.weaponValueCol2}>{shipUnusedSecondaryWeapons}</span>
-                <span className={styles.weaponLabelCol1}>Unused Tertiary Mounts:</span>
-                <span className={styles.weaponValueCol1}>{shipUnusedTertiaryWeapons}</span>
-                <span className={styles.weaponLabelCol2}>Weapon Mount Cargo:</span>
-                <span className={styles.weaponValueCol2}>{shipWeaponMountCargo}</span>
+            <div className={styles.habitatSubContainer}>
+                <span className={styles.habitatInfoLabelCol1}>
+                    Bunk- rooms:
+                </span>
+                {shipBunkrooms >= 100 && <button
+                    onClick={() => habitatIncrementDecrement('Bunkrooms', -100)}
+                    className={styles.habitatMinus100}>
+                    -100
+                </button>}
+                {shipBunkrooms >= 10 && <button
+                    onClick={() => habitatIncrementDecrement('Bunkrooms', -10)}
+                    className={styles.habitatMinus10}>
+                    -10
+                </button>}
+                {shipBunkrooms >= 1 && <button
+                    onClick={() => habitatIncrementDecrement('Bunkrooms', -1)}
+                    className={styles.habitatMinus1}>
+                    -1
+                </button>}
+                <span className={styles.habitatButton}>
+                    {shipBunkrooms}
+                </span>
+                {shipCabins >= 1 && <button
+                    onClick={() => habitatIncrementDecrement('Bunkrooms', 1)}
+                    className={styles.habitatPlus1}>
+                    +1
+                </button>}
+                {shipCabins >= 10 && <button
+                    onClick={() => habitatIncrementDecrement('Bunkrooms', 10)}
+                    className={styles.habitatPlus10}>
+                    +10
+                </button>}
+                {shipCabins >= 100 && <button
+                    onClick={() => habitatIncrementDecrement('Bunkrooms', 100)}
+                    className={styles.habitatPlus100}>
+                    +100
+                </button>}
+                <span className={styles.habitatInfoLabelCol1}>
+                    Cells:
+                </span>
+                {shipCells >= 100 && <button
+                    onClick={() => habitatIncrementDecrement('Cells', -100)}
+                    className={styles.habitatMinus100}>
+                    -100
+                </button>}
+                {shipCells >= 10 && <button
+                    onClick={() => habitatIncrementDecrement('Cells', -10)}
+                    className={styles.habitatMinus10}>
+                    -10
+                </button>}
+                {shipCells >= 1 && <button
+                    onClick={() => habitatIncrementDecrement('Cells', -1)}
+                    className={styles.habitatMinus1}>
+                    -1
+                </button>}
+                <span className={styles.habitatButton}>
+                    {shipCells}
+                </span>
+                {shipCabins >= 1 && <button
+                    onClick={() => habitatIncrementDecrement('Cells', 1)}
+                    className={styles.habitatPlus1}>
+                    +1
+                </button>}
+                {shipCabins >= 10 && <button
+                    onClick={() => habitatIncrementDecrement('Cells', 10)}
+                    className={styles.habitatPlus10}>
+                    +10
+                </button>}
+                {shipCabins >= 100 && <button
+                    onClick={() => habitatIncrementDecrement('Cells', 100)}
+                    className={styles.habitatPlus100}>
+                    +100
+                </button>}
+                <span className={styles.habitatInfoLabelCol1}>
+                    Luxury Cabins:
+                </span>
+                {shipLuxuryCabins >= 100 && <button
+                    onClick={() => habitatIncrementDecrement('Luxury', -100)}
+                    className={styles.habitatMinus100}>
+                    -100
+                </button>}
+                {shipLuxuryCabins >= 10 && <button
+                    onClick={() => habitatIncrementDecrement('Luxury', -10)}
+                    className={styles.habitatMinus10}>
+                    -10
+                </button>}
+                {shipLuxuryCabins >= 1 && <button
+                    onClick={() => habitatIncrementDecrement('Luxury', -1)}
+                    className={styles.habitatMinus1}>
+                    -1
+                </button>}
+                <span className={styles.habitatButton}>
+                    {shipLuxuryCabins}
+                </span>
+                {shipCabins >= 2 && <button
+                    onClick={() => habitatIncrementDecrement('Luxury', 1)}
+                    className={styles.habitatPlus1}>
+                    +1
+                </button>}
+                {shipCabins >= 20 && <button
+                    onClick={() => habitatIncrementDecrement('Luxury', 10)}
+                    className={styles.habitatPlus10}>
+                    +10
+                </button>}
+                {shipCabins >= 200 && <button
+                    onClick={() => habitatIncrementDecrement('Luxury', 100)}
+                    className={styles.habitatPlus100}>
+                    +100
+                </button>}
+                <span className={styles.habitatInfoLabelCol1}>
+                    Briefing Rooms:
+                </span>
+                {shipBriefingRooms >= 100 && <button
+                    onClick={() => habitatIncrementDecrement('Briefing', -100)}
+                    className={styles.habitatMinus100}>
+                    -100
+                </button>}
+                {shipBriefingRooms >= 10 && <button
+                    onClick={() => habitatIncrementDecrement('Briefing', -10)}
+                    className={styles.habitatMinus10}>
+                    -10
+                </button>}
+                {shipBriefingRooms >= 1 && <button
+                    onClick={() => habitatIncrementDecrement('Briefing', -1)}
+                    className={styles.habitatMinus1}>
+                    -1
+                </button>}
+                <span className={styles.habitatButton}>
+                    {shipBriefingRooms}
+                </span>
+                {shipCabins >= 1 && <button
+                    onClick={() => habitatIncrementDecrement('Briefing', 1)}
+                    className={styles.habitatPlus1}>
+                    +1
+                </button>}
+                {shipCabins >= 10 && <button
+                    onClick={() => habitatIncrementDecrement('Briefing', 10)}
+                    className={styles.habitatPlus10}>
+                    +10
+                </button>}
+                {shipCabins >= 100 && <button
+                    onClick={() => habitatIncrementDecrement('Briefing', 100)}
+                    className={styles.habitatPlus100}>
+                    +100
+                </button>}
+                <span className={styles.habitatInfoLabelCol1}>
+                    Establish- ments:
+                </span>
+                {shipEstablishments >= 100 && <button
+                    onClick={() => habitatIncrementDecrement('Establishment', -100)}
+                    className={styles.habitatMinus100}>
+                    -100
+                </button>}
+                {shipEstablishments >= 10 && <button
+                    onClick={() => habitatIncrementDecrement('Establishment', -10)}
+                    className={styles.habitatMinus10}>
+                    -10
+                </button>}
+                {shipEstablishments >= 1 && <button
+                    onClick={() => habitatIncrementDecrement('Establishment', -1)}
+                    className={styles.habitatMinus1}>
+                    -1
+                </button>}
+                <span className={styles.habitatButton}>
+                    {shipEstablishments}
+                </span>
+                {shipCabins >= 2 && <button
+                    onClick={() => habitatIncrementDecrement('Establishment', 1)}
+                    className={styles.habitatPlus1}>
+                    +1
+                </button>}
+                {shipCabins >= 20 && <button
+                    onClick={() => habitatIncrementDecrement('Establishment', 10)}
+                    className={styles.habitatPlus10}>
+                    +10
+                </button>}
+                {shipCabins >= 200 && <button
+                    onClick={() => habitatIncrementDecrement('Establishment', 100)}
+                    className={styles.habitatPlus100}>
+                    +100
+                </button>}
+                {shipTL >= 9 && < span className={styles.habitatInfoLabelCol1}>
+                    Hibernation Chambers:
+                </span>}
+                {shipHibernationChambers >= 100 && shipTL >= 9 && <button
+                    onClick={() => habitatIncrementDecrement('Hibernation', -100)}
+                    className={styles.habitatMinus100}>
+                    -100
+                </button>}
+                {shipHibernationChambers >= 10 && shipTL >= 9 && <button
+                    onClick={() => habitatIncrementDecrement('Hibernation', -10)}
+                    className={styles.habitatMinus10}>
+                    -10
+                </button>}
+                {shipHibernationChambers >= 1 && shipTL >= 9 && <button
+                    onClick={() => habitatIncrementDecrement('Hibernation', -1)}
+                    className={styles.habitatMinus1}>
+                    -1
+                </button>}
+                {shipTL >= 9 && <span className={styles.habitatButton}>
+                    {shipHibernationChambers}
+                </span>}
+                {shipCabins >= 0.25 && shipTL >= 9 && <button
+                    onClick={() => habitatIncrementDecrement('Hibernation', 1)}
+                    className={styles.habitatPlus1}>
+                    +1
+                </button>}
+                {shipCabins >= 2.5 && shipTL >= 9 && <button
+                    onClick={() => habitatIncrementDecrement('Hibernation', 10)}
+                    className={styles.habitatPlus10}>
+                    +10
+                </button>}
+                {shipCabins >= 25 && shipTL >= 9 && <button
+                    onClick={() => habitatIncrementDecrement('Hibernation', 100)}
+                    className={styles.habitatPlus100}>
+                    +100
+                </button>}
+                <span className={styles.habitatInfoLabelCol1}>
+                    Labs:
+                </span>
+                {shipLabs >= 100 && <button
+                    onClick={() => habitatIncrementDecrement('Labs', -100)}
+                    className={styles.habitatMinus100}>
+                    -100
+                </button>}
+                {shipLabs >= 10 && <button
+                    onClick={() => habitatIncrementDecrement('Labs', -10)}
+                    className={styles.habitatMinus10}>
+                    -10
+                </button>}
+                {shipLabs >= 1 && <button
+                    onClick={() => habitatIncrementDecrement('Labs', -1)}
+                    className={styles.habitatMinus1}>
+                    -1
+                </button>}
+                <span className={styles.habitatButton}>
+                    {shipLabs}
+                </span>
+                {shipCabins >= 2 && <button
+                    onClick={() => habitatIncrementDecrement('Labs', 1)}
+                    className={styles.habitatPlus1}>
+                    +1
+                </button>}
+                {shipCabins >= 20 && <button
+                    onClick={() => habitatIncrementDecrement('Labs', 10)}
+                    className={styles.habitatPlus10}>
+                    +10
+                </button>}
+                {shipCabins >= 200 && <button
+                    onClick={() => habitatIncrementDecrement('Labs', 100)}
+                    className={styles.habitatPlus100}>
+                    +100
+                </button>}
+                <span className={styles.habitatInfoLabelCol1}>
+                    Physics Labs:
+                </span>
+                {shipPhysicsLabs >= 100 && <button
+                    onClick={() => habitatIncrementDecrement('Physics Labs', -100)}
+                    className={styles.habitatMinus100}>
+                    -100
+                </button>}
+                {shipPhysicsLabs >= 10 && <button
+                    onClick={() => habitatIncrementDecrement('Physics Labs', -10)}
+                    className={styles.habitatMinus10}>
+                    -10
+                </button>}
+                {shipPhysicsLabs >= 1 && <button
+                    onClick={() => habitatIncrementDecrement('Physics Labs', -1)}
+                    className={styles.habitatMinus1}>
+                    -1
+                </button>}
+                <span className={styles.habitatButton}>
+                    {shipPhysicsLabs}
+                </span>
+                {shipCabins >= 2 && <button
+                    onClick={() => habitatIncrementDecrement('Physics Labs', 1)}
+                    className={styles.habitatPlus1}>
+                    +1
+                </button>}
+                {shipCabins >= 20 && <button
+                    onClick={() => habitatIncrementDecrement('Physics Labs', 10)}
+                    className={styles.habitatPlus10}>
+                    +10
+                </button>}
+                {shipCabins >= 200 && <button
+                    onClick={() => habitatIncrementDecrement('Physics Labs', 100)}
+                    className={styles.habitatPlus100}>
+                    +100
+                </button>}
+                {superScienceChecked === true && <span className={styles.habitatInfoLabelCol1}>
+                    Science! Labs:
+                </span>}
+                {shipSuperScienceLabs >= 100 && superScienceChecked === true && <button
+                    onClick={() => habitatIncrementDecrement('SuperScience Labs', -100)}
+                    className={styles.habitatMinus100}>
+                    -100
+                </button>}
+                {shipSuperScienceLabs >= 10 && superScienceChecked === true && <button
+                    onClick={() => habitatIncrementDecrement('SuperScience Labs', -10)}
+                    className={styles.habitatMinus10}>
+                    -10
+                </button>}
+                {shipSuperScienceLabs >= 1 && superScienceChecked === true && <button
+                    onClick={() => habitatIncrementDecrement('SuperScience Labs', -1)}
+                    className={styles.habitatMinus1}>
+                    -1
+                </button>}
+                {superScienceChecked === true && <span className={styles.habitatButton}>
+                    {shipSuperScienceLabs}
+                </span>}
+                {shipCabins >= 2 && superScienceChecked === true && <button
+                    onClick={() => habitatIncrementDecrement('SuperScience Labs', 1)}
+                    className={styles.habitatPlus1}>
+                    +1
+                </button>}
+                {shipCabins >= 20 && superScienceChecked === true && <button
+                    onClick={() => habitatIncrementDecrement('SuperScience Labs', 10)}
+                    className={styles.habitatPlus10}>
+                    +10
+                </button>}
+                {shipCabins >= 200 && superScienceChecked === true && <button
+                    onClick={() => habitatIncrementDecrement('SuperScience Labs', 100)}
+                    className={styles.habitatPlus100}>
+                    +100
+                </button>}
+                {shipTL >= 8 && <span className={styles.habitatInfoLabelCol1}>
+                    Minifac (Fabricators):
+                </span>}
+                {shipMiniFabricators >= 100 && shipTL >= 8 && <button
+                    onClick={() => habitatIncrementDecrement('Mini Fab', -100)}
+                    className={styles.habitatMinus100}>
+                    -100
+                </button>}
+                {shipMiniFabricators >= 10 && shipTL >= 8 && <button
+                    onClick={() => habitatIncrementDecrement('Mini Fab', -10)}
+                    className={styles.habitatMinus10}>
+                    -10
+                </button>}
+                {shipMiniFabricators >= 1 && shipTL >= 8 && <button
+                    onClick={() => habitatIncrementDecrement('Mini Fab', -1)}
+                    className={styles.habitatMinus1}>
+                    -1
+                </button>}
+                {shipTL >= 8 && <span className={styles.habitatButton}>
+                    {shipMiniFabricators}
+                </span>}
+                {shipCabins >= 1 && shipTL >= 8 && <button
+                    onClick={() => habitatIncrementDecrement('Mini Fab', 1)}
+                    className={styles.habitatPlus1}>
+                    +1
+                </button>}
+                {shipCabins >= 10 && shipTL >= 8 && <button
+                    onClick={() => habitatIncrementDecrement('Mini Fab', 10)}
+                    className={styles.habitatPlus10}>
+                    +10
+                </button>}
+                {shipCabins >= 100 && shipTL >= 8 && <button
+                    onClick={() => habitatIncrementDecrement('Mini Fab', 100)}
+                    className={styles.habitatPlus100}>
+                    +100
+                </button>}
+                {shipTL >= 10 && <span className={styles.habitatInfoLabelCol1}>
+                    Minifac (RoboFacs):
+                </span>}
+                {shipMiniRoboFacs >= 100 && shipTL >= 10 && <button
+                    onClick={() => habitatIncrementDecrement('Mini Robo Fab', -100)}
+                    className={styles.habitatMinus100}>
+                    -100
+                </button>}
+                {shipMiniRoboFacs >= 10 && shipTL >= 10 && <button
+                    onClick={() => habitatIncrementDecrement('Mini Robo Fab', -10)}
+                    className={styles.habitatMinus10}>
+                    -10
+                </button>}
+                {shipMiniRoboFacs >= 1 && shipTL >= 10 && <button
+                    onClick={() => habitatIncrementDecrement('Mini Robo Fab', -1)}
+                    className={styles.habitatMinus1}>
+                    -1
+                </button>}
+                {shipTL >= 10 && <span className={styles.habitatButton}>
+                    {shipMiniRoboFacs}
+                </span>}
+                {shipCabins >= 1 && shipTL >= 10 && <button
+                    onClick={() => habitatIncrementDecrement('Mini Robo Fab', 1)}
+                    className={styles.habitatPlus1}>
+                    +1
+                </button>}
+                {shipCabins >= 10 && shipTL >= 10 && <button
+                    onClick={() => habitatIncrementDecrement('Mini Robo Fab', 10)}
+                    className={styles.habitatPlus10}>
+                    +10
+                </button>}
+                {shipCabins >= 100 && shipTL >= 10 && <button
+                    onClick={() => habitatIncrementDecrement('Mini Robo Fab', 100)}
+                    className={styles.habitatPlus100}>
+                    +100
+                </button>}
+                {shipTL >= 11 && <span className={styles.habitatInfoLabelCol1}>
+                    Minifac (NanoFacs):
+                </span>}
+                {shipMiniNanoFacs >= 100 && shipTL >= 11 && <button
+                    onClick={() => habitatIncrementDecrement('Mini Nano Fab', -100)}
+                    className={styles.habitatMinus100}>
+                    -100
+                </button>}
+                {shipMiniNanoFacs >= 10 && shipTL >= 11 && <button
+                    onClick={() => habitatIncrementDecrement('Mini Nano Fab', -10)}
+                    className={styles.habitatMinus10}>
+                    -10
+                </button>}
+                {shipMiniNanoFacs >= 1 && shipTL >= 11 && <button
+                    onClick={() => habitatIncrementDecrement('Mini Nano Fab', -1)}
+                    className={styles.habitatMinus1}>
+                    -1
+                </button>}
+                {shipTL >= 11 && <span className={styles.habitatButton}>
+                    {shipMiniNanoFacs}
+                </span>}
+                {shipCabins >= 1 && shipTL >= 11 && <button
+                    onClick={() => habitatIncrementDecrement('Mini Nano Fab', 1)}
+                    className={styles.habitatPlus1}>
+                    +1
+                </button>}
+                {shipCabins >= 10 && shipTL >= 11 && <button
+                    onClick={() => habitatIncrementDecrement('Mini Nano Fab', 10)}
+                    className={styles.habitatPlus10}>
+                    +10
+                </button>}
+                {shipCabins >= 100 && shipTL >= 11 && <button
+                    onClick={() => habitatIncrementDecrement('Mini Nano Fab', 100)}
+                    className={styles.habitatPlus100}>
+                    +100
+                </button>}
+                {shipTL >= 12 && superScienceChecked === true && <span className={styles.habitatInfoLabelCol1}>
+                    Minifac (Replicators):
+                </span>}
+                {shipMiniReplicators >= 100 && shipTL >= 12 && superScienceChecked === true && <button
+                    onClick={() => habitatIncrementDecrement('Mini Rep Fab', -100)}
+                    className={styles.habitatMinus100}>
+                    -100
+                </button>}
+                {shipMiniReplicators >= 10 && shipTL >= 12 && superScienceChecked === true && <button
+                    onClick={() => habitatIncrementDecrement('Mini Rep Fab', -10)}
+                    className={styles.habitatMinus10}>
+                    -10
+                </button>}
+                {shipMiniReplicators >= 1 && shipTL >= 12 && superScienceChecked === true && <button
+                    onClick={() => habitatIncrementDecrement('Mini Rep Fab', -1)}
+                    className={styles.habitatMinus1}>
+                    -1
+                </button>}
+                {shipTL >= 12 && superScienceChecked === true && <span className={styles.habitatButton}>
+                    {shipMiniReplicators}
+                </span>}
+                {shipCabins >= 1 && shipTL >= 12 && superScienceChecked === true && <button
+                    onClick={() => habitatIncrementDecrement('Mini Rep Fab', 1)}
+                    className={styles.habitatPlus1}>
+                    +1
+                </button>}
+                {shipCabins >= 10 && shipTL >= 12 && superScienceChecked === true && <button
+                    onClick={() => habitatIncrementDecrement('Mini Rep Fab', 10)}
+                    className={styles.habitatPlus10}>
+                    +10
+                </button>}
+                {shipCabins >= 100 && shipTL >= 12 && superScienceChecked === true && <button
+                    onClick={() => habitatIncrementDecrement('Mini Rep Fab', 100)}
+                    className={styles.habitatPlus100}>
+                    +100
+                </button>}
+                <span className={styles.habitatInfoLabelCol1}>
+                    Offices:
+                </span>
+                {shipOffices >= 100 && <button
+                    onClick={() => habitatIncrementDecrement('Office', -100)}
+                    className={styles.habitatMinus100}>
+                    -100
+                </button>}
+                {shipOffices >= 10 && <button
+                    onClick={() => habitatIncrementDecrement('Office', -10)}
+                    className={styles.habitatMinus10}>
+                    -10
+                </button>}
+                {shipOffices >= 1 && <button
+                    onClick={() => habitatIncrementDecrement('Office', -1)}
+                    className={styles.habitatMinus1}>
+                    -1
+                </button>}
+                <span className={styles.habitatButton}>
+                    {shipOffices}
+                </span>
+                {shipCabins >= 1 && <button
+                    onClick={() => habitatIncrementDecrement('Office', 1)}
+                    className={styles.habitatPlus1}>
+                    +1
+                </button>}
+                {shipCabins >= 10 && <button
+                    onClick={() => habitatIncrementDecrement('Office', 10)}
+                    className={styles.habitatPlus10}>
+                    +10
+                </button>}
+                {shipCabins >= 100 && <button
+                    onClick={() => habitatIncrementDecrement('Office', 100)}
+                    className={styles.habitatPlus100}>
+                    +100
+                </button>}
+                <span className={styles.habitatInfoLabelCol1}>
+                    Sick Bays:
+                </span>
+                {shipSickBays >= 100 && <button
+                    onClick={() => habitatIncrementDecrement('Sickbay', -100)}
+                    className={styles.habitatMinus100}>
+                    -100
+                </button>}
+                {shipSickBays >= 10 && <button
+                    onClick={() => habitatIncrementDecrement('Sickbay', -10)}
+                    className={styles.habitatMinus10}>
+                    -10
+                </button>}
+                {shipSickBays >= 1 && <button
+                    onClick={() => habitatIncrementDecrement('Sickbay', -1)}
+                    className={styles.habitatMinus1}>
+                    -1
+                </button>}
+                <span className={styles.habitatButton}>
+                    {shipSickBays}
+                </span>
+                {shipCabins >= 1 && <button
+                    onClick={() => habitatIncrementDecrement('Sickbay', 1)}
+                    className={styles.habitatPlus1}>
+                    +1
+                </button>}
+                {shipCabins >= 10 && <button
+                    onClick={() => habitatIncrementDecrement('Sickbay', 10)}
+                    className={styles.habitatPlus10}>
+                    +10
+                </button>}
+                {shipCabins >= 100 && <button
+                    onClick={() => habitatIncrementDecrement('Sickbay', 100)}
+                    className={styles.habitatPlus100}>
+                    +100
+                </button>}
+                <span className={styles.habitatInfoLabelCol1}>
+                    Sick Bays (Auto):
+                </span>
+                {shipSickBaysAuto >= 100 && <button
+                    onClick={() => habitatIncrementDecrement('SickbayAuto', -100)}
+                    className={styles.habitatMinus100}>
+                    -100
+                </button>}
+                {shipSickBaysAuto >= 10 && <button
+                    onClick={() => habitatIncrementDecrement('SickbayAuto', -10)}
+                    className={styles.habitatMinus10}>
+                    -10
+                </button>}
+                {shipSickBaysAuto >= 1 && <button
+                    onClick={() => habitatIncrementDecrement('SickbayAuto', -1)}
+                    className={styles.habitatMinus1}>
+                    -1
+                </button>}
+                <span className={styles.habitatButton}>
+                    {shipSickBaysAuto}
+                </span>
+                {shipCabins >= 1 && <button
+                    onClick={() => habitatIncrementDecrement('SickbayAuto', 1)}
+                    className={styles.habitatPlus1}>
+                    +1
+                </button>}
+                {shipCabins >= 10 && <button
+                    onClick={() => habitatIncrementDecrement('SickbayAuto', 10)}
+                    className={styles.habitatPlus10}>
+                    +10
+                </button>}
+                {shipCabins >= 100 && <button
+                    onClick={() => habitatIncrementDecrement('SickbayAuto', 100)}
+                    className={styles.habitatPlus100}>
+                    +100
+                </button>}
+                {shipTL >= 12 && superScienceChecked === true && <span className={styles.habitatInfoLabelCol1}>
+                    Teleport Projectors:
+                </span>}
+                {shipTeleportProjectors >= 100 && shipTL >= 12 && superScienceChecked === true && <button
+                    onClick={() => habitatIncrementDecrement('Teleport', -100)}
+                    className={styles.habitatMinus100}>
+                    -100
+                </button>}
+                {shipTeleportProjectors >= 10 && shipTL >= 12 && superScienceChecked === true && <button
+                    onClick={() => habitatIncrementDecrement('Teleport', -10)}
+                    className={styles.habitatMinus10}>
+                    -10
+                </button>}
+                {shipTeleportProjectors >= 1 && shipTL >= 12 && superScienceChecked === true && <button
+                    onClick={() => habitatIncrementDecrement('Teleport', -1)}
+                    className={styles.habitatMinus1}>
+                    -1
+                </button>}
+                {shipTL >= 12 && superScienceChecked === true && <span className={styles.habitatButton}>
+                    {shipTeleportProjectors}
+                </span>}
+                {shipCabins >= 1 && shipTL >= 12 && superScienceChecked === true && <button
+                    onClick={() => habitatIncrementDecrement('Teleport', 1)}
+                    className={styles.habitatPlus1}>
+                    +1
+                </button>}
+                {shipCabins >= 10 && shipTL >= 12 && superScienceChecked === true && <button
+                    onClick={() => habitatIncrementDecrement('Teleport', 10)}
+                    className={styles.habitatPlus10}>
+                    +10
+                </button>}
+                {shipCabins >= 100 && shipTL >= 12 && superScienceChecked === true && <button
+                    onClick={() => habitatIncrementDecrement('Teleport', 100)}
+                    className={styles.habitatPlus100}>
+                    +100
+                </button>}
+                {shipTL >= 12 && superScienceChecked === true && <span className={styles.habitatInfoLabelCol1}>
+                    Tele. Proj. (Send):
+                </span>}
+                {shipTeleportProjectorsSend >= 100 && shipTL >= 12 && superScienceChecked === true && <button
+                    onClick={() => habitatIncrementDecrement('Teleport Send', -100)}
+                    className={styles.habitatMinus100}>
+                    -100
+                </button>}
+                {shipTeleportProjectorsSend >= 10 && shipTL >= 12 && superScienceChecked === true && <button
+                    onClick={() => habitatIncrementDecrement('Teleport Send', -10)}
+                    className={styles.habitatMinus10}>
+                    -10
+                </button>}
+                {shipTeleportProjectorsSend >= 1 && shipTL >= 12 && superScienceChecked === true && <button
+                    onClick={() => habitatIncrementDecrement('Teleport Send', -1)}
+                    className={styles.habitatMinus1}>
+                    -1
+                </button>}
+                {shipTL >= 12 && superScienceChecked === true && <span className={styles.habitatButton}>
+                    {shipTeleportProjectorsSend}
+                </span>}
+                {shipCabins >= 1 && shipTL >= 12 && superScienceChecked === true && <button
+                    onClick={() => habitatIncrementDecrement('Teleport Send', 1)}
+                    className={styles.habitatPlus1}>
+                    +1
+                </button>}
+                {shipCabins >= 10 && shipTL >= 12 && superScienceChecked === true && <button
+                    onClick={() => habitatIncrementDecrement('Teleport Send', 10)}
+                    className={styles.habitatPlus10}>
+                    +10
+                </button>}
+                {shipCabins >= 100 && shipTL >= 12 && superScienceChecked === true && <button
+                    onClick={() => habitatIncrementDecrement('Teleport Send', 100)}
+                    className={styles.habitatPlus100}>
+                    +100
+                </button>}
+                {shipTL >= 12 && superScienceChecked === true && <span className={styles.habitatInfoLabelCol1}>
+                    Tele. Proj. (Receive):
+                </span>}
+                {shipTeleportProjectorsReceive >= 100 && shipTL >= 12 && superScienceChecked === true && <button
+                    onClick={() => habitatIncrementDecrement('Teleport Receive', -100)}
+                    className={styles.habitatMinus100}>
+                    -100
+                </button>}
+                {shipTeleportProjectorsReceive >= 10 && shipTL >= 12 && superScienceChecked === true && <button
+                    onClick={() => habitatIncrementDecrement('Teleport Receive', -10)}
+                    className={styles.habitatMinus10}>
+                    -10
+                </button>}
+                {shipTeleportProjectorsReceive >= 1 && shipTL >= 12 && superScienceChecked === true && <button
+                    onClick={() => habitatIncrementDecrement('Teleport Receive', -1)}
+                    className={styles.habitatMinus1}>
+                    -1
+                </button>}
+                {shipTL >= 12 && superScienceChecked === true && <span className={styles.habitatButton}>
+                    {shipTeleportProjectorsReceive}
+                </span>}
+                {shipCabins >= 1 && shipTL >= 12 && superScienceChecked === true && <button
+                    onClick={() => habitatIncrementDecrement('Teleport Receive', 1)}
+                    className={styles.habitatPlus1}>
+                    +1
+                </button>}
+                {shipCabins >= 10 && shipTL >= 12 && superScienceChecked === true && <button
+                    onClick={() => habitatIncrementDecrement('Teleport Receive', 10)}
+                    className={styles.habitatPlus10}>
+                    +10
+                </button>}
+                {shipCabins >= 100 && shipTL >= 12 && superScienceChecked === true && <button
+                    onClick={() => habitatIncrementDecrement('Teleport Receive', 100)}
+                    className={styles.habitatPlus100}>
+                    +100
+                </button>}
+                <span className={styles.habitatInfoLabelCol1}>
+                    Steerage Cargo:
+                </span>
+                {shipSteerageCargo >= 500 && <button
+                    onClick={() => habitatIncrementDecrement('Steerage', -100)}
+                    className={styles.habitatMinus100}>
+                    -100
+                </button>}
+                {shipSteerageCargo >= 50 && <button
+                    onClick={() => habitatIncrementDecrement('Steerage', -10)}
+                    className={styles.habitatMinus10}>
+                    -10
+                </button>}
+                {shipSteerageCargo >= 5 && <button
+                    onClick={() => habitatIncrementDecrement('Steerage', -1)}
+                    className={styles.habitatMinus1}>
+                    -1
+                </button>}
+                <span className={styles.habitatButton}>
+                    {shipSteerageCargo}
+                </span>
+                {shipCabins >= 1 && <button
+                    onClick={() => habitatIncrementDecrement('Steerage', 1)}
+                    className={styles.habitatPlus1}>
+                    +1
+                </button>}
+                {shipCabins >= 10 && <button
+                    onClick={() => habitatIncrementDecrement('Steerage', 10)}
+                    className={styles.habitatPlus10}>
+                    +10
+                </button>}
+                {shipCabins >= 100 && <button
+                    onClick={() => habitatIncrementDecrement('Steerage', 100)}
+                    className={styles.habitatPlus100}>
+                    +100
+                </button>}
 
-                <span className={styles.weaponSelectLabel} >Mount: </span>
-                <select className={styles.weaponSelect} value={selectedMountType} onChange={handleWeaponMountChange}>
-                    <option value="">Select Weapon Mount</option>
-                    {unusedWeaponMountList.map((mountType) => (
-                        <option key={mountType} value={mountType}>{mountType}</option>
-                    ))}
-                </select>
-
-                <span className={styles.weaponSelectLabel} >Weapon Type: </span>
-                {selectedMountType && (
-                    <select className={styles.weaponSelect} value={selectedWeaponType} onChange={handleWeaponTypeChange}>
-                        <option value="">Select Weapon Type</option>
-
-                        {selectedMountType === 'Spinal Mount' && <option value="GunSpinalFront">Gun (Front Facing)</option>}
-                        {selectedMountType === 'Spinal Mount' && <option value="MissileSpinalFront">Missile (Front Facing)</option>}
-                        {selectedMountType === 'Spinal Mount' && (shipTL >= 9 || superScienceChecked === true) && <option value="BeamSpinalFront">Beam (Front Facing)</option>}
-                        {selectedMountType === 'Spinal Mount' && <option value="GunSpinalRear">Gun (Rear Facing)</option>}
-                        {selectedMountType === 'Spinal Mount' && <option value="MissileSpinalRear">Missile (Rear Facing)</option>}
-                        {selectedMountType === 'Spinal Mount' && (shipTL >= 9 || superScienceChecked === true) && <option value="BeamSpinalRear">Beam (Rear Facing)</option>}
-
-                        {selectedMountType !== 'Spinal Mount' && <option value="Uninstalled">Empty Mount</option>}
-                        {selectedMountType !== 'Spinal Mount' && <option value="GunTurret">Gun (Turret)</option>}
-                        {selectedMountType !== 'Spinal Mount' && <option value="GunFixed">Gun (Fixed)</option>}
-                        {selectedMountType !== 'Spinal Mount' && <option value="MissileTurret">Missile (Turret)</option>}
-                        {selectedMountType !== 'Spinal Mount' && <option value="MissileFixed">Missile (Fixed)</option>}
-                        {selectedMountType !== 'Spinal Mount' && (shipTL >= 9 || superScienceChecked === true) && <option value="BeamTurret">Beam (Turret)</option>}
-                        {selectedMountType !== 'Spinal Mount' && (shipTL >= 9 || superScienceChecked === true) && <option value="BeamFixed">Beam (Fixed)</option>}
-
-                    </select>
-                )}
-
-                <span className={styles.weaponSelectLabel} >Weapon Sub-type: </span>
-                {selectedWeaponType && (
-                    <>
-                        <select className={styles.weaponSelect} value={weaponSubType} onChange={handleSpecificTypeChange}>
-                            <option value="">Select Sub Type</option>
-                            {shipValidWeaponTypesList.map((weaponType) => (
-                                <option key={weaponType} value={weaponType}>{weaponType}</option>
-                            ))}
-                        </select>
-
-                    </>
-                )}
-
-                {weaponSubType && (
-                    <>
-                        <span className={styles.statTitle}>{weaponSubType}</span>
-
-                        <span className={styles.freeFillWeaponLabel}>Size: </span>
-                        {selectedWeaponType !== "Uninstalled" && <span className={styles.freeFillWeaponValue}>{`${weaponSizeDisplayConverter(selectedWeaponSize).toLocaleString()}`}</span>}
-                        {selectedWeaponType === "Uninstalled" && <span className={styles.freeFillWeaponValue}>{`${selectedUninstalledCargo.toLocaleString()} tons`}</span>}
-
-                        {(selectedWeaponType === "GunSpinalFront" || selectedWeaponType === "GunSpinalRear" || selectedWeaponType === "GunTurret" || selectedWeaponType === "GunFixed" || selectedWeaponType === "MissileSpinalFront" || selectedWeaponType === "MissileSpinalRear" || selectedWeaponType === "MissileTurret" || selectedWeaponType === "MissileFixed") &&
-                            <span className={styles.freeFillWeaponLabel}>Shots: </span>}
-                        {(selectedWeaponType === "GunSpinalFront" || selectedWeaponType === "GunSpinalRear" || selectedWeaponType === "GunTurret" || selectedWeaponType === "GunFixed" || selectedWeaponType === "MissileSpinalFront" || selectedWeaponType === "MissileSpinalRear" || selectedWeaponType === "MissileTurret" || selectedWeaponType === "MissileFixed") &&
-                            <span className={styles.freeFillWeaponValue}>{selectedWeaponShots}</span>}
-
-                        {(selectedWeaponType === "BeamSpinalFront" || selectedWeaponType === "BeamSpinalRear" || selectedWeaponType === "BeamTurret" || selectedWeaponType === "BeamFixed") && <span className={styles.freeFillWeaponLabel}>
-                            Range (Full Dmg) (10 /100 /1k /10k): </span>}
-                        {(selectedWeaponType === "BeamSpinalFront" || selectedWeaponType === "BeamSpinalRear" || selectedWeaponType === "BeamTurret" || selectedWeaponType === "BeamFixed") && <span className={styles.freeFillWeaponValue}>
-                            {`${selectedWeaponRangeArray[0][0]}/${selectedWeaponRangeArray[1][0]}/${selectedWeaponRangeArray[2][0]}/${selectedWeaponRangeArray[3][0]}`}</span>}
-
-                        {(selectedWeaponType === "BeamSpinalFront" || selectedWeaponType === "BeamSpinalRear" || selectedWeaponType === "BeamTurret" || selectedWeaponType === "BeamFixed") && <span className={styles.freeFillWeaponLabel}>
-                            Range (1/2 Dmg) (10 /100 /1k /10k): </span>}
-                        {(selectedWeaponType === "BeamSpinalFront" || selectedWeaponType === "BeamSpinalRear" || selectedWeaponType === "BeamTurret" || selectedWeaponType === "BeamFixed") && <span className={styles.freeFillWeaponValue}>
-                            {`${selectedWeaponRangeArray[0][1]}/${selectedWeaponRangeArray[1][1]}/${selectedWeaponRangeArray[2][1]}/${selectedWeaponRangeArray[3][1]}`}</span>}
-
-                        {weaponSubType === "Warp Missile" && <span className={styles.freeFillWeaponLabel}>
-                            Range (10 /100 /1k /10k): </span>}
-                        {weaponSubType === "Warp Missile" && <span className={styles.freeFillWeaponValue}>
-                            {`${warpMissileRange[0].toLocaleString()}/${warpMissileRange[1].toLocaleString()}/${warpMissileRange[2].toLocaleString()}/${warpMissileRange[3].toLocaleString()}`}</span>}
-
-                        {selectedWeaponType !== "Uninstalled" && <span className={styles.freeFillWeaponLabel}>Rate of Fire (20s /1m /3m /10m): </span>}
-                        {selectedWeaponType !== "Uninstalled" && <span className={styles.freeFillWeaponValue}>{`${selectedWeaponRoF[0]}/${selectedWeaponRoF[1]}/${selectedWeaponRoF[2]}/${selectedWeaponRoF[3]}`}</span>}
-
-                        {selectedWeaponType !== "Uninstalled" && <span className={styles.freeFillWeaponLabel}>Recoil: </span>}
-                        {selectedWeaponType !== "Uninstalled" && <span className={styles.freeFillWeaponValue}>{selectedWeaponRcl}</span>}
-
-                        {selectedWeaponType !== "Uninstalled" && <span className={styles.freeFillWeaponLabel}>Damage Type: </span>}
-                        {selectedWeaponType !== "Uninstalled" && <span className={styles.freeFillWeaponValue}>{selectedWeaponDamageTypes.join(', ')}</span>}
-
-                        {selectedWeaponType !== "Uninstalled" && <span className={styles.freeFillWeaponLabel}>Base Damage: </span>}
-                        {selectedWeaponType !== "Uninstalled" && <span className={styles.freeFillWeaponValue}>
-                            {`${selectedWeaponDmgDice + 'd'}${selectedWeaponDmgMod !== 0 || selectedWeaponDmgMulti !== 0 ? (selectedWeaponDmgMod !== 0 ? selectedWeaponDmgMod : 'x' + selectedWeaponDmgMulti) : '+0'} / ${selectedWeaponArmorDiv}`}</span>}
-
-                        {selectedWeaponType !== "Uninstalled" && <span className={styles.freeFillWeaponLabel}>Space Accuracy: </span>}
-                        {selectedWeaponType !== "Uninstalled" && <span className={styles.freeFillWeaponValue}>{selectedWeaponSAcc}</span>}
-
-                        {(weaponSubType !== "Warp Missile" && (selectedWeaponType === "MissileSpinalFront" || selectedWeaponType === "MissileSpinalRear" || selectedWeaponType === "MissileTurret" || selectedWeaponType === "MissileFixed")) &&
-                            <span className={styles.freeFillWeaponLabel1}>Thrust (10 Mile) (20s /1m /3m /10m): </span>}
-                        {(weaponSubType !== "Warp Missile" && (selectedWeaponType === "MissileSpinalFront" || selectedWeaponType === "MissileSpinalRear" || selectedWeaponType === "MissileTurret" || selectedWeaponType === "MissileFixed")) &&
-                            <span className={styles.freeFillWeaponValue}>{`${selectedWeaponThrust[0][0]}/${selectedWeaponThrust[0][1]}/${selectedWeaponThrust[0][2]}/${selectedWeaponThrust[0][3]}`}</span>}
-
-                        {(weaponSubType !== "Warp Missile" && (selectedWeaponType === "MissileSpinalFront" || selectedWeaponType === "MissileSpinalRear" || selectedWeaponType === "MissileTurret" || selectedWeaponType === "MissileFixed")) &&
-                            <span className={styles.freeFillWeaponLabel}>Thrust (1000 Mile) (20s /1m /3m /10m): </span>}
-                        {(weaponSubType !== "Warp Missile" && (selectedWeaponType === "MissileSpinalFront" || selectedWeaponType === "MissileSpinalRear" || selectedWeaponType === "MissileTurret" || selectedWeaponType === "MissileFixed")) &&
-                            <span className={styles.freeFillWeaponValue}>{`${selectedWeaponThrust[2][0]}/${selectedWeaponThrust[2][1]}/${selectedWeaponThrust[2][2]}/${selectedWeaponThrust[2][3]}`}</span>}
-
-                        {(weaponSubType !== "Warp Missile" && (selectedWeaponType === "MissileSpinalFront" || selectedWeaponType === "MissileSpinalRear" || selectedWeaponType === "MissileTurret" || selectedWeaponType === "MissileFixed")) &&
-                            <span className={styles.freeFillWeaponLabel}>Burn (10 Mile) (20s /1m /3m /10m): </span>}
-                        {(weaponSubType !== "Warp Missile" && (selectedWeaponType === "MissileSpinalFront" || selectedWeaponType === "MissileSpinalRear" || selectedWeaponType === "MissileTurret" || selectedWeaponType === "MissileFixed")) &&
-                            <span className={styles.freeFillWeaponValue}>{`${selectedWeaponBurn[0][0]}/${selectedWeaponBurn[0][1]}/${selectedWeaponBurn[0][2]}/${selectedWeaponBurn[0][3]}`}</span>}
-
-                        {(weaponSubType !== "Warp Missile" && (selectedWeaponType === "MissileSpinalFront" || selectedWeaponType === "MissileSpinalRear" || selectedWeaponType === "MissileTurret" || selectedWeaponType === "MissileFixed")) &&
-                            <span className={styles.freeFillWeaponLabel}>Burn (1000 Mile) (20s /1m /3m /10m): </span>}
-                        {(weaponSubType !== "Warp Missile" && (selectedWeaponType === "MissileSpinalFront" || selectedWeaponType === "MissileSpinalRear" || selectedWeaponType === "MissileTurret" || selectedWeaponType === "MissileFixed")) &&
-                            <span className={styles.freeFillWeaponValue}>{`${selectedWeaponBurn[2][0]}/${selectedWeaponBurn[2][1]}/${selectedWeaponBurn[2][2]}/${selectedWeaponBurn[2][3]}`}</span>}
-
-                        {(selectedWeaponType === "GunSpinalFront" || selectedWeaponType === "GunSpinalRear" || selectedWeaponType === "GunTurret" || selectedWeaponType === "GunFixed") &&
-                            <span className={styles.freeFillWeaponLabel}>Gun Impulse (10 Mile) (20s /1m /3m /10m): </span>}
-                        {(selectedWeaponType === "GunSpinalFront" || selectedWeaponType === "GunSpinalRear" || selectedWeaponType === "GunTurret" || selectedWeaponType === "GunFixed") &&
-                            <span className={styles.freeFillWeaponValue}>{`${selectedWeaponImpulse[0][0]} /${selectedWeaponImpulse[0][1]} /${selectedWeaponImpulse[0][2]} /${selectedWeaponImpulse[0][3]}`}</span>}
-
-                        {(selectedWeaponType === "GunSpinalFront" || selectedWeaponType === "GunSpinalRear" || selectedWeaponType === "GunTurret" || selectedWeaponType === "GunFixed") &&
-                            <span className={styles.freeFillWeaponLabel}>Gun Impulse (1000 Mile) (20s /1m /3m /10m): </span>}
-                        {(selectedWeaponType === "GunSpinalFront" || selectedWeaponType === "GunSpinalRear" || selectedWeaponType === "GunTurret" || selectedWeaponType === "GunFixed") &&
-                            <span className={styles.freeFillWeaponValue}>{`${selectedWeaponImpulse[2][0]} /${selectedWeaponImpulse[2][1]} /${selectedWeaponImpulse[2][2]} /${selectedWeaponImpulse[2][3]}`}</span>}
-
-
-                        {(selectedWeaponType === "BeamSpinalFront" || selectedWeaponType === "BeamSpinalRear" || selectedWeaponType === "BeamTurret" || selectedWeaponType === "BeamFixed" || selectedWeaponType === "GunSpinalFront" || selectedWeaponType === "GunSpinalRear" || selectedWeaponType === "GunTurret" || selectedWeaponType === "GunFixed") &&
-                            <div className={styles.freeFillWeaponLabelContainer}>
-                                {selectedWeaponVeryRapidFire !== true && weaponSubType !== 'Graviton Beam' && weaponSubType !== 'Tractor Beam' && <label className={styles.freeFillWeaponLabel1}>
-                                    Rapid Fire:&nbsp;
-                                    <input className={styles.inputCheckbox}
-                                        type="checkbox"
-                                        checked={selectedWeaponRapidFire}
-                                        onChange={handleRapidFireChange}
-                                    />
-                                </label>}
-
-                                {selectedWeaponRapidFire !== true && weaponSubType !== 'Graviton Beam' && weaponSubType !== 'Tractor Beam' && <label className={styles.freeFillWeaponLabel2}>
-                                    Very Rapid Fire:&nbsp;
-                                    <input className={styles.inputCheckbox}
-                                        type="checkbox"
-                                        checked={selectedWeaponVeryRapidFire}
-                                        onChange={handleVeryRapidFireChange}
-                                    />
-                                </label>}
-
-                                {selectedWeaponImprovedValid === true && <label className={styles.freeFillWeaponLabel3}>
-                                    Improved:&nbsp;
-                                    <input className={styles.inputCheckbox}
-                                        type="checkbox"
-                                        checked={selectedWeaponImproved}
-                                        onChange={handleImprovedChange}
-                                    />
-                                </label>}</div>}
-
-                        {(selectedWeaponLargestWarhead[0] !== "None" && (selectedWeaponType === "GunSpinalFront" || selectedWeaponType === "GunSpinalRear" || selectedWeaponType === "GunTurret" || selectedWeaponType === "GunFixed" || selectedWeaponType === "MissileSpinalFront" || selectedWeaponType === "MissileSpinalRear" || selectedWeaponType === "MissileTurret" || selectedWeaponType === "MissileFixed")) &&
-                            <span className={styles.freeFillWeaponLabel1}>Largest Warhead (Type): </span>}
-                        {(selectedWeaponLargestWarhead[0] !== "None" && (selectedWeaponType === "GunSpinalFront" || selectedWeaponType === "GunSpinalRear" || selectedWeaponType === "GunTurret" || selectedWeaponType === "GunFixed" || selectedWeaponType === "MissileSpinalFront" || selectedWeaponType === "MissileSpinalRear" || selectedWeaponType === "MissileTurret" || selectedWeaponType === "MissileFixed")) &&
-                            <span className={styles.freeFillWeaponValue}>{selectedWeaponLargestWarhead[0]}</span>}
-
-                        {(selectedWeaponLargestWarhead[0] !== "None" && (selectedWeaponType === "GunSpinalFront" || selectedWeaponType === "GunSpinalRear" || selectedWeaponType === "GunTurret" || selectedWeaponType === "GunFixed" || selectedWeaponType === "MissileSpinalFront" || selectedWeaponType === "MissileSpinalRear" || selectedWeaponType === "MissileTurret" || selectedWeaponType === "MissileFixed")) &&
-                            <span className={styles.freeFillWeaponLabel}>Largest Warhead (Size): </span>}
-                        {(selectedWeaponLargestWarhead[0] !== "None" && (selectedWeaponType === "GunSpinalFront" || selectedWeaponType === "GunSpinalRear" || selectedWeaponType === "GunTurret" || selectedWeaponType === "GunFixed" || selectedWeaponType === "MissileSpinalFront" || selectedWeaponType === "MissileSpinalRear" || selectedWeaponType === "MissileTurret" || selectedWeaponType === "MissileFixed")) &&
-                            <span className={styles.freeFillWeaponValue}>{largestWarheadDisplay(selectedWeaponLargestWarhead[1])}</span>}
-
-                        {(selectedWeaponLargestWarhead[0] !== "None" && (selectedWeaponType === "GunSpinalFront" || selectedWeaponType === "GunSpinalRear" || selectedWeaponType === "GunTurret" || selectedWeaponType === "GunFixed" || selectedWeaponType === "MissileSpinalFront" || selectedWeaponType === "MissileSpinalRear" || selectedWeaponType === "MissileTurret" || selectedWeaponType === "MissileFixed")) &&
-                            <span className={styles.freeFillWeaponLabel}>Warhead Damage: </span>}
-                        {(selectedWeaponLargestWarhead[0] !== "None" && (selectedWeaponType === "GunSpinalFront" || selectedWeaponType === "GunSpinalRear" || selectedWeaponType === "GunTurret" || selectedWeaponType === "GunFixed" || selectedWeaponType === "MissileSpinalFront" || selectedWeaponType === "MissileSpinalRear" || selectedWeaponType === "MissileTurret" || selectedWeaponType === "MissileFixed")) &&
-                            <span className={styles.freeFillWeaponValue}>{`${weaponTables["NuclearAntiMatterDmgTable"][selectedWeaponLargestWarhead[1]]["DamageDice"]}x${weaponTables["NuclearAntiMatterDmgTable"][selectedWeaponLargestWarhead[1]]["DamageMultiplier"].toLocaleString()}`}</span>}
-
-                        {(selectedWeaponLargestWarhead[0] !== "None" && (selectedWeaponType === "GunSpinalFront" || selectedWeaponType === "GunSpinalRear" || selectedWeaponType === "GunTurret" || selectedWeaponType === "GunFixed" || selectedWeaponType === "MissileSpinalFront" || selectedWeaponType === "MissileSpinalRear" || selectedWeaponType === "MissileTurret" || selectedWeaponType === "MissileFixed")) &&
-                            <span className={styles.freeFillWeaponLabel}>Warhead Linked Damage: </span>}
-                        {(selectedWeaponLargestWarhead[0] !== "None" && (selectedWeaponType === "GunSpinalFront" || selectedWeaponType === "GunSpinalRear" || selectedWeaponType === "GunTurret" || selectedWeaponType === "GunFixed" || selectedWeaponType === "MissileSpinalFront" || selectedWeaponType === "MissileSpinalRear" || selectedWeaponType === "MissileTurret" || selectedWeaponType === "MissileFixed")) &&
-                            <span className={styles.freeFillWeaponValue}>{`${weaponTables["NuclearAntiMatterDmgTable"][selectedWeaponLargestWarhead[1]]["LinkedDmgDice"]}x${weaponTables["NuclearAntiMatterDmgTable"][selectedWeaponLargestWarhead[1]]["LinkedDmgMultiplier"].toLocaleString()}`}</span>}
-
-                        <div className={styles.addWeaponsNumberButtons}>
-                            <button className={styles.weaponNumberButtonMinusTen} onClick={() => handleWeaponNumberClick(-10, selectedMountType)}>-10</button>
-                            <button className={styles.weaponNumberButtonMinusOne} onClick={() => handleWeaponNumberClick(-1, selectedMountType)}>-1</button>
-                            <span className={styles.weaponNumberDisplay}>{selectedWeaponCount}</span>
-                            <button className={styles.weaponNumberButtonOne} onClick={() => handleWeaponNumberClick(1, selectedMountType)}>1</button>
-                            <button className={styles.weaponNumberButtonTen} onClick={() => handleWeaponNumberClick(10, selectedMountType)}>10</button>
-                        </div>
-
-                        <button className={styles.addWeaponButton} onClick={handleAddWeapon}>Add Weapon(s)</button>
-
-
-                    </>
-                )}
-                {weaponList && <>
-                    {weaponList.map((weapon, weaponIndex) => (
-
-                        <div className={styles.weaponInfoContainer} key={weaponIndex}>
-                            <span className={styles.weaponInfoLabel1}>Mount Type:</span>
-                            <span className={styles.weaponInfoValue}>{weapon.mountType}</span>
-                            <span className={styles.weaponInfoLabel2}>Module Number:</span>
-                            <span className={styles.weaponInfoValue}>{weapon.moduleNumber}</span>
-                            <span className={styles.weaponInfoLabel1}>Weapon Type:</span>
-                            <span className={styles.weaponInfoValue}>{weapon.weaponType}</span>
-                            <span className={styles.weaponInfoLabel2}>Weapon Count:</span>
-                            <span className={styles.weaponInfoValue}>{weapon.count}</span>
-                            <span className={styles.weaponDeleteWarning}>Only weapons in a full mount can be removed.</span>
-                            <button className={styles.addWeaponButton} onClick={() => handleDeleteWeapon(weapon, weaponIndex)}>Remove</button>
-                        </div>
-                    ))}
-                </>}
             </div>
         )
     }
 
-    // Weapon Stats and Options - END
+    function customizationDisplay() {
+        return (
+            <div className={isExpanded ? styles.habitatPowerContainerExpanded : styles.habitatPowerContainerCollapsed}>
+                <h2 className={isExpanded ? styles.statTitleExpanded : styles.statTitleCollapsed}>Module Customization</h2>
+                <span className={styles.infoTitleWarningPower}>WARNING: Changing cost here will not change the module cost, but will change the total cost on the basic stats tab.</span>
+                {habitatCustomizationDisplay()}
+            </div>
+        )
+    }
+
+    // Customization - END
     // ****************************************************************************************************************************************************
     // ****************************************************************************************************************************************************
 
@@ -4726,7 +5117,7 @@ const CreateShipClass = ({ isExpanded }) => {
     function designDisplay() {
         return (
             <div className={isExpanded ? styles.statBlockContainerExpanded : styles.statBlockContainerCollapsed}>
-                <h2 className={styles.statTitle}>Ship Design</h2>
+                <h2 className={isExpanded ? styles.statTitleExpanded : styles.statTitleCollapsed}>Ship Design</h2>
                 <p className={styles.weaponExplanation}>Some design features and switches are not implemented in this
                     version of the website.</p>
                 <span className={styles.freeFillWeaponLabel}>Design Features:</span>
@@ -4845,51 +5236,53 @@ const CreateShipClass = ({ isExpanded }) => {
             <span className={isExpanded ? styles.topRowWarningExpanded : styles.topRowWarningCollapsed}>WARNING: Changing the TL, SM, Super Science, or Un/Streamlined will reset all modules. &nbsp;WARNING: Some actions and modules allowed in the rules are not allowed in this version.  Mouse over to see details.</span>
 
             <span className={`${styles.buildLabel} ${isExpanded ? `${styles.buildCol1} ${styles.buildRow1}` : `${styles.buildColCollapsed} ${styles.buildRowCollapsed}`}`}>Front</span>
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={isExpanded ? styles.buildCol1 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow2 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'front'} moduleLocation2={'hull'} moduleNumber={1} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={isExpanded ? styles.buildCol1 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow3 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'front'} moduleLocation2={'hull'} moduleNumber={2} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={isExpanded ? styles.buildCol1 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow4 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'front'} moduleLocation2={'hull'} moduleNumber={3} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={isExpanded ? styles.buildCol1 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow5 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'front'} moduleLocation2={'hull'} moduleNumber={4} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={isExpanded ? styles.buildCol1 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow6 : styles.buildRowCollapsed} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'front'} moduleLocation2={'hull'} moduleNumber={5} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={isExpanded ? styles.buildCol1 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow7 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'front'} moduleLocation2={'hull'} moduleNumber={6} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={isExpanded ? styles.buildCol1 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow8 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'front'} moduleLocation2={'core'} moduleNumber={'CoreFront'} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
+            <ShipModuleSelector handleSetModules={handleSetModules} styles={styles} buildCol={isExpanded ? styles.buildCol1 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow2 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'front'} moduleLocation2={'hull'} moduleNumber={1} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} reardDR={shipReardDR} getModuleIndex={getModuleIndex} processShipModules={processShipModules} />
+            <ShipModuleSelector handleSetModules={handleSetModules} styles={styles} buildCol={isExpanded ? styles.buildCol1 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow3 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'front'} moduleLocation2={'hull'} moduleNumber={2} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} reardDR={shipReardDR} getModuleIndex={getModuleIndex} processShipModules={processShipModules} />
+            <ShipModuleSelector handleSetModules={handleSetModules} styles={styles} buildCol={isExpanded ? styles.buildCol1 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow4 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'front'} moduleLocation2={'hull'} moduleNumber={3} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} reardDR={shipReardDR} getModuleIndex={getModuleIndex} processShipModules={processShipModules} />
+            <ShipModuleSelector handleSetModules={handleSetModules} styles={styles} buildCol={isExpanded ? styles.buildCol1 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow5 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'front'} moduleLocation2={'hull'} moduleNumber={4} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} reardDR={shipReardDR} getModuleIndex={getModuleIndex} processShipModules={processShipModules} />
+            <ShipModuleSelector handleSetModules={handleSetModules} styles={styles} buildCol={isExpanded ? styles.buildCol1 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow6 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'front'} moduleLocation2={'hull'} moduleNumber={5} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} reardDR={shipReardDR} getModuleIndex={getModuleIndex} processShipModules={processShipModules} />
+            <ShipModuleSelector handleSetModules={handleSetModules} styles={styles} buildCol={isExpanded ? styles.buildCol1 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow7 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'front'} moduleLocation2={'hull'} moduleNumber={6} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} reardDR={shipReardDR} getModuleIndex={getModuleIndex} processShipModules={processShipModules} />
+            <ShipModuleSelector handleSetModules={handleSetModules} styles={styles} buildCol={isExpanded ? styles.buildCol1 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow8 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'front'} moduleLocation2={'core'} moduleNumber={'CoreFront'} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} reardDR={shipReardDR} getModuleIndex={getModuleIndex} processShipModules={processShipModules} />
 
             <span className={`${styles.buildLabel} ${isExpanded ? `${styles.buildCol2} ${styles.buildRow1}` : `${styles.buildColCollapsed} ${styles.buildRowCollapsed}`}`}>Middle</span>
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={isExpanded ? styles.buildCol2 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow2 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'middle'} moduleLocation2={'hull'} moduleNumber={1} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={isExpanded ? styles.buildCol2 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow3 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'middle'} moduleLocation2={'hull'} moduleNumber={2} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={isExpanded ? styles.buildCol2 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow4 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'middle'} moduleLocation2={'hull'} moduleNumber={3} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={isExpanded ? styles.buildCol2 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow5 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'middle'} moduleLocation2={'hull'} moduleNumber={4} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={isExpanded ? styles.buildCol2 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow6 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'middle'} moduleLocation2={'hull'} moduleNumber={5} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={isExpanded ? styles.buildCol2 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow7 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'middle'} moduleLocation2={'hull'} moduleNumber={6} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={isExpanded ? styles.buildCol2 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow8 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'middle'} moduleLocation2={'core'} moduleNumber={'CoreMid'} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
+            <ShipModuleSelector handleSetModules={handleSetModules} styles={styles} buildCol={isExpanded ? styles.buildCol2 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow2 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'middle'} moduleLocation2={'hull'} moduleNumber={1} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} reardDR={shipReardDR} getModuleIndex={getModuleIndex} processShipModules={processShipModules} />
+            <ShipModuleSelector handleSetModules={handleSetModules} styles={styles} buildCol={isExpanded ? styles.buildCol2 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow3 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'middle'} moduleLocation2={'hull'} moduleNumber={2} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} reardDR={shipReardDR} getModuleIndex={getModuleIndex} processShipModules={processShipModules} />
+            <ShipModuleSelector handleSetModules={handleSetModules} styles={styles} buildCol={isExpanded ? styles.buildCol2 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow4 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'middle'} moduleLocation2={'hull'} moduleNumber={3} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} reardDR={shipReardDR} getModuleIndex={getModuleIndex} processShipModules={processShipModules} />
+            <ShipModuleSelector handleSetModules={handleSetModules} styles={styles} buildCol={isExpanded ? styles.buildCol2 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow5 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'middle'} moduleLocation2={'hull'} moduleNumber={4} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} reardDR={shipReardDR} getModuleIndex={getModuleIndex} processShipModules={processShipModules} />
+            <ShipModuleSelector handleSetModules={handleSetModules} styles={styles} buildCol={isExpanded ? styles.buildCol2 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow6 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'middle'} moduleLocation2={'hull'} moduleNumber={5} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} reardDR={shipReardDR} getModuleIndex={getModuleIndex} processShipModules={processShipModules} />
+            <ShipModuleSelector handleSetModules={handleSetModules} styles={styles} buildCol={isExpanded ? styles.buildCol2 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow7 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'middle'} moduleLocation2={'hull'} moduleNumber={6} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} reardDR={shipReardDR} getModuleIndex={getModuleIndex} processShipModules={processShipModules} />
+            <ShipModuleSelector handleSetModules={handleSetModules} styles={styles} buildCol={isExpanded ? styles.buildCol2 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow8 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'middle'} moduleLocation2={'core'} moduleNumber={'CoreMid'} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} reardDR={shipReardDR} getModuleIndex={getModuleIndex} processShipModules={processShipModules} />
 
             <span className={`${styles.buildLabel} ${isExpanded ? `${styles.buildCol3} ${styles.buildRow1}` : `${styles.buildColCollapsed} ${styles.buildRowCollapsed}`}`}>Rear</span>
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={isExpanded ? styles.buildCol3 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow2 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'rear'} moduleLocation2={'hull'} moduleNumber={1} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={isExpanded ? styles.buildCol3 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow3 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'rear'} moduleLocation2={'hull'} moduleNumber={2} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={isExpanded ? styles.buildCol3 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow4 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'rear'} moduleLocation2={'hull'} moduleNumber={3} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={isExpanded ? styles.buildCol3 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow5 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'rear'} moduleLocation2={'hull'} moduleNumber={4} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={isExpanded ? styles.buildCol3 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow6 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'rear'} moduleLocation2={'hull'} moduleNumber={5} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={isExpanded ? styles.buildCol3 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow7 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'rear'} moduleLocation2={'hull'} moduleNumber={6} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
-            <ShipModuleSelector handleSetModules={handleSetModules} handleSelectedEngine={handleSelectedEngine} selectedEngine={selectedEngine} engineKeys={engineKeys} styles={styles} buildCol={isExpanded ? styles.buildCol3 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow8 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'rear'} moduleLocation2={'core'} moduleNumber={'CoreRear'} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} />
+            <ShipModuleSelector handleSetModules={handleSetModules} styles={styles} buildCol={isExpanded ? styles.buildCol3 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow2 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'rear'} moduleLocation2={'hull'} moduleNumber={1} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} reardDR={shipReardDR} getModuleIndex={getModuleIndex} processShipModules={processShipModules} />
+            <ShipModuleSelector handleSetModules={handleSetModules} styles={styles} buildCol={isExpanded ? styles.buildCol3 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow3 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'rear'} moduleLocation2={'hull'} moduleNumber={2} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} reardDR={shipReardDR} getModuleIndex={getModuleIndex} processShipModules={processShipModules} />
+            <ShipModuleSelector handleSetModules={handleSetModules} styles={styles} buildCol={isExpanded ? styles.buildCol3 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow4 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'rear'} moduleLocation2={'hull'} moduleNumber={3} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} reardDR={shipReardDR} getModuleIndex={getModuleIndex} processShipModules={processShipModules} />
+            <ShipModuleSelector handleSetModules={handleSetModules} styles={styles} buildCol={isExpanded ? styles.buildCol3 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow5 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'rear'} moduleLocation2={'hull'} moduleNumber={4} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} reardDR={shipReardDR} getModuleIndex={getModuleIndex} processShipModules={processShipModules} />
+            <ShipModuleSelector handleSetModules={handleSetModules} styles={styles} buildCol={isExpanded ? styles.buildCol3 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow6 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'rear'} moduleLocation2={'hull'} moduleNumber={5} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} reardDR={shipReardDR} getModuleIndex={getModuleIndex} processShipModules={processShipModules} />
+            <ShipModuleSelector handleSetModules={handleSetModules} styles={styles} buildCol={isExpanded ? styles.buildCol3 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow7 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'rear'} moduleLocation2={'hull'} moduleNumber={6} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} reardDR={shipReardDR} getModuleIndex={getModuleIndex} processShipModules={processShipModules} />
+            <ShipModuleSelector handleSetModules={handleSetModules} styles={styles} buildCol={isExpanded ? styles.buildCol3 : styles.buildColCollapsed} buildRow={isExpanded ? styles.buildRow8 : styles.buildRowCollapsed} shipModules={shipModules} shipStreamlinedUn={shipStreamlinedUn} moduleLocation1={'rear'} moduleLocation2={'core'} moduleNumber={'CoreRear'} shipSM={shipSM} shipTL={shipTL} superScience={superScienceChecked} reardDR={shipReardDR} getModuleIndex={getModuleIndex} processShipModules={processShipModules} />
 
             <div className={isExpanded ? styles.statComponentButtonContainerExpanded : styles.statComponentButtonContainerCollapsed}>
                 <button className={styles.statComponentButton} onClick={handleBasicStatsClick}>Basic Stats</button>
-                <button className={styles.statComponentButton} onClick={handleHabitatPowerClick}>Habs & Power</button>
-                <button className={styles.statComponentButton} onClick={handleWeaponClick}>Weapons</button>
+                <button className={styles.statComponentButton} onClick={handleHabitatPowerClick}>Extra Stats</button>
+                <button className={styles.statComponentButton} onClick={handleCustomizationClick}>Customization</button>
                 <button className={styles.statComponentButton} onClick={handleShipDesignClick}>Ship Design</button>
             </div>
 
-            {currentStatComponent === 'shipHabitatPowerStats' && <ShipClassHabitatPower
+            {currentStatComponent === 'shipClassStatBlock' && <ShipClassStatBlock
+                statsDisplay={statsDisplay}
+            />}
+            {currentStatComponent === 'shipHabitatPowerStats' && <ShipClassHabitatPowerWeapons
                 isExpanded={isExpanded}
                 styles={styles}
                 powerPlantsDisplay={powerPlantsDisplay}
                 habitatsDisplay={habitatsDisplay}
-            />}
-            {currentStatComponent === 'shipWeaponStats' && <ShipClassWeaponStats
                 weaponStatsDisplay={weaponStatsDisplay}
             />}
-            {currentStatComponent === 'shipClassStatBlock' && <ShipClassStatBlock
-                statsDisplay={statsDisplay}
+            {currentStatComponent === 'shipCustomization' && <ShipCustomization
+                customizationDisplay={customizationDisplay}
             />}
+
             {currentStatComponent === 'shipDesign' && <ShipDesign
                 isExpanded={isExpanded}
                 styles={styles}

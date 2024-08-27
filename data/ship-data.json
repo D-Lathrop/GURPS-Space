@@ -2438,7 +2438,10 @@
             "PowerGeneration": 0,
             "PowerDemand": 0,
             "SuperScience": false,
-            "TL": 7
+            "TL": 7,
+            "FuelTypes": [
+                "Jet Fuel"
+            ]
         },
         {
             "SM": 5,
@@ -2573,10 +2576,10 @@
             "cost": 150000000000
         }
     ],
-    "Mining and Refinery": [
+    "Mining": [
         {
             "Category": "Utility",
-            "RepairSkill": "Mechanic (Mining or Refineries)",
+            "RepairSkill": "Mechanic (Mining)",
             "Location": "any",
             "PowerGeneration": 0,
             "PowerDemand": 1,
@@ -2586,76 +2589,142 @@
         {
             "SM": 5,
             "TonsHrMining": 0.15,
-            "TonsHrRefinery": 0.5,
             "Workspaces": 0,
             "cost": 30000
         },
         {
             "SM": 6,
             "TonsHrMining": 0.5,
-            "TonsHrRefinery": 1.5,
             "Workspaces": 0,
             "cost": 100000
         },
         {
             "SM": 7,
             "TonsHrMining": 1.5,
-            "TonsHrRefinery": 5,
             "Workspaces": 0,
             "cost": 300000
         },
         {
             "SM": 8,
             "TonsHrMining": 5,
-            "TonsHrRefinery": 15,
             "Workspaces": 0,
             "cost": 1000000
         },
         {
             "SM": 9,
             "TonsHrMining": 15,
-            "TonsHrRefinery": 50,
             "Workspaces": 0,
             "cost": 3000000
         },
         {
             "SM": 10,
             "TonsHrMining": 50,
-            "TonsHrRefinery": 150,
             "Workspaces": 1,
             "cost": 10000000
         },
         {
             "SM": 11,
             "TonsHrMining": 150,
-            "TonsHrRefinery": 500,
             "Workspaces": 3,
             "cost": 30000000
         },
         {
             "SM": 12,
             "TonsHrMining": 500,
-            "TonsHrRefinery": 1500,
             "Workspaces": 10,
             "cost": 100000000
         },
         {
             "SM": 13,
             "TonsHrMining": 1500,
-            "TonsHrRefinery": 5000,
             "Workspaces": 30,
             "cost": 300000000
         },
         {
             "SM": 14,
             "TonsHrMining": 5000,
-            "TonsHrRefinery": 15000,
             "Workspaces": 100,
             "cost": 1000000000
         },
         {
             "SM": 15,
             "TonsHrMining": 15000,
+            "Workspaces": 300,
+            "cost": 3000000000
+        }
+    ],
+    "Refinery": [
+        {
+            "Category": "Utility",
+            "RepairSkill": "Mechanic (Refineries)",
+            "Location": "any",
+            "PowerGeneration": 0,
+            "PowerDemand": 1,
+            "SuperScience": false,
+            "TL": 7
+        },
+        {
+            "SM": 5,
+            "TonsHrRefinery": 0.5,
+            "Workspaces": 0,
+            "cost": 30000
+        },
+        {
+            "SM": 6,
+            "TonsHrRefinery": 1.5,
+            "Workspaces": 0,
+            "cost": 100000
+        },
+        {
+            "SM": 7,
+            "TonsHrRefinery": 5,
+            "Workspaces": 0,
+            "cost": 300000
+        },
+        {
+            "SM": 8,
+            "TonsHrRefinery": 15,
+            "Workspaces": 0,
+            "cost": 1000000
+        },
+        {
+            "SM": 9,
+            "TonsHrRefinery": 50,
+            "Workspaces": 0,
+            "cost": 3000000
+        },
+        {
+            "SM": 10,
+            "TonsHrRefinery": 150,
+            "Workspaces": 1,
+            "cost": 10000000
+        },
+        {
+            "SM": 11,
+            "TonsHrRefinery": 500,
+            "Workspaces": 3,
+            "cost": 30000000
+        },
+        {
+            "SM": 12,
+            "TonsHrRefinery": 1500,
+            "Workspaces": 10,
+            "cost": 100000000
+        },
+        {
+            "SM": 13,
+            "TonsHrRefinery": 5000,
+            "Workspaces": 30,
+            "cost": 300000000
+        },
+        {
+            "SM": 14,
+            "TonsHrRefinery": 15000,
+            "Workspaces": 100,
+            "cost": 1000000000
+        },
+        {
+            "SM": 15,
             "TonsHrRefinery": 50000,
             "Workspaces": 300,
             "cost": 3000000000
@@ -2823,7 +2892,10 @@
             "PowerGeneration": 1,
             "PowerDemand": 0,
             "SuperScience": false,
-            "TL": 7
+            "TL": 7,
+            "FuelTypes": [
+                "Hydrogen-oxygen Rocket Fuel"
+            ]
         },
         {
             "SM": 5,
@@ -2889,7 +2961,10 @@
             "PowerGeneration": 2,
             "PowerDemand": 0,
             "SuperScience": false,
-            "TL": 9
+            "TL": 9,
+            "FuelTypes": [
+                "Hydrogen-oxygen Rocket Fuel"
+            ]
         },
         {
             "SM": 5,
@@ -3353,7 +3428,10 @@
             "TL": 7,
             "Accel": 3,
             "mpsTank": 0.15,
-            "SuperScience": false
+            "SuperScience": false,
+            "FuelTypes": [
+                "Hydrogen-oxygen Rocket Fuel"
+            ]
         },
         {
             "SM": 5,
@@ -3421,7 +3499,10 @@
             "TL": 9,
             "Accel": 2,
             "mpsTank": 0.5,
-            "SuperScience": false
+            "SuperScience": false,
+            "FuelTypes": [
+                "HEDM Fuel"
+            ]
         },
         {
             "SM": 5,
@@ -3489,7 +3570,10 @@
             "TL": 8,
             "Accel": 0.0005,
             "mpsTank": 3,
-            "SuperScience": false
+            "SuperScience": false,
+            "FuelTypes": [
+                "Ionizable Reaction Mass"
+            ]
         },
         {
             "SM": 5,
@@ -3557,7 +3641,10 @@
             "TL": 9,
             "Accel": 0.01,
             "mpsTank": 0.3,
-            "SuperScience": false
+            "SuperScience": false,
+            "FuelTypes": [
+                "Anything"
+            ]
         },
         {
             "SM": 5,
@@ -3625,7 +3712,11 @@
             "TL": 7,
             "Accel": 0.1,
             "mpsTank": 0.3,
-            "SuperScience": false
+            "SuperScience": false,
+            "FuelTypes": [
+                "Hydrogen Fuel",
+                "Water"
+            ]
         },
         {
             "SM": 5,
@@ -3693,7 +3784,10 @@
             "TL": 9,
             "Accel": 0.01,
             "mpsTank": 0.8,
-            "SuperScience": false
+            "SuperScience": false,
+            "FuelTypes": [
+                "Hydrogen Fuel"
+            ]
         },
         {
             "SM": 5,
@@ -3761,7 +3855,10 @@
             "TL": 9,
             "Accel": 2,
             "mpsTank": 2.5,
-            "SuperScience": true
+            "SuperScience": true,
+            "FuelTypes": [
+                "Uranium-saltwater Fuel"
+            ]
         },
         {
             "SM": 5,
@@ -3829,7 +3926,10 @@
             "TL": 7,
             "Accel": 2,
             "mpsTank": 2,
-            "SuperScience": false
+            "SuperScience": false,
+            "FuelTypes": [
+                "Bomb Pulse Units"
+            ]
         },
         {
             "SM": 5,
@@ -3897,7 +3997,10 @@
             "TL": 9,
             "Accel": 0.02,
             "mpsTank": 5,
-            "SuperScience": false
+            "SuperScience": false,
+            "FuelTypes": [
+                "FUsion Pulse Pellets"
+            ]
         },
         {
             "SM": 5,
@@ -3965,7 +4068,10 @@
             "TL": 9,
             "Accel": 0.005,
             "mpsTank": 20,
-            "SuperScience": false
+            "SuperScience": false,
+            "FuelTypes": [
+                "Fusion Pulse Pellets"
+            ]
         },
         {
             "SM": 5,
@@ -4033,7 +4139,10 @@
             "TL": 11,
             "Accel": 20,
             "mpsTank": 350,
-            "SuperScience": true
+            "SuperScience": true,
+            "FuelTypes": [
+                "Fusion Pulse Pellets"
+            ]
         },
         {
             "SM": 5,
@@ -4101,7 +4210,11 @@
             "TL": 9,
             "Accel": 0.005,
             "mpsTank": 12,
-            "SuperScience": false
+            "SuperScience": false,
+            "FuelTypes": [
+                "Hydrogen Fuel",
+                "Water"
+            ]
         },
         {
             "SM": 5,
@@ -4169,7 +4282,11 @@
             "TL": 10,
             "Accel": 0.5,
             "mpsTank": 15,
-            "SuperScience": true
+            "SuperScience": true,
+            "FuelTypes": [
+                "Hydrogen Fuel",
+                "Water"
+            ]
         },
         {
             "SM": 5,
@@ -4237,7 +4354,11 @@
             "TL": 11,
             "Accel": 50,
             "mpsTank": 450,
-            "SuperScience": true
+            "SuperScience": true,
+            "FuelTypes": [
+                "Hydrogen Fuel",
+                "Water"
+            ]
         },
         {
             "SM": 5,
@@ -4305,7 +4426,11 @@
             "TL": 9,
             "Accel": 0.1,
             "mpsTank": 1.8,
-            "SuperScience": false
+            "SuperScience": false,
+            "FuelTypes": [
+                "Antimatter-catalyzed Hydrogen Fuel",
+                "Water"
+            ]
         },
         {
             "SM": 5,
@@ -4373,7 +4498,11 @@
             "TL": 10,
             "Accel": 0.01,
             "mpsTank": 120,
-            "SuperScience": false
+            "SuperScience": false,
+            "FuelTypes": [
+                "Antimatter-boosted Hydrogen Fuel",
+                "Water"
+            ]
         },
         {
             "SM": 5,
@@ -4441,7 +4570,10 @@
             "TL": 10,
             "Accel": 1,
             "mpsTank": 120,
-            "SuperScience": true
+            "SuperScience": true,
+            "FuelTypes": [
+                "Antimatter-boosted Hydrogen Fuel"
+            ]
         },
         {
             "SM": 5,
@@ -4509,7 +4641,10 @@
             "TL": 11,
             "Accel": 100,
             "mpsTank": 360,
-            "SuperScience": true
+            "SuperScience": true,
+            "FuelTypes": [
+                "Antimatter-boosted Hydrogen Fuel"
+            ]
         },
         {
             "SM": 5,
@@ -4577,7 +4712,10 @@
             "TL": 11,
             "Accel": 0.005,
             "mpsTank": 3400,
-            "SuperScience": false
+            "SuperScience": false,
+            "FuelTypes": [
+                "Matter/Antimatter Fuel"
+            ]
         },
         {
             "SM": 5,
@@ -4645,7 +4783,10 @@
             "TL": 11,
             "Accel": 0.1,
             "mpsTank": 3400,
-            "SuperScience": true
+            "SuperScience": true,
+            "FuelTypes": [
+                "Matter/Antimatter Fuel"
+            ]
         },
         {
             "SM": 5,
@@ -4713,7 +4854,10 @@
             "TL": 12,
             "Accel": 1,
             "mpsTank": 10000,
-            "SuperScience": true
+            "SuperScience": true,
+            "FuelTypes": [
+                "Anything"
+            ]
         },
         {
             "SM": 5,
@@ -4781,7 +4925,10 @@
             "TL": 12,
             "Accel": 50,
             "mpsTank": 10000,
-            "SuperScience": true
+            "SuperScience": true,
+            "FuelTypes": [
+                "Anything"
+            ]
         },
         {
             "SM": 5,
