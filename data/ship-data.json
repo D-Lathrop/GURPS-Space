@@ -2511,7 +2511,7 @@
         },
         {
             "SM": 5,
-            "Max tonnage": null,
+            "MaxTonnage": null,
             "Workspaces": null,
             "cost": null
         },

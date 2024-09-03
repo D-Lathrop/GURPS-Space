@@ -568,8 +568,11 @@ const CreateShipClass = ({ isExpanded }) => {
             case "Secondary Battery":
             case "Tertiary Battery":
                 highAndTotalAutomation();
-                newModuleListObj.graviticFocus = false;
                 newModuleListObj.mountedWeapons = [];
+                // newModuleListObj.graviticFocus = false;
+                // newModuleListObj.rapidFire = false;
+                // newModuleListObj.veryRapidFire = false;
+                // newModuleListObj.improved = false;
                 break;
             case "Solar Panel Array":
                 highAndTotalAutomationOnly();
@@ -607,11 +610,14 @@ const CreateShipClass = ({ isExpanded }) => {
                 break;
             case "Jump Gate":
                 highAndTotalAutomation();
-                newModuleListObj.combinedGates = 0;
+                newModuleListObj.maxTonnage = SMData.MaxTonnage;
+                newModuleListObj.combinedGates = [];
                 break;
             case "Hangar Bay":
                 highAndTotalAutomation();
-                newModuleListObj.combinedBays = 0;
+                newModuleListObj.hangarCapacity = SMData.Capacity;
+                newModuleListObj.launchRate = SMData.LaunchRate;
+                newModuleListObj.combinedBays = [];
                 break;
             case "Habitat":
                 highAndTotalAutomation();
@@ -775,181 +781,248 @@ const CreateShipClass = ({ isExpanded }) => {
         let currentShipModules = shipModules.map(row => [...row]);
 
         processShipModules(newShipModules, (shipModule) => {
-            const moduleKey = shipModule.moduleKey;
-            const moduleKeyObj = shipData[moduleKey];
-            const SMData = moduleKeyObj.find(module => module.SM === shipSM);
-            const [rowIndex, colIndex] = getModuleIndex(shipModule.moduleLocation1, shipModule.moduleNumber);
+            if (shipModule.moduleKey !== undefined) {
+                const moduleKey = shipModule.moduleKey;
+                const moduleKeyObj = shipData[moduleKey];
+                const SMData = moduleKeyObj.find(module => module.SM === shipSM);
+                const [rowIndex, colIndex] = getModuleIndex(shipModule.moduleLocation1, shipModule.moduleNumber);
 
-            let isValid = false;
+                let isValid = false;
 
-            if (
-                (moduleKeyObj[0].SuperScience === true && superScienceChecked === true || moduleKeyObj[0].SuperScience === false)
-                && (moduleKeyObj[0].TL <= shipTL)
-                && (moduleKey !== 'Engine Room' || moduleKey === 'Engine Room' && shipSM <= 9)
-                && (moduleKey !== 'Open Space' || moduleKey === 'Open Space' && shipSM >= 8)
-                && (moduleKey !== 'Habitat' || moduleKey === 'Habitat' && shipSM >= 6)
-                && (moduleKey !== 'Armor, Ice' || moduleKey === 'Armor, Ice' && shipSM >= 8 && shipStreamlinedUn === 'unstreamlined')
-                && (moduleKey !== 'Armor, Stone' || moduleKey === 'Armor, Stone' && shipSM >= 7 && shipStreamlinedUn === 'unstreamlined')
-                && (moduleKey !== 'Engine Room' || moduleKey === 'Engine Room' && shipSM <= 9)
-                && (moduleKey !== 'Jump Gate' || moduleKey === 'Jump Gate' && shipSM >= 9)
-                && (moduleKey !== 'Factory, Replicator' || moduleKey === 'Factory, Replicator' && shipSM >= 6)
-                && (moduleKey !== 'Factory, Nanofactory' || moduleKey === 'Factory, Nanofactory' && shipSM >= 6)
-                && (moduleKey !== 'Factory, Robofac' || moduleKey === 'Factory, Robofac' && shipSM >= 6)
-                && (moduleKey !== 'Factory, Fabricator' || moduleKey === 'Factory, Fabricator' && shipSM >= 6)
-                && (moduleKey !== 'Secondary Battery' || moduleKey === 'Secondary Battery' && shipSM >= 6)
-                && (moduleKey !== 'Tertiary Battery' || moduleKey === 'Tertiary Battery' && shipSM >= 7)
-                && (moduleKey !== "External Pulsed Plasma" || moduleKey === "External Pulsed Plasma" && shipReardDR >= 50)
-            ) {
-                isValid = true;
-            } else {
-                newShipModules[rowIndex].splice(colIndex, 1, {});
-            }
+                if (
+                    (moduleKeyObj[0].SuperScience === true && superScienceChecked === true || moduleKeyObj[0].SuperScience === false)
+                    && (moduleKeyObj[0].TL <= shipTL)
+                    && (moduleKey !== 'Engine Room' || moduleKey === 'Engine Room' && shipSM <= 9)
+                    && (moduleKey !== 'Open Space' || moduleKey === 'Open Space' && shipSM >= 8)
+                    && (moduleKey !== 'Habitat' || moduleKey === 'Habitat' && shipSM >= 6)
+                    && (moduleKey !== 'Armor, Ice' || moduleKey === 'Armor, Ice' && shipSM >= 8 && shipStreamlinedUn === 'unstreamlined')
+                    && (moduleKey !== 'Armor, Stone' || moduleKey === 'Armor, Stone' && shipSM >= 7 && shipStreamlinedUn === 'unstreamlined')
+                    && (moduleKey !== 'Jump Gate' || moduleKey === 'Jump Gate' && shipSM >= 9)
+                    && (moduleKey !== 'Factory, Replicator' || moduleKey === 'Factory, Replicator' && shipSM >= 6)
+                    && (moduleKey !== 'Factory, Nanofactory' || moduleKey === 'Factory, Nanofactory' && shipSM >= 6)
+                    && (moduleKey !== 'Factory, Robofac' || moduleKey === 'Factory, Robofac' && shipSM >= 6)
+                    && (moduleKey !== 'Factory, Fabricator' || moduleKey === 'Factory, Fabricator' && shipSM >= 6)
+                    && (moduleKey !== 'Secondary Battery' || moduleKey === 'Secondary Battery' && shipSM >= 6)
+                    && (moduleKey !== 'Tertiary Battery' || moduleKey === 'Tertiary Battery' && shipSM >= 7)
+                    && (moduleKey !== "External Pulsed Plasma" || moduleKey === "External Pulsed Plasma" && shipReardDR >= 50)
+                ) {
+                    isValid = true;
+                } else {
+                    newShipModules[rowIndex].splice(colIndex, 1, {});
+                }
 
-            function updateBaseCostAndWorkspaces() {
-                shipModule.baseModuleCost = SMData.cost;
-                shipModule.baseModuleWorkspaces = SMData.Workspaces;
-            }
+                function updateBaseCostAndWorkspaces() {
+                    shipModule.baseModuleCost = SMData.cost;
+                    shipModule.baseModuleWorkspaces = SMData.Workspaces;
+                }
 
-            if (isValid) {
-                switch (moduleKey) {
-                    case "Control Room":
-                        shipModule.defaultControlStations = SMData.ControlStations;
-                        updateBaseCostAndWorkspaces();
-                        break;
-                    case "Armor, Exotic Laminate":
-                    case "Armor, Diamondoid":
-                    case "Armor, Nanocomposite":
-                    case "Armor, Advanced Metallic Laminate":
-                    case "Armor, Metallic Laminate":
-                    case "Armor, Light Alloy":
-                    case "Armor, Steel":
-                    case "Armor, Organic":
-                    case "Armor, Stone":
-                    case "Armor, Ice":
-                        updateBaseCostAndWorkspaces()
-                        shipModule.baseModuleStreamlineddDR = SMData.SdDR;
-                        shipModule.baseModuleUnstreamlineddDR = SMData.USdDR;
-                        if (shipStreamlinedUn === 'streamlined') {
-                            shipModule.moduledDR = SMData.SdDR;
-                        } else {
-                            shipModule.moduledDR = SMData.USdDR
-                        }
-                        break;
-                    case "Spinal Battery":
-                    case "Major Battery":
-                    case "Medium Battery":
-                    case "Secondary Battery":
-                    case "Tertiary Battery":
-                        // Add logic to change weapon size based on SM here.
-                        updateBaseCostAndWorkspaces();
-                        break;
-                    case "Jump Gate":
-                        // Add logic to update gate capacity.
-                        updateBaseCostAndWorkspaces();
-                        break;
-                    case "Hangar Bay":
-                        // Add logic to update launch rate and capacity.
-                        updateBaseCostAndWorkspaces();
-                        break;
-                    case "Habitat":
-                        shipModule.baseCabins = SMData.Cabins;
-                        // Reset module if new SM has fewer cabins.
-                        updateBaseCostAndWorkspaces();
-                        break;
-                    case "Open Space":
-                        shipModule.baseAreas = SMData.Areas;
-                        // Reset module if new SM has fewer areas.
-                        updateBaseCostAndWorkspaces();
-                        break;
-                    case "Fuel Tank":
-                        shipModule.fuelLoad = SMData.Fuel;
-                        updateBaseCostAndWorkspaces();
-                        break;
-                    case "Force Screen, TL12 Heavy":
-                    case "Force Screen, TL12 Light":
-                    case "Force Screen, TL11 Heavy":
-                    case "Force Screen, TL11 Light":
-                        shipModule.screendDR = SMData.dDr;
-                        updateBaseCostAndWorkspaces();
-                        break;
-                    case "Cargo Hold":
-                        shipModule.baseUPressCargoCapacity = SMData.LoadUPr;
-                        // Reset module if new SM has less cargo space than refrigerated and shielded together.
-                        updateBaseCostAndWorkspaces();
-                        break;
-                    case "Refinery":
-                        updateBaseCostAndWorkspaces();
-                        shipModule.tonsPerHour = SMData.TonsHrRefinery;
-                        break;
-                    case "Mining":
-                        updateBaseCostAndWorkspaces();
-                        shipModule.tonsPerHour = SMData.TonsHrMining;
-                        break;
-                    case "Factory, Nanofactory":
-                    case "Factory, Robofac":
-                    case "Factory, Fabricator":
-                        updateBaseCostAndWorkspaces();
-                        shipModule.valuePerHour = SMData.$Hr;
-                        break;
-                    case "Factory, Replicator":
-                        updateBaseCostAndWorkspaces();
-                        shipModule.weightPerHour = SMData.lbsHr;
-                        break;
-                    case "Solar Panel Array":
-                    case "Reactor, Super Fusion":
-                    case "Reactor, Total Conversion":
-                    case "Reactor, Antimatter":
-                    case "Reactor, Fusion":
-                    case "Reactor, Fission":
-                    case "Chemical, MHD Turbine":
-                    case "Chemical, Fuel Cell":
-                        // Add logic to update internalLifespan.
-                        updateBaseCostAndWorkspaces();
-                        break;
-                    case "Sensor Array, Multipurpose":
-                    case "Sensor Array, Science":
-                    case "Sensor Array, Tactical":
-                    case "Sensor Array, Enhanced":
-                    case "Super Reactionless":
-                    case "Hot Reactionless":
-                    case "Standard":
-                    case "Rotary":
-                    case "Subwarp":
-                    case "Super Stardrive Engine":
-                    case "Stardrive Engine":
-                    case "Antimatter Plasma Torch":
-                    case "Super Antimatter Plasma Torch":
-                    case "Antimatter Thermal Rocket":
-                    case "Super Fusion Torch":
-                    case "Fusion Torch":
-                    case "Nuclear Thermal Rocket":
-                    case "Super Conversion Torch":
-                    case "Total Conversion Torch":
-                    case "Antimatter Pion Torch":
-                    case "Antimatter Pion":
-                    case "Antimatter Plasma Rocket":
-                    case "Fusion Rocket":
-                    case "Super Fusion Pulse Drive":
-                    case "Advanced Fusion Pulse Drive":
-                    case "Fusion Pulse Drive":
-                    case "External Pulsed Plasma":
-                    case "Mass Driver":
-                    case "Ion Drive":
-                    case "Nuclear Saltwater Rocket":
-                    case "Nuclear Light Bulb":
-                    case "Jet Engine":
-                    case "HEDM":
-                    case "Chemical":
-                    case "Stasis Web":
-                    case "Robot Arm":
-                    case "Ramscoop":
-                    case "Engine Room":
-                    case "Defensive ECM":
-                    case "Contragravity Lifter":
-                        updateBaseCostAndWorkspaces();
-                        break;
-                    default:
-                        break;
+                if (isValid) {
+                    switch (moduleKey) {
+                        case "Control Room":
+                            shipModule.defaultControlStations = SMData.ControlStations;
+                            updateBaseCostAndWorkspaces();
+                            break;
+                        case "Armor, Exotic Laminate":
+                        case "Armor, Diamondoid":
+                        case "Armor, Nanocomposite":
+                        case "Armor, Advanced Metallic Laminate":
+                        case "Armor, Metallic Laminate":
+                        case "Armor, Light Alloy":
+                        case "Armor, Steel":
+                        case "Armor, Organic":
+                        case "Armor, Stone":
+                        case "Armor, Ice":
+                            updateBaseCostAndWorkspaces()
+                            shipModule.baseModuleStreamlineddDR = SMData.SdDR;
+                            shipModule.baseModuleUnstreamlineddDR = SMData.USdDR;
+                            shipModule.moduledDR = shipStreamlinedUn === 'streamlined' ? SMData.SdDR : SMData.USdDR;
+                            break;
+                        case "Spinal Battery":
+                        case "Major Battery":
+                        case "Medium Battery":
+                        case "Secondary Battery":
+                        case "Tertiary Battery":
+                            updateBaseCostAndWorkspaces();
+                            let mountedWeaponsArr = shipModule.mountedWeapons;
+                            Object.values(mountedWeaponsArr).forEach((weaponObj, index) => {
+                                const weaponDataObj = weaponData[weaponObj.weaponName];
+                                const weaponTL = weaponDataObj[TL];
+                                const weaponSuperScience = weaponDataObj[SuperScience];
+
+                                if (weaponTL > shipTL || (superScienceChecked === false && weaponSuperScience === true)) {
+                                    mountedWeaponsArr.splice(index, 1);
+                                    shipModule.alreadyCustomized = false;
+                                }
+                            });
+                            shipModule.mountedWeapons = mountedWeaponsArr;
+                            break;
+                        case "Jump Gate":
+                            const combinedGates = shipModule.combinedGates;
+                            let allGatesPresent = true;
+                            combinedGates.forEach(([rowIndex, colIndex]) => {
+                                if (shipModules[rowIndex] && shipModules[rowIndex][colIndex].moduleKey !== 'Jump Gate') {
+                                    allGatesPresent = false;
+                                }
+                            });
+
+                            if (allGatesPresent === false) {
+                                shipModule.combinedGates = [];
+                                shipModule.alreadyCustomized = false;
+                            }
+
+                            shipModule.maxTonnage = SMData.MaxTonnage;
+                            updateBaseCostAndWorkspaces();
+                            break;
+                        case "Hangar Bay":
+                            const combinedBays = shipModule.combinedBays;
+                            let allBaysPresent = true;
+                            combinedBays.forEach(([rowIndex, colIndex]) => {
+                                if (shipModules[rowIndex] && shipModules[rowIndex][colIndex].moduleKey !== 'Hangar Bay') {
+                                    allBaysPresent = false;
+                                }
+                            });
+
+                            if (allBaysPresent === false) {
+                                shipModule.combinedBays = [];
+                                shipModule.alreadyCustomized = false;
+                            }
+
+                            shipModule.hangarCapacity = SMData.Capacity;
+                            shipModule.launchRate = SMData.LaunchRate;
+                            updateBaseCostAndWorkspaces();
+                            break;
+                        case "Habitat":
+                            const originalCabins = shipModule.baseCabins;
+                            shipModule.baseCabins = SMData.Cabins;
+
+                            function resetHabs() {
+                                shipModule.customizedCabins = {};
+                                shipModule.alreadyCustomized = false;
+                                shipModule.steerageCargo = 0;
+                            }
+
+                            if (originalCabins > SMData.Cabins) {
+                                resetHabs();
+                            } else if (shipModule.customizedCabins.hasOwnProperty('Hibernation') && shipTL < 9) {
+                                resetHabs();
+                            } else if (shipModule.customizedCabins.hasOwnProperty('SuperScience Labs') && superScienceChecked === false) {
+                                resetHabs();
+                            } else if (shipModule.customizedCabins.hasOwnProperty('Mini Fab') && shipTL < 9) {
+                                resetHabs();
+                            } else if (shipModule.customizedCabins.hasOwnProperty('Mini Robo Fab') && shipTL < 10) {
+                                resetHabs();
+                            } else if (shipModule.customizedCabins.hasOwnProperty('Mini Nano Fab') && shipTL < 11) {
+                                resetHabs();
+                            } else if (shipModule.customizedCabins.hasOwnProperty('Mini Rep Fab') && (shipTL < 12 || superScienceChecked === false)) {
+                                resetHabs();
+                            } else if ((shipModule.customizedCabins.hasOwnProperty('Teleport Receive') || shipModule.customizedCabins.hasOwnProperty('Teleport Send') || shipModule.customizedCabins.hasOwnProperty('Teleport')) && (shipTL < 12 || superScienceChecked === false)) {
+                                resetHabs();
+                            }
+                            updateBaseCostAndWorkspaces();
+                            break;
+                        case "Open Space":
+                            let originalAreas = shipModule.baseAreas;
+                            shipModule.baseAreas = SMData.Areas;
+                            if (originalAreas > SMData.Areas) {
+                                shipModule.customizedAreas = {};
+                                shipModule.alreadyCustomized = false;
+                            }
+                            updateBaseCostAndWorkspaces();
+                            break;
+                        case "Fuel Tank":
+                            shipModule.fuelLoad = SMData.Fuel;
+                            updateBaseCostAndWorkspaces();
+                            break;
+                        case "Force Screen, TL12 Heavy":
+                        case "Force Screen, TL12 Light":
+                        case "Force Screen, TL11 Heavy":
+                        case "Force Screen, TL11 Light":
+                            shipModule.screendDR = SMData.dDr;
+                            updateBaseCostAndWorkspaces();
+                            break;
+                        case "Cargo Hold":
+                            shipModule.baseUPressCargoCapacity = SMData.LoadUPr;
+                            if (shipModule.shieldedCargo + shipModule.refrigeratedCargo > SMData.LoadUPr) {
+                                shipModule.shieldedCargo = 0;
+                                shipModule.refrigeratedCargo = 0;
+                                shipModule.alreadyCustomized = false;
+                            }
+                            updateBaseCostAndWorkspaces();
+                            break;
+                        case "Refinery":
+                            updateBaseCostAndWorkspaces();
+                            shipModule.tonsPerHour = SMData.TonsHrRefinery;
+                            break;
+                        case "Mining":
+                            updateBaseCostAndWorkspaces();
+                            shipModule.tonsPerHour = SMData.TonsHrMining;
+                            break;
+                        case "Factory, Nanofactory":
+                        case "Factory, Robofac":
+                        case "Factory, Fabricator":
+                            updateBaseCostAndWorkspaces();
+                            shipModule.valuePerHour = SMData.$Hr;
+                            break;
+                        case "Factory, Replicator":
+                            updateBaseCostAndWorkspaces();
+                            shipModule.weightPerHour = SMData.lbsHr;
+                            break;
+                        case "Reactor, Super Fusion":
+                        case "Reactor, Total Conversion":
+                        case "Reactor, Antimatter":
+                        case "Reactor, Fusion":
+                        case "Reactor, Fission":
+                        case "Chemical, MHD Turbine":
+                        case "Chemical, Fuel Cell":
+                            // Add logic to update internalLifespan.
+                            updateBaseCostAndWorkspaces();
+                            break;
+                        case "Solar Panel Array":
+                        case "Sensor Array, Multipurpose":
+                        case "Sensor Array, Science":
+                        case "Sensor Array, Tactical":
+                        case "Sensor Array, Enhanced":
+                        case "Super Reactionless":
+                        case "Hot Reactionless":
+                        case "Standard":
+                        case "Rotary":
+                        case "Subwarp":
+                        case "Super Stardrive Engine":
+                        case "Stardrive Engine":
+                        case "Antimatter Plasma Torch":
+                        case "Super Antimatter Plasma Torch":
+                        case "Antimatter Thermal Rocket":
+                        case "Super Fusion Torch":
+                        case "Fusion Torch":
+                        case "Nuclear Thermal Rocket":
+                        case "Super Conversion Torch":
+                        case "Total Conversion Torch":
+                        case "Antimatter Pion Torch":
+                        case "Antimatter Pion":
+                        case "Antimatter Plasma Rocket":
+                        case "Fusion Rocket":
+                        case "Super Fusion Pulse Drive":
+                        case "Advanced Fusion Pulse Drive":
+                        case "Fusion Pulse Drive":
+                        case "External Pulsed Plasma":
+                        case "Mass Driver":
+                        case "Ion Drive":
+                        case "Nuclear Saltwater Rocket":
+                        case "Nuclear Light Bulb":
+                        case "Jet Engine":
+                        case "HEDM":
+                        case "Chemical":
+                        case "Stasis Web":
+                        case "Robot Arm":
+                        case "Ramscoop":
+                        case "Engine Room":
+                        case "Defensive ECM":
+                        case "Contragravity Lifter":
+                            updateBaseCostAndWorkspaces();
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
         });
@@ -958,12 +1031,8 @@ const CreateShipClass = ({ isExpanded }) => {
         }
     }, []);
 
-    useEffect(() => {
-        updateShipModules(shipModules, shipData, shipSM, shipStreamlinedUn, shipTL, shipReardDR, superScienceChecked)
-    }, [updateShipModules, shipModules, shipSM, shipStreamlinedUn, shipTL, shipReardDR, superScienceChecked])
-
     // This useEffect handles changes to the selected module array to update overall ship statistics.
-    useEffect(() => {
+    const updateShipValues = useCallback((shipModules, shipStreamlinedUn, shipTL, shipSM) => {
         const modulesUseEffect = shipModules;
         const modulesUseEffectData = shipData;
         let tankCount = shipModules.filter(module => module.moduleKey === 'Fuel Tank').length;
@@ -1557,7 +1626,12 @@ const CreateShipClass = ({ isExpanded }) => {
                 setDeltaV(deltaV)
             }
         }
-    }, [shipModules, shipStreamlinedUn, shipTL, shipSM, superScienceChecked, shipTotalModulesCost]);
+    }, []);
+
+    useEffect(() => {
+        updateShipModules(shipModules, shipData, shipSM, shipStreamlinedUn, shipTL, shipReardDR, superScienceChecked)
+        updateShipValues(shipModules, shipStreamlinedUn, shipTL, shipSM)
+    }, [updateShipModules, updateShipValues, shipModules, shipSM, shipStreamlinedUn, shipTL, shipReardDR, superScienceChecked])
 
     // This useEffect resets the selected modules array state variable when one of the dependencies change.
     // useEffect(() => {
@@ -2775,56 +2849,59 @@ const CreateShipClass = ({ isExpanded }) => {
         setSelectedWeaponCount(0)
     }, [selectedMountType, shipSM])
 
-    // This function gets and sets weapon stat variables based on the selected weapon subtype and variable like rapidFire.
-    function getWeaponSubTypeStats(weaponName, rapidFire, veryRapidFire, improved) {
+    // Let moduleKey = '';
+    // switch (selectedMountType) {
+    //     case 'Spinal Mount':
+    //         moduleKey = 'Spinal Battery'
+    //         break;
+
+    //     case 'Major (Front)':
+    //     case 'Major (Middle)':
+    //     case 'Major (Rear)':
+    //         moduleKey = 'Major Battery'
+    //         break;
+
+    //     case 'Medium (Front)':
+    //     case 'Medium (Middle)':
+    //     case 'Medium (Rear)':
+    //         moduleKey = 'Medium Battery'
+    //         break;
+
+    //     case 'Secondary (Front)':
+    //     case 'Secondary (Middle)':
+    //     case 'Secondary (Rear)':
+    //         moduleKey = 'Secondary Battery'
+    //         break;
+
+    //     case 'Tertiary (Front)':
+    //     case 'Tertiary (Middle)':
+    //     case 'Tertiary (Rear)':
+    //         moduleKey = 'Tertiary Battery'
+    //         break;
+
+    //     default:
+    //         break;
+    // }
+
+    function getWeaponStats(weaponName, moduleKey, rapidFire, veryRapidFire, improved, shipSM, shipTL) {
         let shipDataSMIndex = shipSM - 4
-        let moduleKey = ''
-        let damageTypesArray = []
         let weaponType = ''
-
-        switch (selectedMountType) {
-            case 'Spinal Mount':
-                moduleKey = 'Spinal Battery'
-                break;
-
-            case 'Major (Front)':
-            case 'Major (Middle)':
-            case 'Major (Rear)':
-                moduleKey = 'Major Battery'
-                break;
-
-            case 'Medium (Front)':
-            case 'Medium (Middle)':
-            case 'Medium (Rear)':
-                moduleKey = 'Medium Battery'
-                break;
-
-            case 'Secondary (Front)':
-            case 'Secondary (Middle)':
-            case 'Secondary (Rear)':
-                moduleKey = 'Secondary Battery'
-                break;
-
-            case 'Tertiary (Front)':
-            case 'Tertiary (Middle)':
-            case 'Tertiary (Rear)':
-                moduleKey = 'Tertiary Battery'
-                break;
-
-            default:
-                break;
-        }
+        let finalWeaponObj = {}
 
         let damageDice = 0
         let damageModifier = 0
         let damageMultiplier = 0
+        let weaponRcL = 0
+        let weaponsAcc = 0
 
         let beamPower = shipData[moduleKey][shipDataSMIndex]['Beam/kj']
+        let armorDiv = 0
         let tenMileRangeArray = []
         let hundredMileRangeArray = []
         let thousandMileRangeArray = []
         let tenThousandMileRangeArray = []
         let rangeValuesArray = []
+        let damageTypesArray = []
 
         let gunCaliber = shipData[moduleKey][shipDataSMIndex].Gun
         let gunShots = shipData[moduleKey][shipDataSMIndex]['Gun Shots']
@@ -2858,6 +2935,14 @@ const CreateShipClass = ({ isExpanded }) => {
             gunShots = gunShots * 20
         }
 
+        Object.values(weaponData).forEach(weaponArray => {
+            weaponArray.forEach(weapon => {
+                if (weapon.Name === weaponName) {
+                    weaponType = weapon.Type
+                }
+            });
+        });
+
         function getBeamStats(subWeaponTable) {
             const weaponStats = weaponTables[subWeaponTable][beamPower.toString()];
 
@@ -2871,10 +2956,30 @@ const CreateShipClass = ({ isExpanded }) => {
             rangeValuesArray = [tenMileRangeArray, hundredMileRangeArray, thousandMileRangeArray, tenThousandMileRangeArray];
         }
 
-        function getGunStats(selectedWeapon) {
+        function getBeamWeaponObject() {
+            return {
+                weaponType: weaponType,
+                weaponName: weaponName,
+                weaponSize: beamPower,
+                weaponDmgDice: damageDice,
+                weaponDmgMod: damageModifier,
+                weaponDmgMulti: damageMultiplier,
+                weaponArmorDiv: armorDiv,
+                weaponRangeArray: rangeValuesArray,
+                weaponSAcc: weaponsAcc,
+                weaponRcl: weaponRcL,
+                weaponRoF: getRoFStats(),
+                weaponDamageTypes: damageTypesArray,
+                weaponImproved: improved,
+                weaponRapidFire: rapidFire,
+                weaponVeryRapidFire: veryRapidFire
+            }
+        }
+
+        function getGunStats(weaponName) {
             const weaponStats = weaponTables['ConventionalWarheadDmgTable'][gunCaliber.toString()];
 
-            const selectedWeaponData = weaponData[selectedWeapon]
+            const selectedWeaponData = weaponData[weaponName]
             tenMileImpulse = selectedWeaponData[1]['10MileImpulse']
             hundredMileImpulse = selectedWeaponData[1]['100MileImpulse']
             thousandMileImpulse = selectedWeaponData[1]['1000MileImpulse']
@@ -2885,14 +2990,34 @@ const CreateShipClass = ({ isExpanded }) => {
             damageMultiplier = weaponStats.DamageMultiplier;
         }
 
-        function getMissileStats(selectedWeapon) {
+        function getGunWeaponObject() {
+            return {
+                weaponType: weaponType,
+                weaponName: weaponName,
+                weaponSize: gunCaliber,
+                largestWarhead: getLargestWarhead(),
+                weaponDmgDice: damageDice,
+                weaponDmgMod: damageModifier,
+                weaponDmgMulti: damageMultiplier,
+                weaponImpulse: gunImpulse,
+                weaponShots: gunShots,
+                weaponSAcc: weaponsAcc,
+                weaponRcl: weaponRcL,
+                weaponRoF: getRoFStats(),
+                weaponRapidFire: rapidFire,
+                weaponVeryRapidFire: veryRapidFire
+            }
+        }
+
+        function getMissileStats(weaponName) {
             const weaponStats = weaponTables['ConventionalWarheadDmgTable'][launcherCaliber.toString()];
-            const selectedWeaponData = weaponData[selectedWeapon]
+            const selectedWeaponData = weaponData[weaponName]
             damageDice = weaponStats.DamageDice;
             damageModifier = weaponStats.DamageModifier;
             damageMultiplier = weaponStats.DamageMultiplier;
 
-            if (selectedWeapon === "WarpMissile") {
+            if (weaponName === "Warp Missile") {
+                console.log(`Weapon Name: ${weaponName}, selectedWeaponData: ${selectedWeaponData}, weaponData: ${weaponData}`)
                 if (launcherCaliber <= 28) {
                     warpMissileRange = selectedWeaponData[1]["WarpRange28cm"]
                 } else if (launcherCaliber >= 29) {
@@ -2921,9 +3046,45 @@ const CreateShipClass = ({ isExpanded }) => {
             }
         }
 
+        function getMissileWeaponObject() {
+            if (weaponName === 'Warp Missile') {
+                return {
+                    weaponType: weaponType,
+                    weaponName: weaponName,
+                    weaponSize: launcherCaliber,
+                    largestWarhead: getLargestWarhead(),
+                    weaponDmgDice: damageDice,
+                    weaponDmgMod: damageModifier,
+                    weaponDmgMulti: damageMultiplier,
+                    weaponRange: warpMissileRange,
+                    weaponShots: launcherShots,
+                    weaponSAcc: weaponsAcc,
+                    weaponRcl: weaponRcL,
+                    weaponRoF: getRoFStats()
+                }
+            } else {
+                return {
+                    weaponType: weaponType,
+                    weaponName: weaponName,
+                    weaponSize: launcherCaliber,
+                    largestWarhead: getLargestWarhead(),
+                    weaponDmgDice: damageDice,
+                    weaponDmgMod: damageModifier,
+                    weaponDmgMulti: damageMultiplier,
+                    weaponThrust: missileThrust,
+                    weaponBurn: missileBurn,
+                    weaponShots: launcherShots,
+                    weaponSAcc: weaponsAcc,
+                    weaponRcl: weaponRcL,
+                    weaponRoF: getRoFStats()
+                }
+            }
+
+        }
+
         function getRcLsAccStats() {
-            let rcLResult = 0
-            let sAccResult = 0
+            let sAccResult = 0;
+            let rcLResult = 0;
 
             function getMissileRcLsAcc() {
                 if (launcherCaliber <= 28) {
@@ -2975,14 +3136,27 @@ const CreateShipClass = ({ isExpanded }) => {
                     break;
 
                 case 'Missile TL 7-8':
-                    getMissileRcLsAcc()
+                    getMissileRcLsAcc();
                     break;
 
                 case 'Missile TL 9-12':
-                    getMissileRcLsAcc()
+                    getMissileRcLsAcc();
                     break;
 
                 case 'Super Missile':
+                    if (launcherCaliber <= 28) {
+                        sAccResult = shipTL - 8;
+                        rcLResult = 1
+                    } else if (launcherCaliber >= 29) {
+                        sAccResult = shipTL - 7;
+                        rcLResult = 1
+                    } else {
+                        sAccResult = 'Error'
+                        rcLResult = 'Error'
+                    }
+                    break;
+
+                case 'Warp Missile':
                     if (launcherCaliber <= 28) {
                         sAccResult = 17
                         rcLResult = 1
@@ -2995,32 +3169,26 @@ const CreateShipClass = ({ isExpanded }) => {
                     }
                     break;
 
+                // sAcc and RcL information for beams is stored in each beam object in the weaponData file.
                 default:
+                    sAccResult = 'Error, or N/A.';
+                    rcLResult = 'Error, or N/A.';
                     break;
             }
-            setSelectedWeaponRcl(rcLResult)
-            setSelectedWeaponSAcc(sAccResult)
+            return [rcLResult, sAccResult]
         }
-
-        Object.values(weaponData).forEach(weaponArray => {
-            weaponArray.forEach(weapon => {
-                if (weapon.Name === weaponName) {
-                    weaponType = weapon.Type
-                }
-            });
-        });
 
         switch (weaponType) {
             case "Beam":
                 Object.values(weaponData).forEach(weaponArray => {
                     weaponArray.forEach(weapon => {
                         if (weapon.Name === weaponName) {
-                            setSelectedWeaponRcl(weapon.Rcl)
-                            setSelectedWeaponSAcc(weapon.sAcc)
+                            weaponsAcc = weapon.sAcc
+                            weaponRcL = weapon.Rcl
                             if (weapon.ArmorDivisor === 'Infinity') {
-                                setSelectedWeaponArmorDiv(Infinity)
+                                armorDiv = Infinity
                             } else {
-                                setSelectedWeaponArmorDiv(weapon.ArmorDivisor)
+                                armorDiv = weapon.ArmorDivisor
                             }
                             if (weapon.TypeBurn === true) {
                                 damageTypesArray.push('Burn')
@@ -3049,112 +3217,80 @@ const CreateShipClass = ({ isExpanded }) => {
                     case 'Laser Beam':
                     case 'Conversion Beam':
                     case 'Disintegrator Beam':
-                        getBeamStats('ConversionDisintegratorHeatLaserTable')
+                        getBeamStats('ConversionDisintegratorHeatLaserTable');
+                        finalWeaponObj = getBeamWeaponObject();
                         break;
                     case 'Graser Beam':
                     case 'X-Ray Laser':
                     case 'UV Laser':
-                        getBeamStats('GraserUvXrayLaserTable')
+                        getBeamStats('GraserUvXrayLaserTable');
+                        finalWeaponObj = getBeamWeaponObject();
                         break;
                     case 'Ghost Particle Beam':
                     case 'Particle Beam':
-                        getBeamStats('GhostParticleParticleTable')
+                        getBeamStats('GhostParticleParticleTable');
+                        finalWeaponObj = getBeamWeaponObject();
                         break;
                     case 'Antiparticle Beam':
-                        getBeamStats('AntiParticleTable')
+                        getBeamStats('AntiParticleTable');
+                        finalWeaponObj = getBeamWeaponObject();
                         break;
                     case 'Tractor Beam':
                     case 'Graviton Beam':
-                        getBeamStats('TractorGravitonTable')
+                        getBeamStats('TractorGravitonTable');
+                        finalWeaponObj = getBeamWeaponObject();
                         break;
-
                     case 'Plasma Beam':
-                        getBeamStats('PlasmaTable')
+                        getBeamStats('PlasmaTable');
+                        finalWeaponObj = getBeamWeaponObject();
                         break;
                     default:
-                        damageDice = 'Error'
-                        damageModifier = 'Error'
-                        damageMultiplier = 'Error'
-                        rangeValuesArray = 'Error'
-                        damageTypesArray = 'Error'
                         break;
                 }
-
-                setSelectedWeaponSize(beamPower)
-                setSelectedWeaponDmgDice(damageDice)
-                setSelectedWeaponDmgMod(damageModifier)
-                setSelectedWeaponDmgMulti(damageMultiplier)
-                setSelectedWeaponRangeArray(rangeValuesArray)
-                setSelectedWeaponDamageTypes(damageTypesArray)
-
                 break;
 
             case "Gun":
-                getRcLsAccStats()
+                [weaponRcL, weaponsAcc] = getRcLsAccStats();
                 switch (weaponName) {
                     case 'Conventional Gun':
-                        getGunStats('ConventionalGun')
-
+                        getGunStats('Conventional Gun')
+                        finalWeaponObj = getGunWeaponObject();
                         break;
                     case 'Electromagnetic Gun':
-                        getGunStats('ElectromagneticGun')
+                        getGunStats('Electromagnetic Gun')
+                        finalWeaponObj = getGunWeaponObject();
                         break;
                     case 'Grav Gun':
-                        getGunStats('GravGun')
+                        getGunStats('Grav Gun')
+                        finalWeaponObj = getGunWeaponObject();
                         break;
-
                     default:
                         break;
                 }
-                setSelectedWeaponImpulse(gunImpulse)
-                setSelectedWeaponDmgDice(damageDice)
-                setSelectedWeaponDmgMod(damageModifier)
-                setSelectedWeaponDmgMulti(damageMultiplier)
-                setSelectedWeaponSize(gunCaliber)
-                setSelectedWeaponShots(gunShots)
-                setSelectedWeaponDamageTypes(['Default'])
                 break;
 
             case "Missile":
-                getRcLsAccStats()
-
+                [weaponRcL, weaponsAcc] = getRcLsAccStats();
                 switch (weaponName) {
                     case 'Missile TL 7-8':
-                        getMissileStats('Missile7-8')
-                        setSelectedWeaponThrust(missileThrust)
-                        setSelectedWeaponBurn(missileBurn)
+                        getMissileStats('Missile TL 7-8');
+                        finalWeaponObj = getMissileWeaponObject();
                         break;
-
                     case 'Missile TL 9-12':
-                        getMissileStats('Missile9-12')
-                        setSelectedWeaponThrust(missileThrust)
-                        setSelectedWeaponBurn(missileBurn)
+                        getMissileStats('Missile TL 9-12');
+                        finalWeaponObj = getMissileWeaponObject();
                         break;
-
                     case 'Super Missile':
-                        getMissileStats('SuperMissile')
-                        setSelectedWeaponThrust(missileThrust)
-                        setSelectedWeaponBurn(missileBurn)
+                        getMissileStats('Super Missile');
+                        finalWeaponObj = getMissileWeaponObject();
                         break;
-
                     case 'Warp Missile':
-                        getMissileStats('WarpMissile')
-                        setWarpMissileRange(warpMissileRange)
+                        getMissileStats('Warp Missile');
+                        finalWeaponObj = getMissileWeaponObject();
                         break;
-
                     default:
-
                         break;
-
                 }
-
-                setSelectedWeaponSize(launcherCaliber)
-                setSelectedWeaponShots(launcherShots)
-                setSelectedWeaponDmgDice(damageDice)
-                setSelectedWeaponDmgMod(damageModifier)
-                setSelectedWeaponDmgMulti(damageMultiplier)
-                setSelectedWeaponDamageTypes(['Default'])
-
             default:
                 break;
         }
@@ -3165,8 +3301,6 @@ const CreateShipClass = ({ isExpanded }) => {
                 case "Gun":
                     if (shipTL >= 10) {
                         if (gunCaliber >= 40) {
-                            // The first value indicates if the warhead is antimatter or nuclear, 1 means nuclear and 2 means antimatter.
-                            // The second value indicates the size of the warhead, the string matches the keys in the weapon-tables.json file.
                             largestWarhead = ["Antimatter", "10Mega"]
                         } else if (gunCaliber >= 24) {
                             largestWarhead = ["Antimatter", "2.5Mega"]
@@ -3177,7 +3311,6 @@ const CreateShipClass = ({ isExpanded }) => {
                         } else {
                             largestWarhead = ["None", "None"]
                         }
-
                     } else {
                         if (gunCaliber >= 56) {
                             largestWarhead = ["Nuclear", "10Mega"]
@@ -3206,7 +3339,6 @@ const CreateShipClass = ({ isExpanded }) => {
                         } else {
                             largestWarhead = ["None", "None"]
                         }
-
                     } else {
                         if (launcherCaliber >= 56) {
                             largestWarhead = ["Nuclear", "10Mega"]
@@ -3227,8 +3359,6 @@ const CreateShipClass = ({ isExpanded }) => {
             }
             return largestWarhead;
         }
-
-        setSelectedWeaponLargestWarhead(getLargestWarhead())
 
         function getRoFStats() {
             let roFArray = [];
@@ -3267,10 +3397,29 @@ const CreateShipClass = ({ isExpanded }) => {
             }
             return roFArray;
         }
-
-        setSelectedWeaponRoF(getRoFStats());
-
+        return finalWeaponObj;
     }
+    // console.log(`weaponStats:`)
+    // const weaponStats = getWeaponStats("Heat Ray", 'Major Battery', false, false, false, 12, 12);
+    // // console.log("weaponType:", weaponStats.weaponType);
+    // // console.log("weaponName:", weaponStats.weaponName);
+    // // console.log("weaponSize:", weaponStats.weaponSize);
+    // // console.log("largestWarhead:", weaponStats.largestWarhead);
+    // // console.log("weaponDmgDice:", weaponStats.weaponDmgDice);
+    // // console.log("weaponDmgMod:", weaponStats.weaponDmgMod);
+    // // console.log("weaponDmgMulti:", weaponStats.weaponDmgMulti);
+    // // console.log("weaponRange:", weaponStats.weaponRange);
+    // // console.log("weaponShots:", weaponStats.weaponShots);
+    // // console.log("weaponSAcc:", weaponStats.weaponSAcc);
+    // // console.log("weaponRcl:", weaponStats.weaponRcl);
+    // // console.log("weaponRoF:", weaponStats.weaponRoF);
+    // Object.entries(weaponStats).forEach(([key, value]) => {
+    //     console.log(`${key}: ${value}`);
+    // });
+    // console.log("-------------------------------------------------")
+
+
+    // console.log(weaponData["Warp Missile"][1]["WarpRange28cm"])
 
     // This function converts the selected weapon's largest warhead size to a more readable format.
     function largestWarheadDisplay(string) {

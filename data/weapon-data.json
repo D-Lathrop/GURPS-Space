@@ -1,5 +1,5 @@
 {
-    "Missile7-8": [
+    "Missile TL 7-8": [
         {
             "Name": "Missile TL 7-8",
             "Type": "Missile",
@@ -59,7 +59,7 @@
             ]
         }
     ],
-    "Missile9-12": [
+    "Missile TL 9-12": [
         {
             "Name": "Missile TL 9-12",
             "Type": "Missile",
@@ -119,7 +119,7 @@
             ]
         }
     ],
-    "SuperMissile": [
+    "Super Missile": [
         {
             "Name": "Super Missile",
             "Type": "Missile",
@@ -179,7 +179,7 @@
             ]
         }
     ],
-    "WarpMissile": [
+    "Warp Missile": [
         {
             "Name": "Warp Missile",
             "Type": "Missile",
@@ -201,7 +201,7 @@
             ]
         }
     ],
-    "ConventionalGun": [
+    "Conventional Gun": [
         {
             "Name": "Conventional Gun",
             "Type": "Gun",
@@ -235,7 +235,7 @@
             ]
         }
     ],
-    "ElectromagneticGun": [
+    "Electromagnetic Gun": [
         {
             "Name": "Electromagnetic Gun",
             "Type": "Gun",
@@ -269,7 +269,7 @@
             ]
         }
     ],
-    "GravGun": [
+    "Grav Gun": [
         {
             "Name": "Grav Gun",
             "Type": "Gun",
@@ -303,7 +303,7 @@
             ]
         }
     ],
-    "Heat": [
+    "Heat Ray": [
         {
             "Name": "Heat Ray",
             "Type": "Beam",
@@ -320,7 +320,7 @@
             "Rcl": 1
         }
     ],
-    "Laser": [
+    "Laser Beam": [
         {
             "Name": "Laser Beam",
             "Type": "Beam",
@@ -337,7 +337,7 @@
             "Rcl": 1
         }
     ],
-    "Particle": [
+    "Particle Beam": [
         {
             "Name": "Particle Beam",
             "Type": "Beam",
@@ -354,7 +354,7 @@
             "Rcl": 1
         }
     ],
-    "Plasma": [
+    "Plasma Beam": [
         {
             "Name": "Plasma Beam",
             "Type": "Beam",
@@ -371,7 +371,7 @@
             "Rcl": 2
         }
     ],
-    "UVLaser": [
+    "UV Laser": [
         {
             "Name": "UV Laser",
             "Type": "Beam",
@@ -388,7 +388,7 @@
             "Rcl": 1
         }
     ],
-    "Antiparticle": [
+    "Antiparticle Beam": [
         {
             "Name": "Antiparticle Beam",
             "Type": "Beam",
@@ -405,7 +405,7 @@
             "Rcl": 1
         }
     ],
-    "GhostParticle": [
+    "Ghost Particle Beam": [
         {
             "Name": "Ghost Particle Beam",
             "Type": "Beam",
@@ -422,7 +422,7 @@
             "Rcl": 1
         }
     ],
-    "Tractor": [
+    "Tractor Beam": [
         {
             "Name": "Tractor Beam",
             "Type": "Beam",
@@ -439,7 +439,7 @@
             "Rcl": 1
         }
     ],
-    "XRayLaser": [
+    "X-Ray Laser": [
         {
             "Name": "X-Ray Laser",
             "Type": "Beam",
@@ -456,7 +456,7 @@
             "Rcl": 1
         }
     ],
-    "Graviton": [
+    "Graviton Beam": [
         {
             "Name": "Graviton Beam",
             "Type": "Beam",
@@ -473,7 +473,7 @@
             "Rcl": 1
         }
     ],
-    "Conversion": [
+    "Conversion Beam": [
         {
             "Name": "Conversion Beam",
             "Type": "Beam",
@@ -490,7 +490,7 @@
             "Rcl": 1
         }
     ],
-    "Graser": [
+    "Graser Beam": [
         {
             "Name": "Graser Beam",
             "Type": "Beam",
@@ -507,7 +507,7 @@
             "Rcl": 1
         }
     ],
-    "Disintegrator": [
+    "Disintegrator Beam": [
         {
             "Name": "Disintegrator Beam",
             "Type": "Beam",
