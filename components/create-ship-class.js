@@ -49,6 +49,7 @@ const CreateShipClass = ({ isExpanded }) => {
     const [shipJumpGateMax, setJumpGateMax] = useState(0);
     const [shipMaxFTL, setMaxFTL] = useState(0);
     const [shipFuelLoad, setFuelLoad] = useState(0);
+    const [shipFuelObj, setFuelObj] = useState({});
 
 
     // Ship Weapon, ECM, and dDR State Variables
@@ -182,6 +183,8 @@ const CreateShipClass = ({ isExpanded }) => {
 
     // Module Customization State Variables
     const [shipUncustomizedModules, setUncustomizedModules] = useState([]);
+    const [shipAlreadyCustomizedModules, setAlreadyCustomizedModules] = useState([]);
+    const [stardriveNeedsFuel, setStardriveNeedsFuel] = useState(false);
 
     // Design Switch and Feature State Variables
     const [shipHardenedArmorCost, setHardenedArmorCost] = useState(0);
@@ -476,7 +479,7 @@ const CreateShipClass = ({ isExpanded }) => {
     }, [shipAccel, shipDeltaV])
 
     // This function handles changes to the shipModules array and updates the state variable.
-    const handleSetModules = (moduleKey, moduleCategory, moduleLocation1, moduleLocation2, moduleNumber, moduleCost, moduleWorkspaces, fuelTypes) => {
+    const handleSetModules = (moduleKey, moduleCategory, moduleLocation1, moduleLocation2, moduleNumber, moduleCost, moduleWorkspaces, fuelTypes, modulePowerDemand) => {
         const [rowIndex, colIndex] = getModuleIndex(moduleLocation1, moduleNumber);
 
         let newModuleList = [...shipModules];
@@ -487,6 +490,7 @@ const CreateShipClass = ({ isExpanded }) => {
             moduleLocation1: moduleLocation1,
             moduleLocation2: moduleLocation2,
             moduleNumber: moduleNumber,
+            modulePowerDemand: modulePowerDemand,
             baseModuleCost: moduleCost,
             moduleCost: moduleCost,
             baseModuleWorkspaces: moduleWorkspaces,
@@ -521,6 +525,7 @@ const CreateShipClass = ({ isExpanded }) => {
         }
 
         function reactorGenAndLife(powerGen, internalLifespan) {
+            newModuleListObj.basePowerGen = powerGen;
             newModuleListObj.powerGen = powerGen;
             newModuleListObj.internalLifespan = internalLifespan;
         }
@@ -538,7 +543,7 @@ const CreateShipClass = ({ isExpanded }) => {
             case "Control Room":
                 highAndTotalAutomation();
                 newModuleListObj.controlStations = SMData.ControlStations;
-                newModuleListObj.defaultControlStations = defaultNumberControlStations;
+                newModuleListObj.defaultControlStations = SMData.ControlStations;
                 break;
             case "Armor, Exotic Laminate":
                 newModuleListObj.customizable = true;
@@ -574,6 +579,14 @@ const CreateShipClass = ({ isExpanded }) => {
                 // newModuleListObj.veryRapidFire = false;
                 // newModuleListObj.improved = false;
                 break;
+            case "Chemical, Fuel Cell":
+                highAndTotalAutomation();
+                reactorGenAndLife(2, shipTL === 7 ? 3 : shipTL === 8 ? 6 : shipTL === 9 ? 12 : 24);
+                break;
+            case "Chemical, MHD Turbine":
+                highAndTotalAutomation();
+                reactorGenAndLife(2, shipTL === 9 ? 6 : shipTL === 10 ? 12 : 12);
+                break;
             case "Solar Panel Array":
                 highAndTotalAutomationOnly();
                 reactorGenAndLife(1, Infinity);
@@ -598,16 +611,6 @@ const CreateShipClass = ({ isExpanded }) => {
                 highAndTotalAutomationOnly();
                 reactorGenAndLife(1, shipTL === 8 ? 25 : shipTL === 9 ? 50 : 75)
                 break;
-            case "Chemical, MHD Turbine":
-                highAndTotalAutomation();
-                newModuleListObj.powerGen = 2;
-                newModuleListObj.internalLifespan = shipTL === 9 ? 6 : shipTL === 10 ? 12 : 12;
-                break;
-            case "Chemical, Fuel Cell":
-                highAndTotalAutomation();
-                newModuleListObj.powerGen = 1;
-                newModuleListObj.internalLifespan = shipTL === 7 ? 3 : shipTL === 8 ? 6 : shipTL === 9 ? 12 : 24;
-                break;
             case "Jump Gate":
                 highAndTotalAutomation();
                 newModuleListObj.maxTonnage = SMData.MaxTonnage;
@@ -625,6 +628,9 @@ const CreateShipClass = ({ isExpanded }) => {
                 newModuleListObj.customizedCabins = {};
                 newModuleListObj.steerageCargo = 0;
                 newModuleListObj.totalLifeSupport = false;
+                break;
+            case "Passenger Seating":
+                newModuleListObj.seats = SMData.Seats;
                 break;
             case "Open Space":
                 highAndTotalAutomation();
@@ -693,7 +699,6 @@ const CreateShipClass = ({ isExpanded }) => {
                 newModuleListObj.pseudoVelocity = false;
                 newModuleListObj.singularityDrive = false;
                 newModuleListObj.stardriveFuel = false;
-                newModuleListObj.fuelTanks = 0;
                 newModuleListObj.reactionlessEngineSuper = false;
                 newModuleListObj.reactionlessEngineHot = false;
                 newModuleListObj.reactionlessEngineStandard = false;
@@ -773,7 +778,7 @@ const CreateShipClass = ({ isExpanded }) => {
     }
 
 
-    // This useCallback checks if modules are still valid based on SM, TL, superScience and other variable and deletes the if they aren't.
+    // This useCallback checks if modules are still valid based on SM, TL, superScience and other variable and deletes them if they aren't.
     // It then updates the cost, workspace, and other values in each module array to match new SM, TL, etc.
     const updateShipModules = useCallback((shipModules, shipData, shipSM, shipStreamlinedUn, shipTL, shipReardDR, superScienceChecked) => {
 
@@ -814,6 +819,13 @@ const CreateShipClass = ({ isExpanded }) => {
                 function updateBaseCostAndWorkspaces() {
                     shipModule.baseModuleCost = SMData.cost;
                     shipModule.baseModuleWorkspaces = SMData.Workspaces;
+                }
+
+                function getInternalLifespan(basePowerGen, powerGen, baseInternalLifespan) {
+                    const increment = baseInternalLifespan / basePowerGen;
+                    const incrementCount = basePowerGen - powerGen;
+                    const internalLifespan = baseInternalLifespan + (increment * incrementCount);
+                    return Math.floor(internalLifespan);
                 }
 
                 if (isValid) {
@@ -920,6 +932,10 @@ const CreateShipClass = ({ isExpanded }) => {
                             }
                             updateBaseCostAndWorkspaces();
                             break;
+                        case "Passenger Seating":
+                            shipModule.seats = SMData.Seats;
+                            updateBaseCostAndWorkspaces();
+                            break;
                         case "Open Space":
                             let originalAreas = shipModule.baseAreas;
                             shipModule.baseAreas = SMData.Areas;
@@ -967,16 +983,25 @@ const CreateShipClass = ({ isExpanded }) => {
                             updateBaseCostAndWorkspaces();
                             shipModule.weightPerHour = SMData.lbsHr;
                             break;
-                        case "Reactor, Super Fusion":
-                        case "Reactor, Total Conversion":
-                        case "Reactor, Antimatter":
-                        case "Reactor, Fusion":
-                        case "Reactor, Fission":
-                        case "Chemical, MHD Turbine":
                         case "Chemical, Fuel Cell":
-                            // Add logic to update internalLifespan.
-                            updateBaseCostAndWorkspaces();
+                            shipModule.internalLifespan = shipTL === 7 ? 3 : shipTL === 8 ? 6 : shipTL === 9 ? 12 : 24;
                             break;
+                        case "Chemical, MHD Turbine":
+                            shipModule.internalLifespan = shipTL === 9 ? 6 : shipTL === 10 ? 12 : 12;
+                            break;
+                        case "Reactor, Super Fusion":
+                            shipModule.internalLifespan = getInternalLifespan(shipModule.basePowerGen, shipModule.powerGen, shipTL === 11 ? 400 : shipTL === 12 ? 1000 : 400);
+                            break;
+                        case "Reactor, Antimatter":
+                            shipModule.internalLifespan = getInternalLifespan(shipModule.basePowerGen, shipModule.powerGen, shipTL === 10 ? 2 : shipTL === 11 ? 20 : 200);
+                            break;
+                        case "Reactor, Fusion":
+                            shipModule.internalLifespan = getInternalLifespan(shipModule.basePowerGen, shipModule.powerGen, shipTL === 9 ? 50 : shipTL === 10 ? 200 : shipTL === 11 ? 600 : 1500);
+                            break;
+                        case "Reactor, Fission":
+                            shipModule.internalLifespan = getInternalLifespan(shipModule.basePowerGen, shipModule.powerGen, shipTL === 8 ? 25 : shipTL === 9 ? 50 : 75);
+                            break;
+                        case "Reactor, Total Conversion":
                         case "Solar Panel Array":
                         case "Sensor Array, Multipurpose":
                         case "Sensor Array, Science":
@@ -1032,7 +1057,7 @@ const CreateShipClass = ({ isExpanded }) => {
     }, []);
 
     // This useEffect handles changes to the selected module array to update overall ship statistics.
-    const updateShipValues = useCallback((shipModules, shipStreamlinedUn, shipTL, shipSM) => {
+    const updateShipValues = useCallback((shipModules, shipTL, shipSM) => {
         const modulesUseEffect = shipModules;
         const modulesUseEffectData = shipData;
         let tankCount = shipModules.filter(module => module.moduleKey === 'Fuel Tank').length;
@@ -1078,10 +1103,12 @@ const CreateShipClass = ({ isExpanded }) => {
         let zoos = 0;
         let gyms = 0;
         let controlStations = 0;
+        let fuelObj = {};
         let fuelLoad = 0;
-        let jumpGate = 0;
+        let jumpGate = [];
         let maxFTL = 0;
         let uPressCargo = 0;
+        let pressCargo = 0;
         let arrayLevel = 0;
         let facValueHour = 0;
         let facWeightHour = 0;
@@ -1099,6 +1126,7 @@ const CreateShipClass = ({ isExpanded }) => {
         let rearSpinal = false;
         let accel = 0;
         let deltaV = 0;
+        let stardriveNeedsFuel = false;
 
         // if (modulesUseEffect.length === 0) {
         //     frontdDR = 0
@@ -1118,7 +1146,7 @@ const CreateShipClass = ({ isExpanded }) => {
         //     seats = 0
         //     controlStations = 0
         //     engineRoomCount = 0
-        //     fuelLoad = 0
+        //     fuelObj = 0
         //     jumpGate = 0
         //     maxFTL = 0
         //     uPressCargo = 0
@@ -1150,15 +1178,6 @@ const CreateShipClass = ({ isExpanded }) => {
         //     tankCount = 0
         // }
 
-        function updatedDR(currentModuleLocation, dDRValue) {
-            if (currentModuleLocation === 'front') {
-                frontdDR += dDRValue
-            } else if (currentModuleLocation === 'middle') {
-                middDR += dDRValue
-            } else if (currentModuleLocation === 'rear') {
-                reardDR += dDRValue
-            }
-        }
 
         for (let rowIndex = 0; rowIndex < modulesUseEffect.length; rowIndex++) {
             for (let colIndex = 0; colIndex < modulesUseEffect[rowIndex].length; colIndex++) {
@@ -1178,57 +1197,107 @@ const CreateShipClass = ({ isExpanded }) => {
                 let moduleCost = currentModule.moduleCost;
                 let moduleWorkspaces = SMData.Workspaces;
 
+                if (currentModule.totalAutomation !== undefined) {
+                    if (currentModule.totalAutomation) {
+                        const totalAutoCost = currentModule.baseModuleWorkspaces * 5000000;
+                        moduleCost += totalAutoCost;
+                        moduleWorkspaces = 0;
+                    }
+                }
+                if (currentModule.highAutomation !== undefined) {
+                    if (currentModule.highAutomation) {
+                        const highAutoCost = currentModule.baseModuleWorkspaces * 1000000;
+                        moduleCost += highAutoCost;
+                        moduleWorkspaces = Math.floor(currentModule.baseModuleWorkspaces * .1);
+                    }
+                }
+
+                function handleStardrive() {
+                    if (currentModule.driveField) {
+                        if (shipTL <= 11) {
+                            const forceScreenTL11Light = modulesUseEffectData["Force Screen, TL11 Light"];
+                            const forceScreenTL11LightSM = forceScreenTL11Light.find(module => module.SM === shipSM);
+                            const screendDr = forceScreenTL11LightSM.dDR;
+                            frontdDR += screendDr * 3;
+                        } else {
+                            const forceScreenTL12Light = modulesUseEffectData["Force Screen, TL12 Light"];
+                            const forceScreenTL12LightSM = forceScreenTL12Light.find(module => module.SM === shipSM);
+                            const screendDr = forceScreenTL12LightSM.dDR;
+                            frontdDR += screendDr * 3;
+                        }
+                    }
+                    if (currentModule.singularityDrive) {
+                        currentModule.modulePowerDemand = 0;
+                        currentModule.moduleCost = currentModule.baseModuleCost * 5;
+                    }
+                    if (currentModule.stardriveFuel) {
+                        stardriveNeedsFuel = true;
+                    }
+                    if (currentModule.reactionlessEngineSuper) {
+                        const superReactionless = modulesUseEffectData["Super Reactionless"];
+                        const superReactionlessSM = superReactionless.find(module => module.SM === shipSM);
+                        accel += superReactionless[0].Accel;
+                        deltaV = Infinity;
+                        if (currentModule.reactionlessEngineExtraCost) {
+                            const reactionlessCost = superReactionlessSM.cost;
+                            moduleCost += (currentModule.baseModuleCost * 2) + (reactionlessCost * 2);
+                        }
+                    }
+                    if (currentModule.reactionlessEngineHot) {
+                        const hotReactionless = modulesUseEffectData["Hot Reactionless"];
+                        const hotReactionlessSM = hotReactionless.find(module => module.SM === shipSM);
+                        accel += hotReactionless[0].Accel;
+                        deltaV = Infinity;
+                        if (currentModule.reactionlessEngineExtraCost) {
+                            const reactionlessCost = hotReactionlessSM.cost;
+                            moduleCost += (currentModule.baseModuleCost * 2) + (reactionlessCost * 2);
+                        }
+                    }
+                    if (currentModule.reactionlessEngineStandard) {
+                        const standardReactionless = modulesUseEffectData["Standard"];
+                        const standardReactionlessSM = standardReactionless.find(module => module.SM === shipSM);
+                        accel += standardReactionless[0].Accel;
+                        deltaV = Infinity;
+                        if (currentModule.reactionlessEngineExtraCost) {
+                            const reactionlessCost = standardReactionlessSM.cost;
+                            moduleCost += (currentModule.baseModuleCost * 2) + (reactionlessCost * 2);
+                        }
+                    }
+                    if (currentModule.reactionlessEngineRotary) {
+                        const rotaryReactionless = modulesUseEffectData["Rotary"];
+                        const rotaryReactionlessSM = rotaryReactionless.find(module => module.SM === shipSM);
+                        accel += rotaryReactionless[0].Accel;
+                        deltaV = Infinity;
+                        if (currentModule.reactionlessEngineExtraCost) {
+                            const reactionlessCost = rotaryReactionlessSM.cost;
+                            moduleCost += (currentModule.baseModuleCost * 2) + (reactionlessCost * 2);
+                        }
+                    }
+                }
+
                 switch (moduleCategory) {
                     case 'Armor and Survivability':
                         if (currentModuleKey.includes('Armor')) {
-                            let unStreamlineddDR = SMData.USdDR
-                            let streamlineddDR = SMData.SdDR
+                            let newdDR = currentModule.moduledDR;
 
-                            switch (shipStreamlinedUn) {
-                                case 'streamlined':
-                                    if (currentModuleKey === "Armor, Exotic Laminate") {
-                                        if (currentModule.hardenedArmor === true) {
-                                            moduleCost = currentModule.baseModuleCost * 2;
-                                        }
-                                        if (currentModule.indestructibleArmor === true) {
-                                            moduleCost = baseModuleCost * 10;
-                                            streamlineddDR = Infinity;
-                                        }
-                                        updatedDR(currentModuleLocation, streamlineddDR)
-                                    } else {
-                                        if (currentModule.hardenedArmor === true) {
-                                            moduleCost = baseModuleCost * 2;
-                                        }
-                                        updatedDR(currentModuleLocation, streamlineddDR)
-                                    }
+                            if (currentModuleKey === "Armor, Exotic Laminate" && currentModule.indestructibleArmor) {
+                                moduleCost = baseModuleCost * 10;
+                                newdDR = Infinity;
+                            } else if (currentModuleKey !== "Armor, Organic" && currentModuleKey !== "Armor, Stone" && currentModuleKey !== "Armor, Ice" && currentModule.hardenedArmor) {
+                                moduleCost = currentModule.baseModuleCost * 2;
+                            }
+
+                            switch (currentModuleLocation) {
+                                case 'front':
+                                    frontdDR += newdDR;
                                     break;
-                                case 'unstreamlined':
-                                    if (currentModuleKey === "Armor, Exotic Laminate") {
-                                        if (currentModule.hardenedArmor === true) {
-                                            moduleCost = baseModuleCost * 2;
-                                        }
-                                        if (currentModule.indestructibleArmor === true) {
-                                            moduleCost = baseModuleCost * 10;
-                                            streamlineddDR = Infinity;
-                                        }
-                                        updatedDR(currentModuleLocation, unStreamlineddDR)
-                                    } else {
-                                        if (currentModule.hardenedArmor === true) {
-                                            moduleCost = baseModuleCost * 2;
-                                        }
-                                        updatedDR(currentModuleLocation, unStreamlineddDR)
-                                    }
+                                case 'middle':
+                                    middDR += newdDR;
                                     break;
-                                default:
-                                    frontdDR = 'System Error'
-                                    middDR = 'System Error'
-                                    reardDR = 'System Error'
-                                    hardenedFrontdDR = 'System Error'
-                                    hardenedMiddDR = 'System Error'
-                                    hardenedReardDR = 'System Error'
+                                case 'rear':
+                                    reardDR += newdDR;
                                     break;
                             }
-                            break;
                         }
 
                         if (currentModuleKey === 'Defensive ECM') {
@@ -1294,50 +1363,57 @@ const CreateShipClass = ({ isExpanded }) => {
                         break;
 
                     case 'Crew':
+
                         if (currentModuleKey === 'Habitat') {
-                            const defaultNumberCabins = SMData.Cabins
+                            const habStrings = ['Cabins', 'Bunkrooms', 'Cells', 'Luxury', 'Briefing', 'Establishment', 'Hibernation', 'Labs', 'Physics Labs', 'SuperScience Labs',
+                                'Mini Fab', 'Mini Robo Fab', 'Mini Nano Fab', 'Mini Rep Fab', 'Office', 'Sickbay', 'SickbayAuto', 'Teleport', 'Teleport Send', 'Teleport Receive',
+                                'Steerage'];
+
+                            const defaultNumberCabins = SMData.Cabins;
                             if (Object.keys(currentModule.customizedCabins).length > 0) {
-                                longOccupancy += (currentModule.customizedCabins.cabins ?? 0) * 2;
-                                longOccupancy += (currentModule.customizedCabins.luxuryCabins ?? 0) * 2;
-                                longOccupancy += (currentModule.customizedCabins.bunkrooms ?? 0) * 4;
-                                longOccupancy += (currentModule.customizedCabins.cells ?? 0) * 4;
-                                longOccupancy += (currentModule.customizedCabins.hibernationChambers ?? 0) * 1;
-                                shortOccupancyCrew += (currentModule.customizedCabins.labs ?? 0) * 2;
-                                shortOccupancyCrew += (currentModule.customizedCabins.physicsLabs ?? 0) * 2;
-                                shortOccupancyCrew += (currentModule.customizedCabins.superScienceLabs ?? 0) * 2;
-                                shortOccupancyCrew += (currentModule.customizedCabins.establishments ?? 0) * 2;
-                                shortOccupancyCrew += (currentModule.customizedCabins.offices ?? 0) * 2;
-                                shortOccupancyPassengers += (currentModule.customizedCabins.brifingRooms ?? 0) * 10;
-                                shortOccupancyPassengers += (currentModule.customizedCabins.establishments ?? 0) * 30;
+                                longOccupancy += (currentModule.customizedCabins.Cabins ?? 0) * 2;
+                                longOccupancy += (currentModule.customizedCabins.Luxury ?? 0) * 2;
+                                longOccupancy += (currentModule.customizedCabins.Bunkrooms ?? 0) * 4;
+                                longOccupancy += (currentModule.customizedCabins.Cells ?? 0) * 4;
+                                longOccupancy += (currentModule.customizedCabins.Hibernation ?? 0) * 1;
+                                shortOccupancyCrew += (currentModule.customizedCabins.Labs ?? 0) * 2;
+                                shortOccupancyCrew += (currentModule.customizedCabins['Physics Labs'] ?? 0) * 2;
+                                shortOccupancyCrew += (currentModule.customizedCabins['SuperScience Labs'] ?? 0) * 2;
+                                shortOccupancyCrew += (currentModule.customizedCabins.Establishment ?? 0) * 2;
+                                shortOccupancyCrew += (currentModule.customizedCabins.Office ?? 0) * 2;
+                                shortOccupancyPassengers += (currentModule.customizedCabins.Briefing ?? 0) * 10;
+                                shortOccupancyPassengers += (currentModule.customizedCabins.Establishment ?? 0) * 30;
 
-                                cabins += currentModule.customizedCabins.cabins ?? 0;
-                                luxuryCabins += currentModule.customizedCabins.luxuryCabins ?? 0;
-                                bunkrooms += currentModule.customizedCabins.bunkrooms ?? 0;
-                                cells += currentModule.customizedCabins.cells ?? 0;
-                                hibernationChambers += currentModule.customizedCabins.hibernationChambers ?? 0;
-                                labs += currentModule.customizedCabins.labs ?? 0;
-                                physicsLabs += currentModule.customizedCabins.physicsLabs ?? 0;
-                                superScienceLabs += currentModule.customizedCabins.superScienceLabs ?? 0;
-                                establishments += currentModule.customizedCabins.establishments ?? 0;
-                                offices += currentModule.customizedCabins.offices ?? 0;
-                                briefingRooms += currentModule.customizedCabins.briefingRooms ?? 0;
-                                fabricators += currentModule.customizedCabins.fabricators ?? 0;
-                                roboFacs += currentModule.customizedCabins.roboFacs ?? 0;
-                                nanoFacs += currentModule.customizedCabins.nanoFacs ?? 0;
-                                replicators += currentModule.customizedCabins.replicators ?? 0;
-                                sickbays += currentModule.customizedCabins.sickbays ?? 0;
-                                sickbaysAuto += currentModule.customizedCabins.sickbaysAuto ?? 0;
-                                teleProjectors += currentModule.customizedCabins.teleProjectors ?? 0;
-                                teleProjectorsSend += currentModule.customizedCabins.teleProjectorsSend ?? 0;
-                                teleProjectorsReceive += currentModule.customizedCabins.teleProjectorsReceive ?? 0;
+                                cabins += currentModule.customizedCabins.Cabins ?? 0;
+                                luxuryCabins += currentModule.customizedCabins.Luxury ?? 0;
+                                bunkrooms += currentModule.customizedCabins.Bunkrooms ?? 0;
+                                cells += currentModule.customizedCabins.Cells ?? 0;
+                                hibernationChambers += currentModule.customizedCabins.Hibernation ?? 0;
+                                labs += currentModule.customizedCabins.Labs ?? 0;
+                                physicsLabs += currentModule.customizedCabins['Physics Labs'] ?? 0;
+                                superScienceLabs += currentModule.customizedCabins['SuperScience Labs'] ?? 0;
+                                establishments += currentModule.customizedCabins.Establishment ?? 0;
+                                offices += currentModule.customizedCabins.Office ?? 0;
+                                briefingRooms += currentModule.customizedCabins.Briefing ?? 0;
+                                fabricators += currentModule.customizedCabins['Mini Fab'] ?? 0;
+                                roboFacs += currentModule.customizedCabins['Mini Robo Fab'] ?? 0;
+                                nanoFacs += currentModule.customizedCabins['Mini Nano Fab'] ?? 0;
+                                replicators += currentModule.customizedCabins['Mini Rep Fab'] ?? 0;
+                                sickbays += currentModule.customizedCabins.Sickbay ?? 0;
+                                sickbaysAuto += currentModule.customizedCabins.SickbayAuto ?? 0;
+                                teleProjectors += currentModule.customizedCabins.Teleport ?? 0;
+                                teleProjectorsSend += currentModule.customizedCabins['Teleport Send'] ?? 0;
+                                teleProjectorsReceive += currentModule.customizedCabins['Teleport Receive'] ?? 0;
 
-                                moduleCost += (currentModule.customizedCabins.sickbaysAuto ?? 0) * 100000
-                                moduleCost += (currentModule.customizedCabins.teleProjectors ?? 0) * 20000000
-                                moduleCost += (currentModule.customizedCabins.teleProjectorsSend ?? 0) * 10000000
-                                moduleCost += (currentModule.customizedCabins.teleProjectorsReceive ?? 0) * 10000000
-                                moduleCost += (currentModule.customizedCabins.labs ?? 0) * 1000000
-                                moduleCost += (currentModule.customizedCabins.physicsLabs ?? 0) * 10000000
-                                moduleCost += (currentModule.customizedCabins.superScienceLabs ?? 0) * 30000000
+                                moduleCost += (currentModule.customizedCabins.SickbayAuto ?? 0) * 100000;
+                                moduleCost += (currentModule.customizedCabins.Teleport ?? 0) * 20000000;
+                                moduleCost += (currentModule.customizedCabins['Teleport Send'] ?? 0) * 10000000;
+                                moduleCost += (currentModule.customizedCabins['Teleport Receive'] ?? 0) * 10000000;
+                                moduleCost += (currentModule.customizedCabins.Labs ?? 0) * 1000000;
+                                moduleCost += (currentModule.customizedCabins['Physics Labs'] ?? 0) * 10000000;
+                                moduleCost += (currentModule.customizedCabins['SuperScience Labs'] ?? 0) * 30000000;
+
+                                pressCargo += currentModule.steerageCargo;
                             } else {
                                 longOccupancy += defaultNumberCabins * 2;
                             }
@@ -1352,48 +1428,66 @@ const CreateShipClass = ({ isExpanded }) => {
                                 zoos += currentModule.customizedAreas.zoos ?? 0;
                                 gyms += currentModule.customizedAreas.gyms ?? 0;
                             } else {
-                                farms += SMData.Areas;
+                                farms += currentModule.baseAreas;
                             }
-                            areas += SMData.Areas;
+                            areas += currentModule.baseAreas;
                             shortOccupancyPassengers += 100;
                         }
 
                         if (currentModuleKey === 'Passenger Seating') {
-                            seats += SMData.Seats
-                            shortOccupancyPassengers += SMData.Seats
+                            seats += currentModule.seats;
+                            shortOccupancyPassengers += currentModule.seats;
                         }
                         break;
 
                     case 'Engineering':
                         if (currentModuleKey === 'Control Room') {
                             if (currentModule.totalAutomation === true) {
-                                controlStations += SMData.ControlStations
-                                shortOccupancyCrew += SMData.ControlStations
+                                controlStations = 0;
+                                shortOccupancyCrew += 0;
+                            } else {
+                                controlStations = currentModule.controlStations;
+                                shortOccupancyCrew += currentModule.controlStations;
                             }
-                            controlStations = SMData.ControlStations
-                            shortOccupancyCrew += SMData.ControlStations
                         }
-                        if (currentModuleKey === 'Engine Room') {
+                        if (currentModuleKey === 'Engine Room' && currentModule.totalAutomation !== true) {
                             controlStations += 1
                             shortOccupancyCrew += 1
                         }
                         break;
 
                     case 'Power':
-
+                        powerGeneration += currentModule.powerGen;
                         break;
 
                     case 'Propulsion':
                         if (currentModuleKey === 'Fuel Tank') {
-                            fuelLoad += SMData.Fuel
+                            const key = currentModule.assignedContents;
+                            if (fuelObj.hasOwnProperty(key)) {
+                                fuelObj[key] += currentModule.fuelLoad;
+                            } else {
+                                fuelObj[key] = currentModule.fuelLoad;
+                            }
+
+                            fuelLoad += currentModule.fuelLoad;
                         }
                         if (currentModuleKey === 'Jump Gate') {
-                            jumpGate += SMData.MaxTonnage
+                            const combinedGatesExists = jumpGate.some(gate =>
+                                Array.isArray(gate) &&
+                                gate.length === currentModule.combinedGates.length &&
+                                gate.every((value, index) => value === currentModule.combinedGates[index])
+                            );
+
+                            if (!combinedGatesExists) {
+                                jumpGate.push(currentModule.combinedGates);
+                            }
                         }
                         if (currentModuleKey === 'Stardrive Engine') {
+                            handleStardrive();
                             maxFTL += 1
                         }
                         if (currentModuleKey === 'Super Stardrive Engine') {
+                            handleStardrive();
                             maxFTL += 2
                         }
                         break;
@@ -1605,7 +1699,6 @@ const CreateShipClass = ({ isExpanded }) => {
                 setPowerDemand(powerDemand)
                 setPowerGen(powerGeneration)
                 setControlStations(controlStations)
-                setFuelLoad(fuelLoad)
                 setJumpGateMax(jumpGate)
                 setMaxFTL(maxFTL)
                 setUPressCargo(uPressCargo)
@@ -1624,13 +1717,16 @@ const CreateShipClass = ({ isExpanded }) => {
                 setTertiaryMounts(tertiaryMounts)
                 setAccel(accel)
                 setDeltaV(deltaV)
+                setFuelLoad(fuelLoad)
+                setFuelObj(fuelObj)
+                setStardriveNeedsFuel(stardriveNeedsFuel)
             }
         }
     }, []);
 
     useEffect(() => {
         updateShipModules(shipModules, shipData, shipSM, shipStreamlinedUn, shipTL, shipReardDR, superScienceChecked)
-        updateShipValues(shipModules, shipStreamlinedUn, shipTL, shipSM)
+        updateShipValues(shipModules, shipTL, shipSM)
     }, [updateShipModules, updateShipValues, shipModules, shipSM, shipStreamlinedUn, shipTL, shipReardDR, superScienceChecked])
 
     // This useEffect resets the selected modules array state variable when one of the dependencies change.
@@ -2970,6 +3066,7 @@ const CreateShipClass = ({ isExpanded }) => {
                 weaponRcl: weaponRcL,
                 weaponRoF: getRoFStats(),
                 weaponDamageTypes: damageTypesArray,
+                weaponGraviticFocus: graviticFocus,
                 weaponImproved: improved,
                 weaponRapidFire: rapidFire,
                 weaponVeryRapidFire: veryRapidFire
@@ -4076,6 +4173,24 @@ const CreateShipClass = ({ isExpanded }) => {
         }
 
     }
+
+    // const [shipUncustomizedModules, setUncustomizedModules] = useState([]);
+    // const [shipAlreadyCustomizedModules, setAlreadyCustomizedModules] = useState([]);
+    useEffect(() => {
+        let uncustomizedModulesArr = [];
+        let alreadyCustomizedArr = [];
+        processShipModules(shipModules, (shipModule) => {
+            if (shipModule.customizable === true && shipModule.alreadyCustomized === false) {
+                uncustomizedModulesArr.push(shipModule.moduleKey);
+            }
+            if (shipModule.customizable === true && shipModule.alreadyCustomized === true) {
+                alreadyCustomizedArr.push(shipModule.moduleKey);
+            }
+        });
+
+        setUncustomizedModules(uncustomizedModulesArr);
+        setAlreadyCustomizedModules(alreadyCustomizedArr);
+    }, [shipModules])
 
     function habitatCustomizationDisplay() {
         return (

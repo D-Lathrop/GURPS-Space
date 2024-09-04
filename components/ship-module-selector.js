@@ -60,7 +60,7 @@ const ShipModuleSelector = ({ handleSetModules, styles, buildCol, buildRow, ship
             setCost(0);
             setWorkspaces(0);
             setRepairSkill('');
-            handleSetModules(e.target.value, moduleCategory, moduleLocation1, moduleLocation2, moduleNumber, 0, 0, null)
+            handleSetModules(e.target.value, moduleCategory, moduleLocation1, moduleLocation2, moduleNumber, 0, 0, null, 0)
         } else {
             let moduleKeyObj = moduleShipData[e.target.value];
             let SMData = moduleKeyObj.find(module => module.SM === shipSM);
@@ -70,7 +70,7 @@ const ShipModuleSelector = ({ handleSetModules, styles, buildCol, buildRow, ship
             }
 
             setModule(e.target.value);
-            handleSetModules(e.target.value, moduleCategory, moduleLocation1, moduleLocation2, moduleNumber, SMData.cost, SMData.Workspaces, fuelTypes);
+            handleSetModules(e.target.value, moduleCategory, moduleLocation1, moduleLocation2, moduleNumber, SMData.cost, SMData.Workspaces, fuelTypes, moduleKeyObj[0].PowerDemand);
             setCost(SMData.cost);
             setWorkspaces(SMData.Workspaces);
             setRepairSkill(moduleKeyObj[0].RepairSkill);
