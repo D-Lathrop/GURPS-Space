@@ -42,10 +42,8 @@ const CreateShipClass = ({ isExpanded }) => {
     const [shipHnd, setHnd] = useState(0);
     const [shipSR, setSR] = useState(0);
     const [shipDisplayHndSR, setDisplayHndSR] = useState('0/0');
-    const [selectedEngine, setSelectedEngine] = useState('');
     const [shipMove, setMove] = useState(0);
-    const [shipAccel, setAccel] = useState(0);
-    const [shipDeltaV, setDeltaV] = useState(0);
+    const [shipAccelDeltaInfo, setAccelDeltaInfo] = useState([]);
     const [shipJumpGateMax, setJumpGateMax] = useState(0);
     const [shipMaxFTL, setMaxFTL] = useState(0);
     const [shipFuelLoad, setFuelLoad] = useState(0);
@@ -54,11 +52,8 @@ const CreateShipClass = ({ isExpanded }) => {
 
     // Ship Weapon, ECM, and dDR State Variables
     const [shipDisplaydDR, setDisplaydDR] = useState('0/0/0');
-    const [shipBaseFrontdDR, setBaseFrontdDR] = useState(0);
     const [shipFrontdDR, setFrontdDR] = useState(0);
-    const [shipBaseMiddDR, setBaseMiddDR] = useState(0);
     const [shipMiddDR, setMiddDR] = useState(0);
-    const [shipBaseReardDR, setBaseReardDR] = useState(0);
     const [shipReardDR, setReardDR] = useState(0);
     const [shipDefensiveECMTL, setShipDefensiveECMTL] = useState(0);
     const [shipDefensiveECMBonus, setShipDefensiveECMBonus] = useState(0);
@@ -470,16 +465,16 @@ const CreateShipClass = ({ isExpanded }) => {
     }, [shipFrontdDR, shipMiddDR, shipReardDR])
 
     // This useEffect handles changes to shipAccel and shipDeltaV to update the shipMove value used for display.
-    useEffect(() => {
-        if (shipDeltaV === Infinity) {
-            setMove(`${shipAccel}/ ∞`)
-        } else {
-            setMove(`${shipAccel}/${shipDeltaV}`)
-        }
-    }, [shipAccel, shipDeltaV])
+    // useEffect(() => {
+    //     if (shipDeltaV === Infinity) {
+    //         setMove(`${shipAccel}/ ∞`)
+    //     } else {
+    //         setMove(`${shipAccel}/${shipDeltaV}`)
+    //     }
+    // }, [shipAccel, shipDeltaV])
 
     // This function handles changes to the shipModules array and updates the state variable.
-    const handleSetModules = (moduleKey, moduleCategory, moduleLocation1, moduleLocation2, moduleNumber, moduleCost, moduleWorkspaces, fuelTypes, modulePowerDemand) => {
+    const handleSetModules = (moduleKey, moduleCategory, moduleLocation1, moduleLocation2, moduleNumber, moduleCost, moduleWorkspaces, fuelTypes, accel, mpsTank, modulePowerDemand) => {
         const [rowIndex, colIndex] = getModuleIndex(moduleLocation1, moduleNumber);
 
         let newModuleList = [...shipModules];
@@ -499,7 +494,14 @@ const CreateShipClass = ({ isExpanded }) => {
         }
 
         if (fuelTypes) {
-            newModuleListObj.fuelTypes = fuelTypes
+            newModuleListObj.fuelTypes = fuelTypes // fuelTypes is an array passed from the module selector component.
+        }
+
+        function addmpsTankandDeltaV() {
+            newModuleListObj.baseAccel = accel;
+            newModuleListObj.accel = accel;
+            newModuleListObj.basempsTank = mpsTank;
+            newModuleListObj.mpsTank = mpsTank;
         }
 
         function highAndTotalAutomation() {
@@ -711,11 +713,13 @@ const CreateShipClass = ({ isExpanded }) => {
             case "Super Fusion Torch":
             case "Fusion Torch":
                 highAndTotalAutomation();
+                addmpsTankandDeltaV();
                 newModuleListObj.ramRocket = false;
                 newModuleListObj.highThrust = false;
                 break;
             case "Nuclear Thermal Rocket":
                 highAndTotalAutomation();
+                addmpsTankandDeltaV();
                 newModuleListObj.ramRocket = false;
                 break;
             case "Super Conversion Torch":
@@ -731,6 +735,7 @@ const CreateShipClass = ({ isExpanded }) => {
             case "Mass Driver":
             case "Ion Drive":
                 highAndTotalAutomation();
+                addmpsTankandDeltaV();
                 newModuleListObj.highThrust = false;
                 break;
             case "Factory, Nanofactory":
@@ -1106,9 +1111,12 @@ const CreateShipClass = ({ isExpanded }) => {
         let fuelObj = {};
         let fuelLoad = 0;
         let jumpGate = [];
+        let combinedBays = [];
         let maxFTL = 0;
         let uPressCargo = 0;
         let pressCargo = 0;
+        let refrigeratedCargo = 0;
+        let shieldedCargo = 0;
         let arrayLevel = 0;
         let facValueHour = 0;
         let facWeightHour = 0;
@@ -1213,17 +1221,28 @@ const CreateShipClass = ({ isExpanded }) => {
                 }
 
                 function handleStardrive() {
+
+                    function addReactionlessEngine(EngineType) {
+                        const reactionlessEngine = modulesUseEffectData[EngineType];
+                        const reactionlessEngineSM = reactionlessEngine.find(module => module.SM === shipSM);
+                        if (currentModule.reactionlessEngineExtraCost) {
+                            const reactionlessCost = reactionlessEngineSM.cost;
+                            moduleCost += (currentModule.baseModuleCost * 2) + (reactionlessCost * 2);
+                        }
+                    }
+
+                    function addForceScreen(ScreenType) {
+                        const forceScreen = modulesUseEffectData[ScreenType];
+                        const forceScreenSM = forceScreen.find(module => module.SM === shipSM);
+                        const screendDr = forceScreenSM.dDR;
+                        frontdDR += screendDr * 3;
+                    }
+
                     if (currentModule.driveField) {
                         if (shipTL <= 11) {
-                            const forceScreenTL11Light = modulesUseEffectData["Force Screen, TL11 Light"];
-                            const forceScreenTL11LightSM = forceScreenTL11Light.find(module => module.SM === shipSM);
-                            const screendDr = forceScreenTL11LightSM.dDR;
-                            frontdDR += screendDr * 3;
+                            addForceScreen("Force Screen, TL11 Light");
                         } else {
-                            const forceScreenTL12Light = modulesUseEffectData["Force Screen, TL12 Light"];
-                            const forceScreenTL12LightSM = forceScreenTL12Light.find(module => module.SM === shipSM);
-                            const screendDr = forceScreenTL12LightSM.dDR;
-                            frontdDR += screendDr * 3;
+                            addForceScreen("Force Screen, TL12 Light");
                         }
                     }
                     if (currentModule.singularityDrive) {
@@ -1234,44 +1253,23 @@ const CreateShipClass = ({ isExpanded }) => {
                         stardriveNeedsFuel = true;
                     }
                     if (currentModule.reactionlessEngineSuper) {
-                        const superReactionless = modulesUseEffectData["Super Reactionless"];
-                        const superReactionlessSM = superReactionless.find(module => module.SM === shipSM);
-                        accel += superReactionless[0].Accel;
-                        deltaV = Infinity;
-                        if (currentModule.reactionlessEngineExtraCost) {
-                            const reactionlessCost = superReactionlessSM.cost;
-                            moduleCost += (currentModule.baseModuleCost * 2) + (reactionlessCost * 2);
-                        }
+                        addReactionlessEngine("Super Reactionless");
                     }
                     if (currentModule.reactionlessEngineHot) {
-                        const hotReactionless = modulesUseEffectData["Hot Reactionless"];
-                        const hotReactionlessSM = hotReactionless.find(module => module.SM === shipSM);
-                        accel += hotReactionless[0].Accel;
-                        deltaV = Infinity;
-                        if (currentModule.reactionlessEngineExtraCost) {
-                            const reactionlessCost = hotReactionlessSM.cost;
-                            moduleCost += (currentModule.baseModuleCost * 2) + (reactionlessCost * 2);
-                        }
+                        addReactionlessEngine("Hot Reactionless");
                     }
                     if (currentModule.reactionlessEngineStandard) {
-                        const standardReactionless = modulesUseEffectData["Standard"];
-                        const standardReactionlessSM = standardReactionless.find(module => module.SM === shipSM);
-                        accel += standardReactionless[0].Accel;
-                        deltaV = Infinity;
-                        if (currentModule.reactionlessEngineExtraCost) {
-                            const reactionlessCost = standardReactionlessSM.cost;
-                            moduleCost += (currentModule.baseModuleCost * 2) + (reactionlessCost * 2);
-                        }
+                        addReactionlessEngine("Standard");
                     }
                     if (currentModule.reactionlessEngineRotary) {
-                        const rotaryReactionless = modulesUseEffectData["Rotary"];
-                        const rotaryReactionlessSM = rotaryReactionless.find(module => module.SM === shipSM);
-                        accel += rotaryReactionless[0].Accel;
-                        deltaV = Infinity;
-                        if (currentModule.reactionlessEngineExtraCost) {
-                            const reactionlessCost = rotaryReactionlessSM.cost;
-                            moduleCost += (currentModule.baseModuleCost * 2) + (reactionlessCost * 2);
-                        }
+                        addReactionlessEngine("Rotary");
+                    }
+                }
+
+                function handleReactionEngine() {
+                    if (shipModule.highThrust ?? false) {
+                        shipModule.accel = shipModule.baseAccel * 2;
+                        shipModule.mpsTank = shipModule.basempsTank / 2;
                     }
                 }
 
@@ -1281,10 +1279,13 @@ const CreateShipClass = ({ isExpanded }) => {
                             let newdDR = currentModule.moduledDR;
 
                             if (currentModuleKey === "Armor, Exotic Laminate" && currentModule.indestructibleArmor) {
-                                moduleCost = baseModuleCost * 10;
+                                moduleCost = currentModule.baseModuleCost * 10;
                                 newdDR = Infinity;
-                            } else if (currentModuleKey !== "Armor, Organic" && currentModuleKey !== "Armor, Stone" && currentModuleKey !== "Armor, Ice" && currentModule.hardenedArmor) {
-                                moduleCost = currentModule.baseModuleCost * 2;
+                            }
+                            if (currentModule.hardenedArmor !== undefined) {
+                                if (currentModule.hardenedArmor) {
+                                    moduleCost = currentModule.baseModuleCost * 2;
+                                }
                             }
 
                             switch (currentModuleLocation) {
@@ -1494,107 +1495,55 @@ const CreateShipClass = ({ isExpanded }) => {
 
                     case 'Utility':
                         if (currentModuleKey === 'Cargo Hold') {
-                            uPressCargo += SMData.LoadUPr
+                            uPressCargo += currentModule.uPressCargoCapacity;
+                            refrigeratedCargo += currentModule.refrigeratedCargo;
+                            shieldedCargo += currentModule.shieldedCargo
                         }
                         if (currentModuleKey === "Sensor Array, Science"
                             || currentModuleKey === "Sensor Array, Tactical"
                             || currentModuleKey === "Sensor Array, Enhanced"
                             || currentModuleKey === "Sensor Array, Multipurpose") {
-
+                            // Is this still needed?
                         }
                         if (currentModuleKey === 'Factory, Replicator') {
-                            facWeightHour += SMData.lbsHr
-
+                            facWeightHour += currentModule.weightPerHour;
                         } else if (currentModuleKey === 'Factory, Nanofactory' || 'Factory, Robofac' || 'Factory, Fabricator') {
-                            facValueHour += SMData.$Hr
+                            facValueHour += currentModule.valuePerHour;
                         }
                         if (currentModuleKey === 'Hangar Bay') {
-                            hangarCapacity += SMData.Capacity
-                            launchRate += SMData.LaunchRate
+                            const combinedBaysExists = combinedBays.some(gate =>
+                                Array.isArray(bays) &&
+                                bays.length === currentModule.combinedBays.length &&
+                                bays.every((value, index) => value === currentModule.combinedBays[index])
+                            );
+
+                            if (!combinedBaysExists) {
+                                combinedBays.push(currentModule.combinedBays);
+                                hangarCapacity += currentModule.hangarCapacity * currentModule.combinedBays.length;
+                                launchRate = currentModule.launchRate;
+                            }
                         }
                         if (currentModuleKey === 'Mining') {
-                            miningCapacity += SMData.TonsHrMining
+                            miningCapacity += currentModule.tonsPerHour;
                         }
                         if (currentModuleKey === 'Refinery') {
-                            refineryCapacity += SMData.TonsHrRefinery
+                            refineryCapacity += currentModule.tonsPerHour;
                         }
                         break;
 
                     case 'Weapons':
-                        function handleWeaponLocationEmpty(mountLocationArray, index) {
-                            if (mountLocationArray[index][0] === 0) {
-                                mountLocationArray[index][0] = 1
-                            } else {
-                                mountLocationArray[index].push(1)
-                            }
-                        }
+
                         if (currentModuleKey === 'Major Battery') {
                             majorMounts += 1
-                            unusedMajorMounts += 1
-                            switch (currentModuleLocation) {
-                                case 'front':
-                                    handleWeaponLocationEmpty(majorMountLocation, 0)
-                                    break;
-                                case 'middle':
-                                    handleWeaponLocationEmpty(majorMountLocation, 1)
-                                    break;
-                                case 'rear':
-                                    handleWeaponLocationEmpty(majorMountLocation, 2)
-                                    break;
-                                default:
-                                    break;
-                            }
                         }
                         if (currentModuleKey === 'Medium Battery') {
                             mediumMounts += 1
-                            unusedMediumMounts += 3
-                            switch (currentModuleLocation) {
-                                case 'front':
-                                    handleWeaponLocationEmpty(mediumMountLocation, 0)
-                                    break;
-                                case 'middle':
-                                    handleWeaponLocationEmpty(mediumMountLocation, 1)
-                                    break;
-                                case 'rear':
-                                    handleWeaponLocationEmpty(mediumMountLocation, 2)
-                                    break;
-                                default:
-                                    break;
-                            }
                         }
                         if (currentModuleKey === 'Secondary Battery') {
                             secondaryMounts += 1
-                            unusedSecondaryMounts += 10
-                            switch (currentModuleLocation) {
-                                case 'front':
-                                    handleWeaponLocationEmpty(secondaryMountLocation, 0)
-                                    break;
-                                case 'middle':
-                                    handleWeaponLocationEmpty(secondaryMountLocation, 1)
-                                    break;
-                                case 'rear':
-                                    handleWeaponLocationEmpty(secondaryMountLocation, 2)
-                                    break;
-                                default:
-                                    break;
-                            }
                         }
                         if (currentModuleKey === 'Tertiary Battery') {
                             tertiaryMounts += 1
-                            unusedTertiaryMounts += 30
-                            switch (currentModuleLocation) {
-                                case 'front':
-                                    handleWeaponLocationEmpty(tertiaryMountLocation, 0)
-                                    break;
-                                case 'middle':
-                                    handleWeaponLocationEmpty(tertiaryMountLocation, 1)
-                                    break;
-                                case 'rear':
-                                    handleWeaponLocationEmpty(tertiaryMountLocation, 2)
-                                    break;
-                                default:
-                                    break;
-                            }
                         }
                         if (currentModuleKey === 'Spinal Battery') {
                             if (currentModuleLocation === 'front') {
@@ -1616,48 +1565,33 @@ const CreateShipClass = ({ isExpanded }) => {
                         break;
 
                     case 'Engine, Chemical & HEDM':
-                        accel += moduleKeyObj[0].Accel
-                        deltaV = deltaVMultiplier(moduleKeyObj[0].mpsTank, tankCount)
+                        handleReactionEngine();
                         break;
 
                     case 'Engine, Electric':
-                        accel += moduleKeyObj[0].Accel
-                        deltaV = deltaVMultiplier(moduleKeyObj[0].mpsTank, tankCount)
+                        handleReactionEngine();
                         break;
 
                     case 'Engine, Fission':
-                        accel += moduleKeyObj[0].Accel
-                        deltaV = deltaVMultiplier(moduleKeyObj[0].mpsTank, tankCount)
+                        handleReactionEngine();
                         break;
 
                     case 'Engine, Nuclear Pulse':
-                        accel += moduleKeyObj[0].Accel
-                        deltaV = deltaVMultiplier(moduleKeyObj[0].mpsTank, tankCount)
+                        handleReactionEngine();
                         break;
 
                     case 'Engine, Fusion':
-                        accel += moduleKeyObj[0].Accel
-                        deltaV = deltaVMultiplier(moduleKeyObj[0].mpsTank, tankCount)
+                        handleReactionEngine();
                         break;
                     case 'Engine, TotalConv. & Antimatter':
-                        accel += moduleKeyObj[0].Accel
-                        deltaV = deltaVMultiplier(moduleKeyObj[0].mpsTank, tankCount)
+                        handleReactionEngine();
                         break;
 
                     case 'Reactionless Engine':
-                        accel += moduleKeyObj[0].Accel
-                        deltaV = Infinity
-                        singularityDriveCost += moduleCost
+                        // Do I need to do anything with this?
                         break;
                     default:
                         break;
-                }
-
-                if (currentModule.highAutomation === true) {
-                    moduleWorkspaces *= 0.1;
-                }
-                if (currentModule.totalAutomation === true) {
-                    moduleWorkspaces = 0;
                 }
 
                 cost += moduleCost;
@@ -1665,17 +1599,6 @@ const CreateShipClass = ({ isExpanded }) => {
                 powerDemand += modulePowerDemand;
                 powerGeneration += modulePowerGeneration;
                 shortOccupancyCrew += SMData.Workspaces
-
-                // const moduleObject = shipModules[2][0];
-
-                // if (moduleObject && typeof moduleObject === 'object') {
-                //     for (const [key, value] of Object.entries(moduleObject)) {
-                //         console.log(`${key}: ${value}`);
-                //     }
-                //     console.log('*****************************************');
-                // } else {
-                //     console.log('No valid object found at the specified coordinates.');
-                // }
 
                 setFrontdDR(frontdDR)
                 setBaseFrontdDR(frontdDR)
@@ -1715,8 +1638,6 @@ const CreateShipClass = ({ isExpanded }) => {
                 setMediumMounts(mediumMounts)
                 setSecondaryMounts(secondaryMounts)
                 setTertiaryMounts(tertiaryMounts)
-                setAccel(accel)
-                setDeltaV(deltaV)
                 setFuelLoad(fuelLoad)
                 setFuelObj(fuelObj)
                 setStardriveNeedsFuel(stardriveNeedsFuel)
@@ -1727,7 +1648,67 @@ const CreateShipClass = ({ isExpanded }) => {
     useEffect(() => {
         updateShipModules(shipModules, shipData, shipSM, shipStreamlinedUn, shipTL, shipReardDR, superScienceChecked)
         updateShipValues(shipModules, shipTL, shipSM)
-    }, [updateShipModules, updateShipValues, shipModules, shipSM, shipStreamlinedUn, shipTL, shipReardDR, superScienceChecked])
+    }, [updateShipModules, updateShipValues, shipModules, shipSM, shipStreamlinedUn, shipTL, shipReardDR, superScienceChecked]);
+
+    useEffect(() => {
+        let newShipAccelDeltaInfo = [];
+
+        processShipModules(shipModules, (shipModule) => {
+            let moduleKey = shipModule.moduleKey;
+
+            function updateAccelDelta(moduleKey) {
+                if (fuelObj.hasOwnProperty(key)) {
+                    fuelObj[key] += currentModule.fuelLoad;
+                } else {
+                    fuelObj[key] = currentModule.fuelLoad;
+                }
+            }
+            switch (moduleKey) {
+                case "Super Reactionless":
+                case "Hot Reactionless":
+                case "Standard":
+                case "Rotary":
+                case "Subwarp":
+
+                    break;
+                case "Super Stardrive Engine":
+                case "Stardrive Engine":
+
+                    break;
+                case "Antimatter Plasma Torch":
+                case "Super Antimatter Plasma Torch":
+                case "Antimatter Thermal Rocket":
+                case "Super Fusion Torch":
+                case "Fusion Torch":
+                case "Nuclear Thermal Rocket":
+                case "Super Conversion Torch":
+                case "Total Conversion Torch":
+                case "Antimatter Pion Torch":
+                case "Antimatter Pion":
+                case "Antimatter Plasma Rocket":
+                case "Fusion Rocket":
+                case "Super Fusion Pulse Drive":
+                case "Advanced Fusion Pulse Drive":
+                case "Fusion Pulse Drive":
+                case "External Pulsed Plasma":
+                case "Mass Driver":
+                case "Ion Drive":
+                case "Nuclear Saltwater Rocket":
+                case "Nuclear Light Bulb":
+                case "HEDM":
+                case "Chemical":
+
+                    break;
+
+                default:
+
+                    break;
+
+            }
+            setAccelDeltaInfo(shipAccelDeltaInfo);
+        })
+
+    }, [shipModules, shipFuelObj]);
 
     // This useEffect resets the selected modules array state variable when one of the dependencies change.
     // useEffect(() => {
@@ -5284,9 +5265,6 @@ const CreateShipClass = ({ isExpanded }) => {
             case "Indestructible Armor":
                 pushToValidFeatures("Hardened Armor")
                 newDesignCost -= shipHardenedArmorCost * 9
-                setFrontdDR(shipBaseFrontdDR)
-                setMiddDR(shipBaseMiddDR)
-                setReardDR(shipBaseReardDR)
                 break;
             case "Ram Rockets":
                 newDesignCost -= shipRamRocketCost * 4
