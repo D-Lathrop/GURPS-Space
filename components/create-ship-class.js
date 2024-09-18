@@ -43,11 +43,12 @@ const CreateShipClass = ({ isExpanded }) => {
     const [shipSR, setSR] = useState(0);
     const [shipDisplayHndSR, setDisplayHndSR] = useState('0/0');
     const [shipMove, setMove] = useState(0);
-    const [shipAccelDeltaInfo, setAccelDeltaInfo] = useState([]);
-    const [shipJumpGateMax, setJumpGateMax] = useState(0);
+    const [shipJumpGateArr, setJumpGateArr] = useState([]);
     const [shipMaxFTL, setMaxFTL] = useState(0);
     const [shipFuelLoad, setFuelLoad] = useState(0);
+    const [shipFuelLoadObj, setFuelLoadObj] = useState({});
     const [shipFuelObj, setFuelObj] = useState({});
+    const [shipEngineAccelDelta, setEngineAccelDelta] = useState([]);
 
 
     // Ship Weapon, ECM, and dDR State Variables
@@ -170,7 +171,7 @@ const CreateShipClass = ({ isExpanded }) => {
     const [shipPowerDemand, setPowerDemand] = useState(0);
     const [shipPowerGen, setPowerGen] = useState(0);
     const [shipLaunchRate, setShipLaunchRate] = useState(0);
-    const [shipHangarCapacity, setShipHangarCapacity] = useState(0);
+    const [shipTotalHangarCapacity, setShipTotalHangarCapacity] = useState(0);
     const [shipMiningCapacity, setMiningCapacity] = useState(0);
     const [shipRefineryCapacity, setRefineryCapacity] = useState(0);
     const [shipFacValueHour, setFacValueHour] = useState(0);
@@ -180,6 +181,9 @@ const CreateShipClass = ({ isExpanded }) => {
     const [shipUncustomizedModules, setUncustomizedModules] = useState([]);
     const [shipAlreadyCustomizedModules, setAlreadyCustomizedModules] = useState([]);
     const [stardriveNeedsFuel, setStardriveNeedsFuel] = useState(false);
+    const [heatSinkCount, setHeatSinkCount] = useState(0);
+    const [shipAllCombinedBaysArr, setShipCombinedBaysArr] = useState([]);
+    const [currentCustomizationPanel, setCurrentCustomizationPanel] = useState('Habitats');
 
     // Design Switch and Feature State Variables
     const [shipHardenedArmorCost, setHardenedArmorCost] = useState(0);
@@ -494,7 +498,7 @@ const CreateShipClass = ({ isExpanded }) => {
         }
 
         if (fuelTypes) {
-            newModuleListObj.fuelTypes = fuelTypes // fuelTypes is an array passed from the module selector component.
+            newModuleListObj.fuelTypes = fuelTypes;
         }
 
         function addmpsTankandDeltaV() {
@@ -502,6 +506,7 @@ const CreateShipClass = ({ isExpanded }) => {
             newModuleListObj.accel = accel;
             newModuleListObj.basempsTank = mpsTank;
             newModuleListObj.mpsTank = mpsTank;
+            newModuleListObj.fuelTypes = fuelTypes;
         }
 
         function highAndTotalAutomation() {
@@ -622,7 +627,7 @@ const CreateShipClass = ({ isExpanded }) => {
                 highAndTotalAutomation();
                 newModuleListObj.hangarCapacity = SMData.Capacity;
                 newModuleListObj.launchRate = SMData.LaunchRate;
-                newModuleListObj.combinedBays = [];
+                newModuleListObj.combinedBays = [[rowIndex, colIndex]];
                 break;
             case "Habitat":
                 highAndTotalAutomation();
@@ -689,6 +694,7 @@ const CreateShipClass = ({ isExpanded }) => {
             case "Rotary":
             case "Subwarp":
                 highAndTotalAutomation();
+                newModuleListObj.accel = accel;
                 newModuleListObj.pseudoVelocity = false;
                 newModuleListObj.singularityDrive = false;
                 newModuleListObj.driveField = false;
@@ -900,7 +906,7 @@ const CreateShipClass = ({ isExpanded }) => {
                             });
 
                             if (allBaysPresent === false) {
-                                shipModule.combinedBays = [];
+                                shipModule.combinedBays = [[rowIndex, colIndex]];
                                 shipModule.alreadyCustomized = false;
                             }
 
@@ -1057,14 +1063,16 @@ const CreateShipClass = ({ isExpanded }) => {
             }
         });
         if (JSON.stringify(newShipModules) !== JSON.stringify(currentShipModules)) {
-            setShipModules(newShipModules);
+            setModules(newShipModules);
         }
     }, []);
 
     // This useEffect handles changes to the selected module array to update overall ship statistics.
     const updateShipValues = useCallback((shipModules, shipTL, shipSM) => {
-        const modulesUseEffect = shipModules;
         const modulesUseEffectData = shipData;
+        let newShipModules = shipModules;
+        let currentShipModules = shipModules;
+
         let tankCount = shipModules.filter(module => module.moduleKey === 'Fuel Tank').length;
         let frontdDR = 0;
         let middDR = 0;
@@ -1110,14 +1118,14 @@ const CreateShipClass = ({ isExpanded }) => {
         let controlStations = 0;
         let fuelObj = {};
         let fuelLoad = 0;
+        let fuelLoadObj = {};
         let jumpGate = [];
-        let combinedBays = [];
+        let allCombinedBaysArr = [];
         let maxFTL = 0;
         let uPressCargo = 0;
         let pressCargo = 0;
         let refrigeratedCargo = 0;
         let shieldedCargo = 0;
-        let arrayLevel = 0;
         let facValueHour = 0;
         let facWeightHour = 0;
         let launchRate = 0;
@@ -1132,9 +1140,10 @@ const CreateShipClass = ({ isExpanded }) => {
         let frontSpinal = false;
         let midSpinal = false;
         let rearSpinal = false;
-        let accel = 0;
-        let deltaV = 0;
         let stardriveNeedsFuel = false;
+        let heatSinks = 0;
+
+
 
         // if (modulesUseEffect.length === 0) {
         //     frontdDR = 0
@@ -1187,9 +1196,9 @@ const CreateShipClass = ({ isExpanded }) => {
         // }
 
 
-        for (let rowIndex = 0; rowIndex < modulesUseEffect.length; rowIndex++) {
-            for (let colIndex = 0; colIndex < modulesUseEffect[rowIndex].length; colIndex++) {
-                let currentModule = modulesUseEffect[rowIndex][colIndex];
+        for (let rowIndex = 0; rowIndex < newShipModules.length; rowIndex++) {
+            for (let colIndex = 0; colIndex < newShipModules[rowIndex].length; colIndex++) {
+                let currentModule = newShipModules[rowIndex][colIndex];
                 let currentModuleKey = currentModule.moduleKey;
                 if (Object.keys(currentModule).length === 0) {
                     continue;
@@ -1197,13 +1206,17 @@ const CreateShipClass = ({ isExpanded }) => {
                 let currentModuleLocation = currentModule.moduleLocation1;
                 let moduleKeyObj = modulesUseEffectData[currentModuleKey];
 
-                let moduleCategory = moduleKeyObj[0].Category;
-                let modulePowerGeneration = moduleKeyObj[0].PowerGeneration;
-                let modulePowerDemand = moduleKeyObj[0].PowerDemand;
+                let moduleCategory = currentModule.moduleCategory;
+                let modulePowerGeneration = 0;
+                let modulePowerDemand = currentModule.modulePowerDemand;
                 let SMData = moduleKeyObj.find(module => module.SM === shipSM);
-                let baseModuleCost = SMData.cost;
-                let moduleCost = currentModule.moduleCost;
-                let moduleWorkspaces = SMData.Workspaces;
+                let baseModuleCost = currentModule.baseModuleCost;
+                let moduleCost = currentModule.baseModuleCost;
+                let moduleWorkspaces = currentModule.baseModuleWorkspaces;
+
+                if (currentModule.powerGen !== undefined) {
+                    modulePowerGeneration = currentModule.powerGen;
+                }
 
                 if (currentModule.totalAutomation !== undefined) {
                     if (currentModule.totalAutomation) {
@@ -1246,8 +1259,8 @@ const CreateShipClass = ({ isExpanded }) => {
                         }
                     }
                     if (currentModule.singularityDrive) {
-                        currentModule.modulePowerDemand = 0;
-                        currentModule.moduleCost = currentModule.baseModuleCost * 5;
+                        modulePowerDemand = 0;
+                        moduleCost = currentModule.baseModuleCost * 5;
                     }
                     if (currentModule.stardriveFuel) {
                         stardriveNeedsFuel = true;
@@ -1267,9 +1280,9 @@ const CreateShipClass = ({ isExpanded }) => {
                 }
 
                 function handleReactionEngine() {
-                    if (shipModule.highThrust ?? false) {
-                        shipModule.accel = shipModule.baseAccel * 2;
-                        shipModule.mpsTank = shipModule.basempsTank / 2;
+                    if (currentModule.highThrust ?? false) {
+                        currentModule.accel = currentModule.baseAccel * 2;
+                        currentModule.mpsTank = currentModule.basempsTank / 2;
                     }
                 }
 
@@ -1307,7 +1320,7 @@ const CreateShipClass = ({ isExpanded }) => {
                         }
 
                         if (currentModuleKey.includes('Force Screen')) {
-                            let forcedDR = SMData.dDr;
+                            let forcedDR = currentModule.screendDR;
                             moduleCost = baseModuleCost;
 
                             if (currentModule.mandatorySwitch === false) {
@@ -1445,6 +1458,7 @@ const CreateShipClass = ({ isExpanded }) => {
                         if (currentModuleKey === 'Control Room') {
                             if (currentModule.totalAutomation === true) {
                                 controlStations = 0;
+                                currentModule.controlStations = 0;
                                 shortOccupancyCrew += 0;
                             } else {
                                 controlStations = currentModule.controlStations;
@@ -1464,13 +1478,18 @@ const CreateShipClass = ({ isExpanded }) => {
                     case 'Propulsion':
                         if (currentModuleKey === 'Fuel Tank') {
                             const key = currentModule.assignedContents;
-                            if (fuelObj.hasOwnProperty(key)) {
-                                fuelObj[key] += currentModule.fuelLoad;
-                            } else {
-                                fuelObj[key] = currentModule.fuelLoad;
-                            }
 
-                            fuelLoad += currentModule.fuelLoad;
+                            if (key !== 'ThermalFluid') {
+                                if (fuelObj.hasOwnProperty(key)) {
+                                    fuelObj[key] += currentModule.fuelLoad;
+                                } else {
+                                    fuelObj[key] = currentModule.fuelLoad;
+                                }
+
+                                fuelLoad += currentModule.fuelLoad;
+                            } else {
+                                heatSinks += 1;
+                            }
                         }
                         if (currentModuleKey === 'Jump Gate') {
                             const combinedGatesExists = jumpGate.some(gate =>
@@ -1511,14 +1530,14 @@ const CreateShipClass = ({ isExpanded }) => {
                             facValueHour += currentModule.valuePerHour;
                         }
                         if (currentModuleKey === 'Hangar Bay') {
-                            const combinedBaysExists = combinedBays.some(gate =>
+                            const combinedBaysExists = allCombinedBaysArr.some(bays =>
                                 Array.isArray(bays) &&
                                 bays.length === currentModule.combinedBays.length &&
                                 bays.every((value, index) => value === currentModule.combinedBays[index])
                             );
 
                             if (!combinedBaysExists) {
-                                combinedBays.push(currentModule.combinedBays);
+                                allCombinedBaysArr.push(currentModule.combinedBays);
                                 hangarCapacity += currentModule.hangarCapacity * currentModule.combinedBays.length;
                                 launchRate = currentModule.launchRate;
                             }
@@ -1595,85 +1614,191 @@ const CreateShipClass = ({ isExpanded }) => {
                 }
 
                 cost += moduleCost;
+                currentModule.moduleCost = moduleCost;
                 workspaces += moduleWorkspaces;
+                currentModule.moduleWorkspaces = moduleWorkspaces;
                 powerDemand += modulePowerDemand;
+                currentModule.modulePowerDemand = modulePowerDemand;
                 powerGeneration += modulePowerGeneration;
-                shortOccupancyCrew += SMData.Workspaces
+                shortOccupancyCrew += moduleWorkspaces;
 
-                setFrontdDR(frontdDR)
-                setBaseFrontdDR(frontdDR)
-                setMiddDR(middDR)
-                setBaseMiddDR(middDR)
-                setReardDR(reardDR)
-                setBaseReardDR(reardDR)
-                setShipDefensiveECMBonus(defensiveECMBonus)
-                setShipDefensiveECMTL(defensiveECMTL)
-                setTotalModulesCost(cost)
-                setWorkspaces(workspaces)
-                setBaseWorkspaces(workspaces)
-                setCabinsCapacity(cabinsCapacity)
-                setLongOccupancy(longOccupancy)
-                setShortOccupancy(shortOccupancyCrew + shortOccupancyPassengers)
-                setShortOccupancyCrew(shortOccupancyCrew)
-                setShortOccupancyPassengers(shortOccupancyPassengers)
-                setShipCabins(cabinsCapacity)
-                setShipAreas(areas)
-                setShipSeats(seats)
-                setPowerDemand(powerDemand)
-                setPowerGen(powerGeneration)
-                setControlStations(controlStations)
-                setJumpGateMax(jumpGate)
-                setMaxFTL(maxFTL)
-                setUPressCargo(uPressCargo)
-                setUPressCargoCapacity(uPressCargo)
-                setFacValueHour(facValueHour)
-                setFacWeightHour(facWeightHour)
-                setShipLaunchRate(launchRate)
-                setShipHangarCapacity(hangarCapacity)
-                setMiningCapacity(miningCapacity)
-                setRefineryCapacity(refineryCapacity)
-                setSpinalMounts(spinalMounts)
-                setUnusedSpinalMounts(spinalMounts)
-                setMajorMounts(majorMounts)
-                setMediumMounts(mediumMounts)
-                setSecondaryMounts(secondaryMounts)
-                setTertiaryMounts(tertiaryMounts)
-                setFuelLoad(fuelLoad)
-                setFuelObj(fuelObj)
-                setStardriveNeedsFuel(stardriveNeedsFuel)
+                if (currentModule.powerGen !== undefined) {
+                    currentModule.powerGen = modulePowerGeneration;
+                }
+
+                // let newModuleListObj = {
+                //     moduleKey: moduleKey,
+                //     moduleCategory: moduleCategory,
+                //     moduleLocation1: moduleLocation1,
+                //     moduleLocation2: moduleLocation2,
+                //     moduleNumber: moduleNumber,
+                //     modulePowerDemand: modulePowerDemand,
+                //     baseModuleCost: moduleCost,
+                //     moduleCost: moduleCost,
+                //     baseModuleWorkspaces: moduleWorkspaces,
+                //     moduleWorkspaces: moduleWorkspaces,
+                //     alreadyCustomized: false
+                // }
+
             }
+        }
+
+        setFrontdDR(frontdDR);
+        setMiddDR(middDR);
+        setReardDR(reardDR);
+        setShipDefensiveECMBonus(defensiveECMBonus);
+        setShipDefensiveECMTL(defensiveECMTL);
+        setTotalModulesCost(cost);
+        setWorkspaces(workspaces);
+        setBaseWorkspaces(workspaces);
+        setCabinsCapacity(cabinsCapacity);
+        setLongOccupancy(longOccupancy);
+        setShortOccupancy(shortOccupancyCrew + shortOccupancyPassengers);
+        setShortOccupancyCrew(shortOccupancyCrew);
+        setShortOccupancyPassengers(shortOccupancyPassengers);
+        setShipCabins(cabinsCapacity);
+        setShipAreas(areas);
+        setShipSeats(seats);
+        setPowerDemand(powerDemand);
+        setPowerGen(powerGeneration);
+        setControlStations(controlStations);
+        setJumpGateArr(jumpGate);
+        setMaxFTL(maxFTL);
+        setUPressCargo(uPressCargo);
+        setUPressCargoCapacity(uPressCargo);
+        setFacValueHour(facValueHour);
+        setFacWeightHour(facWeightHour);
+        setShipLaunchRate(launchRate);
+        setShipTotalHangarCapacity(hangarCapacity);
+        setShipCombinedBaysArr(allCombinedBaysArr);
+        setMiningCapacity(miningCapacity);
+        setRefineryCapacity(refineryCapacity);
+        setSpinalMounts(spinalMounts);
+        setUnusedSpinalMounts(spinalMounts);
+        setMajorMounts(majorMounts);
+        setMediumMounts(mediumMounts);
+        setSecondaryMounts(secondaryMounts);
+        setTertiaryMounts(tertiaryMounts);
+        setFuelLoad(fuelLoad);
+        setFuelObj(fuelObj);
+        setFuelLoadObj(fuelLoadObj);
+        setStardriveNeedsFuel(stardriveNeedsFuel);
+        setHeatSinkCount(heatSinks);
+
+        if (JSON.stringify(newShipModules) !== JSON.stringify(currentShipModules)) {
+            setModules([...newShipModules]);
         }
     }, []);
 
+    // This useEffect calls the updateShipModules and updateShipValues callbacks.
     useEffect(() => {
         updateShipModules(shipModules, shipData, shipSM, shipStreamlinedUn, shipTL, shipReardDR, superScienceChecked)
-        updateShipValues(shipModules, shipTL, shipSM)
+        updateShipValues(shipModules, shipTL, shipSM) // **************************************************************** Call this directly in updateShipModules?
     }, [updateShipModules, updateShipValues, shipModules, shipSM, shipStreamlinedUn, shipTL, shipReardDR, superScienceChecked]);
 
+    // This useEffect updates the shipEngineAccelDelta array based on ship modules and the fuelObj.
     useEffect(() => {
-        let newShipAccelDeltaInfo = [];
+
+        // shipModule.moduleKey = "Fusion Torch"
+        // shipModule.fuelTypes = ["HydrogenFuel", "Water"]
+        // shipFuelObj = {HydrogenFuel: 4; Water: 1}
+        // shipModule.accel = 0.5
+        // shipModule.mpsTank = 15
+        // Final result for newEngineAccelDelta should be: [{ engineType: "Fusion Torch", fuelType: "HydrogenFuel", accel: 0.5, deltaV: 60}, { engineType: "Fusion Torch", fuelType: "Water", accel: 1.5, deltaV: 5}]
+        // If there were two "Fusion Torch" modules the final result for newEngineAccelDelta should be: [{ engineType: "Fusion Torch", fuelType: "HydrogenFuel", accel: 1, deltaV: 60}, { engineType: "Fusion Torch", fuelType: "Water", accel: 3, deltaV: 5}]        
+
+        let newEngineAccelDelta = []
 
         processShipModules(shipModules, (shipModule) => {
             let moduleKey = shipModule.moduleKey;
 
-            function updateAccelDelta(moduleKey) {
-                if (fuelObj.hasOwnProperty(key)) {
-                    fuelObj[key] += currentModule.fuelLoad;
+
+            function addReactionlessAccel(moduleKey) {
+                const accel = shipModule.accel;
+
+                const existingEntry = newEngineAccelDelta.find(entry => entry.engineType === moduleKey);
+                if (existingEntry) {
+                    existingEntry.accel += accel;
                 } else {
-                    fuelObj[key] = currentModule.fuelLoad;
+                    newEngineAccelDelta.push({
+                        engineType: moduleKey,
+                        accel: accel,
+                        deltaV: Infinity
+                    });
                 }
             }
+
+            function addStardriveReactionless(engineType) {
+                const moduleKeyObj = shipData[engineType];
+                const accel = moduleKeyObj.Accel;
+
+                const existingEntry = newEngineAccelDelta.find(entry => entry.engineType === moduleKey);
+                if (existingEntry) {
+                    existingEntry.accel += accel;
+                } else {
+                    newEngineAccelDelta.push({
+                        engineType: moduleKey,
+                        accel: accel,
+                        deltaV: Infinity
+                    });
+                }
+            }
+
+            function addReactionAccelDelta(moduleKey) {
+                let fuelTypes = shipModule.fuelTypes;
+                let moduleAccel = shipModule.accel;
+                let moduleMpsTank = shipModule.mpsTank;
+
+                for (let i = 0; i < fuelTypes.length; i++) {
+                    let fuelType = fuelTypes[i];
+                    let fuelObj = shipFuelObj;
+
+                    let deltaV = 0;
+                    let accel = moduleAccel;
+
+                    if (fuelObj.hasOwnProperty(fuelType) && fuelType !== 'Water') {
+                        deltaV = fuelObj[fuelType] * moduleMpsTank;
+                    } else if (fuelObj.hasOwnProperty(fuelType) && fuelType === 'Water') {
+                        deltaV = fuelObj[fuelType] * (moduleMpsTank / 3);
+                        accel *= 3;
+                    }
+
+                    let existingEntry = newEngineAccelDelta.find(entry => entry.engineType === moduleKey && entry.fuelType === fuelType);
+                    if (existingEntry) {
+                        existingEntry.accel += accel;
+                    } else {
+                        newEngineAccelDelta.push({
+                            engineType: moduleKey,
+                            fuelType: fuelType,
+                            accel: accel,
+                            deltaV: deltaV
+                        });
+                    }
+                }
+            };
+
             switch (moduleKey) {
                 case "Super Reactionless":
                 case "Hot Reactionless":
                 case "Standard":
                 case "Rotary":
                 case "Subwarp":
-
+                    addReactionlessAccel(moduleKey);
                     break;
                 case "Super Stardrive Engine":
                 case "Stardrive Engine":
-
+                    if (shipModule.reactionlessEngineSuper) {
+                        addStardriveReactionless("Super Reactionless")
+                    }
+                    if (shipModule.reactionlessEngineHot) {
+                        addStardriveReactionless("Hot Reactionless")
+                    }
+                    if (shipModule.reactionlessEngineStandard) {
+                        addStardriveReactionless("Standard")
+                    }
+                    if (shipModule.reactionlessEngineRotary) {
+                        addStardriveReactionless("Rotary")
+                    }
                     break;
                 case "Antimatter Plasma Torch":
                 case "Super Antimatter Plasma Torch":
@@ -1697,7 +1822,7 @@ const CreateShipClass = ({ isExpanded }) => {
                 case "Nuclear Light Bulb":
                 case "HEDM":
                 case "Chemical":
-
+                    addReactionAccelDelta(moduleKey);
                     break;
 
                 default:
@@ -1705,7 +1830,8 @@ const CreateShipClass = ({ isExpanded }) => {
                     break;
 
             }
-            setAccelDeltaInfo(shipAccelDeltaInfo);
+            console.log(`newEngineAccelDelta: ${JSON.stringify(newEngineAccelDelta)}`);
+            setEngineAccelDelta(newEngineAccelDelta);
         })
 
     }, [shipModules, shipFuelObj]);
@@ -1797,7 +1923,7 @@ const CreateShipClass = ({ isExpanded }) => {
                 <span className={`${styles.statBlockLable} ${styles.infoTitle}`} title="Select weapons for your mounts in the Weapon Stats tab.">Secondary Mounts:</span>
                 <span className={isExpanded ? styles.statBlockArea : styles.statBlockAreaLarge}>{shipSecondaryMounts}</span>
                 <span className={`${styles.statBlockLable} ${styles.infoTitle}`} title="Capacity is measured in tons, for example if capacity is 1 the hangar can only hold 1 ton of cargo or vehicles.">Hangar Capacity:</span>
-                <span className={isExpanded ? styles.statBlockArea : styles.statBlockAreaLarge}>{shipHangarCapacity}</span>
+                <span className={isExpanded ? styles.statBlockArea : styles.statBlockAreaLarge}>{shipTotalHangarCapacity}</span>
                 <span className={`${styles.statBlockLable} ${styles.infoTitle}`} title="Select weapons for your mounts in the Weapon Stats tab.">Tertiary Mounts:</span>
                 <span className={isExpanded ? styles.statBlockArea : styles.statBlockAreaLarge}>{shipTertiaryMounts}</span>
                 <span className={`${styles.statBlockLable} ${styles.infoTitle}`} title="Capacity is measured in tons per minute, for example if capacity is 1,000 it would take 3 minutes to launch a 3,000 ton ship.">Launch Rate:</span>
@@ -4173,9 +4299,10 @@ const CreateShipClass = ({ isExpanded }) => {
         setAlreadyCustomizedModules(alreadyCustomizedArr);
     }, [shipModules])
 
-    function habitatCustomizationDisplay() {
+    function HabitatCustomizationDisplay() {
         return (
             <div className={styles.habitatSubContainer}>
+                <h2 className={isExpanded ? styles.statTitleExpanded : styles.statTitleCollapsed}>Habitat Customization</h2>
                 <span className={styles.habitatInfoLabelCol1}>
                     Bunk- rooms:
                 </span>
@@ -4901,12 +5028,63 @@ const CreateShipClass = ({ isExpanded }) => {
         )
     }
 
+    function EngineCustomizationDisplay() {
+        return (
+            <div className={styles.habitatSubContainer}>
+                <h2 className={isExpanded ? styles.statTitleExpanded : styles.statTitleCollapsed}>Engine Customization</h2>
+            </div>
+        )
+    }
+
+    function WeaponCustomizationDisplay() {
+        return (
+            <div className={styles.habitatSubContainer}>
+                <h2 className={isExpanded ? styles.statTitleExpanded : styles.statTitleCollapsed}>Weapon Customization</h2>
+            </div>
+        )
+    }
+
+    function MiscCustomizationDisplay() {
+        return (
+            <div className={styles.habitatSubContainer}>
+                <h2 className={isExpanded ? styles.statTitleExpanded : styles.statTitleCollapsed}>Misc. Customization</h2>
+            </div>
+        )
+    }
+
+    const handleCustomClick = (componentType) => {
+        switch (componentType) {
+            case 'Habitats':
+                setCurrentCustomizationPanel('Habitats');
+                break;
+            case 'Engines':
+                setCurrentCustomizationPanel('Engines');
+                break;
+            case 'Weapons':
+                setCurrentCustomizationPanel('Weapons');
+                break;
+            case 'Misc':
+                setCurrentCustomizationPanel('Misc');
+                break;
+            default:
+                break;
+        }
+    };
+
     function customizationDisplay() {
         return (
             <div className={isExpanded ? styles.habitatPowerContainerExpanded : styles.habitatPowerContainerCollapsed}>
-                <h2 className={isExpanded ? styles.statTitleExpanded : styles.statTitleCollapsed}>Module Customization</h2>
-                <span className={styles.infoTitleWarningPower}>WARNING: Changing cost here will not change the module cost, but will change the total cost on the basic stats tab.</span>
-                {habitatCustomizationDisplay()}
+                <h2 className={isExpanded ? styles.customizationTitleExpanded : styles.customizationTitleCollapsed}>Module Customization</h2>
+                <div className={isExpanded ? styles.customizationComponentButtonContainerExpanded : styles.customizationComponentButtonContainerCollapsed}>
+                    <button className={styles.statComponentButton} onClick={() => handleCustomClick('Habitats')}>Habitats</button>
+                    <button className={styles.statComponentButton} onClick={() => handleCustomClick('Engines')}>Engines</button>
+                    <button className={styles.statComponentButton} onClick={() => handleCustomClick('Weapons')}>Weapons</button>
+                    <button className={styles.statComponentButton} onClick={() => handleCustomClick('Misc')}>Misc.</button>
+                </div>
+                {currentCustomizationPanel === "Habitats" && <HabitatCustomizationDisplay />}
+                {currentCustomizationPanel === "Weapons" && <WeaponCustomizationDisplay />}
+                {currentCustomizationPanel === "Engines" && <EngineCustomizationDisplay />}
+                {currentCustomizationPanel === "Misc" && <MiscCustomizationDisplay />}
             </div>
         )
     }

@@ -3430,7 +3430,7 @@
             "mpsTank": 0.15,
             "SuperScience": false,
             "FuelTypes": [
-                "Hydrogen-oxygen Rocket Fuel"
+                "Hydrogen-oxygenRocketFuel"
             ]
         },
         {
@@ -3501,7 +3501,7 @@
             "mpsTank": 0.5,
             "SuperScience": false,
             "FuelTypes": [
-                "HEDM Fuel"
+                "HEDMFuel"
             ]
         },
         {
@@ -3572,7 +3572,7 @@
             "mpsTank": 3,
             "SuperScience": false,
             "FuelTypes": [
-                "Ionizable Reaction Mass"
+                "IonizableReactionMass"
             ]
         },
         {
@@ -3714,7 +3714,7 @@
             "mpsTank": 0.3,
             "SuperScience": false,
             "FuelTypes": [
-                "Hydrogen Fuel",
+                "HydrogenFuel",
                 "Water"
             ]
         },
@@ -3786,7 +3786,7 @@
             "mpsTank": 0.8,
             "SuperScience": false,
             "FuelTypes": [
-                "Hydrogen Fuel"
+                "HydrogenFuel"
             ]
         },
         {
@@ -3857,7 +3857,7 @@
             "mpsTank": 2.5,
             "SuperScience": true,
             "FuelTypes": [
-                "Uranium-saltwater Fuel"
+                "Uranium-saltwaterFuel"
             ]
         },
         {
@@ -3928,7 +3928,7 @@
             "mpsTank": 2,
             "SuperScience": false,
             "FuelTypes": [
-                "Bomb Pulse Units"
+                "BombPulseUnits"
             ]
         },
         {
@@ -3999,7 +3999,7 @@
             "mpsTank": 5,
             "SuperScience": false,
             "FuelTypes": [
-                "FUsion Pulse Pellets"
+                "FusionPulsePellets"
             ]
         },
         {
@@ -4070,7 +4070,7 @@
             "mpsTank": 20,
             "SuperScience": false,
             "FuelTypes": [
-                "Fusion Pulse Pellets"
+                "FusionPulsePellets"
             ]
         },
         {
@@ -4141,7 +4141,7 @@
             "mpsTank": 350,
             "SuperScience": true,
             "FuelTypes": [
-                "Fusion Pulse Pellets"
+                "FusionPulsePellets"
             ]
         },
         {
@@ -4212,7 +4212,7 @@
             "mpsTank": 12,
             "SuperScience": false,
             "FuelTypes": [
-                "Hydrogen Fuel",
+                "HydrogenFuel",
                 "Water"
             ]
         },
@@ -4284,7 +4284,7 @@
             "mpsTank": 15,
             "SuperScience": true,
             "FuelTypes": [
-                "Hydrogen Fuel",
+                "HydrogenFuel",
                 "Water"
             ]
         },
@@ -4356,7 +4356,7 @@
             "mpsTank": 450,
             "SuperScience": true,
             "FuelTypes": [
-                "Hydrogen Fuel",
+                "HydrogenFuel",
                 "Water"
             ]
         },
@@ -4428,7 +4428,7 @@
             "mpsTank": 1.8,
             "SuperScience": false,
             "FuelTypes": [
-                "Antimatter-catalyzed Hydrogen Fuel",
+                "Antimatter-catalyzedHydrogenFuel",
                 "Water"
             ]
         },
@@ -4500,7 +4500,7 @@
             "mpsTank": 120,
             "SuperScience": false,
             "FuelTypes": [
-                "Antimatter-boosted Hydrogen Fuel",
+                "Antimatter-boostedHydrogenFuel",
                 "Water"
             ]
         },
@@ -4572,7 +4572,7 @@
             "mpsTank": 120,
             "SuperScience": true,
             "FuelTypes": [
-                "Antimatter-boosted Hydrogen Fuel"
+                "Antimatter-boostedHydrogenFuel"
             ]
         },
         {
@@ -4643,7 +4643,7 @@
             "mpsTank": 360,
             "SuperScience": true,
             "FuelTypes": [
-                "Antimatter-boosted Hydrogen Fuel"
+                "Antimatter-boostedHydrogenFuel"
             ]
         },
         {
@@ -4714,7 +4714,7 @@
             "mpsTank": 3400,
             "SuperScience": false,
             "FuelTypes": [
-                "Matter/Antimatter Fuel"
+                "Matter/AntimatterFuel"
             ]
         },
         {
@@ -4785,7 +4785,7 @@
             "mpsTank": 3400,
             "SuperScience": true,
             "FuelTypes": [
-                "Matter/Antimatter Fuel"
+                "Matter/AntimatterFuel"
             ]
         },
         {

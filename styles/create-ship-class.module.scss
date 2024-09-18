@@ -669,7 +669,6 @@
 %weaponStatsContainerCommonStyles {
     @extend %commonContainerStyles;
     grid-template-columns: 1fr 1fr 1fr 1fr;
-
     overflow-y: auto
 }
 
@@ -856,4 +855,26 @@
     color: $secondaryColor2;
     font-size: 24px;
     overflow: hidden;
+}
+
+.customizationTitleExpanded {
+    @extend %commonTitleStyles;
+    grid-column: span 4;
+}
+
+.customizationTitleCollapsed {
+    @extend %commonTitleStyles;
+    grid-column: span 4;
+}
+
+.customizationComponentButtonContainerExpanded {
+    @extend %statComponentButtonContainerCommonStyles;
+    grid-column: span 4;
+
+}
+
+.customizationComponentButtonContainerCollapsed {
+    @extend %statComponentButtonContainerCommonStyles;
+    grid-column: span 4;
+
 }

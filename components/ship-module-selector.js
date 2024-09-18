@@ -19,6 +19,12 @@ const ShipModuleSelector = ({ handleSetModules, styles, buildCol, buildRow, ship
         'Weapons', 'Engine, Chemical & HEDM', 'Engine, Electric', 'Engine, Fission', 'Engine, Nuclear Pulse',
         'Engine, Fusion', 'Engine, TotalConv. & Antimatter', 'Reactionless Engine'];
 
+    // This useEffect updates the module, cost, workspaces, and repairSkill state variables (used for display purposes) 
+    // when the shipModule state variable is changed in the higher component.
+    useEffect(() => {
+
+    }, [shipModules])
+
     // This use effect retrieves the values for cost and workspaces from the modules array in the create-ship-class component, 
     // this is to reflect changes caused by customization such as automation and other design features.
     useEffect(() => {
@@ -29,8 +35,9 @@ const ShipModuleSelector = ({ handleSetModules, styles, buildCol, buildRow, ship
             const newDisplayCost = shipModule.moduleCost ?? 0;
             const newDisplayWorkspaces = shipModule.moduleWorkspaces ?? 0;
 
-            setDisplayCost(newDisplayCost);
-            setDisplayWorkspaces(newDisplayWorkspaces);
+            setModule(shipModule.moduleKey);
+            setDisplayCost(newDisplayCost.toLocaleString());
+            setDisplayWorkspaces(newDisplayWorkspaces.toLocaleString());
         } else {
             setDisplayCost(0);
             setDisplayWorkspaces(0);
@@ -56,10 +63,10 @@ const ShipModuleSelector = ({ handleSetModules, styles, buildCol, buildRow, ship
         }
 
         if (e.target.value === '') {
-            setModule(e.target.value);
-            setCost(0);
-            setWorkspaces(0);
-            setRepairSkill('');
+            // setModule(e.target.value);
+            // setCost(0);
+            // setWorkspaces(0);
+            // setRepairSkill('');
             handleSetModules(e.target.value, moduleCategory, moduleLocation1, moduleLocation2, moduleNumber, 0, 0, null, 0, 0, 0)
         } else {
             let moduleKeyObj = moduleShipData[e.target.value];
@@ -77,11 +84,11 @@ const ShipModuleSelector = ({ handleSetModules, styles, buildCol, buildRow, ship
                 mpsTank = moduleKeyObj[0].mpsTank;
             }
 
-            setModule(e.target.value);
+            // setModule(e.target.value);
             handleSetModules(e.target.value, moduleCategory, moduleLocation1, moduleLocation2, moduleNumber, SMData.cost, SMData.Workspaces, fuelTypes, accel, mpsTank, moduleKeyObj[0].PowerDemand);
-            setCost(SMData.cost);
-            setWorkspaces(SMData.Workspaces);
-            setRepairSkill(moduleKeyObj[0].RepairSkill);
+            // setCost(SMData.cost);
+            // setWorkspaces(SMData.Workspaces);
+            // setRepairSkill(moduleKeyObj[0].RepairSkill);
         }
     }
 
@@ -184,9 +191,9 @@ const ShipModuleSelector = ({ handleSetModules, styles, buildCol, buildRow, ship
     // This use effect resets the current module when the fundamental ship characteristics are changed,
     // it would be better to upgrade this to only remove them if they are no longer valid but this will 
     // work for now.
-    useEffect(() => {
-        setModule('');
-    }, [shipSM, shipTL, superScience, shipStreamlinedUn])
+    // useEffect(() => {
+    //     setModule('');
+    // }, [shipSM, shipTL, superScience, shipStreamlinedUn])
 
     return (
         <div className={`${styles.buildLabel} ${buildCol} ${buildRow}`}>
@@ -207,7 +214,7 @@ const ShipModuleSelector = ({ handleSetModules, styles, buildCol, buildRow, ship
                 </select>
             )}
 
-            <span className={styles.moduleInfoSpanTitle}>Cost: ${displayCost.toLocaleString()} Workspaces: {displayWorkspaces.toLocaleString()}</span>
+            <span className={styles.moduleInfoSpanTitle}>Cost: ${displayCost} Workspaces: {displayWorkspaces}</span>
             <span className={styles.moduleInfoSpanTitle} title={repairSkill}>Repair Skill</span>
         </div>
     )

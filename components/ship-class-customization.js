@@ -5,7 +5,6 @@ const ShipClassWeaponStats = (props) => {
 
     return (
         <>
-
             {props.customizationDisplay()}
         </>
     )
