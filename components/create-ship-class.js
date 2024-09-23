@@ -838,7 +838,7 @@ const CreateShipClass = ({ isExpanded }) => {
                 const [rowIndex, colIndex] = getModuleIndex(shipModule.moduleLocation1, shipModule.moduleNumber);
 
                 let isValid = false;
-                let habitatValid = false;
+                // let habitatValid = false;
 
                 if (
                     (moduleKeyObj[0].SuperScience === true && superScienceChecked === true || moduleKeyObj[0].SuperScience === false)
@@ -893,10 +893,10 @@ const CreateShipClass = ({ isExpanded }) => {
                 //     console.log(`Habitat valid Fired.`)
                 // }
 
-                if (moduleKey === 'Habitat') {
-                    console.log(`Habitat valid: ${habitatValid} isValid: ${isValid}`)
-                    console.log(JSON.stringify(shipModule))
-                }
+                // if (moduleKey === 'Habitat') {
+                //     console.log(`Habitat valid: ${habitatValid} isValid: ${isValid}`)
+                //     console.log(JSON.stringify(shipModule))
+                // }
 
                 function updateBaseCostAndWorkspaces() {
                     shipModule.baseModuleCost = SMData.cost;
@@ -4166,235 +4166,76 @@ const CreateShipClass = ({ isExpanded }) => {
         let newRoomValue = 0;
         let newCabinValue = 0;
 
+        function handleIncrementDecrement(roomValue, cabinValueMultiplier, habitatType) {
+            newRoomValue = roomValue + value;
+            newCabinValue = newCabins - (value * cabinValueMultiplier);
+            if (newRoomValue >= 0 && newCabinValue >= 0) {
+                newCustomizedCabins.cabins = newCabinValue;
+                if (newRoomValue === 0) {
+                    delete newCustomizedCabins[habitatType];
+                } else {
+                    newCustomizedCabins[habitatType] = newRoomValue;
+                }
+            }
+        }
 
         switch (habitatType) {
             case 'Bunkrooms':
-                newRoomValue = newBunkrooms + value;
-                newCabinValue = newCabins - value;
-                if (newRoomValue >= 0 && newCabinValue >= 0) {
-                    newCustomizedCabins.cabins = newCabinValue;
-                    if (newRoomValue === 0) {
-                        delete newCustomizedCabins.bunkrooms;
-                    } else {
-                        newCustomizedCabins.bunkrooms = newRoomValue;
-                    }
-                }
+                handleIncrementDecrement(newBunkrooms, 1, 'bunkrooms');
                 break;
             case 'Cells':
-                newRoomValue = newCells + value;
-                newCabinValue = newCabins - value;
-                if (newRoomValue >= 0 && newCabinValue >= 0) {
-                    newCustomizedCabins.cabins = newCabinValue;
-                    if (newRoomValue === 0) {
-                        delete newCustomizedCabins.cells;
-                    } else {
-                        newCustomizedCabins.cells = newRoomValue;
-                    }
-                }
+                handleIncrementDecrement(newCells, 1, 'cells');
                 break;
             case 'Luxury':
-                newRoomValue = newLuxury + value;
-                newCabinValue = newCabins - (value * 2);
-                if (newRoomValue >= 0 && newCabinValue >= 0) {
-                    newCustomizedCabins.cabins = newCabinValue;
-                    if (newRoomValue === 0) {
-                        delete newCustomizedCabins.luxuryCabins;
-                    } else {
-                        newCustomizedCabins.luxuryCabins = newRoomValue;
-                    }
-                }
+                handleIncrementDecrement(newLuxury, 2, 'luxuryCabins');
                 break;
             case 'Briefing':
-                newRoomValue = newBriefing + value;
-                newCabinValue = newCabins - value;
-                if (newRoomValue >= 0 && newCabinValue >= 0) {
-                    newCustomizedCabins.cabins = newCabinValue;
-                    if (newRoomValue === 0) {
-                        delete newCustomizedCabins.briefingRooms;
-                    } else {
-                        newCustomizedCabins.briefingRooms = newRoomValue;
-                    }
-                }
+                handleIncrementDecrement(newBriefing, 1, 'briefingRooms');
                 break;
             case 'Establishment':
-                newRoomValue = newEstablishments + value;
-                newCabinValue = newCabins - (value * 2);
-                if (newRoomValue >= 0 && newCabinValue >= 0) {
-                    newCustomizedCabins.cabins = newCabinValue;
-                    if (newRoomValue === 0) {
-                        delete newCustomizedCabins.establishments;
-                    } else {
-                        newCustomizedCabins.establishments = newRoomValue;
-                    }
-                }
+                handleIncrementDecrement(newEstablishments, 2, 'establishments');
                 break;
             case 'Hibernation':
-                newRoomValue = newHibernation + value;
-                newCabinValue = newCabins - (value * 0.25);
-                if (newRoomValue >= 0 && newCabinValue >= 0) {
-                    newCustomizedCabins.cabins = newCabinValue;
-                    if (newRoomValue === 0) {
-                        delete newCustomizedCabins.hibernationChambers;
-                    } else {
-                        newCustomizedCabins.hibernationChambers = newRoomValue;
-                    }
-                }
+                handleIncrementDecrement(newHibernation, 0.25, 'hibernationChambers');
                 break;
             case 'Labs':
-                newRoomValue = newLabs + value;
-                newCabinValue = newCabins - (value * 2);
-                if (newRoomValue >= 0 && newCabinValue >= 0) {
-                    newCustomizedCabins.cabins = newCabinValue;
-                    if (newRoomValue === 0) {
-                        delete newCustomizedCabins.labs;
-                    } else {
-                        newCustomizedCabins.labs = newRoomValue;
-                    }
-                }
+                handleIncrementDecrement(newLabs, 2, 'labs');
                 break;
             case 'Physics Labs':
-                newRoomValue = newPhysicsLabs + value;
-                newCabinValue = newCabins - (value * 2);
-                if (newRoomValue >= 0 && newCabinValue >= 0) {
-                    newCustomizedCabins.cabins = newCabinValue;
-                    if (newRoomValue === 0) {
-                        delete newCustomizedCabins.physicsLabs;
-                    } else {
-                        newCustomizedCabins.physicsLabs = newRoomValue;
-                    }
-                }
+                handleIncrementDecrement(newPhysicsLabs, 2, 'physicsLabs');
                 break;
             case 'SuperScience Labs':
-                newRoomValue = newSuperScienceLabs + value;
-                newCabinValue = newCabins - (value * 2);
-                if (newRoomValue >= 0 && newCabinValue >= 0) {
-                    newCustomizedCabins.cabins = newCabinValue;
-                    if (newRoomValue === 0) {
-                        delete newCustomizedCabins.superScienceLabs;
-                    } else {
-                        newCustomizedCabins.superScienceLabs = newRoomValue;
-                    }
-                }
+                handleIncrementDecrement(newSuperScienceLabs, 2, 'superScienceLabs');
                 break;
             case 'Mini Fab':
-                newRoomValue = newMiniFabs + value;
-                newCabinValue = newCabins - value;
-                if (newRoomValue >= 0 && newCabinValue >= 0) {
-                    newCustomizedCabins.cabins = newCabinValue;
-                    if (newRoomValue === 0) {
-                        delete newCustomizedCabins.miniFabs;
-                    } else {
-                        newCustomizedCabins.miniFabs = newRoomValue;
-                    }
-                }
+                handleIncrementDecrement(newMiniFabs, 1, 'miniFabs');
                 break;
             case 'Mini Robo Fab':
-                newRoomValue = newMiniRoboFabs + value;
-                newCabinValue = newCabins - value;
-                if (newRoomValue >= 0 && newCabinValue >= 0) {
-                    newCustomizedCabins.cabins = newCabinValue;
-                    if (newRoomValue === 0) {
-                        delete newCustomizedCabins.miniRoboFabs;
-                    } else {
-                        newCustomizedCabins.miniRoboFabs = newRoomValue;
-                    }
-                }
+                handleIncrementDecrement(newMiniRoboFabs, 1, 'miniRoboFabs');
                 break;
             case 'Mini Nano Fab':
-                newRoomValue = newMiniNanoFabs + value;
-                newCabinValue = newCabins - value;
-                if (newRoomValue >= 0 && newCabinValue >= 0) {
-                    newCustomizedCabins.cabins = newCabinValue;
-                    if (newRoomValue === 0) {
-                        delete newCustomizedCabins.miniNanoFabs;
-                    } else {
-                        newCustomizedCabins.miniNanoFabs = newRoomValue;
-                    }
-                }
+                handleIncrementDecrement(newMiniNanoFabs, 1, 'miniNanoFabs');
                 break;
             case 'Mini Rep Fab':
-                newRoomValue = newMiniReplicators + value;
-                newCabinValue = newCabins - value;
-                if (newRoomValue >= 0 && newCabinValue >= 0) {
-                    newCustomizedCabins.cabins = newCabinValue;
-                    if (newRoomValue === 0) {
-                        delete newCustomizedCabins.miniReplicators;
-                    } else {
-                        newCustomizedCabins.miniReplicators = newRoomValue;
-                    }
-                }
+                handleIncrementDecrement(newMiniReplicators, 1, 'miniReplicators');
                 break;
             case 'Office':
-                newRoomValue = newOffices + value;
-                newCabinValue = newCabins - value;
-                if (newRoomValue >= 0 && newCabinValue >= 0) {
-                    newCustomizedCabins.cabins = newCabinValue;
-                    if (newRoomValue === 0) {
-                        delete newCustomizedCabins.offices;
-                    } else {
-                        newCustomizedCabins.offices = newRoomValue;
-                    }
-                }
+                handleIncrementDecrement(newOffices, 1, 'offices');
                 break;
             case 'Sickbay':
-                newRoomValue = newSickbays + value;
-                newCabinValue = newCabins - value;
-                if (newRoomValue >= 0 && newCabinValue >= 0) {
-                    newCustomizedCabins.cabins = newCabinValue;
-                    if (newRoomValue === 0) {
-                        delete newCustomizedCabins.sickBays;
-                    } else {
-                        newCustomizedCabins.sickBays = newRoomValue;
-                    }
-                }
+                handleIncrementDecrement(newSickbays, 1, 'sickBays');
                 break;
             case 'SickbayAuto':
-                newRoomValue = newSickbaysAuto + value;
-                newCabinValue = newCabins - value;
-                if (newRoomValue >= 0 && newCabinValue >= 0) {
-                    newCustomizedCabins.cabins = newCabinValue;
-                    if (newRoomValue === 0) {
-                        delete newCustomizedCabins.sickBaysAuto;
-                    } else {
-                        newCustomizedCabins.sickBaysAuto = newRoomValue;
-                    }
-                }
+                handleIncrementDecrement(newSickbaysAuto, 1, 'sickBaysAuto');
                 break;
             case 'Teleport':
-                newRoomValue = newTeleport + value;
-                newCabinValue = newCabins - value;
-                if (newRoomValue >= 0 && newCabinValue >= 0) {
-                    newCustomizedCabins.cabins = newCabinValue;
-                    if (newRoomValue === 0) {
-                        delete newCustomizedCabins.teleportProjectors;
-                    } else {
-                        newCustomizedCabins.teleportProjectors = newRoomValue;
-                    }
-                }
+                handleIncrementDecrement(newTeleport, 1, 'teleportProjectors');
                 break;
             case 'Teleport Send':
-                newRoomValue = newTeleportSend + value;
-                newCabinValue = newCabins - value;
-                if (newRoomValue >= 0 && newCabinValue >= 0) {
-                    newCustomizedCabins.cabins = newCabinValue;
-                    if (newRoomValue === 0) {
-                        delete newCustomizedCabins.teleportProjectorsSend;
-                    } else {
-                        newCustomizedCabins.teleportProjectorsSend = newRoomValue;
-                    }
-                }
+                handleIncrementDecrement(newTeleportSend, 1, 'teleportProjectorsSend');
                 break;
             case 'Teleport Receive':
-                newRoomValue = newTeleportReceive + value;
-                newCabinValue = newCabins - value;
-                if (newRoomValue >= 0 && newCabinValue >= 0) {
-                    newCustomizedCabins.cabins = newCabinValue;
-                    if (newRoomValue === 0) {
-                        delete newCustomizedCabins.teleportProjectorsReceive;
-                    } else {
-                        newCustomizedCabins.teleportProjectorsReceive = newRoomValue;
-                    }
-                }
+                handleIncrementDecrement(newTeleportReceive, 1, 'teleportProjectorsReceive');
                 break;
             case 'Steerage':
                 let newSteerageValue = selectedHabitat.steerageCargo + (value * 5);
@@ -4406,7 +4247,6 @@ const CreateShipClass = ({ isExpanded }) => {
                     selectedHabitatSteerage = newSteerageValue;
                 }
                 break;
-
             default:
                 break;
         }
@@ -4434,6 +4274,41 @@ const CreateShipClass = ({ isExpanded }) => {
         );
     }
 
+    // const HabitatButton = ({ condition, onClick, className, label }) => {
+    //     return condition ? (
+    //         <button onClick={onClick} className={className}>
+    //             {label}
+    //         </button>
+    //     ) : null;
+    // };
+
+    // const HabitatSection = ({ label, habitatType, value, incrementValues, decrementValues, customizedCabins }) => {
+    //     return (
+    //         <>
+    //             <span className={styles.habitatInfoLabelCol1}>{label}:</span>
+    //             {decrementValues.map((decValue) => (
+    //                 <HabitatButton
+    //                     key={`dec-${decValue}`}
+    //                     condition={customizedCabins[habitatType] >= decValue}
+    //                     onClick={() => habitatIncrementDecrement(habitatType, -decValue)}
+    //                     className={styles[`habitatMinus${decValue}`]}
+    //                     label={`-${decValue}`}
+    //                 />
+    //             ))}
+    //             <span className={styles.habitatButton}>{customizedCabins[habitatType] || 0}</span>
+    //             {incrementValues.map((incValue) => (
+    //                 <HabitatButton
+    //                     key={`inc-${incValue}`}
+    //                     condition={customizedCabins.cabins >= incValue}
+    //                     onClick={() => habitatIncrementDecrement(habitatType, incValue)}
+    //                     className={styles[`habitatPlus${incValue}`]}
+    //                     label={`+${incValue}`}
+    //                 />
+    //             ))}
+    //         </>
+    //     );
+    // };
+
     // This is a component that displays all UI for customizing habitats.
     function HabitatCustomizationDisplay() {
         return (
@@ -4455,6 +4330,13 @@ const CreateShipClass = ({ isExpanded }) => {
                         <span className={styles.habitatButton}>
                             {selectedHabitat.customizedCabins.cabins || 0}
                         </span>
+                        {/* <HabitatSection
+                            label="Bunk- rooms"
+                            habitatType="bunkrooms"
+                            incrementValues={[1, 10, 100]}
+                            decrementValues={[1, 10, 100]}
+                            customizedCabins={selectedHabitat.customizedCabins}
+                        /> */}
                         <span className={styles.habitatInfoLabelCol1}>
                             Bunk- rooms:
                         </span>
