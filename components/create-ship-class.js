@@ -4161,8 +4161,6 @@ const CreateShipClass = ({ isExpanded }) => {
         let newTeleportReceive = selectedHabitat.customizedCabins.teleportProjectorsReceive || 0;
         let newSteerage = shipSteerageCargo;
 
-
-
         let newRoomValue = 0;
         let newCabinValue = 0;
 
@@ -4180,61 +4178,61 @@ const CreateShipClass = ({ isExpanded }) => {
         }
 
         switch (habitatType) {
-            case 'Bunkrooms':
+            case 'bunkrooms':
                 handleIncrementDecrement(newBunkrooms, 1, 'bunkrooms');
                 break;
-            case 'Cells':
+            case 'cells':
                 handleIncrementDecrement(newCells, 1, 'cells');
                 break;
-            case 'Luxury':
+            case 'luxuryCabins':
                 handleIncrementDecrement(newLuxury, 2, 'luxuryCabins');
                 break;
-            case 'Briefing':
+            case 'briefingRooms':
                 handleIncrementDecrement(newBriefing, 1, 'briefingRooms');
                 break;
-            case 'Establishment':
+            case 'establishments':
                 handleIncrementDecrement(newEstablishments, 2, 'establishments');
                 break;
-            case 'Hibernation':
+            case 'hibernationChambers':
                 handleIncrementDecrement(newHibernation, 0.25, 'hibernationChambers');
                 break;
-            case 'Labs':
+            case 'labs':
                 handleIncrementDecrement(newLabs, 2, 'labs');
                 break;
-            case 'Physics Labs':
+            case 'physicsLabs':
                 handleIncrementDecrement(newPhysicsLabs, 2, 'physicsLabs');
                 break;
-            case 'SuperScience Labs':
+            case 'superScienceLabs':
                 handleIncrementDecrement(newSuperScienceLabs, 2, 'superScienceLabs');
                 break;
-            case 'Mini Fab':
+            case 'miniFabs':
                 handleIncrementDecrement(newMiniFabs, 1, 'miniFabs');
                 break;
-            case 'Mini Robo Fab':
+            case 'miniRoboFabs':
                 handleIncrementDecrement(newMiniRoboFabs, 1, 'miniRoboFabs');
                 break;
-            case 'Mini Nano Fab':
+            case 'miniNanoFabs':
                 handleIncrementDecrement(newMiniNanoFabs, 1, 'miniNanoFabs');
                 break;
-            case 'Mini Rep Fab':
+            case 'miniReplicators':
                 handleIncrementDecrement(newMiniReplicators, 1, 'miniReplicators');
                 break;
-            case 'Office':
+            case 'offices':
                 handleIncrementDecrement(newOffices, 1, 'offices');
                 break;
-            case 'Sickbay':
+            case 'sickBays':
                 handleIncrementDecrement(newSickbays, 1, 'sickBays');
                 break;
-            case 'SickbayAuto':
+            case 'sickBaysAuto':
                 handleIncrementDecrement(newSickbaysAuto, 1, 'sickBaysAuto');
                 break;
-            case 'Teleport':
+            case 'teleportProjectors':
                 handleIncrementDecrement(newTeleport, 1, 'teleportProjectors');
                 break;
-            case 'Teleport Send':
+            case 'teleportProjectorsSend':
                 handleIncrementDecrement(newTeleportSend, 1, 'teleportProjectorsSend');
                 break;
-            case 'Teleport Receive':
+            case 'teleportProjectorsReceive':
                 handleIncrementDecrement(newTeleportReceive, 1, 'teleportProjectorsReceive');
                 break;
             case 'Steerage':
@@ -4274,40 +4272,44 @@ const CreateShipClass = ({ isExpanded }) => {
         );
     }
 
-    // const HabitatButton = ({ condition, onClick, className, label }) => {
-    //     return condition ? (
-    //         <button onClick={onClick} className={className}>
-    //             {label}
-    //         </button>
-    //     ) : null;
-    // };
+    const HabitatButton = ({ condition, onClick, className, label }) => {
+        return condition ? (
+            <button onClick={onClick} className={className}>
+                {label}
+            </button>
+        ) : null;
+    };
 
-    // const HabitatSection = ({ label, habitatType, value, incrementValues, decrementValues, customizedCabins }) => {
-    //     return (
-    //         <>
-    //             <span className={styles.habitatInfoLabelCol1}>{label}:</span>
-    //             {decrementValues.map((decValue) => (
-    //                 <HabitatButton
-    //                     key={`dec-${decValue}`}
-    //                     condition={customizedCabins[habitatType] >= decValue}
-    //                     onClick={() => habitatIncrementDecrement(habitatType, -decValue)}
-    //                     className={styles[`habitatMinus${decValue}`]}
-    //                     label={`-${decValue}`}
-    //                 />
-    //             ))}
-    //             <span className={styles.habitatButton}>{customizedCabins[habitatType] || 0}</span>
-    //             {incrementValues.map((incValue) => (
-    //                 <HabitatButton
-    //                     key={`inc-${incValue}`}
-    //                     condition={customizedCabins.cabins >= incValue}
-    //                     onClick={() => habitatIncrementDecrement(habitatType, incValue)}
-    //                     className={styles[`habitatPlus${incValue}`]}
-    //                     label={`+${incValue}`}
-    //                 />
-    //             ))}
-    //         </>
-    //     );
-    // };
+    const HabitatSection = ({ label, habitatType, incrementValues, decrementValues, customizedCabins, habitatIncrementDecrement }) => {
+        return (
+            <>
+                <span className={styles.habitatInfoLabelCol1}>{label}:</span>
+                {decrementValues
+                    .sort((a, b) => b - a) // Sort in descending order
+                    .map((decValue) => (
+                        <HabitatButton
+                            key={`dec-${decValue}`}
+                            condition={customizedCabins[habitatType] >= decValue}
+                            onClick={() => habitatIncrementDecrement(habitatType, -decValue)}
+                            className={styles[`habitatMinus${decValue}`]}
+                            label={`-${decValue.toLocaleString()}`}
+                        />
+                    ))}
+                <span className={styles.habitatButton}>{(customizedCabins[habitatType] || 0).toLocaleString()}</span>
+                {incrementValues.map((incValue) => (
+                    <HabitatButton
+                        key={`inc-${incValue}`}
+                        condition={customizedCabins.cabins >= incValue}
+                        onClick={() => habitatIncrementDecrement(habitatType, incValue)}
+                        className={styles[`habitatPlus${incValue}`]}
+                        label={`+${incValue.toLocaleString()}`}
+                    />
+                ))}
+            </>
+        );
+    };
+
+
 
     // This is a component that displays all UI for customizing habitats.
     function HabitatCustomizationDisplay() {
@@ -4328,709 +4330,160 @@ const CreateShipClass = ({ isExpanded }) => {
                             Cabins:
                         </span>
                         <span className={styles.habitatButton}>
-                            {selectedHabitat.customizedCabins.cabins || 0}
+                            {(selectedHabitat.customizedCabins.cabins || 0).toLocaleString()}
                         </span>
-                        {/* <HabitatSection
+                        <HabitatSection
                             label="Bunk- rooms"
                             habitatType="bunkrooms"
                             incrementValues={[1, 10, 100]}
                             decrementValues={[1, 10, 100]}
                             customizedCabins={selectedHabitat.customizedCabins}
-                        /> */}
-                        <span className={styles.habitatInfoLabelCol1}>
-                            Bunk- rooms:
-                        </span>
-                        {selectedHabitat.customizedCabins.bunkrooms >= 100 && <button
-                            onClick={() => habitatIncrementDecrement('Bunkrooms', -100)}
-                            className={styles.habitatMinus100}>
-                            -100
-                        </button>}
-                        {selectedHabitat.customizedCabins.bunkrooms >= 10 && <button
-                            onClick={() => habitatIncrementDecrement('Bunkrooms', -10)}
-                            className={styles.habitatMinus10}>
-                            -10
-                        </button>}
-                        {selectedHabitat.customizedCabins.bunkrooms >= 1 && <button
-                            onClick={() => habitatIncrementDecrement('Bunkrooms', -1)}
-                            className={styles.habitatMinus1}>
-                            -1
-                        </button>}
-                        <span className={styles.habitatButton}>
-                            {selectedHabitat.customizedCabins.bunkrooms || 0}
-                        </span>
-                        {selectedHabitat.customizedCabins.cabins >= 1 && <button
-                            onClick={() => habitatIncrementDecrement('Bunkrooms', 1)}
-                            className={styles.habitatPlus1}>
-                            +1
-                        </button>}
-                        {selectedHabitat.customizedCabins.cabins >= 10 && <button
-                            onClick={() => habitatIncrementDecrement('Bunkrooms', 10)}
-                            className={styles.habitatPlus10}>
-                            +10
-                        </button>}
-                        {selectedHabitat.customizedCabins.cabins >= 100 && <button
-                            onClick={() => habitatIncrementDecrement('Bunkrooms', 100)}
-                            className={styles.habitatPlus100}>
-                            +100
-                        </button>}
-                        <span className={styles.habitatInfoLabelCol1}>
-                            Cells:
-                        </span>
-                        {selectedHabitat.customizedCabins.cells >= 100 && <button
-                            onClick={() => habitatIncrementDecrement('Cells', -100)}
-                            className={styles.habitatMinus100}>
-                            -100
-                        </button>}
-                        {selectedHabitat.customizedCabins.cells >= 10 && <button
-                            onClick={() => habitatIncrementDecrement('Cells', -10)}
-                            className={styles.habitatMinus10}>
-                            -10
-                        </button>}
-                        {selectedHabitat.customizedCabins.cells >= 1 && <button
-                            onClick={() => habitatIncrementDecrement('Cells', -1)}
-                            className={styles.habitatMinus1}>
-                            -1
-                        </button>}
-                        <span className={styles.habitatButton}>
-                            {selectedHabitat.customizedCabins.cells || 0}
-                        </span>
-                        {selectedHabitat.customizedCabins.cabins >= 1 && <button
-                            onClick={() => habitatIncrementDecrement('Cells', 1)}
-                            className={styles.habitatPlus1}>
-                            +1
-                        </button>}
-                        {selectedHabitat.customizedCabins.cabins >= 10 && <button
-                            onClick={() => habitatIncrementDecrement('Cells', 10)}
-                            className={styles.habitatPlus10}>
-                            +10
-                        </button>}
-                        {selectedHabitat.customizedCabins.cabins >= 100 && <button
-                            onClick={() => habitatIncrementDecrement('Cells', 100)}
-                            className={styles.habitatPlus100}>
-                            +100
-                        </button>}
-                        <span className={styles.habitatInfoLabelCol1}>
-                            Luxury Cabins:
-                        </span>
-                        {selectedHabitat.customizedCabins.luxuryCabins >= 100 && <button
-                            onClick={() => habitatIncrementDecrement('Luxury', -100)}
-                            className={styles.habitatMinus100}>
-                            -100
-                        </button>}
-                        {selectedHabitat.customizedCabins.luxuryCabins >= 10 && <button
-                            onClick={() => habitatIncrementDecrement('Luxury', -10)}
-                            className={styles.habitatMinus10}>
-                            -10
-                        </button>}
-                        {selectedHabitat.customizedCabins.luxuryCabins >= 1 && <button
-                            onClick={() => habitatIncrementDecrement('Luxury', -1)}
-                            className={styles.habitatMinus1}>
-                            -1
-                        </button>}
-                        <span className={styles.habitatButton}>
-                            {selectedHabitat.customizedCabins.luxuryCabins || 0}
-                        </span>
-                        {selectedHabitat.customizedCabins.cabins >= 2 && <button
-                            onClick={() => habitatIncrementDecrement('Luxury', 1)}
-                            className={styles.habitatPlus1}>
-                            +1
-                        </button>}
-                        {selectedHabitat.customizedCabins.cabins >= 20 && <button
-                            onClick={() => habitatIncrementDecrement('Luxury', 10)}
-                            className={styles.habitatPlus10}>
-                            +10
-                        </button>}
-                        {selectedHabitat.customizedCabins.cabins >= 200 && <button
-                            onClick={() => habitatIncrementDecrement('Luxury', 100)}
-                            className={styles.habitatPlus100}>
-                            +100
-                        </button>}
-                        <span className={styles.habitatInfoLabelCol1}>
-                            Briefing Rooms:
-                        </span>
-                        {selectedHabitat.customizedCabins.briefingRooms >= 100 && <button
-                            onClick={() => habitatIncrementDecrement('Briefing', -100)}
-                            className={styles.habitatMinus100}>
-                            -100
-                        </button>}
-                        {selectedHabitat.customizedCabins.briefingRooms >= 10 && <button
-                            onClick={() => habitatIncrementDecrement('Briefing', -10)}
-                            className={styles.habitatMinus10}>
-                            -10
-                        </button>}
-                        {selectedHabitat.customizedCabins.briefingRooms >= 1 && <button
-                            onClick={() => habitatIncrementDecrement('Briefing', -1)}
-                            className={styles.habitatMinus1}>
-                            -1
-                        </button>}
-                        <span className={styles.habitatButton}>
-                            {selectedHabitat.customizedCabins.briefingRooms || 0}
-                        </span>
-                        {selectedHabitat.customizedCabins.cabins >= 1 && <button
-                            onClick={() => habitatIncrementDecrement('Briefing', 1)}
-                            className={styles.habitatPlus1}>
-                            +1
-                        </button>}
-                        {selectedHabitat.customizedCabins.cabins >= 10 && <button
-                            onClick={() => habitatIncrementDecrement('Briefing', 10)}
-                            className={styles.habitatPlus10}>
-                            +10
-                        </button>}
-                        {selectedHabitat.customizedCabins.cabins >= 100 && <button
-                            onClick={() => habitatIncrementDecrement('Briefing', 100)}
-                            className={styles.habitatPlus100}>
-                            +100
-                        </button>}
-                        <span className={styles.habitatInfoLabelCol1}>
-                            Establish- ments:
-                        </span>
-                        {selectedHabitat.customizedCabins.establishments >= 100 && <button
-                            onClick={() => habitatIncrementDecrement('Establishment', -100)}
-                            className={styles.habitatMinus100}>
-                            -100
-                        </button>}
-                        {selectedHabitat.customizedCabins.establishments >= 10 && <button
-                            onClick={() => habitatIncrementDecrement('Establishment', -10)}
-                            className={styles.habitatMinus10}>
-                            -10
-                        </button>}
-                        {selectedHabitat.customizedCabins.establishments >= 1 && <button
-                            onClick={() => habitatIncrementDecrement('Establishment', -1)}
-                            className={styles.habitatMinus1}>
-                            -1
-                        </button>}
-                        <span className={styles.habitatButton}>
-                            {selectedHabitat.customizedCabins.establishments || 0}
-                        </span>
-                        {selectedHabitat.customizedCabins.cabins >= 2 && <button
-                            onClick={() => habitatIncrementDecrement('Establishment', 1)}
-                            className={styles.habitatPlus1}>
-                            +1
-                        </button>}
-                        {selectedHabitat.customizedCabins.cabins >= 20 && <button
-                            onClick={() => habitatIncrementDecrement('Establishment', 10)}
-                            className={styles.habitatPlus10}>
-                            +10
-                        </button>}
-                        {selectedHabitat.customizedCabins.cabins >= 200 && <button
-                            onClick={() => habitatIncrementDecrement('Establishment', 100)}
-                            className={styles.habitatPlus100}>
-                            +100
-                        </button>}
-                        {shipTL >= 9 && <span className={styles.habitatInfoLabelCol1}>
-                            Hibernation Chambers:
-                        </span>}
-                        {selectedHabitat.customizedCabins.hibernationChambers >= 100 && shipTL >= 9 && <button
-                            onClick={() => habitatIncrementDecrement('Hibernation', -100)}
-                            className={styles.habitatMinus100}>
-                            -100
-                        </button>}
-                        {selectedHabitat.customizedCabins.hibernationChambers >= 10 && shipTL >= 9 && <button
-                            onClick={() => habitatIncrementDecrement('Hibernation', -10)}
-                            className={styles.habitatMinus10}>
-                            -10
-                        </button>}
-                        {selectedHabitat.customizedCabins.hibernationChambers >= 1 && shipTL >= 9 && <button
-                            onClick={() => habitatIncrementDecrement('Hibernation', -1)}
-                            className={styles.habitatMinus1}>
-                            -1
-                        </button>}
-                        {shipTL >= 9 && <span className={styles.habitatButton}>
-                            {selectedHabitat.customizedCabins.hibernationChambers || 0}
-                        </span>}
-                        {selectedHabitat.customizedCabins.cabins >= 0.25 && shipTL >= 9 && <button
-                            onClick={() => habitatIncrementDecrement('Hibernation', 1)}
-                            className={styles.habitatPlus1}>
-                            +1
-                        </button>}
-                        {selectedHabitat.customizedCabins.cabins >= 2.5 && shipTL >= 9 && <button
-                            onClick={() => habitatIncrementDecrement('Hibernation', 10)}
-                            className={styles.habitatPlus10}>
-                            +10
-                        </button>}
-                        {selectedHabitat.customizedCabins.cabins >= 25 && shipTL >= 9 && <button
-                            onClick={() => habitatIncrementDecrement('Hibernation', 100)}
-                            className={styles.habitatPlus100}>
-                            +100
-                        </button>}
-
-                        <span className={styles.habitatInfoLabelCol1}>
-                            Labs:
-                        </span>
-                        {selectedHabitat.customizedCabins.labs >= 100 && <button
-                            onClick={() => habitatIncrementDecrement('Labs', -100)}
-                            className={styles.habitatMinus100}>
-                            -100
-                        </button>}
-                        {selectedHabitat.customizedCabins.labs >= 10 && <button
-                            onClick={() => habitatIncrementDecrement('Labs', -10)}
-                            className={styles.habitatMinus10}>
-                            -10
-                        </button>}
-                        {selectedHabitat.customizedCabins.labs >= 1 && <button
-                            onClick={() => habitatIncrementDecrement('Labs', -1)}
-                            className={styles.habitatMinus1}>
-                            -1
-                        </button>}
-                        <span className={styles.habitatButton}>
-                            {selectedHabitat.customizedCabins.labs || 0}
-                        </span>
-                        {selectedHabitat.customizedCabins.cabins >= 2 && <button
-                            onClick={() => habitatIncrementDecrement('Labs', 1)}
-                            className={styles.habitatPlus1}>
-                            +1
-                        </button>}
-                        {selectedHabitat.customizedCabins.cabins >= 20 && <button
-                            onClick={() => habitatIncrementDecrement('Labs', 10)}
-                            className={styles.habitatPlus10}>
-                            +10
-                        </button>}
-                        {selectedHabitat.customizedCabins.cabins >= 200 && <button
-                            onClick={() => habitatIncrementDecrement('Labs', 100)}
-                            className={styles.habitatPlus100}>
-                            +100
-                        </button>}
-
-                        <span className={styles.habitatInfoLabelCol1}>
-                            Physics Labs:
-                        </span>
-                        {selectedHabitat.customizedCabins.physicsLabs >= 100 && <button
-                            onClick={() => habitatIncrementDecrement('Physics Labs', -100)}
-                            className={styles.habitatMinus100}>
-                            -100
-                        </button>}
-                        {selectedHabitat.customizedCabins.physicsLabs >= 10 && <button
-                            onClick={() => habitatIncrementDecrement('Physics Labs', -10)}
-                            className={styles.habitatMinus10}>
-                            -10
-                        </button>}
-                        {selectedHabitat.customizedCabins.physicsLabs >= 1 && <button
-                            onClick={() => habitatIncrementDecrement('Physics Labs', -1)}
-                            className={styles.habitatMinus1}>
-                            -1
-                        </button>}
-                        <span className={styles.habitatButton}>
-                            {selectedHabitat.customizedCabins.physicsLabs || 0}
-                        </span>
-                        {selectedHabitat.customizedCabins.cabins >= 2 && <button
-                            onClick={() => habitatIncrementDecrement('Physics Labs', 1)}
-                            className={styles.habitatPlus1}>
-                            +1
-                        </button>}
-                        {selectedHabitat.customizedCabins.cabins >= 20 && <button
-                            onClick={() => habitatIncrementDecrement('Physics Labs', 10)}
-                            className={styles.habitatPlus10}>
-                            +10
-                        </button>}
-                        {selectedHabitat.customizedCabins.cabins >= 200 && <button
-                            onClick={() => habitatIncrementDecrement('Physics Labs', 100)}
-                            className={styles.habitatPlus100}>
-                            +100
-                        </button>}
-
-                        {superScienceChecked === true && <span className={styles.habitatInfoLabelCol1}>
-                            Science! Labs:
-                        </span>}
-                        {selectedHabitat.customizedCabins.superScienceLabs >= 100 && superScienceChecked === true && <button
-                            onClick={() => habitatIncrementDecrement('SuperScience Labs', -100)}
-                            className={styles.habitatMinus100}>
-                            -100
-                        </button>}
-                        {selectedHabitat.customizedCabins.superScienceLabs >= 10 && superScienceChecked === true && <button
-                            onClick={() => habitatIncrementDecrement('SuperScience Labs', -10)}
-                            className={styles.habitatMinus10}>
-                            -10
-                        </button>}
-                        {selectedHabitat.customizedCabins.superScienceLabs >= 1 && superScienceChecked === true && <button
-                            onClick={() => habitatIncrementDecrement('SuperScience Labs', -1)}
-                            className={styles.habitatMinus1}>
-                            -1
-                        </button>}
-                        {superScienceChecked === true && <span className={styles.habitatButton}>
-                            {selectedHabitat.customizedCabins.superScienceLabs || 0}
-                        </span>}
-                        {selectedHabitat.customizedCabins.cabins >= 2 && superScienceChecked === true && <button
-                            onClick={() => habitatIncrementDecrement('SuperScience Labs', 1)}
-                            className={styles.habitatPlus1}>
-                            +1
-                        </button>}
-                        {selectedHabitat.customizedCabins.cabins >= 20 && superScienceChecked === true && <button
-                            onClick={() => habitatIncrementDecrement('SuperScience Labs', 10)}
-                            className={styles.habitatPlus10}>
-                            +10
-                        </button>}
-                        {selectedHabitat.customizedCabins.cabins >= 200 && superScienceChecked === true && <button
-                            onClick={() => habitatIncrementDecrement('SuperScience Labs', 100)}
-                            className={styles.habitatPlus100}>
-                            +100
-                        </button>}
-
-                        {shipTL >= 8 && <span className={styles.habitatInfoLabelCol1}>
-                            Minifac (Fabricators):
-                        </span>}
-                        {selectedHabitat.customizedCabins.miniFabs >= 100 && shipTL >= 8 && <button
-                            onClick={() => habitatIncrementDecrement('Mini Fab', -100)}
-                            className={styles.habitatMinus100}>
-                            -100
-                        </button>}
-                        {selectedHabitat.customizedCabins.miniFabs >= 10 && shipTL >= 8 && <button
-                            onClick={() => habitatIncrementDecrement('Mini Fab', -10)}
-                            className={styles.habitatMinus10}>
-                            -10
-                        </button>}
-                        {selectedHabitat.customizedCabins.miniFabs >= 1 && shipTL >= 8 && <button
-                            onClick={() => habitatIncrementDecrement('Mini Fab', -1)}
-                            className={styles.habitatMinus1}>
-                            -1
-                        </button>}
-                        {shipTL >= 8 && <span className={styles.habitatButton}>
-                            {selectedHabitat.customizedCabins.miniFabs || 0}
-                        </span>}
-                        {selectedHabitat.customizedCabins.cabins >= 1 && shipTL >= 8 && <button
-                            onClick={() => habitatIncrementDecrement('Mini Fab', 1)}
-                            className={styles.habitatPlus1}>
-                            +1
-                        </button>}
-                        {selectedHabitat.customizedCabins.cabins >= 10 && shipTL >= 8 && <button
-                            onClick={() => habitatIncrementDecrement('Mini Fab', 10)}
-                            className={styles.habitatPlus10}>
-                            +10
-                        </button>}
-                        {selectedHabitat.customizedCabins.cabins >= 100 && shipTL >= 8 && <button
-                            onClick={() => habitatIncrementDecrement('Mini Fab', 100)}
-                            className={styles.habitatPlus100}>
-                            +100
-                        </button>}
-
-                        {shipTL >= 10 && <span className={styles.habitatInfoLabelCol1}>
-                            Minifac (RoboFacs):
-                        </span>}
-                        {selectedHabitat.customizedCabins.miniRoboFabs >= 100 && shipTL >= 10 && <button
-                            onClick={() => habitatIncrementDecrement('Mini Robo Fab', -100)}
-                            className={styles.habitatMinus100}>
-                            -100
-                        </button>}
-                        {selectedHabitat.customizedCabins.miniRoboFabs >= 10 && shipTL >= 10 && <button
-                            onClick={() => habitatIncrementDecrement('Mini Robo Fab', -10)}
-                            className={styles.habitatMinus10}>
-                            -10
-                        </button>}
-                        {selectedHabitat.customizedCabins.miniRoboFabs >= 1 && shipTL >= 10 && <button
-                            onClick={() => habitatIncrementDecrement('Mini Robo Fab', -1)}
-                            className={styles.habitatMinus1}>
-                            -1
-                        </button>}
-                        {shipTL >= 10 && <span className={styles.habitatButton}>
-                            {selectedHabitat.customizedCabins.miniRoboFabs || 0}
-                        </span>}
-                        {selectedHabitat.customizedCabins.cabins >= 1 && shipTL >= 10 && <button
-                            onClick={() => habitatIncrementDecrement('Mini Robo Fab', 1)}
-                            className={styles.habitatPlus1}>
-                            +1
-                        </button>}
-                        {selectedHabitat.customizedCabins.cabins >= 10 && shipTL >= 10 && <button
-                            onClick={() => habitatIncrementDecrement('Mini Robo Fab', 10)}
-                            className={styles.habitatPlus10}>
-                            +10
-                        </button>}
-                        {selectedHabitat.customizedCabins.cabins >= 100 && shipTL >= 10 && <button
-                            onClick={() => habitatIncrementDecrement('Mini Robo Fab', 100)}
-                            className={styles.habitatPlus100}>
-                            +100
-                        </button>}
-                        {shipTL >= 11 && <span className={styles.habitatInfoLabelCol1}>
-                            Minifac (NanoFacs):
-                        </span>}
-                        {selectedHabitat.customizedCabins.miniNanoFabs >= 100 && shipTL >= 11 && <button
-                            onClick={() => habitatIncrementDecrement('Mini Nano Fab', -100)}
-                            className={styles.habitatMinus100}>
-                            -100
-                        </button>}
-                        {selectedHabitat.customizedCabins.miniNanoFabs >= 10 && shipTL >= 11 && <button
-                            onClick={() => habitatIncrementDecrement('Mini Nano Fab', -10)}
-                            className={styles.habitatMinus10}>
-                            -10
-                        </button>}
-                        {selectedHabitat.customizedCabins.miniNanoFabs >= 1 && shipTL >= 11 && <button
-                            onClick={() => habitatIncrementDecrement('Mini Nano Fab', -1)}
-                            className={styles.habitatMinus1}>
-                            -1
-                        </button>}
-                        {shipTL >= 11 && <span className={styles.habitatButton}>
-                            {selectedHabitat.customizedCabins.miniNanoFabs || 0}
-                        </span>}
-                        {selectedHabitat.customizedCabins.cabins >= 1 && shipTL >= 11 && <button
-                            onClick={() => habitatIncrementDecrement('Mini Nano Fab', 1)}
-                            className={styles.habitatPlus1}>
-                            +1
-                        </button>}
-                        {selectedHabitat.customizedCabins.cabins >= 10 && shipTL >= 11 && <button
-                            onClick={() => habitatIncrementDecrement('Mini Nano Fab', 10)}
-                            className={styles.habitatPlus10}>
-                            +10
-                        </button>}
-                        {selectedHabitat.customizedCabins.cabins >= 100 && shipTL >= 11 && <button
-                            onClick={() => habitatIncrementDecrement('Mini Nano Fab', 100)}
-                            className={styles.habitatPlus100}>
-                            +100
-                        </button>}
-
-                        {shipTL >= 12 && superScienceChecked === true && <span className={styles.habitatInfoLabelCol1}>
-                            Minifac (Replicators):
-                        </span>}
-                        {selectedHabitat.customizedCabins.miniReplicators >= 100 && shipTL >= 12 && superScienceChecked === true && <button
-                            onClick={() => habitatIncrementDecrement('Mini Rep Fab', -100)}
-                            className={styles.habitatMinus100}>
-                            -100
-                        </button>}
-                        {selectedHabitat.customizedCabins.miniReplicators >= 10 && shipTL >= 12 && superScienceChecked === true && <button
-                            onClick={() => habitatIncrementDecrement('Mini Rep Fab', -10)}
-                            className={styles.habitatMinus10}>
-                            -10
-                        </button>}
-                        {selectedHabitat.customizedCabins.miniReplicators >= 1 && shipTL >= 12 && superScienceChecked === true && <button
-                            onClick={() => habitatIncrementDecrement('Mini Rep Fab', -1)}
-                            className={styles.habitatMinus1}>
-                            -1
-                        </button>}
-                        {shipTL >= 12 && superScienceChecked === true && <span className={styles.habitatButton}>
-                            {selectedHabitat.customizedCabins.miniReplicators || 0}
-                        </span>}
-                        {selectedHabitat.customizedCabins.cabins >= 1 && shipTL >= 12 && superScienceChecked === true && <button
-                            onClick={() => habitatIncrementDecrement('Mini Rep Fab', 1)}
-                            className={styles.habitatPlus1}>
-                            +1
-                        </button>}
-                        {selectedHabitat.customizedCabins.cabins >= 10 && shipTL >= 12 && superScienceChecked === true && <button
-                            onClick={() => habitatIncrementDecrement('Mini Rep Fab', 10)}
-                            className={styles.habitatPlus10}>
-                            +10
-                        </button>}
-                        {selectedHabitat.customizedCabins.cabins >= 100 && shipTL >= 12 && superScienceChecked === true && <button
-                            onClick={() => habitatIncrementDecrement('Mini Rep Fab', 100)}
-                            className={styles.habitatPlus100}>
-                            +100
-                        </button>}
-                        <span className={styles.habitatInfoLabelCol1}>
-                            Offices:
-                        </span>
-                        {selectedHabitat.customizedCabins.offices >= 100 && <button
-                            onClick={() => habitatIncrementDecrement('Office', -100)}
-                            className={styles.habitatMinus100}>
-                            -100
-                        </button>}
-                        {selectedHabitat.customizedCabins.offices >= 10 && <button
-                            onClick={() => habitatIncrementDecrement('Office', -10)}
-                            className={styles.habitatMinus10}>
-                            -10
-                        </button>}
-                        {selectedHabitat.customizedCabins.offices >= 1 && <button
-                            onClick={() => habitatIncrementDecrement('Office', -1)}
-                            className={styles.habitatMinus1}>
-                            -1
-                        </button>}
-                        <span className={styles.habitatButton}>
-                            {selectedHabitat.customizedCabins.offices || 0}
-                        </span>
-                        {selectedHabitat.customizedCabins.cabins >= 1 && <button
-                            onClick={() => habitatIncrementDecrement('Office', 1)}
-                            className={styles.habitatPlus1}>
-                            +1
-                        </button>}
-                        {selectedHabitat.customizedCabins.cabins >= 10 && <button
-                            onClick={() => habitatIncrementDecrement('Office', 10)}
-                            className={styles.habitatPlus10}>
-                            +10
-                        </button>}
-                        {selectedHabitat.customizedCabins.cabins >= 100 && <button
-                            onClick={() => habitatIncrementDecrement('Office', 100)}
-                            className={styles.habitatPlus100}>
-                            +100
-                        </button>}
-
-                        <span className={styles.habitatInfoLabelCol1}>
-                            Sick Bays:
-                        </span>
-                        {selectedHabitat.customizedCabins.sickBays >= 100 && <button
-                            onClick={() => habitatIncrementDecrement('Sickbay', -100)}
-                            className={styles.habitatMinus100}>
-                            -100
-                        </button>}
-                        {selectedHabitat.customizedCabins.sickBays >= 10 && <button
-                            onClick={() => habitatIncrementDecrement('Sickbay', -10)}
-                            className={styles.habitatMinus10}>
-                            -10
-                        </button>}
-                        {selectedHabitat.customizedCabins.sickBays >= 1 && <button
-                            onClick={() => habitatIncrementDecrement('Sickbay', -1)}
-                            className={styles.habitatMinus1}>
-                            -1
-                        </button>}
-                        <span className={styles.habitatButton}>
-                            {selectedHabitat.customizedCabins.sickBays || 0}
-                        </span>
-                        {selectedHabitat.customizedCabins.cabins >= 1 && <button
-                            onClick={() => habitatIncrementDecrement('Sickbay', 1)}
-                            className={styles.habitatPlus1}>
-                            +1
-                        </button>}
-                        {selectedHabitat.customizedCabins.cabins >= 10 && <button
-                            onClick={() => habitatIncrementDecrement('Sickbay', 10)}
-                            className={styles.habitatPlus10}>
-                            +10
-                        </button>}
-                        {selectedHabitat.customizedCabins.cabins >= 100 && <button
-                            onClick={() => habitatIncrementDecrement('Sickbay', 100)}
-                            className={styles.habitatPlus100}>
-                            +100
-                        </button>}
-                        <span className={styles.habitatInfoLabelCol1}>
-                            Sick Bays (Auto):
-                        </span>
-                        {selectedHabitat.customizedCabins.sickBaysAuto >= 100 && <button
-                            onClick={() => habitatIncrementDecrement('SickbayAuto', -100)}
-                            className={styles.habitatMinus100}>
-                            -100
-                        </button>}
-                        {selectedHabitat.customizedCabins.sickBaysAuto >= 10 && <button
-                            onClick={() => habitatIncrementDecrement('SickbayAuto', -10)}
-                            className={styles.habitatMinus10}>
-                            -10
-                        </button>}
-                        {selectedHabitat.customizedCabins.sickBaysAuto >= 1 && <button
-                            onClick={() => habitatIncrementDecrement('SickbayAuto', -1)}
-                            className={styles.habitatMinus1}>
-                            -1
-                        </button>}
-                        <span className={styles.habitatButton}>
-                            {selectedHabitat.customizedCabins.sickBaysAuto || 0}
-                        </span>
-                        {selectedHabitat.customizedCabins.cabins >= 1 && <button
-                            onClick={() => habitatIncrementDecrement('SickbayAuto', 1)}
-                            className={styles.habitatPlus1}>
-                            +1
-                        </button>}
-                        {selectedHabitat.customizedCabins.cabins >= 10 && <button
-                            onClick={() => habitatIncrementDecrement('SickbayAuto', 10)}
-                            className={styles.habitatPlus10}>
-                            +10
-                        </button>}
-                        {selectedHabitat.customizedCabins.cabins >= 100 && <button
-                            onClick={() => habitatIncrementDecrement('SickbayAuto', 100)}
-                            className={styles.habitatPlus100}>
-                            +100
-                        </button>}
-                        {shipTL >= 12 && superScienceChecked === true && <span className={styles.habitatInfoLabelCol1}>
-                            Teleport Projectors:
-                        </span>}
-                        {selectedHabitat.customizedCabins.teleportProjectors >= 100 && shipTL >= 12 && superScienceChecked === true && <button
-                            onClick={() => habitatIncrementDecrement('Teleport', -100)}
-                            className={styles.habitatMinus100}>
-                            -100
-                        </button>}
-                        {selectedHabitat.customizedCabins.teleportProjectors >= 10 && shipTL >= 12 && superScienceChecked === true && <button
-                            onClick={() => habitatIncrementDecrement('Teleport', -10)}
-                            className={styles.habitatMinus10}>
-                            -10
-                        </button>}
-                        {selectedHabitat.customizedCabins.teleportProjectors >= 1 && shipTL >= 12 && superScienceChecked === true && <button
-                            onClick={() => habitatIncrementDecrement('Teleport', -1)}
-                            className={styles.habitatMinus1}>
-                            -1
-                        </button>}
-                        {shipTL >= 12 && superScienceChecked === true && <span className={styles.habitatButton}>
-                            {selectedHabitat.customizedCabins.teleportProjectors || 0}
-                        </span>}
-                        {selectedHabitat.customizedCabins.cabins >= 1 && shipTL >= 12 && superScienceChecked === true && <button
-                            onClick={() => habitatIncrementDecrement('Teleport', 1)}
-                            className={styles.habitatPlus1}>
-                            +1
-                        </button>}
-                        {selectedHabitat.customizedCabins.cabins >= 10 && shipTL >= 12 && superScienceChecked === true && <button
-                            onClick={() => habitatIncrementDecrement('Teleport', 10)}
-                            className={styles.habitatPlus10}>
-                            +10
-                        </button>}
-                        {selectedHabitat.customizedCabins.cabins >= 100 && shipTL >= 12 && superScienceChecked === true && <button
-                            onClick={() => habitatIncrementDecrement('Teleport', 100)}
-                            className={styles.habitatPlus100}>
-                            +100
-                        </button>}
-
-                        {shipTL >= 12 && superScienceChecked === true && <span className={styles.habitatInfoLabelCol1}>
-                            Tele. Proj. (Send):
-                        </span>}
-                        {selectedHabitat.customizedCabins.teleportProjectorsSend >= 100 && shipTL >= 12 && superScienceChecked === true && <button
-                            onClick={() => habitatIncrementDecrement('Teleport Send', -100)}
-                            className={styles.habitatMinus100}>
-                            -100
-                        </button>}
-                        {selectedHabitat.customizedCabins.teleportProjectorsSend >= 10 && shipTL >= 12 && superScienceChecked === true && <button
-                            onClick={() => habitatIncrementDecrement('Teleport Send', -10)}
-                            className={styles.habitatMinus10}>
-                            -10
-                        </button>}
-                        {selectedHabitat.customizedCabins.teleportProjectorsSend >= 1 && shipTL >= 12 && superScienceChecked === true && <button
-                            onClick={() => habitatIncrementDecrement('Teleport Send', -1)}
-                            className={styles.habitatMinus1}>
-                            -1
-                        </button>}
-                        {shipTL >= 12 && superScienceChecked === true && <span className={styles.habitatButton}>
-                            {selectedHabitat.customizedCabins.teleportProjectorsSend || 0}
-                        </span>}
-                        {selectedHabitat.customizedCabins.cabins >= 1 && shipTL >= 12 && superScienceChecked === true && <button
-                            onClick={() => habitatIncrementDecrement('Teleport Send', 1)}
-                            className={styles.habitatPlus1}>
-                            +1
-                        </button>}
-                        {selectedHabitat.customizedCabins.cabins >= 10 && shipTL >= 12 && superScienceChecked === true && <button
-                            onClick={() => habitatIncrementDecrement('Teleport Send', 10)}
-                            className={styles.habitatPlus10}>
-                            +10
-                        </button>}
-                        {selectedHabitat.customizedCabins.cabins >= 100 && shipTL >= 12 && superScienceChecked === true && <button
-                            onClick={() => habitatIncrementDecrement('Teleport Send', 100)}
-                            className={styles.habitatPlus100}>
-                            +100
-                        </button>}
-
-                        {shipTL >= 12 && superScienceChecked === true && <span className={styles.habitatInfoLabelCol1}>
-                            Tele. Proj. (Receive):
-                        </span>}
-                        {selectedHabitat.customizedCabins.teleportProjectorsReceive >= 100 && shipTL >= 12 && superScienceChecked === true && <button
-                            onClick={() => habitatIncrementDecrement('Teleport Receive', -100)}
-                            className={styles.habitatMinus100}>
-                            -100
-                        </button>}
-                        {selectedHabitat.customizedCabins.teleportProjectorsReceive >= 10 && shipTL >= 12 && superScienceChecked === true && <button
-                            onClick={() => habitatIncrementDecrement('Teleport Receive', -10)}
-                            className={styles.habitatMinus10}>
-                            -10
-                        </button>}
-                        {selectedHabitat.customizedCabins.teleportProjectorsReceive >= 1 && shipTL >= 12 && superScienceChecked === true && <button
-                            onClick={() => habitatIncrementDecrement('Teleport Receive', -1)}
-                            className={styles.habitatMinus1}>
-                            -1
-                        </button>}
-                        {shipTL >= 12 && superScienceChecked === true && <span className={styles.habitatButton}>
-                            {selectedHabitat.customizedCabins.teleportProjectorsReceive || 0}
-                        </span>}
-                        {selectedHabitat.customizedCabins.cabins >= 1 && shipTL >= 12 && superScienceChecked === true && <button
-                            onClick={() => habitatIncrementDecrement('Teleport Receive', 1)}
-                            className={styles.habitatPlus1}>
-                            +1
-                        </button>}
-                        {selectedHabitat.customizedCabins.cabins >= 10 && shipTL >= 12 && superScienceChecked === true && <button
-                            onClick={() => habitatIncrementDecrement('Teleport Receive', 10)}
-                            className={styles.habitatPlus10}>
-                            +10
-                        </button>}
-                        {selectedHabitat.customizedCabins.cabins >= 100 && shipTL >= 12 && superScienceChecked === true && <button
-                            onClick={() => habitatIncrementDecrement('Teleport Receive', 100)}
-                            className={styles.habitatPlus100}>
-                            +100
-                        </button>}
-
+                            habitatIncrementDecrement={habitatIncrementDecrement}
+                        />
+                        <HabitatSection
+                            label="Cells"
+                            habitatType="cells"
+                            incrementValues={[1, 10, 100]}
+                            decrementValues={[1, 10, 100]}
+                            customizedCabins={selectedHabitat.customizedCabins}
+                            habitatIncrementDecrement={habitatIncrementDecrement}
+                        />
+                        <HabitatSection
+                            label="Luxury Cabins"
+                            habitatType="luxuryCabins"
+                            incrementValues={[1, 10, 100]}
+                            decrementValues={[1, 10, 100]}
+                            customizedCabins={selectedHabitat.customizedCabins}
+                            habitatIncrementDecrement={habitatIncrementDecrement}
+                        />
+                        <HabitatSection
+                            label="Briefing Rooms"
+                            habitatType="briefingRooms"
+                            incrementValues={[1, 10, 100]}
+                            decrementValues={[1, 10, 100]}
+                            customizedCabins={selectedHabitat.customizedCabins}
+                            habitatIncrementDecrement={habitatIncrementDecrement}
+                        />
+                        <HabitatSection
+                            label="Establishments"
+                            habitatType="establishments"
+                            incrementValues={[1, 10, 100]}
+                            decrementValues={[1, 10, 100]}
+                            customizedCabins={selectedHabitat.customizedCabins}
+                            habitatIncrementDecrement={habitatIncrementDecrement}
+                        />
+                        {shipTL >= 9 && <HabitatSection
+                            label="Hibernation Chambers"
+                            habitatType="hibernationChambers"
+                            incrementValues={[1, 10, 100]}
+                            decrementValues={[1, 10, 100]}
+                            customizedCabins={selectedHabitat.customizedCabins}
+                            habitatIncrementDecrement={habitatIncrementDecrement}
+                        />}
+                        <HabitatSection
+                            label="Labs"
+                            habitatType="labs"
+                            incrementValues={[1, 10, 100]}
+                            decrementValues={[1, 10, 100]}
+                            customizedCabins={selectedHabitat.customizedCabins}
+                            habitatIncrementDecrement={habitatIncrementDecrement}
+                        />
+                        <HabitatSection
+                            label="Physics Labs"
+                            habitatType="physicsLabs"
+                            incrementValues={[1, 10, 100]}
+                            decrementValues={[1, 10, 100]}
+                            customizedCabins={selectedHabitat.customizedCabins}
+                            habitatIncrementDecrement={habitatIncrementDecrement}
+                        />
+                        {superScienceChecked === true && <HabitatSection
+                            label="Super Science Labs"
+                            habitatType="superScienceLabs"
+                            incrementValues={[1, 10, 100]}
+                            decrementValues={[1, 10, 100]}
+                            customizedCabins={selectedHabitat.customizedCabins}
+                            habitatIncrementDecrement={habitatIncrementDecrement}
+                        />}
+                        {shipTL >= 8 && <HabitatSection
+                            label="Mini Fabs"
+                            habitatType="miniFabs"
+                            incrementValues={[1, 10, 100]}
+                            decrementValues={[1, 10, 100]}
+                            customizedCabins={selectedHabitat.customizedCabins}
+                            habitatIncrementDecrement={habitatIncrementDecrement}
+                        />}
+                        {shipTL >= 10 && <HabitatSection
+                            label="Mini Robo Fabs"
+                            habitatType="miniRoboFabs"
+                            incrementValues={[1, 10, 100]}
+                            decrementValues={[1, 10, 100]}
+                            customizedCabins={selectedHabitat.customizedCabins}
+                            habitatIncrementDecrement={habitatIncrementDecrement}
+                        />}
+                        {shipTL >= 11 && <HabitatSection
+                            label="Mini Nano Fabs"
+                            habitatType="miniNanoFabs"
+                            incrementValues={[1, 10, 100]}
+                            decrementValues={[1, 10, 100]}
+                            customizedCabins={selectedHabitat.customizedCabins}
+                            habitatIncrementDecrement={habitatIncrementDecrement}
+                        />}
+                        {shipTL >= 12 && superScienceChecked === true && <HabitatSection
+                            label="Mini Replicators"
+                            habitatType="miniReplicators"
+                            incrementValues={[1, 10, 100]}
+                            decrementValues={[1, 10, 100]}
+                            customizedCabins={selectedHabitat.customizedCabins}
+                            habitatIncrementDecrement={habitatIncrementDecrement}
+                        />}
+                        <HabitatSection
+                            label="Offices"
+                            habitatType="offices"
+                            incrementValues={[1, 10, 100]}
+                            decrementValues={[1, 10, 100]}
+                            customizedCabins={selectedHabitat.customizedCabins}
+                            habitatIncrementDecrement={habitatIncrementDecrement}
+                        />
+                        <HabitatSection
+                            label="Sick Bays"
+                            habitatType="sickBays"
+                            incrementValues={[1, 10, 100]}
+                            decrementValues={[1, 10, 100]}
+                            customizedCabins={selectedHabitat.customizedCabins}
+                            habitatIncrementDecrement={habitatIncrementDecrement}
+                        />
+                        <HabitatSection
+                            label="Sick Bays (Auto)"
+                            habitatType="sickBaysAuto"
+                            incrementValues={[1, 10, 100]}
+                            decrementValues={[1, 10, 100]}
+                            customizedCabins={selectedHabitat.customizedCabins}
+                            habitatIncrementDecrement={habitatIncrementDecrement}
+                        />
+                        {shipTL >= 12 && superScienceChecked === true && <HabitatSection
+                            label="Teleport Projectors"
+                            habitatType="teleportProjectors"
+                            incrementValues={[1, 10, 100]}
+                            decrementValues={[1, 10, 100]}
+                            customizedCabins={selectedHabitat.customizedCabins}
+                            habitatIncrementDecrement={habitatIncrementDecrement}
+                        />}
+                        {shipTL >= 12 && superScienceChecked === true && <HabitatSection
+                            label="Tele. Proj. (Send)"
+                            habitatType="teleportProjectorsSend"
+                            incrementValues={[1, 10, 100]}
+                            decrementValues={[1, 10, 100]}
+                            customizedCabins={selectedHabitat.customizedCabins}
+                            habitatIncrementDecrement={habitatIncrementDecrement}
+                        />}
+                        {shipTL >= 12 && superScienceChecked === true && <HabitatSection
+                            label="Tele. Proj. (Recieve)"
+                            habitatType="teleportProjectorsReceive"
+                            incrementValues={[1, 10, 100]}
+                            decrementValues={[1, 10, 100]}
+                            customizedCabins={selectedHabitat.customizedCabins}
+                            habitatIncrementDecrement={habitatIncrementDecrement}
+                        />}
                         <span className={styles.habitatInfoLabelCol1}>
                             Steerage Cargo (tons):
                         </span>
