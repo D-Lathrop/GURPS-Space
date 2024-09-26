@@ -161,6 +161,29 @@
     display: block;
 }
 
+%automationAndLifeSuppLabelCommonStyles {
+    color: $secondaryColor2;
+    font-size: 17px;
+    display: block;
+    margin: 6px 0px 0px 8px;
+    align-self: center;
+}
+
+.lifeSuppLabel {
+    @extend %automationAndLifeSuppLabelCommonStyles;
+    grid-column: span 3;
+}
+
+.automationLabelCol1 {
+    @extend %automationAndLifeSuppLabelCommonStyles;
+    grid-column: 1 / span 4;
+}
+
+.automationLabelCol2 {
+    @extend %automationAndLifeSuppLabelCommonStyles;
+    grid-column: 5 / span 4;
+}
+
 .moduleLabel {
     color: $secondaryColor1;
     font-size: 20px;
@@ -384,23 +407,28 @@
     @extend %statComponentButtonCommonStyles;
 }
 
-.statTitleExpanded {
+%statTitleCommonStyles {
     color: $secondaryColor2;
     margin: 3px 0px;
-    grid-column: span 4;
     align-self: center;
     justify-self: center;
     font-size: 22px;
 }
 
+.statTitleExpanded {
+    @extend %statTitleCommonStyles;
+    grid-column: span 4;
+}
+
 .statTitleCollapsed {
-    color: $secondaryColor2;
-    margin: 3px 0px;
+    @extend %statTitleCommonStyles;
     grid-column: 1/ span 4;
     grid-row: 1 / span 1;
-    align-self: center;
-    justify-self: center;
-    font-size: 22px;
+}
+
+.statTitle5ColExpanded {
+    @extend %statTitleCommonStyles;
+    grid-column: span 5;
 }
 
 .habitatStatTitle {

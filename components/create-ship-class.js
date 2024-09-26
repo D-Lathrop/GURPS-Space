@@ -186,6 +186,7 @@ const CreateShipClass = ({ isExpanded }) => {
     const [currentCustomizationPanel, setCurrentCustomizationPanel] = useState('Habitats');
     const [habitatsArr, setHabitatsArr] = useState([{}]);
     const [selectedHabitat, setSelectedHabitat] = useState(null);
+    const [enginesArr, setEnginesArr] = useState([{}]);
 
     // Design Switch and Feature State Variables
     const [shipHardenedArmorCost, setHardenedArmorCost] = useState(0);
@@ -247,13 +248,6 @@ const CreateShipClass = ({ isExpanded }) => {
     // ****************************************************************************************************************************************************
     // ****************************************************************************************************************************************************
     // Modules and Overall Ship Stats - START
-
-    const engineKeys = ['Chemical', 'HEDM', 'Ion Drive', 'Mass Driver', 'Nuclear Thermal Rocket',
-        'Nuclear Light Bulb', 'Nuclear Saltwater Rocket', 'External Pulsed Plasma', 'Fusion Pulse Drive',
-        'Advanced Fusion Pulse Drive', 'Super Fusion Pulse Drive', 'Fusion Rocket', 'Fusion Torch',
-        'Super Fusion Torch', 'Antimatter Thermal Rocket', 'Antimatter Plasma Rocket', 'Antimatter Plasma Torch',
-        'Super Antimatter Plasma Torch', 'Antimatter Pion', 'Antimatter Pion Torch', 'Total Conversion Torch',
-        'Super Conversion Torch', 'Rotary', 'Standard', 'Hot Reactionless', 'Super Reactionless', 'Subwarp']
 
     // This useEffect handles changes of the SM to calculate basic ship statistics including mass, length, handling, SR, ST, and HP.  It also displays more readable values to the page.
     useEffect(() => {
@@ -1466,46 +1460,48 @@ const CreateShipClass = ({ isExpanded }) => {
                             const defaultNumberCabins = SMData.Cabins;
                             if (Object.keys(currentModule.customizedCabins).length > 0) {
                                 longOccupancy += (currentModule.customizedCabins.cabins ?? 0) * 2;
-                                longOccupancy += (currentModule.customizedCabins.Luxury ?? 0) * 2;
-                                longOccupancy += (currentModule.customizedCabins.Bunkrooms ?? 0) * 4;
-                                longOccupancy += (currentModule.customizedCabins.Cells ?? 0) * 4;
-                                longOccupancy += (currentModule.customizedCabins.Hibernation ?? 0) * 1;
-                                shortOccupancyCrew += (currentModule.customizedCabins.Labs ?? 0) * 2;
-                                shortOccupancyCrew += (currentModule.customizedCabins['Physics Labs'] ?? 0) * 2;
-                                shortOccupancyCrew += (currentModule.customizedCabins['SuperScience Labs'] ?? 0) * 2;
-                                shortOccupancyCrew += (currentModule.customizedCabins.Establishment ?? 0) * 2;
-                                shortOccupancyCrew += (currentModule.customizedCabins.Office ?? 0) * 2;
-                                shortOccupancyPassengers += (currentModule.customizedCabins.Briefing ?? 0) * 10;
-                                shortOccupancyPassengers += (currentModule.customizedCabins.Establishment ?? 0) * 30;
+                                longOccupancy += (currentModule.customizedCabins.luxuryCabins ?? 0) * 2;
+                                longOccupancy += (currentModule.customizedCabins.bunkrooms ?? 0) * 4;
+                                longOccupancy += (currentModule.customizedCabins.cells ?? 0) * 4;
+                                longOccupancy += (currentModule.customizedCabins.hibernationChambers ?? 0) * 1;
+                                shortOccupancyCrew += (currentModule.customizedCabins.labs ?? 0) * 2;
+                                shortOccupancyCrew += (currentModule.customizedCabins.physicsLabs ?? 0) * 2;
+                                shortOccupancyCrew += (currentModule.customizedCabins.superScienceLabs ?? 0) * 2;
+                                shortOccupancyCrew += (currentModule.customizedCabins.establishments ?? 0) * 2;
+                                shortOccupancyCrew += (currentModule.customizedCabins.offices ?? 0) * 2;
+                                shortOccupancyPassengers += (currentModule.customizedCabins.briefingRooms ?? 0) * 10;
+                                shortOccupancyPassengers += (currentModule.customizedCabins.establishments ?? 0) * 30;
+
+
 
                                 cabins += currentModule.customizedCabins.cabins ?? 0;
-                                luxuryCabins += currentModule.customizedCabins.Luxury ?? 0;
-                                bunkrooms += currentModule.customizedCabins.Bunkrooms ?? 0;
-                                cells += currentModule.customizedCabins.Cells ?? 0;
-                                hibernationChambers += currentModule.customizedCabins.Hibernation ?? 0;
-                                labs += currentModule.customizedCabins.Labs ?? 0;
-                                physicsLabs += currentModule.customizedCabins['Physics Labs'] ?? 0;
-                                superScienceLabs += currentModule.customizedCabins['SuperScience Labs'] ?? 0;
-                                establishments += currentModule.customizedCabins.Establishment ?? 0;
-                                offices += currentModule.customizedCabins.Office ?? 0;
-                                briefingRooms += currentModule.customizedCabins.Briefing ?? 0;
-                                fabricators += currentModule.customizedCabins['Mini Fab'] ?? 0;
-                                roboFacs += currentModule.customizedCabins['Mini Robo Fab'] ?? 0;
-                                nanoFacs += currentModule.customizedCabins['Mini Nano Fab'] ?? 0;
-                                replicators += currentModule.customizedCabins['Mini Rep Fab'] ?? 0;
-                                sickbays += currentModule.customizedCabins.Sickbay ?? 0;
-                                sickbaysAuto += currentModule.customizedCabins.SickbayAuto ?? 0;
-                                teleProjectors += currentModule.customizedCabins.Teleport ?? 0;
-                                teleProjectorsSend += currentModule.customizedCabins['Teleport Send'] ?? 0;
-                                teleProjectorsReceive += currentModule.customizedCabins['Teleport Receive'] ?? 0;
+                                luxuryCabins += currentModule.customizedCabins.luxuryCabins ?? 0;
+                                bunkrooms += currentModule.customizedCabins.bunkrooms ?? 0;
+                                cells += currentModule.customizedCabins.cells ?? 0;
+                                hibernationChambers += currentModule.customizedCabins.hibernationChambers ?? 0;
+                                labs += currentModule.customizedCabins.labs ?? 0;
+                                physicsLabs += currentModule.customizedCabins.physicsLabs ?? 0;
+                                superScienceLabs += currentModule.customizedCabins.superScienceLabs ?? 0;
+                                establishments += currentModule.customizedCabins.establishments ?? 0;
+                                offices += currentModule.customizedCabins.offices ?? 0;
+                                briefingRooms += currentModule.customizedCabins.briefingRooms ?? 0;
+                                fabricators += currentModule.customizedCabins.miniFabs ?? 0;
+                                roboFacs += currentModule.customizedCabins.miniRoboFabs ?? 0;
+                                nanoFacs += currentModule.customizedCabins.miniNanoFabs ?? 0;
+                                replicators += currentModule.customizedCabins.miniReplicators ?? 0;
+                                sickbays += currentModule.customizedCabins.sickBays ?? 0;
+                                sickbaysAuto += currentModule.customizedCabins.sickBaysAuto ?? 0;
+                                teleProjectors += currentModule.customizedCabins.teleportProjectors ?? 0;
+                                teleProjectorsSend += currentModule.customizedCabins.teleportProjectorsSend ?? 0;
+                                teleProjectorsReceive += currentModule.customizedCabins.teleportProjectorsReceive ?? 0;
 
-                                moduleCost += (currentModule.customizedCabins.SickbayAuto ?? 0) * 100000;
-                                moduleCost += (currentModule.customizedCabins.Teleport ?? 0) * 20000000;
-                                moduleCost += (currentModule.customizedCabins['Teleport Send'] ?? 0) * 10000000;
-                                moduleCost += (currentModule.customizedCabins['Teleport Receive'] ?? 0) * 10000000;
-                                moduleCost += (currentModule.customizedCabins.Labs ?? 0) * 1000000;
-                                moduleCost += (currentModule.customizedCabins['Physics Labs'] ?? 0) * 10000000;
-                                moduleCost += (currentModule.customizedCabins['SuperScience Labs'] ?? 0) * 30000000;
+                                moduleCost += (currentModule.customizedCabins.sickBaysAuto ?? 0) * 100000;
+                                moduleCost += (currentModule.customizedCabins.teleportProjectors ?? 0) * 20000000;
+                                moduleCost += (currentModule.customizedCabins.teleportProjectorsSend ?? 0) * 10000000;
+                                moduleCost += (currentModule.customizedCabins.teleportProjectorsReceive ?? 0) * 10000000;
+                                moduleCost += (currentModule.customizedCabins.labs ?? 0) * 1000000;
+                                moduleCost += (currentModule.customizedCabins.physicsLabs ?? 0) * 10000000;
+                                moduleCost += (currentModule.customizedCabins.superScienceLabs ?? 0) * 30000000;
 
                                 pressCargo += currentModule.steerageCargo;
                             } else {
@@ -1705,21 +1701,6 @@ const CreateShipClass = ({ isExpanded }) => {
                 if (currentModule.powerGen !== undefined) {
                     currentModule.powerGen = modulePowerGeneration;
                 }
-
-                // let newModuleListObj = {
-                //     moduleKey: moduleKey,
-                //     moduleCategory: moduleCategory,
-                //     moduleLocation1: moduleLocation1,
-                //     moduleLocation2: moduleLocation2,
-                //     moduleNumber: moduleNumber,
-                //     modulePowerDemand: modulePowerDemand,
-                //     baseModuleCost: moduleCost,
-                //     moduleCost: moduleCost,
-                //     baseModuleWorkspaces: moduleWorkspaces,
-                //     moduleWorkspaces: moduleWorkspaces,
-                //     alreadyCustomized: false
-                // }
-
             }
         }
 
@@ -1765,6 +1746,27 @@ const CreateShipClass = ({ isExpanded }) => {
         setStardriveNeedsFuel(stardriveNeedsFuel);
         setHeatSinkCount(heatSinks);
 
+        setShipCabins(cabins);
+        setLuxuryCabins(luxuryCabins);
+        setBunkrooms(bunkrooms);
+        setCells(cells);
+        setHibernationChambers(hibernationChambers);
+        setLabs(labs);
+        setPhysicsLabs(physicsLabs);
+        setSuperScienceLabs(superScienceLabs);
+        setEstablishments(establishments);
+        setOffices(offices);
+        setBriefingRooms(briefingRooms);
+        setMiniFabricators(fabricators);
+        setMiniRoboFacs(roboFacs);
+        setMiniNanoFacs(nanoFacs);
+        setMiniReplicators(replicators);
+        setSickBays(sickbays);
+        setSickBaysAuto(sickbaysAuto);
+        setTeleportProjectors(teleProjectors);
+        setTeleportProjectorsSend(teleProjectorsSend);
+        setTeleportProjectorsReceive(teleProjectorsReceive);
+
         if (JSON.stringify(newShipModules) !== JSON.stringify(currentShipModules)) {
             setModules([...newShipModules]);
         }
@@ -1778,15 +1780,6 @@ const CreateShipClass = ({ isExpanded }) => {
 
     // This useEffect updates the shipEngineAccelDelta array based on ship modules and the fuelObj.
     useEffect(() => {
-
-        // shipModule.moduleKey = "Fusion Torch"
-        // shipModule.fuelTypes = ["HydrogenFuel", "Water"]
-        // shipFuelObj = {HydrogenFuel: 4; Water: 1}
-        // shipModule.accel = 0.5
-        // shipModule.mpsTank = 15
-        // Final result for newEngineAccelDelta should be: [{ engineType: "Fusion Torch", fuelType: "HydrogenFuel", accel: 0.5, deltaV: 60}, { engineType: "Fusion Torch", fuelType: "Water", accel: 1.5, deltaV: 5}]
-        // If there were two "Fusion Torch" modules the final result for newEngineAccelDelta should be: [{ engineType: "Fusion Torch", fuelType: "HydrogenFuel", accel: 1, deltaV: 60}, { engineType: "Fusion Torch", fuelType: "Water", accel: 3, deltaV: 5}]        
-
         let newEngineAccelDelta = []
 
         processShipModules(shipModules, (shipModule) => {
@@ -2110,34 +2103,34 @@ const CreateShipClass = ({ isExpanded }) => {
     // This function sets shipCabinsCapacity, and shipLongOccupancy when the total life support checkbox is changed.
     // It also resets all habitat state variables because the cabins and cabins capacity are fundamental variables the habitat 
     // variables depend on.
-    function handleTotalLifeSupportChange(event) {
-        const totalLifeSupportBoolean = event.target.checked
-        if (totalLifeSupportBoolean === true) {
-            setShipCabins(shipCabinsCapacity / 2)
-            setLongOccupancy((shipCabinsCapacity / 2) * 2)
-        } else if (totalLifeSupportBoolean === false) {
-            setShipCabins(shipCabinsCapacity)
-            setLongOccupancy(shipCabinsCapacity * 2)
-        }
-        setTotalLifeSupport(totalLifeSupportBoolean)
-        setBunkrooms(0)
-        setCells(0)
-        setLuxuryCabins(0)
-        setBriefingRooms(0)
-        setEstablishments(0)
-        setHibernationChambers(0)
-        setLabs(0)
-        setPhysicsLabs(0)
-        setSuperScienceLabs(0)
-        setMiniFabricators(0)
-        setMiniNanoFacs(0)
-        setMiniRoboFacs(0)
-        setMiniReplicators(0)
-        setOffices(0)
-        setSickBays(0)
-        setTeleportProjectors(0)
-        setSteerageCargo(0)
-    }
+    // function handleTotalLifeSupportChange(event) {
+    //     const totalLifeSupportBoolean = event.target.checked
+    //     if (totalLifeSupportBoolean === true) {
+    //         setShipCabins(shipCabinsCapacity / 2)
+    //         setLongOccupancy((shipCabinsCapacity / 2) * 2)
+    //     } else if (totalLifeSupportBoolean === false) {
+    //         setShipCabins(shipCabinsCapacity)
+    //         setLongOccupancy(shipCabinsCapacity * 2)
+    //     }
+    //     setTotalLifeSupport(totalLifeSupportBoolean)
+    //     setBunkrooms(0)
+    //     setCells(0)
+    //     setLuxuryCabins(0)
+    //     setBriefingRooms(0)
+    //     setEstablishments(0)
+    //     setHibernationChambers(0)
+    //     setLabs(0)
+    //     setPhysicsLabs(0)
+    //     setSuperScienceLabs(0)
+    //     setMiniFabricators(0)
+    //     setMiniNanoFacs(0)
+    //     setMiniRoboFacs(0)
+    //     setMiniReplicators(0)
+    //     setOffices(0)
+    //     setSickBays(0)
+    //     setTeleportProjectors(0)
+    //     setSteerageCargo(0)
+    // }
 
     // This useEffect updates the shipOccupancy state variable when the shipShortOccupancyCrew, shipShortOccupancyPassengers, 
     // or shipLongOccupancy state variables change.
@@ -2153,35 +2146,35 @@ const CreateShipClass = ({ isExpanded }) => {
     }, [shipShortOccupancyCrew, shipShortOccupancyPassengers, shipLongOccupancy])
 
     // This useEffect resets the ship cargo, habitat, and selected weapon state variables when the shipModules state variable changes.
-    useEffect(() => {
-        setRefrigeratedCargo(0)
-        setShieldedCargo(0)
-        setPressCargo(0)
-        setWeaponSubType('')
-        setSelectedWeaponType('')
-        setSelectedMountType('')
-        setSelectedUninstalledCargo(0)
-        setWeaponList([])
-        resetWeaponStats()
-        setTotalLifeSupport(false)
-        setBunkrooms(0)
-        setCells(0)
-        setLuxuryCabins(0)
-        setBriefingRooms(0)
-        setEstablishments(0)
-        setHibernationChambers(0)
-        setLabs(0)
-        setPhysicsLabs(0)
-        setSuperScienceLabs(0)
-        setMiniFabricators(0)
-        setMiniNanoFacs(0)
-        setMiniRoboFacs(0)
-        setMiniReplicators(0)
-        setOffices(0)
-        setSickBays(0)
-        setTeleportProjectors(0)
-        setSteerageCargo(0)
-    }, [shipModules])
+    // useEffect(() => {
+    //     setRefrigeratedCargo(0)
+    //     setShieldedCargo(0)
+    //     setPressCargo(0)
+    //     setWeaponSubType('')
+    //     setSelectedWeaponType('')
+    //     setSelectedMountType('')
+    //     setSelectedUninstalledCargo(0)
+    //     setWeaponList([])
+    //     resetWeaponStats()
+    //     setTotalLifeSupport(false)
+    //     setBunkrooms(0)
+    //     setCells(0)
+    //     setLuxuryCabins(0)
+    //     setBriefingRooms(0)
+    //     setEstablishments(0)
+    //     setHibernationChambers(0)
+    //     setLabs(0)
+    //     setPhysicsLabs(0)
+    //     setSuperScienceLabs(0)
+    //     setMiniFabricators(0)
+    //     setMiniNanoFacs(0)
+    //     setMiniRoboFacs(0)
+    //     setMiniReplicators(0)
+    //     setOffices(0)
+    //     setSickBays(0)
+    //     setTeleportProjectors(0)
+    //     setSteerageCargo(0)
+    // }, [shipModules])
 
     // This useEffect updates the shipUPressCargoCapacity, shipRefrigeratedCargo, and shipShieldedCargo state variables when the user 
     // changes them.
@@ -2224,173 +2217,49 @@ const CreateShipClass = ({ isExpanded }) => {
         }
     }
 
+
+    const HabitatStat = ({ label, value }) => {
+        return (
+            <>
+                <span className={styles.habitatStatsLabel}>{label}:</span>
+                <span className={styles.habitatStatsValue}>{value.toLocaleString()}</span>
+            </>
+        );
+    };
+
     // This function displays habitat information.
     function habitatsDisplay() {
         return (
             <div className={styles.habitatStatsSubContainer}>
                 <h2 className={styles.habitatStatTitle}>Habitat Stat Block</h2>
-                <span className={styles.habitatStatsLabel}>
-                    Workspaces:
-                </span>
-                <span className={styles.habitatStatsValue}>
-                    {shipWorkspaces.toLocaleString()}
-                </span>
-                <span className={styles.habitatStatsLabel}>
-                    Long Term Occupancy:
-                </span>
-                <span className={styles.habitatStatsValue}>
-                    {shipLongOccupancy.toLocaleString()}
-                </span>
-                <span className={styles.habitatStatsLabel}>
-                    Short Term Occupancy:
-                </span>
-                <span className={styles.habitatStatsValue}>
-                    {shipShortOccupancy.toLocaleString()}
-                </span>
-                <span className={styles.habitatStatsLabel}>
-                    Cabins Capacity:
-                </span>
-                <span className={styles.habitatStatsValue}>
-                    {shipCabinsCapacity.toLocaleString()}
-                </span>
-                <span className={styles.habitatStatsLabel}>
-                    Short Occ. (Crew):
-                </span>
-                <span className={styles.habitatStatsValue}>
-                    {shipShortOccupancyCrew.toLocaleString()}
-                </span>
-                <span className={styles.habitatStatsLabel}>
-                    Short Occ. (Pax.):
-                </span>
-                <span className={styles.habitatStatsValue}>
-                    {shipShortOccupancyPassengers.toLocaleString()}
-                </span>
-                {shipCabins > 0 && <span className={styles.habitatStatsLabel}>
-                    Cabins:
-                </span>}
-                {shipCabins > 0 && <span className={styles.habitatStatsValue}>
-                    {shipCabins.toLocaleString()}
-                </span>}
-                {shipSeats > 0 && <span className={styles.habitatStatsLabel}>
-                    Ship Seats:
-                </span>}
-                {shipSeats > 0 && <span className={styles.habitatStatsValue}>
-                    {shipSeats.toLocaleString()}
-                </span>}
-                {shipAreas > 0 && <span className={styles.habitatStatsLabel}>
-                    Areas:
-                </span>}
-                {shipAreas > 0 && <span className={styles.habitatStatsValue}>
-                    {shipAreas.toLocaleString()}
-                </span>}
-                {shipHibernationChambers > 0 && <span className={styles.habitatStatsLabel}>
-                    Hibernation Chambers:
-                </span>}
-                {shipHibernationChambers > 0 && <span className={styles.habitatStatsValue}>
-                    {shipHibernationChambers.toLocaleString()}
-                </span>}
-                {shipLuxuryCabins > 0 && <span className={styles.habitatStatsLabel}>
-                    Luxury Cabins:
-                </span>}
-                {shipLuxuryCabins > 0 && <span className={styles.habitatStatsValue}>
-                    {shipLuxuryCabins.toLocaleString()}
-                </span>}
-                {shipOffices > 0 && <span className={styles.habitatStatsLabel}>
-                    Offices:
-                </span>}
-                {shipOffices > 0 && <span className={styles.habitatStatsValue}>
-                    {shipOffices.toLocaleString()}
-                </span>}
-                {shipEstablishments > 0 && <span className={styles.habitatStatsLabel}>
-                    Establish- ments:
-                </span>}
-                {shipEstablishments > 0 && <span className={styles.habitatStatsValue}>
-                    {shipEstablishments.toLocaleString()}
-                </span>}
-                {shipCells > 0 && <span className={styles.habitatStatsLabel}>
-                    Cells:
-                </span>}
-                {shipCells > 0 && <span className={styles.habitatStatsValue}>
-                    {shipCells.toLocaleString()}
-                </span>}
-                {shipBriefingRooms > 0 && <span className={styles.habitatStatsLabel}>
-                    Briefing Rooms:
-                </span>}
-                {shipBriefingRooms > 0 && <span className={styles.habitatStatsValue}>
-                    {shipBriefingRooms.toLocaleString()}
-                </span>}
-                {shipLabs > 0 && <span className={styles.habitatStatsLabel}>
-                    Labs:
-                </span>}
-                {shipLabs > 0 && <span className={styles.habitatStatsValue}>
-                    {shipLabs.toLocaleString()}
-                </span>}
-                {shipPhysicsLabs > 0 && <span className={styles.habitatStatsLabel}>
-                    Physics Labs:
-                </span>}
-                {shipPhysicsLabs > 0 && <span className={styles.habitatStatsValue}>
-                    {shipPhysicsLabs.toLocaleString()}
-                </span>}
-                {shipSuperScienceLabs > 0 && <span className={styles.habitatStatsLabel}>
-                    Super Science Labs:
-                </span>}
-                {shipSuperScienceLabs > 0 && <span className={styles.habitatStatsValue}>
-                    {shipSuperScienceLabs.toLocaleString()}
-                </span>}
-                {shipMiniFabricators > 0 && <span className={styles.habitatStatsLabel}>
-                    Mini- Fabs:
-                </span>}
-                {shipMiniFabricators > 0 && <span className={styles.habitatStatsValue}>
-                    {shipMiniFabricators.toLocaleString()}
-                </span>}
-                {shipMiniRoboFacs > 0 && <span className={styles.habitatStatsLabel}>
-                    Mini- Robo Fabs:
-                </span>}
-                {shipMiniRoboFacs > 0 && <span className={styles.habitatStatsValue}>
-                    {shipMiniRoboFacs.toLocaleString()}
-                </span>}
-                {shipMiniNanoFacs > 0 && <span className={styles.habitatStatsLabel}>
-                    Mini- Nano Fabs:
-                </span>}
-                {shipMiniNanoFacs > 0 && <span className={styles.habitatStatsValue}>
-                    {shipMiniNanoFacs.toLocaleString()}
-                </span>}
-                {shipSickBays > 0 && <span className={styles.habitatStatsLabel}>
-                    Sickbays:
-                </span>}
-                {shipSickBays > 0 && <span className={styles.habitatStatsValue}>
-                    {shipSickBays.toLocaleString()}
-                </span>}
-                {shipSickBaysAuto > 0 && <span className={styles.habitatStatsLabel}>
-                    Auto-Sickbays:
-                </span>}
-                {shipSickBaysAuto > 0 && <span className={styles.habitatStatsValue}>
-                    {shipSickBaysAuto.toLocaleString()}
-                </span>}
-                {shipMiniReplicators > 0 && <span className={styles.habitatStatsLabel}>
-                    Mini- Replicators:
-                </span>}
-                {shipMiniReplicators > 0 && <span className={styles.habitatStatsValue}>
-                    {shipMiniReplicators.toLocaleString()}
-                </span>}
-                {shipTeleportProjectors > 0 && <span className={styles.habitatStatsLabel}>
-                    Teleport Projectors:
-                </span>}
-                {shipTeleportProjectors > 0 && <span className={styles.habitatStatsValue}>
-                    {shipTeleportProjectors.toLocaleString()}
-                </span>}
-                {shipTeleportProjectorsSend > 0 && <span className={styles.habitatStatsLabel}>
-                    Teleport Projectors (Send):
-                </span>}
-                {shipTeleportProjectorsSend > 0 && <span className={styles.habitatStatsValue}>
-                    {shipTeleportProjectorsSend.toLocaleString()}
-                </span>}
-                {shipTeleportProjectorsReceive > 0 && <span className={styles.habitatStatsLabel}>
-                    Teleport Projectors (Recieve):
-                </span>}
-                {shipTeleportProjectorsReceive > 0 && <span className={styles.habitatStatsValue}>
-                    {shipTeleportProjectorsReceive.toLocaleString()}
-                </span>}
+                <HabitatStat label="Control Stations" value={shipControlStations} />
+                <HabitatStat label="Workspaces" value={shipWorkspaces} />
+                <HabitatStat label="Long Term Occupancy" value={shipLongOccupancy} />
+                <HabitatStat label="Short Term Occupancy" value={shipShortOccupancy} />
+                <HabitatStat label="Short Occ. (Crew)" value={shipShortOccupancyCrew} />
+                <HabitatStat label="Short Occ. (Pax.)" value={shipShortOccupancyPassengers} />
+                {shipSeats > 0 && <HabitatStat label="Ship Seats" value={shipSeats} />}
+                {shipCabins > 0 && <HabitatStat label="Cabins" value={shipCabins} />}
+                {shipBunkrooms > 0 && <HabitatStat label="Bunkrooms" value={shipBunkrooms} />}
+                {shipAreas > 0 && <HabitatStat label="Areas" value={shipAreas} />}
+                {shipHibernationChambers > 0 && <HabitatStat label="Hibernation Chambers" value={shipHibernationChambers} />}
+                {shipLuxuryCabins > 0 && <HabitatStat label="Luxury Cabins" value={shipLuxuryCabins} />}
+                {shipOffices > 0 && <HabitatStat label="Offices" value={shipOffices} />}
+                {shipEstablishments > 0 && <HabitatStat label="Establish- ments" value={shipEstablishments} />}
+                {shipCells > 0 && <HabitatStat label="Cells" value={shipCells} />}
+                {shipBriefingRooms > 0 && <HabitatStat label="Briefing Rooms" value={shipBriefingRooms} />}
+                {shipLabs > 0 && <HabitatStat label="Labs" value={shipLabs} />}
+                {shipPhysicsLabs > 0 && <HabitatStat label="Physics Labs" value={shipPhysicsLabs} />}
+                {shipSuperScienceLabs > 0 && <HabitatStat label="Super Science Labs" value={shipSuperScienceLabs} />}
+                {shipMiniFabricators > 0 && <HabitatStat label="Mini- Fabs" value={shipMiniFabricators} />}
+                {shipMiniRoboFacs > 0 && <HabitatStat label="Mini- Robo Fabs" value={shipMiniRoboFacs} />}
+                {shipMiniNanoFacs > 0 && <HabitatStat label="Mini- Nano Fabs" value={shipMiniNanoFacs} />}
+                {shipSickBays > 0 && <HabitatStat label="Sickbays" value={shipSickBays} />}
+                {shipSickBaysAuto > 0 && <HabitatStat label="Auto-Sickbays" value={shipSickBaysAuto} />}
+                {shipMiniReplicators > 0 && <HabitatStat label="Mini- Replicators" value={shipMiniReplicators} />}
+                {shipTeleportProjectors > 0 && <HabitatStat label="Teleport Projectors" value={shipTeleportProjectors} />}
+                {shipTeleportProjectorsSend > 0 && <HabitatStat label="Teleport Projectors (Send)" value={shipTeleportProjectorsSend} />}
+                {shipTeleportProjectorsReceive > 0 && <HabitatStat label="Teleport Projectors (Recieve)" value={shipTeleportProjectorsReceive} />}
             </div >
         )
     }
@@ -4121,6 +3990,7 @@ const CreateShipClass = ({ isExpanded }) => {
                 const SMData = moduleKeyObj.find(module => module.SM === shipSM);
                 shipModule.baseCabins = SMData.Cabins;
                 shipModule.customizedCabins = { cabins: SMData.Cabins };
+                shipModule.totalLifeSupport = false;
                 shipModule.alreadyCustomized = false;
                 shipModule.steerageCargo = 0;
             }
@@ -4246,6 +4116,7 @@ const CreateShipClass = ({ isExpanded }) => {
                 }
                 break;
             default:
+                console.log("Unexpected value in habitatIncrementDecrement.")
                 break;
         }
 
@@ -4263,6 +4134,40 @@ const CreateShipClass = ({ isExpanded }) => {
                             ? {
                                 ...module,
                                 steerageCargo: selectedHabitatSteerage,
+                                customizedCabins: newCustomizedCabins
+                            }
+                            : module
+                    )
+                    : row
+            )
+        );
+    }
+
+    function handleSelectedHabTotalLifeSupport(event) {
+        const [rowIndex, colIndex] = getModuleIndex(selectedHabitat.moduleLocation1, selectedHabitat.moduleNumber);
+        const baseCabins = selectedHabitat.baseCabins;
+        const newTotalLifeSupport = event.target.checked;
+
+        let newCustomizedCabins = { cabins: baseCabins };
+
+        if (newTotalLifeSupport) {
+            newCustomizedCabins = { cabins: baseCabins / 2 };
+        }
+
+        setSelectedHabitat((prevState) => ({
+            ...prevState,
+            totalLifeSupport: newTotalLifeSupport,
+            customizedCabins: newCustomizedCabins
+        }));
+
+        setModules((prevModules) =>
+            prevModules.map((row, i) =>
+                i === rowIndex
+                    ? row.map((module, j) =>
+                        j === colIndex
+                            ? {
+                                ...module,
+                                totalLifeSupport: newTotalLifeSupport,
                                 customizedCabins: newCustomizedCabins
                             }
                             : module
@@ -4309,7 +4214,81 @@ const CreateShipClass = ({ isExpanded }) => {
         );
     };
 
+    function handleSelectedTotalAutomation(event, shipModule, setFunction) {
+        const [rowIndex, colIndex] = getModuleIndex(shipModule.moduleLocation1, shipModule.moduleNumber);
+        const baseWorkspaces = shipModule.baseModuleWorkspaces;
+        const newTotalAutomation = event.target.checked;
 
+        let newModuleHighAutomation = shipModule.highAutomation;
+        let newWorkspaces = baseWorkspaces;
+
+        if (newTotalAutomation) {
+            newWorkspaces = 0;
+            newModuleHighAutomation = false;
+        }
+
+        setFunction((prevState) => ({
+            ...prevState,
+            moduleWorkspaces: newWorkspaces,
+            highAutomation: newModuleHighAutomation,
+            totalAutomation: newTotalAutomation
+        }));
+
+        setModules((prevModules) =>
+            prevModules.map((row, i) =>
+                i === rowIndex
+                    ? row.map((module, j) =>
+                        j === colIndex
+                            ? {
+                                ...module,
+                                moduleWorkspaces: newWorkspaces,
+                                highAutomation: newModuleHighAutomation,
+                                totalAutomation: newTotalAutomation
+                            }
+                            : module
+                    )
+                    : row
+            )
+        );
+    }
+
+    function handleSelectedHighAutomation(event, shipModule, setFunction) {
+        const [rowIndex, colIndex] = getModuleIndex(shipModule.moduleLocation1, shipModule.moduleNumber);
+        const baseWorkspaces = shipModule.baseModuleWorkspaces;
+        const newHighAutomation = event.target.checked;
+
+        let newModuleTotalAutomation = shipModule.totalAutomation;
+        let newWorkspaces = baseWorkspaces;
+
+        if (newHighAutomation) {
+            newWorkspaces = baseWorkspaces / 10;
+            newModuleTotalAutomation = false;
+        }
+
+        setFunction((prevState) => ({
+            ...prevState,
+            moduleWorkspaces: newWorkspaces,
+            highAutomation: newHighAutomation,
+            totalAutomation: newModuleTotalAutomation
+        }));
+
+        setModules((prevModules) =>
+            prevModules.map((row, i) =>
+                i === rowIndex
+                    ? row.map((module, j) =>
+                        j === colIndex
+                            ? {
+                                ...module,
+                                moduleWorkspaces: newWorkspaces,
+                                highAutomation: newHighAutomation,
+                                totalAutomation: newModuleTotalAutomation
+                            }
+                            : module
+                    )
+                    : row
+            )
+        );
+    }
 
     // This is a component that displays all UI for customizing habitats.
     function HabitatCustomizationDisplay() {
@@ -4326,12 +4305,40 @@ const CreateShipClass = ({ isExpanded }) => {
                 </select>
                 {selectedHabitat && (
                     <>
+                        {shipTL >= 9 && (<label className={styles.lifeSuppLabel}>
+                            Total Life<br />Support:
+                            <input className={styles.inputCheckbox}
+                                type="checkbox"
+                                checked={selectedHabitat.totalLifeSupport}
+                                onChange={handleSelectedHabTotalLifeSupport}
+                            />
+                        </label>)}
+                        {selectedHabitat.baseModuleWorkspaces >= 1 && (<label className={styles.automationLabelCol1}>
+                            Total Automation:
+                            <input className={styles.inputCheckbox}
+                                type="checkbox"
+                                checked={selectedHabitat.totalAutomation}
+                                onChange={(event) => handleSelectedTotalAutomation(event, selectedHabitat, setSelectedHabitat)}
+                            />
+                        </label>)}
+
+                        {selectedHabitat.baseModuleWorkspaces >= 1 && shipSM >= 12 && (<label className={styles.automationLabelCol2}>
+                            High Automation:
+                            <input className={styles.inputCheckbox}
+                                type="checkbox"
+                                checked={selectedHabitat.highAutomation}
+                                onChange={(event) => handleSelectedHighAutomation(event, selectedHabitat, setSelectedHabitat)}
+                            />
+                        </label>)}
                         <span className={styles.habitatInfoLabelCol1}>
                             Cabins:
                         </span>
                         <span className={styles.habitatButton}>
                             {(selectedHabitat.customizedCabins.cabins || 0).toLocaleString()}
                         </span>
+
+
+
                         <HabitatSection
                             label="Bunk- rooms"
                             habitatType="bunkrooms"
@@ -4372,14 +4379,16 @@ const CreateShipClass = ({ isExpanded }) => {
                             customizedCabins={selectedHabitat.customizedCabins}
                             habitatIncrementDecrement={habitatIncrementDecrement}
                         />
-                        {shipTL >= 9 && <HabitatSection
-                            label="Hibernation Chambers"
-                            habitatType="hibernationChambers"
-                            incrementValues={[1, 10, 100]}
-                            decrementValues={[1, 10, 100]}
-                            customizedCabins={selectedHabitat.customizedCabins}
-                            habitatIncrementDecrement={habitatIncrementDecrement}
-                        />}
+                        {shipTL >= 9 && (
+                            <HabitatSection
+                                label="Hibernation Chambers"
+                                habitatType="hibernationChambers"
+                                incrementValues={[1, 10, 100]}
+                                decrementValues={[1, 10, 100]}
+                                customizedCabins={selectedHabitat.customizedCabins}
+                                habitatIncrementDecrement={habitatIncrementDecrement}
+                            />
+                        )}
                         <HabitatSection
                             label="Labs"
                             habitatType="labs"
@@ -4396,46 +4405,56 @@ const CreateShipClass = ({ isExpanded }) => {
                             customizedCabins={selectedHabitat.customizedCabins}
                             habitatIncrementDecrement={habitatIncrementDecrement}
                         />
-                        {superScienceChecked === true && <HabitatSection
-                            label="Super Science Labs"
-                            habitatType="superScienceLabs"
-                            incrementValues={[1, 10, 100]}
-                            decrementValues={[1, 10, 100]}
-                            customizedCabins={selectedHabitat.customizedCabins}
-                            habitatIncrementDecrement={habitatIncrementDecrement}
-                        />}
-                        {shipTL >= 8 && <HabitatSection
-                            label="Mini Fabs"
-                            habitatType="miniFabs"
-                            incrementValues={[1, 10, 100]}
-                            decrementValues={[1, 10, 100]}
-                            customizedCabins={selectedHabitat.customizedCabins}
-                            habitatIncrementDecrement={habitatIncrementDecrement}
-                        />}
-                        {shipTL >= 10 && <HabitatSection
-                            label="Mini Robo Fabs"
-                            habitatType="miniRoboFabs"
-                            incrementValues={[1, 10, 100]}
-                            decrementValues={[1, 10, 100]}
-                            customizedCabins={selectedHabitat.customizedCabins}
-                            habitatIncrementDecrement={habitatIncrementDecrement}
-                        />}
-                        {shipTL >= 11 && <HabitatSection
-                            label="Mini Nano Fabs"
-                            habitatType="miniNanoFabs"
-                            incrementValues={[1, 10, 100]}
-                            decrementValues={[1, 10, 100]}
-                            customizedCabins={selectedHabitat.customizedCabins}
-                            habitatIncrementDecrement={habitatIncrementDecrement}
-                        />}
-                        {shipTL >= 12 && superScienceChecked === true && <HabitatSection
-                            label="Mini Replicators"
-                            habitatType="miniReplicators"
-                            incrementValues={[1, 10, 100]}
-                            decrementValues={[1, 10, 100]}
-                            customizedCabins={selectedHabitat.customizedCabins}
-                            habitatIncrementDecrement={habitatIncrementDecrement}
-                        />}
+                        {superScienceChecked && (
+                            <HabitatSection
+                                label="Super Science Labs"
+                                habitatType="superScienceLabs"
+                                incrementValues={[1, 10, 100]}
+                                decrementValues={[1, 10, 100]}
+                                customizedCabins={selectedHabitat.customizedCabins}
+                                habitatIncrementDecrement={habitatIncrementDecrement}
+                            />
+                        )}
+                        {shipTL >= 8 && (
+                            <HabitatSection
+                                label="Mini Fabs"
+                                habitatType="miniFabs"
+                                incrementValues={[1, 10, 100]}
+                                decrementValues={[1, 10, 100]}
+                                customizedCabins={selectedHabitat.customizedCabins}
+                                habitatIncrementDecrement={habitatIncrementDecrement}
+                            />
+                        )}
+                        {shipTL >= 10 && (
+                            <HabitatSection
+                                label="Mini Robo Fabs"
+                                habitatType="miniRoboFabs"
+                                incrementValues={[1, 10, 100]}
+                                decrementValues={[1, 10, 100]}
+                                customizedCabins={selectedHabitat.customizedCabins}
+                                habitatIncrementDecrement={habitatIncrementDecrement}
+                            />
+                        )}
+                        {shipTL >= 11 && (
+                            <HabitatSection
+                                label="Mini Nano Fabs"
+                                habitatType="miniNanoFabs"
+                                incrementValues={[1, 10, 100]}
+                                decrementValues={[1, 10, 100]}
+                                customizedCabins={selectedHabitat.customizedCabins}
+                                habitatIncrementDecrement={habitatIncrementDecrement}
+                            />
+                        )}
+                        {shipTL >= 12 && superScienceChecked && (
+                            <HabitatSection
+                                label="Mini Replicators"
+                                habitatType="miniReplicators"
+                                incrementValues={[1, 10, 100]}
+                                decrementValues={[1, 10, 100]}
+                                customizedCabins={selectedHabitat.customizedCabins}
+                                habitatIncrementDecrement={habitatIncrementDecrement}
+                            />
+                        )}
                         <HabitatSection
                             label="Offices"
                             habitatType="offices"
@@ -4460,30 +4479,36 @@ const CreateShipClass = ({ isExpanded }) => {
                             customizedCabins={selectedHabitat.customizedCabins}
                             habitatIncrementDecrement={habitatIncrementDecrement}
                         />
-                        {shipTL >= 12 && superScienceChecked === true && <HabitatSection
-                            label="Teleport Projectors"
-                            habitatType="teleportProjectors"
-                            incrementValues={[1, 10, 100]}
-                            decrementValues={[1, 10, 100]}
-                            customizedCabins={selectedHabitat.customizedCabins}
-                            habitatIncrementDecrement={habitatIncrementDecrement}
-                        />}
-                        {shipTL >= 12 && superScienceChecked === true && <HabitatSection
-                            label="Tele. Proj. (Send)"
-                            habitatType="teleportProjectorsSend"
-                            incrementValues={[1, 10, 100]}
-                            decrementValues={[1, 10, 100]}
-                            customizedCabins={selectedHabitat.customizedCabins}
-                            habitatIncrementDecrement={habitatIncrementDecrement}
-                        />}
-                        {shipTL >= 12 && superScienceChecked === true && <HabitatSection
-                            label="Tele. Proj. (Recieve)"
-                            habitatType="teleportProjectorsReceive"
-                            incrementValues={[1, 10, 100]}
-                            decrementValues={[1, 10, 100]}
-                            customizedCabins={selectedHabitat.customizedCabins}
-                            habitatIncrementDecrement={habitatIncrementDecrement}
-                        />}
+                        {shipTL >= 12 && superScienceChecked && (
+                            <HabitatSection
+                                label="Teleport Projectors"
+                                habitatType="teleportProjectors"
+                                incrementValues={[1, 10, 100]}
+                                decrementValues={[1, 10, 100]}
+                                customizedCabins={selectedHabitat.customizedCabins}
+                                habitatIncrementDecrement={habitatIncrementDecrement}
+                            />
+                        )}
+                        {shipTL >= 12 && superScienceChecked && (
+                            <HabitatSection
+                                label="Tele. Proj. (Send)"
+                                habitatType="teleportProjectorsSend"
+                                incrementValues={[1, 10, 100]}
+                                decrementValues={[1, 10, 100]}
+                                customizedCabins={selectedHabitat.customizedCabins}
+                                habitatIncrementDecrement={habitatIncrementDecrement}
+                            />
+                        )}
+                        {shipTL >= 12 && superScienceChecked && (
+                            <HabitatSection
+                                label="Tele. Proj. (Receive)"
+                                habitatType="teleportProjectorsReceive"
+                                incrementValues={[1, 10, 100]}
+                                decrementValues={[1, 10, 100]}
+                                customizedCabins={selectedHabitat.customizedCabins}
+                                habitatIncrementDecrement={habitatIncrementDecrement}
+                            />
+                        )}
                         <span className={styles.habitatInfoLabelCol1}>
                             Steerage Cargo (tons):
                         </span>
@@ -4527,10 +4552,227 @@ const CreateShipClass = ({ isExpanded }) => {
         )
     }
 
+    useEffect(() => {
+        const engineKeys = ['Chemical', 'HEDM', 'Ion Drive', 'Mass Driver', 'Nuclear Thermal Rocket',
+            'Nuclear Light Bulb', 'Nuclear Saltwater Rocket', 'External Pulsed Plasma', 'Fusion Pulse Drive',
+            'Advanced Fusion Pulse Drive', 'Super Fusion Pulse Drive', 'Fusion Rocket', 'Fusion Torch',
+            'Super Fusion Torch', 'Antimatter Thermal Rocket', 'Antimatter Plasma Rocket', 'Antimatter Plasma Torch',
+            'Super Antimatter Plasma Torch', 'Antimatter Pion', 'Antimatter Pion Torch', 'Total Conversion Torch',
+            'Super Conversion Torch', 'Rotary', 'Standard', 'Hot Reactionless', 'Super Reactionless', 'Subwarp', 'Super Stardrive Engine',
+            'Stardrive Engine']
+
+        // {
+        //     moduleKey: moduleKey,
+        //     moduleCategory: moduleCategory,
+        //     moduleLocation1: moduleLocation1,
+        //     moduleLocation2: moduleLocation2,
+        //     moduleNumber: moduleNumber,
+        //     modulePowerDemand: modulePowerDemand,
+        //     baseModuleCost: moduleCost,
+        //     moduleCost: moduleCost,
+        //     baseModuleWorkspaces: moduleWorkspaces,
+        //     moduleWorkspaces: moduleWorkspaces,
+        //     alreadyCustomized: false,
+        //     baseAccel: accel,
+        //     accel: accel,
+        //     basempsTank: mpsTank,
+        //     mpsTank: mpsTank,
+        //     fuelTypes: fuelTypes
+        // ramRocket: false;
+        // highThrust: false;
+        // driveField: false;
+        // pseudoVelocity: false;
+        // singularityDrive: false;
+        // stardriveFuel: false;
+        // reactionlessEngineSuper: false;
+        // reactionlessEngineHot: false;
+        // reactionlessEngineStandard: false;
+        // reactionlessEngineRotary: false;
+        // reactionlessEngineExtraCost: false;
+        // pseudoVelocity: false;
+        // singularityDrive: false;
+        // driveField: false;
+        // negativeMassPropulsionDrive: false;
+        // }
+
+        let newEngineModulesArr = [];
+
+        processShipModules(shipModules, (shipModule) => {
+            if (engineKeys.includes(shipModule.moduleKey)) {
+                newEngineModulesArr.push(shipModule);
+            }
+        });
+
+        setEnginesArr(newEngineModulesArr);
+    }, [shipModules])
+
+    const handleCheckboxChange = (index, property) => {
+        setEnginesArr(prevState => {
+            const newState = [...prevState];
+            newState[index][property] = !newState[index][property];
+            return newState;
+        });
+    };
+
     function EngineCustomizationDisplay() {
         return (
             <div className={styles.habitatSubContainer}>
-                <h2 className={isExpanded ? styles.statTitleExpanded : styles.statTitleCollapsed}>Engine Customization</h2>
+                <h2 className={isExpanded ? styles.statTitle5ColExpanded : styles.statTitleCollapsed}>Engine & Fuel Customization</h2>
+                {enginesArr.map((module, index) => (
+                    <div key={index}>
+                        <div><strong>Module Key:</strong> {module.moduleKey}</div>
+                        <div><strong>Location 1:</strong> {module.moduleLocation1}</div>
+                        <div><strong>Cost:</strong> {module.moduleCost}</div>
+                        <div><strong>Workspaces:</strong> {module.moduleWorkspaces}</div>
+                        <div><strong>Fuel Types:</strong> {module.fuelTypes?.join(', ')}</div>
+                        <div><strong>Acceleration:</strong> {module.accel}</div>
+                        <div><strong>MPS Tank:</strong> {module.mpsTank}</div>
+                        {module.hasOwnProperty('ramRocket') && (
+                            <div>
+                                <label>
+                                    <strong>Ram Rocket:</strong>
+                                    <input
+                                        type="checkbox"
+                                        checked={module.ramRocket}
+                                        onChange={() => handleCheckboxChange(index, 'ramRocket')}
+                                    />
+                                </label>
+                            </div>
+                        )}
+                        {module.hasOwnProperty('highThrust') && (
+                            <div>
+                                <label>
+                                    <strong>High Thrust:</strong>
+                                    <input
+                                        type="checkbox"
+                                        checked={module.highThrust}
+                                        onChange={() => handleCheckboxChange(index, 'highThrust')}
+                                    />
+                                </label>
+                            </div>
+                        )}
+                        {module.hasOwnProperty('driveField') && (
+                            <div>
+                                <label>
+                                    <strong>Drive Field:</strong>
+                                    <input
+                                        type="checkbox"
+                                        checked={module.driveField}
+                                        onChange={() => handleCheckboxChange(index, 'driveField')}
+                                    />
+                                </label>
+                            </div>
+                        )}
+                        {module.hasOwnProperty('pseudoVelocity') && (
+                            <div>
+                                <label>
+                                    <strong>Pseudo Velocity:</strong>
+                                    <input
+                                        type="checkbox"
+                                        checked={module.pseudoVelocity}
+                                        onChange={() => handleCheckboxChange(index, 'pseudoVelocity')}
+                                    />
+                                </label>
+                            </div>
+                        )}
+                        {module.hasOwnProperty('singularityDrive') && (
+                            <div>
+                                <label>
+                                    <strong>Singularity Drive:</strong>
+                                    <input
+                                        type="checkbox"
+                                        checked={module.singularityDrive}
+                                        onChange={() => handleCheckboxChange(index, 'singularityDrive')}
+                                    />
+                                </label>
+                            </div>
+                        )}
+                        {module.hasOwnProperty('stardriveFuel') && (
+                            <div>
+                                <label>
+                                    <strong>Stardrive Fuel:</strong>
+                                    <input
+                                        type="checkbox"
+                                        checked={module.stardriveFuel}
+                                        onChange={() => handleCheckboxChange(index, 'stardriveFuel')}
+                                    />
+                                </label>
+                            </div>
+                        )}
+                        {module.hasOwnProperty('reactionlessEngineSuper') && (
+                            <div>
+                                <label>
+                                    <strong>Reactionless Engine Super:</strong>
+                                    <input
+                                        type="checkbox"
+                                        checked={module.reactionlessEngineSuper}
+                                        onChange={() => handleCheckboxChange(index, 'reactionlessEngineSuper')}
+                                    />
+                                </label>
+                            </div>
+                        )}
+                        {module.hasOwnProperty('reactionlessEngineHot') && (
+                            <div>
+                                <label>
+                                    <strong>Reactionless Engine Hot:</strong>
+                                    <input
+                                        type="checkbox"
+                                        checked={module.reactionlessEngineHot}
+                                        onChange={() => handleCheckboxChange(index, 'reactionlessEngineHot')}
+                                    />
+                                </label>
+                            </div>
+                        )}
+                        {module.hasOwnProperty('reactionlessEngineStandard') && (
+                            <div>
+                                <label>
+                                    <strong>Reactionless Engine Standard:</strong>
+                                    <input
+                                        type="checkbox"
+                                        checked={module.reactionlessEngineStandard}
+                                        onChange={() => handleCheckboxChange(index, 'reactionlessEngineStandard')}
+                                    />
+                                </label>
+                            </div>
+                        )}
+                        {module.hasOwnProperty('reactionlessEngineRotary') && (
+                            <div>
+                                <label>
+                                    <strong>Reactionless Engine Rotary:</strong>
+                                    <input
+                                        type="checkbox"
+                                        checked={module.reactionlessEngineRotary}
+                                        onChange={() => handleCheckboxChange(index, 'reactionlessEngineRotary')}
+                                    />
+                                </label>
+                            </div>
+                        )}
+                        {module.hasOwnProperty('reactionlessEngineExtraCost') && (
+                            <div>
+                                <label>
+                                    <strong>Reactionless Engine Extra Cost:</strong>
+                                    <input
+                                        type="checkbox"
+                                        checked={module.reactionlessEngineExtraCost}
+                                        onChange={() => handleCheckboxChange(index, 'reactionlessEngineExtraCost')}
+                                    />
+                                </label>
+                            </div>
+                        )}
+                        {module.hasOwnProperty('negativeMassPropulsionDrive') && (
+                            <div>
+                                <label>
+                                    <strong>Negative Mass Propulsion Drive:</strong>
+                                    <input
+                                        type="checkbox"
+                                        checked={module.negativeMassPropulsionDrive}
+                                        onChange={() => handleCheckboxChange(index, 'negativeMassPropulsionDrive')}
+                                    />
+                                </label>
+                            </div>
+                        )}
+                    </div>
+                ))}
             </div>
         )
     }
@@ -4576,7 +4818,7 @@ const CreateShipClass = ({ isExpanded }) => {
                 <h2 className={isExpanded ? styles.customizationTitleExpanded : styles.customizationTitleCollapsed}>Module Customization</h2>
                 <div className={isExpanded ? styles.customizationComponentButtonContainerExpanded : styles.customizationComponentButtonContainerCollapsed}>
                     <button className={styles.statComponentButton} onClick={() => handleCustomClick('Habitats')}>Habitats</button>
-                    <button className={styles.statComponentButton} onClick={() => handleCustomClick('Engines')}>Engines</button>
+                    <button className={styles.statComponentButton} onClick={() => handleCustomClick('Engines')}>Engines & Fuel</button>
                     <button className={styles.statComponentButton} onClick={() => handleCustomClick('Weapons')}>Weapons</button>
                     <button className={styles.statComponentButton} onClick={() => handleCustomClick('Misc')}>Misc.</button>
                 </div>
