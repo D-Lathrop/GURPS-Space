@@ -187,6 +187,7 @@ const CreateShipClass = ({ isExpanded }) => {
     const [habitatsArr, setHabitatsArr] = useState([{}]);
     const [selectedHabitat, setSelectedHabitat] = useState(null);
     const [enginesArr, setEnginesArr] = useState([{}]);
+    const [stardriveReactionlessArr, setStardriveReactionlessArr] = useState([{}])
 
     // Design Switch and Feature State Variables
     const [shipHardenedArmorCost, setHardenedArmorCost] = useState(0);
@@ -491,6 +492,7 @@ const CreateShipClass = ({ isExpanded }) => {
             moduleLocation1: moduleLocation1,
             moduleLocation2: moduleLocation2,
             moduleNumber: moduleNumber,
+            baseModulePowerDemand: modulePowerDemand,
             modulePowerDemand: modulePowerDemand,
             baseModuleCost: moduleCost,
             moduleCost: moduleCost,
@@ -751,6 +753,13 @@ const CreateShipClass = ({ isExpanded }) => {
                 addmpsTankandDeltaV();
                 newModuleListObj.highThrust = false;
                 break;
+            case "HEDM":
+            case "Chemical":
+            case "Nuclear Light Bulb":
+            case "Nuclear Saltwater Rocket":
+                highAndTotalAutomation();
+                addmpsTankandDeltaV();
+                break;
             case "Factory, Nanofactory":
             case "Factory, Robofac":
             case "Factory, Fabricator":
@@ -769,11 +778,7 @@ const CreateShipClass = ({ isExpanded }) => {
                 newModuleListObj.tonsPerHour = SMData.TonsHrMining;
                 highAndTotalAutomationOnly();
                 break;
-            case "Nuclear Saltwater Rocket":
-            case "Nuclear Light Bulb":
             case "Jet Engine":
-            case "HEDM":
-            case "Chemical":
             case "Stasis Web":
             case "Robot Arm":
             case "Ramscoop":
@@ -1278,11 +1283,12 @@ const CreateShipClass = ({ isExpanded }) => {
                     continue;
                 }
                 let currentModuleLocation = currentModule.moduleLocation1;
+                let currentModuleNumber = currentModule.moduleNumber;
                 let moduleKeyObj = modulesUseEffectData[currentModuleKey];
 
                 let moduleCategory = currentModule.moduleCategory;
                 let modulePowerGeneration = 0;
-                let modulePowerDemand = currentModule.modulePowerDemand;
+                let modulePowerDemand = currentModule.baseModulePowerDemand;
                 let SMData = moduleKeyObj.find(module => module.SM === shipSM);
                 let baseModuleCost = currentModule.baseModuleCost;
                 let moduleCost = currentModule.baseModuleCost;
@@ -1312,17 +1318,50 @@ const CreateShipClass = ({ isExpanded }) => {
                     function addReactionlessEngine(EngineType) {
                         const reactionlessEngine = modulesUseEffectData[EngineType];
                         const reactionlessEngineSM = reactionlessEngine.find(module => module.SM === shipSM);
+
+                        let newStardriveReactionlessArr = JSON.parse(JSON.stringify(stardriveReactionlessArr));
+
                         if (currentModule.reactionlessEngineExtraCost) {
                             const reactionlessCost = reactionlessEngineSM.cost;
                             moduleCost += (currentModule.baseModuleCost * 2) + (reactionlessCost * 2);
                         }
+
+                        const newReactionlessEngine = {
+                            moduleKey: EngineType,
+                            moduleCategory: reactionlessEngine.Category,
+                            moduleLocation1: currentModuleLocation,
+                            moduleNumber: currentModuleNumber,
+                            baseAccel: reactionlessEngine.Accel,
+                            accel: reactionlessEngine.Accel,
+                            pseudoVelocity: false,
+                        }
+
+                        newStardriveReactionlessArr.push(newReactionlessEngine);
+
+                        setStardriveReactionlessArr(newStardriveReactionlessArr);
+                    }
+
+                    function removeReactionlessEngine() {
+                        let newStardriveReactionlessArr = JSON.parse(JSON.stringify(stardriveReactionlessArr));
+
+                        const indexToRemove = newStardriveReactionlessArr.findIndex(engine =>
+                            engine.moduleLocation1 === currentModuleLocation && engine.moduleNumber === currentModuleNumber
+                        );
+
+                        if (indexToRemove !== -1) {
+                            newStardriveReactionlessArr.splice(indexToRemove, 1);
+                        }
+
+                        setStardriveReactionlessArr(newStardriveReactionlessArr);
                     }
 
                     function addForceScreen(ScreenType) {
                         const forceScreen = modulesUseEffectData[ScreenType];
                         const forceScreenSM = forceScreen.find(module => module.SM === shipSM);
-                        const screendDr = forceScreenSM.dDR;
-                        frontdDR += screendDr * 3;
+                        const screendDR = forceScreenSM.dDr;
+                        frontdDR += screendDR * 3;
+
+                        console.log(`ScreenType: ${ScreenType} forceScreen: ${JSON.stringify(forceScreen)} forceScreenSM: ${JSON.stringify(forceScreenSM)} screendDr: ${screendDR}`)
                     }
 
                     if (currentModule.driveField) {
@@ -1341,15 +1380,23 @@ const CreateShipClass = ({ isExpanded }) => {
                     }
                     if (currentModule.reactionlessEngineSuper) {
                         addReactionlessEngine("Super Reactionless");
+                    } else {
+                        removeReactionlessEngine()
                     }
                     if (currentModule.reactionlessEngineHot) {
                         addReactionlessEngine("Hot Reactionless");
+                    } else {
+                        removeReactionlessEngine()
                     }
                     if (currentModule.reactionlessEngineStandard) {
                         addReactionlessEngine("Standard");
+                    } else {
+                        removeReactionlessEngine()
                     }
                     if (currentModule.reactionlessEngineRotary) {
                         addReactionlessEngine("Rotary");
+                    } else {
+                        removeReactionlessEngine()
                     }
                 }
 
@@ -1357,7 +1404,18 @@ const CreateShipClass = ({ isExpanded }) => {
                     if (currentModule.highThrust ?? false) {
                         currentModule.accel = currentModule.baseAccel * 2;
                         currentModule.mpsTank = currentModule.basempsTank / 2;
+                    } else {
+                        currentModule.accel = currentModule.baseAccel;
+                        currentModule.mpsTank = currentModule.basempsTank;
                     }
+
+                    if (currentModule.ramRocket ?? false) {
+                        moduleCost = currentModule.baseModuleCost * 5;
+                    } else {
+                        moduleCost = currentModule.baseModuleCost;
+                    }
+
+                    console.log(`New Accel: ${currentModule.accel} New mpsTank: ${currentModule.mpsTank}`)
                 }
 
                 switch (moduleCategory) {
@@ -3946,24 +4004,6 @@ const CreateShipClass = ({ isExpanded }) => {
         setAlreadyCustomizedModules(alreadyCustomizedArr);
     }, [shipModules])
 
-    // {
-    //     moduleKey: moduleKey,
-    //     moduleCategory: moduleCategory,
-    //     moduleLocation1: moduleLocation1,
-    //     moduleLocation2: moduleLocation2,
-    //     moduleNumber: moduleNumber,
-    //     modulePowerDemand: modulePowerDemand,
-    //     baseModuleCost: moduleCost,
-    //     moduleCost: moduleCost,
-    //     baseModuleWorkspaces: moduleWorkspaces,
-    //     moduleWorkspaces: moduleWorkspaces,
-    //     alreadyCustomized: false
-    //     baseCabins: SMData.Cabins;
-    //     customizedCabins: {};
-    //     steerageCargo: 0;
-    //     totalLifeSupport: false;
-    // }
-
     // This useEffect updates the list of habitats that can be customized based on the ship's habitat modules.
     useEffect(() => {
         let habitatModulesArr = [];
@@ -4603,174 +4643,265 @@ const CreateShipClass = ({ isExpanded }) => {
             }
         });
 
+        console.log(`newEngineModulesArr: ${JSON.stringify(newEngineModulesArr)}`);
+
         setEnginesArr(newEngineModulesArr);
     }, [shipModules])
 
-    const handleCheckboxChange = (index, property) => {
-        setEnginesArr(prevState => {
-            const newState = [...prevState];
-            newState[index][property] = !newState[index][property];
-            return newState;
+    const handleEngineCheckboxChange = (moduleLocation1, moduleNumber, property) => {
+        const [rowIndex, colIndex] = getModuleIndex(moduleLocation1, moduleNumber);
+
+        let newModuleObj = { ...shipModules[rowIndex][colIndex] };
+
+        switch (property) {
+            case 'ramRocket':
+                newModuleObj.ramRocket = !newModuleObj.ramRocket;
+                break;
+            case 'highThrust':
+                newModuleObj.highThrust = !newModuleObj.highThrust;
+                break;
+            case 'driveField':
+                newModuleObj.driveField = !newModuleObj.driveField;
+                break;
+            case 'pseudoVelocity':
+                newModuleObj.pseudoVelocity = !newModuleObj.pseudoVelocity;
+                break;
+            case 'singularityDrive':
+                newModuleObj.singularityDrive = !newModuleObj.singularityDrive;
+                break;
+            case 'stardriveFuel':
+                newModuleObj.stardriveFuel = !newModuleObj.stardriveFuel;
+                break;
+            case 'reactionlessEngineSuper':
+                newModuleObj.reactionlessEngineSuper = !newModuleObj.reactionlessEngineSuper;
+                break;
+            case 'reactionlessEngineHot':
+                newModuleObj.reactionlessEngineHot = !newModuleObj.reactionlessEngineHot;
+                break;
+            case 'reactionlessEngineStandard':
+                newModuleObj.reactionlessEngineStandard = !newModuleObj.reactionlessEngineStandard;
+                break;
+            case 'reactionlessEngineRotary':
+                newModuleObj.reactionlessEngineRotary = !newModuleObj.reactionlessEngineRotary;
+                break;
+            case 'reactionlessEngineExtraCost':
+                newModuleObj.reactionlessEngineExtraCost = !newModuleObj.reactionlessEngineExtraCost;
+                break;
+            case 'negativeMassPropulsionDrive':
+                newModuleObj.negativeMassPropulsionDrive = !newModuleObj.negativeMassPropulsionDrive;
+                break;
+            default:
+                console.log("Unexpected value in handleWeaponCheckboxChange.");
+                return;
+        }
+
+        setModules(prevModules => {
+            const newModules = [...prevModules];
+            newModules[rowIndex] = [...newModules[rowIndex]];
+            newModules[rowIndex][colIndex] = newModuleObj;
+            return newModules;
         });
     };
 
+    function formatFuelType(fuelType) {
+        return fuelType
+            .replace(/([a-z])([A-Z])/g, '$1 $2') // Add space between lowercase and uppercase letters
+            .replace(/([a-zA-Z])([A-Z][a-z])/g, '$1 $2') // Add space before capitalized words
+            .replace(/([a-z])([A-Z])/g, '$1 $2') // Add space between lowercase and uppercase letters again for edge cases
+            .replace(/([a-z])([0-9])/g, '$1 $2') // Add space between letters and numbers
+            .replace(/([0-9])([A-Z])/g, '$1 $2'); // Add space between numbers and uppercase letters
+    }
+
     function EngineCustomizationDisplay() {
         return (
-            <div className={styles.habitatSubContainer}>
+            <div className={styles.engineCustomizationContainer}>
                 <h2 className={isExpanded ? styles.statTitle5ColExpanded : styles.statTitleCollapsed}>Engine & Fuel Customization</h2>
-                {enginesArr.map((module, index) => (
-                    <div key={index}>
-                        <div><strong>Module Key:</strong> {module.moduleKey}</div>
-                        <div><strong>Location 1:</strong> {module.moduleLocation1}</div>
-                        <div><strong>Cost:</strong> {module.moduleCost}</div>
-                        <div><strong>Workspaces:</strong> {module.moduleWorkspaces}</div>
-                        <div><strong>Fuel Types:</strong> {module.fuelTypes?.join(', ')}</div>
-                        <div><strong>Acceleration:</strong> {module.accel}</div>
-                        <div><strong>MPS Tank:</strong> {module.mpsTank}</div>
-                        {module.hasOwnProperty('ramRocket') && (
-                            <div>
-                                <label>
-                                    <strong>Ram Rocket:</strong>
-                                    <input
-                                        type="checkbox"
-                                        checked={module.ramRocket}
-                                        onChange={() => handleCheckboxChange(index, 'ramRocket')}
-                                    />
-                                </label>
-                            </div>
+                {enginesArr.map((engineModule, index) => (
+                    <div key={index} className={styles.engineCustomizationSubContainer}>
+                        <span className={styles.engineCustomizationLabel}>Module Key:</span>
+                        <span className={styles.engineCustomizationValue}>{engineModule.moduleKey}</span>
+                        <span className={styles.engineCustomizationLabel}>Location 1:</span>
+                        <span className={styles.engineCustomizationValue}>{engineModule.moduleLocation1}</span>
+                        <span className={styles.engineCustomizationLabel}>Cost:</span>
+                        <span className={styles.engineCustomizationValue}>${engineModule.moduleCost?.toLocaleString()}</span>
+                        <span className={styles.engineCustomizationLabel}>Module Number:</span>
+                        <span className={styles.engineCustomizationValue}>{engineModule.moduleNumber}</span>
+                        <span className={styles.engineCustomizationLabel}>Workspaces:</span>
+                        <span className={styles.engineCustomizationValue}>{engineModule.moduleWorkspaces?.toLocaleString()}</span>
+                        <span className={styles.engineCustomizationLabel}>Fuel Types:</span>
+                        <span className={styles.engineCustomizationValue}>
+                            {engineModule.fuelTypes?.map(formatFuelType).join(', ')}
+                        </span>
+                        <span className={styles.engineCustomizationLabel}>Acceleration:</span>
+                        <span className={styles.engineCustomizationValue}>
+                            {engineModule.accel !== undefined ? (
+                                <>
+                                    <span style={{ display: engineModule.accel < 1 ? 'inline' : 'none' }}>
+                                        {engineModule.accel.toFixed(4)}
+                                    </span>
+                                    <span style={{ display: engineModule.accel >= 1 ? 'inline' : 'none' }}>
+                                        {engineModule.accel.toLocaleString()}
+                                    </span>
+                                </>
+                            ) : ''}
+                        </span>
+                        <span className={styles.engineCustomizationLabel}>mps/Tank:</span>
+                        <span className={styles.engineCustomizationValue}>{engineModule.mpsTank?.toLocaleString()}</span>
+                        {engineModule.hasOwnProperty('ramRocket') && (
+                            <label className={styles.engineCustomizationCheckLabel}>
+                                Ram Rocket:
+                                <input className={styles.inputCheckbox}
+                                    type="checkbox"
+                                    checked={engineModule.ramRocket}
+                                    onChange={() => handleEngineCheckboxChange(engineModule.moduleLocation1, engineModule.moduleNumber, 'ramRocket')}
+                                />
+                            </label>
                         )}
-                        {module.hasOwnProperty('highThrust') && (
-                            <div>
-                                <label>
-                                    <strong>High Thrust:</strong>
-                                    <input
-                                        type="checkbox"
-                                        checked={module.highThrust}
-                                        onChange={() => handleCheckboxChange(index, 'highThrust')}
-                                    />
-                                </label>
-                            </div>
+                        {engineModule.hasOwnProperty('highThrust') && (
+                            <label className={styles.engineCustomizationCheckLabel}>
+                                High Thrust:
+                                <input className={styles.inputCheckbox}
+                                    type="checkbox"
+                                    checked={engineModule.highThrust}
+                                    onChange={() => handleEngineCheckboxChange(engineModule.moduleLocation1, engineModule.moduleNumber, 'highThrust')}
+                                />
+                            </label>
                         )}
-                        {module.hasOwnProperty('driveField') && (
-                            <div>
-                                <label>
-                                    <strong>Drive Field:</strong>
-                                    <input
-                                        type="checkbox"
-                                        checked={module.driveField}
-                                        onChange={() => handleCheckboxChange(index, 'driveField')}
-                                    />
-                                </label>
-                            </div>
+                        {engineModule.hasOwnProperty('driveField') && (
+                            <label className={styles.engineCustomizationCheckLabel}>
+                                Drive Field:
+                                <input className={styles.inputCheckbox}
+                                    type="checkbox"
+                                    checked={engineModule.driveField}
+                                    onChange={() => handleEngineCheckboxChange(engineModule.moduleLocation1, engineModule.moduleNumber, 'driveField')}
+                                />
+                            </label>
                         )}
-                        {module.hasOwnProperty('pseudoVelocity') && (
-                            <div>
-                                <label>
-                                    <strong>Pseudo Velocity:</strong>
-                                    <input
-                                        type="checkbox"
-                                        checked={module.pseudoVelocity}
-                                        onChange={() => handleCheckboxChange(index, 'pseudoVelocity')}
-                                    />
-                                </label>
-                            </div>
+                        {engineModule.hasOwnProperty('pseudoVelocity') && (
+                            <label className={styles.engineCustomizationCheckLabel}>
+                                Pseudo Velocity:
+                                <input className={styles.inputCheckbox}
+                                    type="checkbox"
+                                    checked={engineModule.pseudoVelocity}
+                                    onChange={() => handleEngineCheckboxChange(engineModule.moduleLocation1, engineModule.moduleNumber, 'pseudoVelocity')}
+                                />
+                            </label>
                         )}
-                        {module.hasOwnProperty('singularityDrive') && (
-                            <div>
-                                <label>
-                                    <strong>Singularity Drive:</strong>
-                                    <input
-                                        type="checkbox"
-                                        checked={module.singularityDrive}
-                                        onChange={() => handleCheckboxChange(index, 'singularityDrive')}
-                                    />
-                                </label>
-                            </div>
+                        {engineModule.hasOwnProperty('singularityDrive') && shipSM >= 22 - shipTL && (
+                            <label className={styles.engineCustomizationCheckLabel}>
+                                Singularity Drive:
+                                <input className={styles.inputCheckbox}
+                                    type="checkbox"
+                                    checked={engineModule.singularityDrive}
+                                    onChange={() => handleEngineCheckboxChange(engineModule.moduleLocation1, engineModule.moduleNumber, 'singularityDrive')}
+                                />
+                            </label>
                         )}
-                        {module.hasOwnProperty('stardriveFuel') && (
-                            <div>
-                                <label>
-                                    <strong>Stardrive Fuel:</strong>
-                                    <input
-                                        type="checkbox"
-                                        checked={module.stardriveFuel}
-                                        onChange={() => handleCheckboxChange(index, 'stardriveFuel')}
-                                    />
-                                </label>
-                            </div>
+                        {engineModule.hasOwnProperty('stardriveFuel') && (
+                            <label className={styles.engineCustomizationCheckLabel}>
+                                Stardrive Fuel:
+                                <input className={styles.inputCheckbox}
+                                    type="checkbox"
+                                    checked={engineModule.stardriveFuel}
+                                    onChange={() => handleEngineCheckboxChange(engineModule.moduleLocation1, engineModule.moduleNumber, 'stardriveFuel')}
+                                />
+                            </label>
                         )}
-                        {module.hasOwnProperty('reactionlessEngineSuper') && (
-                            <div>
-                                <label>
-                                    <strong>Reactionless Engine Super:</strong>
-                                    <input
-                                        type="checkbox"
-                                        checked={module.reactionlessEngineSuper}
-                                        onChange={() => handleCheckboxChange(index, 'reactionlessEngineSuper')}
-                                    />
-                                </label>
-                            </div>
+                        {engineModule.hasOwnProperty('reactionlessEngineSuper') && (
+                            <label className={styles.engineCustomizationCheckLabel}>
+                                Reactionless Engine Super:
+                                <input className={styles.inputCheckbox}
+                                    type="checkbox"
+                                    checked={engineModule.reactionlessEngineSuper}
+                                    onChange={() => handleEngineCheckboxChange(engineModule.moduleLocation1, engineModule.moduleNumber, 'reactionlessEngineSuper')}
+                                />
+                            </label>
                         )}
-                        {module.hasOwnProperty('reactionlessEngineHot') && (
-                            <div>
-                                <label>
-                                    <strong>Reactionless Engine Hot:</strong>
-                                    <input
-                                        type="checkbox"
-                                        checked={module.reactionlessEngineHot}
-                                        onChange={() => handleCheckboxChange(index, 'reactionlessEngineHot')}
-                                    />
-                                </label>
-                            </div>
+                        {engineModule.hasOwnProperty('reactionlessEngineHot') && (
+                            <label className={styles.engineCustomizationCheckLabel}>
+                                Reactionless Engine Hot:
+                                <input className={styles.inputCheckbox}
+                                    type="checkbox"
+                                    checked={engineModule.reactionlessEngineHot}
+                                    onChange={() => handleEngineCheckboxChange(engineModule.moduleLocation1, engineModule.moduleNumber, 'reactionlessEngineHot')}
+                                />
+                            </label>
                         )}
-                        {module.hasOwnProperty('reactionlessEngineStandard') && (
-                            <div>
-                                <label>
-                                    <strong>Reactionless Engine Standard:</strong>
-                                    <input
-                                        type="checkbox"
-                                        checked={module.reactionlessEngineStandard}
-                                        onChange={() => handleCheckboxChange(index, 'reactionlessEngineStandard')}
-                                    />
-                                </label>
-                            </div>
+                        {engineModule.hasOwnProperty('reactionlessEngineStandard') && (
+                            <label className={styles.engineCustomizationCheckLabel}>
+                                Reactionless Engine Standard:
+                                <input className={styles.inputCheckbox}
+                                    type="checkbox"
+                                    checked={engineModule.reactionlessEngineStandard}
+                                    onChange={() => handleEngineCheckboxChange(engineModule.moduleLocation1, engineModule.moduleNumber, 'reactionlessEngineStandard')}
+                                />
+                            </label>
                         )}
-                        {module.hasOwnProperty('reactionlessEngineRotary') && (
-                            <div>
-                                <label>
-                                    <strong>Reactionless Engine Rotary:</strong>
-                                    <input
-                                        type="checkbox"
-                                        checked={module.reactionlessEngineRotary}
-                                        onChange={() => handleCheckboxChange(index, 'reactionlessEngineRotary')}
-                                    />
-                                </label>
-                            </div>
+                        {engineModule.hasOwnProperty('reactionlessEngineRotary') && (
+                            <label className={styles.engineCustomizationCheckLabel}>
+                                Reactionless Engine Rotary:
+                                <input className={styles.inputCheckbox}
+                                    type="checkbox"
+                                    checked={engineModule.reactionlessEngineRotary}
+                                    onChange={() => handleEngineCheckboxChange(engineModule.moduleLocation1, engineModule.moduleNumber, 'reactionlessEngineRotary')}
+                                />
+                            </label>
                         )}
-                        {module.hasOwnProperty('reactionlessEngineExtraCost') && (
-                            <div>
-                                <label>
-                                    <strong>Reactionless Engine Extra Cost:</strong>
-                                    <input
-                                        type="checkbox"
-                                        checked={module.reactionlessEngineExtraCost}
-                                        onChange={() => handleCheckboxChange(index, 'reactionlessEngineExtraCost')}
-                                    />
-                                </label>
-                            </div>
+                        {engineModule.hasOwnProperty('reactionlessEngineExtraCost') && (
+                            <label className={styles.engineCustomizationCheckLabel}>
+                                Reactionless Engine Extra Cost:
+                                <input className={styles.inputCheckbox}
+                                    type="checkbox"
+                                    checked={engineModule.reactionlessEngineExtraCost}
+                                    onChange={() => handleEngineCheckboxChange(engineModule.moduleLocation1, engineModule.moduleNumber, 'reactionlessEngineExtraCost')}
+                                />
+                            </label>
                         )}
-                        {module.hasOwnProperty('negativeMassPropulsionDrive') && (
-                            <div>
-                                <label>
-                                    <strong>Negative Mass Propulsion Drive:</strong>
-                                    <input
-                                        type="checkbox"
-                                        checked={module.negativeMassPropulsionDrive}
-                                        onChange={() => handleCheckboxChange(index, 'negativeMassPropulsionDrive')}
-                                    />
-                                </label>
-                            </div>
+                        {engineModule.hasOwnProperty('negativeMassPropulsionDrive') && (
+                            <label className={styles.engineCustomizationCheckLabel}>
+                                Negative Mass Propulsion Drive:
+                                <input className={styles.inputCheckbox}
+                                    type="checkbox"
+                                    checked={engineModule.negativeMassPropulsionDrive}
+                                    onChange={() => handleEngineCheckboxChange(engineModule.moduleLocation1, engineModule.moduleNumber, 'negativeMassPropulsionDrive')}
+                                />
+                            </label>
                         )}
+                    </div>
+                ))}
+                {stardriveReactionlessArr.map((engineModule, index) => (
+                    <div key={index} className={styles.engineCustomizationSubContainer}>
+                        <span className={styles.engineCustomizationLabel}>Module Key:</span>
+                        <span className={styles.engineCustomizationValue}>{engineModule.moduleKey}</span>
+                        <span className={styles.engineCustomizationLabel}>Category:</span>
+                        <span className={styles.engineCustomizationValue}>{engineModule.moduleCategory}</span>
+                        <span className={styles.engineCustomizationLabel}>Location 1:</span>
+                        <span className={styles.engineCustomizationValue}>{engineModule.moduleLocation1}</span>
+                        <span className={styles.engineCustomizationLabel}>Module Number:</span>
+                        <span className={styles.engineCustomizationValue}>{engineModule.moduleNumber}</span>
+                        <span className={styles.engineCustomizationLabel}>Base Acceleration:</span>
+                        <span className={styles.engineCustomizationValue}>{engineModule.baseAccel?.toLocaleString()}</span>
+                        <span className={styles.engineCustomizationLabel}>Acceleration:</span>
+                        <span className={styles.engineCustomizationValue}>
+                            {engineModule.accel !== undefined ? (
+                                <>
+                                    <span style={{ display: engineModule.accel < 1 ? 'inline' : 'none' }}>
+                                        {engineModule.accel.toFixed(4)}
+                                    </span>
+                                    <span style={{ display: engineModule.accel >= 1 ? 'inline' : 'none' }}>
+                                        {engineModule.accel.toLocaleString()}
+                                    </span>
+                                </>
+                            ) : ''}
+                        </span>
+                        <span className={styles.engineCustomizationLabel}>Pseudo Velocity:</span>
+                        <span className={styles.engineCustomizationValue}>
+                            <input className={styles.inputCheckbox}
+                                type="checkbox"
+                                checked={engineModule.pseudoVelocity}
+                                onChange={() => handleEngineCheckboxChange(engineModule.moduleLocation1, engineModule.moduleNumber, 'pseudoVelocity')}
+                            />
+                        </span>
                     </div>
                 ))}
             </div>

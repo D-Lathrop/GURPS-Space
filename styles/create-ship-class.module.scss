@@ -906,3 +906,35 @@
     grid-column: span 4;
 
 }
+
+.engineCustomizationContainer {
+    @extend %commonContainerStyles;
+    grid-template-columns: repeat(6, 1fr);
+    grid-auto-rows: minmax(40px, 70px);
+    grid-column: span 4;
+    grid-row: span 19;
+}
+
+.engineCustomizationSubContainer {
+    @extend %commonContainerStyles;
+    grid-template-columns: repeat(6, 1fr);
+    grid-auto-rows: minmax(40px, 70px);
+    grid-column: 1 / span 6;
+    grid-row: span 5;
+}
+
+.engineCustomizationLabel {
+    @extend %habitatPowerInfoLabelCommonStyles;
+
+    color: $secondaryColor1;
+}
+
+.engineCustomizationValue {
+    @extend %habitatPowerInfoLabelCommonStyles;
+    grid-column: span 2;
+}
+
+.engineCustomizationCheckLabel {
+    @extend %automationAndLifeSuppLabelCommonStyles;
+    grid-column: span 3;
+}
