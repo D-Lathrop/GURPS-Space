@@ -187,7 +187,7 @@ const CreateShipClass = ({ isExpanded }) => {
     const [habitatsArr, setHabitatsArr] = useState([{}]);
     const [selectedHabitat, setSelectedHabitat] = useState(null);
     const [enginesArr, setEnginesArr] = useState([{}]);
-    const [stardriveReactionlessArr, setStardriveReactionlessArr] = useState([{}])
+    const [stardriveReactionlessArr, setStardriveReactionlessArr] = useState([])
 
     // Design Switch and Feature State Variables
     const [shipHardenedArmorCost, setHardenedArmorCost] = useState(0);
@@ -708,6 +708,7 @@ const CreateShipClass = ({ isExpanded }) => {
                 newModuleListObj.singularityDrive = false;
                 newModuleListObj.driveField = false;
                 newModuleListObj.negativeMassPropulsionDrive = false;
+                newModuleListObj.mpsTank = Infinity
                 break;
             case "Super Stardrive Engine":
             case "Stardrive Engine":
@@ -1146,6 +1147,10 @@ const CreateShipClass = ({ isExpanded }) => {
         }
     }, []);
 
+    // useEffect(() => {
+    //     console.log(`stardriveReactionlessArr: ${JSON.stringify(stardriveReactionlessArr)}`);
+    // }, [stardriveReactionlessArr]);
+
     // This useEffect handles changes to the selected module array to update overall ship statistics.
     const updateShipValues = useCallback((shipModules, shipTL, shipSM) => {
         const modulesUseEffectData = shipData;
@@ -1222,7 +1227,7 @@ const CreateShipClass = ({ isExpanded }) => {
         let stardriveNeedsFuel = false;
         let heatSinks = 0;
 
-
+        let newStardriveReactionlessArr = [];
 
         // if (modulesUseEffect.length === 0) {
         //     frontdDR = 0
@@ -1319,8 +1324,6 @@ const CreateShipClass = ({ isExpanded }) => {
                         const reactionlessEngine = modulesUseEffectData[EngineType];
                         const reactionlessEngineSM = reactionlessEngine.find(module => module.SM === shipSM);
 
-                        let newStardriveReactionlessArr = JSON.parse(JSON.stringify(stardriveReactionlessArr));
-
                         if (currentModule.reactionlessEngineExtraCost) {
                             const reactionlessCost = reactionlessEngineSM.cost;
                             moduleCost += (currentModule.baseModuleCost * 2) + (reactionlessCost * 2);
@@ -1328,31 +1331,15 @@ const CreateShipClass = ({ isExpanded }) => {
 
                         const newReactionlessEngine = {
                             moduleKey: EngineType,
-                            moduleCategory: reactionlessEngine.Category,
+                            moduleCategory: reactionlessEngine[0].Category,
                             moduleLocation1: currentModuleLocation,
                             moduleNumber: currentModuleNumber,
-                            baseAccel: reactionlessEngine.Accel,
-                            accel: reactionlessEngine.Accel,
-                            pseudoVelocity: false,
+                            baseAccel: reactionlessEngine[0].Accel,
+                            accel: reactionlessEngine[0].Accel,
+                            mpsTank: Infinity,
                         }
 
                         newStardriveReactionlessArr.push(newReactionlessEngine);
-
-                        setStardriveReactionlessArr(newStardriveReactionlessArr);
-                    }
-
-                    function removeReactionlessEngine() {
-                        let newStardriveReactionlessArr = JSON.parse(JSON.stringify(stardriveReactionlessArr));
-
-                        const indexToRemove = newStardriveReactionlessArr.findIndex(engine =>
-                            engine.moduleLocation1 === currentModuleLocation && engine.moduleNumber === currentModuleNumber
-                        );
-
-                        if (indexToRemove !== -1) {
-                            newStardriveReactionlessArr.splice(indexToRemove, 1);
-                        }
-
-                        setStardriveReactionlessArr(newStardriveReactionlessArr);
                     }
 
                     function addForceScreen(ScreenType) {
@@ -1360,8 +1347,6 @@ const CreateShipClass = ({ isExpanded }) => {
                         const forceScreenSM = forceScreen.find(module => module.SM === shipSM);
                         const screendDR = forceScreenSM.dDr;
                         frontdDR += screendDR * 3;
-
-                        console.log(`ScreenType: ${ScreenType} forceScreen: ${JSON.stringify(forceScreen)} forceScreenSM: ${JSON.stringify(forceScreenSM)} screendDr: ${screendDR}`)
                     }
 
                     if (currentModule.driveField) {
@@ -1380,23 +1365,15 @@ const CreateShipClass = ({ isExpanded }) => {
                     }
                     if (currentModule.reactionlessEngineSuper) {
                         addReactionlessEngine("Super Reactionless");
-                    } else {
-                        removeReactionlessEngine()
                     }
                     if (currentModule.reactionlessEngineHot) {
                         addReactionlessEngine("Hot Reactionless");
-                    } else {
-                        removeReactionlessEngine()
-                    }
-                    if (currentModule.reactionlessEngineStandard) {
-                        addReactionlessEngine("Standard");
-                    } else {
-                        removeReactionlessEngine()
                     }
                     if (currentModule.reactionlessEngineRotary) {
                         addReactionlessEngine("Rotary");
-                    } else {
-                        removeReactionlessEngine()
+                    }
+                    if (currentModule.reactionlessEngineStandard) {
+                        addReactionlessEngine("Standard");
                     }
                 }
 
@@ -1414,9 +1391,36 @@ const CreateShipClass = ({ isExpanded }) => {
                     } else {
                         moduleCost = currentModule.baseModuleCost;
                     }
-
-                    console.log(`New Accel: ${currentModule.accel} New mpsTank: ${currentModule.mpsTank}`)
                 }
+
+                function handleReactionlessEngine() {
+                    function addForceScreen(ScreenType) {
+                        const forceScreen = modulesUseEffectData[ScreenType];
+                        const forceScreenSM = forceScreen.find(module => module.SM === shipSM);
+                        const screendDR = forceScreenSM.dDr;
+                        frontdDR += screendDR * 3;
+                    }
+
+                    if (currentModule.driveField) {
+                        if (shipTL <= 11) {
+                            addForceScreen("Force Screen, TL11 Light");
+                        } else {
+                            addForceScreen("Force Screen, TL12 Light");
+                        }
+                    }
+
+                    if (currentModule.negativeMassPropulsionDrive) {
+                        moduleCost = currentModule.baseModuleCost * 10;
+                        powerDemand = 0;
+                    } else {
+                        moduleCost = currentModule.baseModuleCost;
+                        powerDemand = currentModule.baseModulePowerDemand;
+                    }
+                }
+
+                // newModuleListObj.pseudoVelocity = false;
+                // newModuleListObj.singularityDrive = false;
+                // newModuleListObj.driveField = false;
 
                 switch (moduleCategory) {
                     case 'Armor and Survivability':
@@ -1637,11 +1641,11 @@ const CreateShipClass = ({ isExpanded }) => {
                             }
                         }
                         if (currentModuleKey === 'Stardrive Engine') {
-                            handleStardrive();
+                            handleStardrive(stardriveReactionlessArr);
                             maxFTL += 1
                         }
                         if (currentModuleKey === 'Super Stardrive Engine') {
-                            handleStardrive();
+                            handleStardrive(stardriveReactionlessArr);
                             maxFTL += 2
                         }
                         break;
@@ -1741,7 +1745,7 @@ const CreateShipClass = ({ isExpanded }) => {
                         break;
 
                     case 'Reactionless Engine':
-                        // Do I need to do anything with this?
+                        handleReactionlessEngine();
                         break;
                     default:
                         break;
@@ -1824,6 +1828,8 @@ const CreateShipClass = ({ isExpanded }) => {
         setTeleportProjectors(teleProjectors);
         setTeleportProjectorsSend(teleProjectorsSend);
         setTeleportProjectorsReceive(teleProjectorsReceive);
+
+        setStardriveReactionlessArr(newStardriveReactionlessArr);
 
         if (JSON.stringify(newShipModules) !== JSON.stringify(currentShipModules)) {
             setModules([...newShipModules]);
@@ -4601,40 +4607,6 @@ const CreateShipClass = ({ isExpanded }) => {
             'Super Conversion Torch', 'Rotary', 'Standard', 'Hot Reactionless', 'Super Reactionless', 'Subwarp', 'Super Stardrive Engine',
             'Stardrive Engine']
 
-        // {
-        //     moduleKey: moduleKey,
-        //     moduleCategory: moduleCategory,
-        //     moduleLocation1: moduleLocation1,
-        //     moduleLocation2: moduleLocation2,
-        //     moduleNumber: moduleNumber,
-        //     modulePowerDemand: modulePowerDemand,
-        //     baseModuleCost: moduleCost,
-        //     moduleCost: moduleCost,
-        //     baseModuleWorkspaces: moduleWorkspaces,
-        //     moduleWorkspaces: moduleWorkspaces,
-        //     alreadyCustomized: false,
-        //     baseAccel: accel,
-        //     accel: accel,
-        //     basempsTank: mpsTank,
-        //     mpsTank: mpsTank,
-        //     fuelTypes: fuelTypes
-        // ramRocket: false;
-        // highThrust: false;
-        // driveField: false;
-        // pseudoVelocity: false;
-        // singularityDrive: false;
-        // stardriveFuel: false;
-        // reactionlessEngineSuper: false;
-        // reactionlessEngineHot: false;
-        // reactionlessEngineStandard: false;
-        // reactionlessEngineRotary: false;
-        // reactionlessEngineExtraCost: false;
-        // pseudoVelocity: false;
-        // singularityDrive: false;
-        // driveField: false;
-        // negativeMassPropulsionDrive: false;
-        // }
-
         let newEngineModulesArr = [];
 
         processShipModules(shipModules, (shipModule) => {
@@ -4642,8 +4614,6 @@ const CreateShipClass = ({ isExpanded }) => {
                 newEngineModulesArr.push(shipModule);
             }
         });
-
-        console.log(`newEngineModulesArr: ${JSON.stringify(newEngineModulesArr)}`);
 
         setEnginesArr(newEngineModulesArr);
     }, [shipModules])
@@ -4674,15 +4644,35 @@ const CreateShipClass = ({ isExpanded }) => {
                 break;
             case 'reactionlessEngineSuper':
                 newModuleObj.reactionlessEngineSuper = !newModuleObj.reactionlessEngineSuper;
+                if (newModuleObj.reactionlessEngineSuper) {
+                    newModuleObj.reactionlessEngineHot = false;
+                    newModuleObj.reactionlessEngineStandard = false;
+                    newModuleObj.reactionlessEngineRotary = false;
+                }
                 break;
             case 'reactionlessEngineHot':
                 newModuleObj.reactionlessEngineHot = !newModuleObj.reactionlessEngineHot;
+                if (newModuleObj.reactionlessEngineHot) {
+                    newModuleObj.reactionlessEngineSuper = false;
+                    newModuleObj.reactionlessEngineStandard = false;
+                    newModuleObj.reactionlessEngineRotary = false;
+                }
                 break;
             case 'reactionlessEngineStandard':
                 newModuleObj.reactionlessEngineStandard = !newModuleObj.reactionlessEngineStandard;
+                if (newModuleObj.reactionlessEngineStandard) {
+                    newModuleObj.reactionlessEngineSuper = false;
+                    newModuleObj.reactionlessEngineHot = false;
+                    newModuleObj.reactionlessEngineRotary = false;
+                }
                 break;
             case 'reactionlessEngineRotary':
                 newModuleObj.reactionlessEngineRotary = !newModuleObj.reactionlessEngineRotary;
+                if (newModuleObj.reactionlessEngineRotary) {
+                    newModuleObj.reactionlessEngineSuper = false;
+                    newModuleObj.reactionlessEngineHot = false;
+                    newModuleObj.reactionlessEngineStandard = false;
+                }
                 break;
             case 'reactionlessEngineExtraCost':
                 newModuleObj.reactionlessEngineExtraCost = !newModuleObj.reactionlessEngineExtraCost;
@@ -4704,12 +4694,56 @@ const CreateShipClass = ({ isExpanded }) => {
     };
 
     function formatFuelType(fuelType) {
+        if (fuelType === undefined || fuelType === null) {
+            return 'None';
+        }
         return fuelType
             .replace(/([a-z])([A-Z])/g, '$1 $2') // Add space between lowercase and uppercase letters
             .replace(/([a-zA-Z])([A-Z][a-z])/g, '$1 $2') // Add space before capitalized words
             .replace(/([a-z])([A-Z])/g, '$1 $2') // Add space between lowercase and uppercase letters again for edge cases
             .replace(/([a-z])([0-9])/g, '$1 $2') // Add space between letters and numbers
-            .replace(/([0-9])([A-Z])/g, '$1 $2'); // Add space between numbers and uppercase letters
+            .replace(/([0-9])([A-Z])/g, '$1 $2') // Add space between numbers and uppercase letters
+            .replace(/\//g, '/ '); // Add space after forward slash
+    }
+
+    function getEngineDisplayClass(moduleKey) {
+        switch (moduleKey) {
+            case "Super Stardrive Engine":
+            case "Stardrive Engine":
+                return styles.engineCustomizationSubContainer9Options;
+            case "Nuclear Saltwater Rocket":
+            case "Nuclear Light Bulb":
+            case "HEDM":
+            case "Chemical":
+                return styles.engineCustomizationSubContainerNoOptions;
+            case "Super Antimatter Plasma Torch":
+            case "Super Conversion Torch":
+            case "Total Conversion Torch":
+            case "Antimatter Pion Torch":
+            case "Antimatter Pion":
+            case "Antimatter Plasma Torch":
+            case "Antimatter Plasma Rocket":
+            case "Antimatter Thermal Rocket":
+            case "Super Fusion Torch":
+            case "Fusion Torch":
+            case "Fusion Rocket":
+            case "Mass Driver":
+            case "Ion Drive":
+            case "Nuclear Thermal Rocket":
+            case "Super Fusion Pulse Drive":
+            case "Advanced Fusion Pulse Drive":
+            case "Fusion Pulse Drive":
+            case "External Pulsed Plasma":
+                return styles.engineCustomizationSubContainer1to2Options;
+            case "Super Reactionless":
+            case "Hot Reactionless":
+            case "Standard":
+            case "Rotary":
+            case "Subwarp":
+                return styles.engineCustomizationSubContainer3to4Options;
+            default:
+                return styles.engineCustomizationSubContainer9Options;
+        }
     }
 
     function EngineCustomizationDisplay() {
@@ -4717,10 +4751,10 @@ const CreateShipClass = ({ isExpanded }) => {
             <div className={styles.engineCustomizationContainer}>
                 <h2 className={isExpanded ? styles.statTitle5ColExpanded : styles.statTitleCollapsed}>Engine & Fuel Customization</h2>
                 {enginesArr.map((engineModule, index) => (
-                    <div key={index} className={styles.engineCustomizationSubContainer}>
+                    <div key={index} className={`${getEngineDisplayClass(engineModule.moduleKey)}`}>
                         <span className={styles.engineCustomizationLabel}>Module Key:</span>
                         <span className={styles.engineCustomizationValue}>{engineModule.moduleKey}</span>
-                        <span className={styles.engineCustomizationLabel}>Location 1:</span>
+                        <span className={styles.engineCustomizationLabel}>Hull Location:</span>
                         <span className={styles.engineCustomizationValue}>{engineModule.moduleLocation1}</span>
                         <span className={styles.engineCustomizationLabel}>Cost:</span>
                         <span className={styles.engineCustomizationValue}>${engineModule.moduleCost?.toLocaleString()}</span>
@@ -4730,7 +4764,7 @@ const CreateShipClass = ({ isExpanded }) => {
                         <span className={styles.engineCustomizationValue}>{engineModule.moduleWorkspaces?.toLocaleString()}</span>
                         <span className={styles.engineCustomizationLabel}>Fuel Types:</span>
                         <span className={styles.engineCustomizationValue}>
-                            {engineModule.fuelTypes?.map(formatFuelType).join(', ')}
+                            {(engineModule.fuelTypes ? engineModule.fuelTypes.map(formatFuelType).join(', ') : formatFuelType(undefined))}
                         </span>
                         <span className={styles.engineCustomizationLabel}>Acceleration:</span>
                         <span className={styles.engineCustomizationValue}>
@@ -4869,41 +4903,35 @@ const CreateShipClass = ({ isExpanded }) => {
                         )}
                     </div>
                 ))}
-                {stardriveReactionlessArr.map((engineModule, index) => (
-                    <div key={index} className={styles.engineCustomizationSubContainer}>
-                        <span className={styles.engineCustomizationLabel}>Module Key:</span>
-                        <span className={styles.engineCustomizationValue}>{engineModule.moduleKey}</span>
-                        <span className={styles.engineCustomizationLabel}>Category:</span>
-                        <span className={styles.engineCustomizationValue}>{engineModule.moduleCategory}</span>
-                        <span className={styles.engineCustomizationLabel}>Location 1:</span>
-                        <span className={styles.engineCustomizationValue}>{engineModule.moduleLocation1}</span>
-                        <span className={styles.engineCustomizationLabel}>Module Number:</span>
-                        <span className={styles.engineCustomizationValue}>{engineModule.moduleNumber}</span>
-                        <span className={styles.engineCustomizationLabel}>Base Acceleration:</span>
-                        <span className={styles.engineCustomizationValue}>{engineModule.baseAccel?.toLocaleString()}</span>
-                        <span className={styles.engineCustomizationLabel}>Acceleration:</span>
-                        <span className={styles.engineCustomizationValue}>
-                            {engineModule.accel !== undefined ? (
-                                <>
-                                    <span style={{ display: engineModule.accel < 1 ? 'inline' : 'none' }}>
-                                        {engineModule.accel.toFixed(4)}
-                                    </span>
-                                    <span style={{ display: engineModule.accel >= 1 ? 'inline' : 'none' }}>
-                                        {engineModule.accel.toLocaleString()}
-                                    </span>
-                                </>
-                            ) : ''}
-                        </span>
-                        <span className={styles.engineCustomizationLabel}>Pseudo Velocity:</span>
-                        <span className={styles.engineCustomizationValue}>
-                            <input className={styles.inputCheckbox}
-                                type="checkbox"
-                                checked={engineModule.pseudoVelocity}
-                                onChange={() => handleEngineCheckboxChange(engineModule.moduleLocation1, engineModule.moduleNumber, 'pseudoVelocity')}
-                            />
-                        </span>
-                    </div>
-                ))}
+                {stardriveReactionlessArr.length === 1 && Object.keys(stardriveReactionlessArr[0]).length === 0 ? null : (
+                    stardriveReactionlessArr.map((engineModule, index) => (
+                        <div key={index} className={styles.engineCustomizationSubContainerNoOptions}>
+                            <span className={styles.engineCustomizationLabel}>Module Key:</span>
+                            <span className={styles.engineCustomizationValue}>{engineModule.moduleKey}</span>
+                            <span className={styles.engineCustomizationLabel}>Category:</span>
+                            <span className={styles.engineCustomizationValue}>{engineModule.moduleCategory}</span>
+                            <span className={styles.engineCustomizationLabel}>Location 1:</span>
+                            <span className={styles.engineCustomizationValue}>{engineModule.moduleLocation1}</span>
+                            <span className={styles.engineCustomizationLabel}>Module Number:</span>
+                            <span className={styles.engineCustomizationValue}>{engineModule.moduleNumber}</span>
+                            <span className={styles.engineCustomizationLabel}>mps/tank:</span>
+                            <span className={styles.engineCustomizationValue}>{engineModule.mpsTank?.toLocaleString()}</span>
+                            <span className={styles.engineCustomizationLabel}>Acceleration:</span>
+                            <span className={styles.engineCustomizationValue}>
+                                {engineModule.accel !== undefined ? (
+                                    <>
+                                        <span style={{ display: engineModule.accel < 1 ? 'inline' : 'none' }}>
+                                            {engineModule.accel.toFixed(4)}
+                                        </span>
+                                        <span style={{ display: engineModule.accel >= 1 ? 'inline' : 'none' }}>
+                                            {engineModule.accel.toLocaleString()}
+                                        </span>
+                                    </>
+                                ) : ''}
+                            </span>
+                        </div>
+                    ))
+                )}
             </div>
         )
     }

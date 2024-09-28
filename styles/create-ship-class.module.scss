@@ -912,15 +912,7 @@
     grid-template-columns: repeat(6, 1fr);
     grid-auto-rows: minmax(40px, 70px);
     grid-column: span 4;
-    grid-row: span 19;
-}
-
-.engineCustomizationSubContainer {
-    @extend %commonContainerStyles;
-    grid-template-columns: repeat(6, 1fr);
-    grid-auto-rows: minmax(40px, 70px);
-    grid-column: 1 / span 6;
-    grid-row: span 5;
+    grid-row: span 22;
 }
 
 .engineCustomizationLabel {
@@ -936,5 +928,34 @@
 
 .engineCustomizationCheckLabel {
     @extend %automationAndLifeSuppLabelCommonStyles;
+    font-size: 14px;
     grid-column: span 3;
+    border-top: 1px solid $secondaryColor1
+}
+
+%engineCustomizationSubContainerCommonStyles {
+    @extend %commonContainerStyles;
+    grid-template-columns: repeat(6, 1fr);
+    grid-auto-rows: minmax(40px, 70px);
+    grid-column: 1 / span 6;
+}
+
+.engineCustomizationSubContainer3to4Options {
+    @extend %engineCustomizationSubContainerCommonStyles;
+    grid-row: span 5;
+}
+
+.engineCustomizationSubContainer9Options {
+    @extend %engineCustomizationSubContainerCommonStyles;
+    grid-row: span 6;
+}
+
+.engineCustomizationSubContainerNoOptions {
+    @extend %engineCustomizationSubContainerCommonStyles;
+    grid-row: span 3;
+}
+
+.engineCustomizationSubContainer1to2Options {
+    @extend %engineCustomizationSubContainerCommonStyles;
+    grid-row: span 4;
 }
