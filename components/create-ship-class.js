@@ -1862,19 +1862,21 @@ const CreateShipClass = ({ isExpanded }) => {
                         accel *= 3;
                     }
 
-                    let existingEntry = newEngineAccelDelta.find(entry => entry.engineType === moduleKey && entry.fuelType === fuelType);
-                    if (existingEntry) {
-                        existingEntry.accel += accel;
-                    } else {
-                        newEngineAccelDelta.push({
-                            engineType: moduleKey,
-                            fuelType: fuelType,
-                            accel: accel,
-                            deltaV: deltaV
-                        });
+                    if (deltaV > 0) {
+                        let existingEntry = newEngineAccelDelta.find(entry => entry.engineType === moduleKey && entry.fuelType === fuelType);
+                        if (existingEntry) {
+                            existingEntry.accel += accel;
+                        } else {
+                            newEngineAccelDelta.push({
+                                engineType: moduleKey,
+                                fuelType: fuelType,
+                                accel: accel,
+                                deltaV: deltaV
+                            });
+                        }
                     }
                 }
-            };
+            }
 
             switch (moduleKey) {
                 // case "Super Reactionless":
@@ -4734,6 +4736,26 @@ const CreateShipClass = ({ isExpanded }) => {
         }
     }
 
+    function getFuelDisplayClass() {
+        const arrLength = shipValidFuelTypes.length;
+
+        switch (arrLength) {
+            case 1:
+            case 2:
+                return styles.engineCustomizationSubContainer1to2Options;
+            case 3:
+            case 4:
+                return styles.engineCustomizationSubContainer3to4Options;
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+                return styles.engineCustomizationSubContainer9Options;
+            default:
+                return styles.engineCustomizationSubContainer1to2Options;
+        }
+    }
+
     // This useEffect populates the validFuelTypes state variable used to customize fuel tanks.
     useEffect(() => {
         let newValidFuelTypes = ['Empty'];
@@ -4767,6 +4789,7 @@ const CreateShipClass = ({ isExpanded }) => {
     }, [shipModules]);
 
     function updateAssignedContents(selectedFuel, moduleLocation, moduleNumber) {
+
         const unformattedFuel = unformatFuelType(selectedFuel);
 
         const [rowIndex, colIndex] = getModuleIndex(moduleLocation, moduleNumber)
@@ -4806,11 +4829,11 @@ const CreateShipClass = ({ isExpanded }) => {
                         <span className={styles.engineCustomizationLabel}>Engine Type:</span>
                         <span className={styles.engineCustomizationValue}>{engine.engineType}</span>
                         <span className={styles.engineCustomizationLabel}>Fuel Type:</span>
-                        <span className={styles.engineCustomizationValue}>{engine.fuelType}</span>
+                        <span className={styles.engineCustomizationValue}>{formatFuelType(engine.fuelType)}</span>
                         <span className={styles.engineCustomizationLabel}>Acceleration:</span>
                         <span className={styles.engineCustomizationValue}>{engine.accel} G</span>
                         <span className={styles.engineCustomizationLabel}>Delta V:</span>
-                        <span className={styles.engineCustomizationValue}>{engine.deltaV} km/s</span>
+                        <span className={styles.engineCustomizationValue}>{engine.deltaV} mps</span>
                     </div>
                 ))}
                 {enginesArr.map((engineModule, index) => (
@@ -4968,7 +4991,7 @@ const CreateShipClass = ({ isExpanded }) => {
                 ))}
                 {/* ["Empty", "Anything", "Matter/AntimatterFuel", "Antimatter-boostedHydrogenFuel", "Water", "Antimatter-catalyzedHydrogenFuel", "HydrogenFuel", "FusionPulsePellets", "BombPulseUnits", "Uranium-saltwaterFuel", "IonizableReactionMass", "HEDMFuel", "Hydrogen-oxygenRocketFuel"] */}
                 {shipFuelTanksArr.map((fuelTank, index) => (
-                    <div key={index} className={styles.engineCustomizationSubContainerNoOptions}>
+                    <div key={index} className={getFuelDisplayClass()}>
                         <span className={styles.engineCustomizationLabel}>Module:</span>
                         <span className={styles.engineCustomizationValue}>{fuelTank.moduleKey}</span>
                         <span className={styles.engineCustomizationLabel}>Hull Location:</span>
@@ -4981,14 +5004,14 @@ const CreateShipClass = ({ isExpanded }) => {
                         <span className={styles.engineCustomizationValue}>{fuelTank.moduleWorkspaces?.toLocaleString()}</span>
                         <span className={styles.engineCustomizationLabel}>Fuel Load:</span>
                         <span className={styles.engineCustomizationValue}>{fuelTank.fuelLoad}</span>
-                        <span className={styles.engineCustomizationLabel}>Assigned Contents:</span>
+                        <span className={styles.engineCustomizationLabelFuel}>Assigned Contents:</span>
                         {shipValidFuelTypes.map((fuelType, idx) => (
-                            <label key={idx} className={styles.engineCustomizationCheckLabel}>
+                            <label key={idx} className={styles.engineCustomizationCheckLabelFuel}>
                                 {fuelType}:
                                 <input
                                     className={styles.inputCheckbox}
                                     type="checkbox"
-                                    checked={fuelTank.assignedContents === fuelType}
+                                    checked={fuelTank.assignedContents === unformatFuelType(fuelType)}
                                     onChange={() => updateAssignedContents(fuelType, fuelTank.moduleLocation1, fuelTank.moduleNumber)}
                                 />
                             </label>
