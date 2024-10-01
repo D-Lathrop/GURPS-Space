@@ -918,7 +918,6 @@
 
 .engineCustomizationLabel {
     @extend %habitatPowerInfoLabelCommonStyles;
-
     color: $secondaryColor1;
 }
 
@@ -944,7 +943,8 @@
     @extend %automationAndLifeSuppLabelCommonStyles;
     font-size: 14px;
     grid-column: span 6;
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
     align-items: center;
     border-top: 1px solid $secondaryColor1
 }
@@ -978,7 +978,7 @@
 
 .engineCustomizationSubContainerEngineAccelDelta {
     @extend %engineCustomizationSubContainerCommonStyles;
-    grid-row: span 2;
+    grid-row: span 3;
 }
 
 .fuelTankSelect {
@@ -986,4 +986,21 @@
     align-self: center;
     height: 70%;
     grid-column: span 4;
+}
+
+.engineCustomizationCheckbox {
+    grid-column: 4;
+    width: 20px;
+    height: 20px;
+}
+
+.fuelCustomizationLabel {
+    @extend %habitatPowerInfoLabelCommonStyles;
+    color: $secondaryColor2;
+    grid-column: span 3;
+}
+
+.engineExplanation {
+    @extend %statBlockLableCargoCommonStyles;
+    grid-column: 1 / span 6;
 }

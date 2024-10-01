@@ -661,7 +661,7 @@ const CreateShipClass = ({ isExpanded }) => {
                 break;
             case "Fuel Tank":
                 newModuleListObj.customizable = true;
-                newModuleListObj.assignedContents = '';
+                newModuleListObj.assignedContents = 'Empty';
                 newModuleListObj.fuelLoad = SMData.Fuel;
                 break;
             case "Force Screen, TL12 Heavy":
@@ -1803,139 +1803,6 @@ const CreateShipClass = ({ isExpanded }) => {
         updateShipModules(shipModules, shipData, shipSM, shipStreamlinedUn, shipTL, shipReardDR, superScienceChecked)
         updateShipValues(shipModules, shipTL, shipSM) // **************************************************************** Call this directly in updateShipModules?
     }, [updateShipModules, updateShipValues, shipModules, shipSM, shipStreamlinedUn, shipTL, shipReardDR, superScienceChecked]);
-
-    // This useEffect updates the shipEngineAccelDelta array based on ship modules and the fuelObj.
-    useEffect(() => {
-        let newEngineAccelDelta = []
-
-        processShipModules(shipModules, (shipModule) => {
-            let moduleKey = shipModule.moduleKey;
-
-
-            // function addReactionlessAccel(moduleKey) {
-            //     const accel = shipModule.accel;
-
-            //     const existingEntry = newEngineAccelDelta.find(entry => entry.engineType === moduleKey);
-            //     if (existingEntry) {
-            //         existingEntry.accel += accel;
-            //     } else {
-            //         newEngineAccelDelta.push({
-            //             engineType: moduleKey,
-            //             accel: accel,
-            //             deltaV: Infinity
-            //         });
-            //     }
-            // }
-
-            // function addStardriveReactionless(engineType) {
-            //     const moduleKeyObj = shipData[engineType];
-            //     const accel = moduleKeyObj.Accel;
-
-            //     const existingEntry = newEngineAccelDelta.find(entry => entry.engineType === moduleKey);
-            //     if (existingEntry) {
-            //         existingEntry.accel += accel;
-            //     } else {
-            //         newEngineAccelDelta.push({
-            //             engineType: moduleKey,
-            //             accel: accel,
-            //             deltaV: Infinity
-            //         });
-            //     }
-            // }
-
-            function addReactionAccelDelta(moduleKey) {
-                let fuelTypes = shipModule.fuelTypes;
-                let moduleAccel = shipModule.accel;
-                let moduleMpsTank = shipModule.mpsTank;
-
-                for (let i = 0; i < fuelTypes.length; i++) {
-                    let fuelType = fuelTypes[i];
-                    let fuelObj = shipFuelObj;
-
-                    let deltaV = 0;
-                    let accel = moduleAccel;
-
-                    if (fuelObj.hasOwnProperty(fuelType) && fuelType !== 'Water') {
-                        deltaV = fuelObj[fuelType] * moduleMpsTank;
-                    } else if (fuelObj.hasOwnProperty(fuelType) && fuelType === 'Water') {
-                        deltaV = fuelObj[fuelType] * (moduleMpsTank / 3);
-                        accel *= 3;
-                    }
-
-                    if (deltaV > 0) {
-                        let existingEntry = newEngineAccelDelta.find(entry => entry.engineType === moduleKey && entry.fuelType === fuelType);
-                        if (existingEntry) {
-                            existingEntry.accel += accel;
-                        } else {
-                            newEngineAccelDelta.push({
-                                engineType: moduleKey,
-                                fuelType: fuelType,
-                                accel: accel,
-                                deltaV: deltaV
-                            });
-                        }
-                    }
-                }
-            }
-
-            switch (moduleKey) {
-                // case "Super Reactionless":
-                // case "Hot Reactionless":
-                // case "Standard":
-                // case "Rotary":
-                // case "Subwarp":
-                //     addReactionlessAccel(moduleKey);
-                //     break;
-                // case "Super Stardrive Engine":
-                // case "Stardrive Engine":
-                //     if (shipModule.reactionlessEngineSuper) {
-                //         addStardriveReactionless("Super Reactionless")
-                //     }
-                //     if (shipModule.reactionlessEngineHot) {
-                //         addStardriveReactionless("Hot Reactionless")
-                //     }
-                //     if (shipModule.reactionlessEngineStandard) {
-                //         addStardriveReactionless("Standard")
-                //     }
-                //     if (shipModule.reactionlessEngineRotary) {
-                //         addStardriveReactionless("Rotary")
-                //     }
-                //     break;
-                case "Antimatter Plasma Torch":
-                case "Super Antimatter Plasma Torch":
-                case "Antimatter Thermal Rocket":
-                case "Super Fusion Torch":
-                case "Fusion Torch":
-                case "Nuclear Thermal Rocket":
-                case "Super Conversion Torch":
-                case "Total Conversion Torch":
-                case "Antimatter Pion Torch":
-                case "Antimatter Pion":
-                case "Antimatter Plasma Rocket":
-                case "Fusion Rocket":
-                case "Super Fusion Pulse Drive":
-                case "Advanced Fusion Pulse Drive":
-                case "Fusion Pulse Drive":
-                case "External Pulsed Plasma":
-                case "Mass Driver":
-                case "Ion Drive":
-                case "Nuclear Saltwater Rocket":
-                case "Nuclear Light Bulb":
-                case "HEDM":
-                case "Chemical":
-                    addReactionAccelDelta(moduleKey);
-                    break;
-
-                default:
-
-                    break;
-
-            }
-            console.log(`newEngineAccelDelta: ${JSON.stringify(newEngineAccelDelta)}`);
-            setEngineAccelDelta(newEngineAccelDelta);
-        })
-
-    }, [shipModules, shipFuelObj]);
 
     // This useEffect resets the selected modules array state variable when one of the dependencies change.
     // useEffect(() => {
@@ -4763,7 +4630,7 @@ const CreateShipClass = ({ isExpanded }) => {
         processShipModules(shipModules, (shipModule) => {
             if (shipModule.fuelTypes) {
                 shipModule.fuelTypes.forEach((fuelType) => {
-                    if (!newValidFuelTypes.includes(fuelType)) {
+                    if (!newValidFuelTypes.includes(formatFuelType(fuelType))) {
                         newValidFuelTypes.push(formatFuelType(fuelType));
                     }
                 });
@@ -4819,11 +4686,150 @@ const CreateShipClass = ({ isExpanded }) => {
     //     assignedContents: 'string';
     //     fuelLoad: SMData.Fuel;
     // }
+    // This useEffect updates the shipEngineAccelDelta array based on ship modules and the fuelObj.
+    useEffect(() => {
+        let newEngineAccelDelta = []
+
+        processShipModules(shipModules, (shipModule) => {
+            let moduleKey = shipModule.moduleKey;
+
+
+            // function addReactionlessAccel(moduleKey) {
+            //     const accel = shipModule.accel;
+
+            //     const existingEntry = newEngineAccelDelta.find(entry => entry.engineType === moduleKey);
+            //     if (existingEntry) {
+            //         existingEntry.accel += accel;
+            //     } else {
+            //         newEngineAccelDelta.push({
+            //             engineType: moduleKey,
+            //             accel: accel,
+            //             deltaV: Infinity
+            //         });
+            //     }
+            // }
+
+            // function addStardriveReactionless(engineType) {
+            //     const moduleKeyObj = shipData[engineType];
+            //     const accel = moduleKeyObj.Accel;
+
+            //     const existingEntry = newEngineAccelDelta.find(entry => entry.engineType === moduleKey);
+            //     if (existingEntry) {
+            //         existingEntry.accel += accel;
+            //     } else {
+            //         newEngineAccelDelta.push({
+            //             engineType: moduleKey,
+            //             accel: accel,
+            //             deltaV: Infinity
+            //         });
+            //     }
+            // }
+
+            function addReactionAccelDelta(moduleKey) {
+                const fuelTypes = shipModule.fuelTypes;
+                const moduleAccel = shipModule.accel;
+                const moduleMpsTank = shipModule.mpsTank;
+                const ramRocket = shipModule.ramRocket ?? false;
+                const highThrust = shipModule.highThrust ?? false;
+
+                for (let i = 0; i < fuelTypes.length; i++) {
+                    let fuelType = fuelTypes[i];
+                    let fuelObj = shipFuelObj;
+
+                    let deltaV = 0;
+                    let accel = moduleAccel;
+
+                    if (fuelObj.hasOwnProperty(fuelType) && fuelType !== 'Water') {
+                        deltaV = fuelObj[fuelType] * moduleMpsTank;
+                    } else if (fuelObj.hasOwnProperty(fuelType) && fuelType === 'Water') {
+                        deltaV = fuelObj[fuelType] * (moduleMpsTank / 3);
+                        accel *= 3;
+                    }
+
+                    if (deltaV > 0) {
+                        let existingEntry = newEngineAccelDelta.find(entry => entry.engineType === moduleKey && entry.fuelType === fuelType && entry.ramRocket === ramRocket && entry.highThrust === highThrust);
+                        if (existingEntry) {
+                            existingEntry.accel += accel;
+                        } else {
+                            newEngineAccelDelta.push({
+                                engineType: moduleKey,
+                                fuelType: fuelType,
+                                accel: accel,
+                                deltaV: deltaV,
+                                ramRocket: ramRocket,
+                                highThrust: highThrust
+                            });
+                        }
+                    }
+                }
+            }
+
+            switch (moduleKey) {
+                // case "Super Reactionless":
+                // case "Hot Reactionless":
+                // case "Standard":
+                // case "Rotary":
+                // case "Subwarp":
+                //     addReactionlessAccel(moduleKey);
+                //     break;
+                // case "Super Stardrive Engine":
+                // case "Stardrive Engine":
+                //     if (shipModule.reactionlessEngineSuper) {
+                //         addStardriveReactionless("Super Reactionless")
+                //     }
+                //     if (shipModule.reactionlessEngineHot) {
+                //         addStardriveReactionless("Hot Reactionless")
+                //     }
+                //     if (shipModule.reactionlessEngineStandard) {
+                //         addStardriveReactionless("Standard")
+                //     }
+                //     if (shipModule.reactionlessEngineRotary) {
+                //         addStardriveReactionless("Rotary")
+                //     }
+                //     break;
+                case "Antimatter Plasma Torch":
+                case "Super Antimatter Plasma Torch":
+                case "Antimatter Thermal Rocket":
+                case "Super Fusion Torch":
+                case "Fusion Torch":
+                case "Nuclear Thermal Rocket":
+                case "Super Conversion Torch":
+                case "Total Conversion Torch":
+                case "Antimatter Pion Torch":
+                case "Antimatter Pion":
+                case "Antimatter Plasma Rocket":
+                case "Fusion Rocket":
+                case "Super Fusion Pulse Drive":
+                case "Advanced Fusion Pulse Drive":
+                case "Fusion Pulse Drive":
+                case "External Pulsed Plasma":
+                case "Mass Driver":
+                case "Ion Drive":
+                case "Nuclear Saltwater Rocket":
+                case "Nuclear Light Bulb":
+                case "HEDM":
+                case "Chemical":
+                    addReactionAccelDelta(moduleKey);
+                    break;
+
+                default:
+
+                    break;
+
+            }
+            console.log(`newEngineAccelDelta: ${JSON.stringify(newEngineAccelDelta)}`);
+            setEngineAccelDelta(newEngineAccelDelta);
+        })
+
+    }, [shipModules, shipFuelObj]);
+
 
     function EngineCustomizationDisplay() {
         return (
             <div className={styles.engineCustomizationContainer}>
                 <h2 className={isExpanded ? styles.statTitle5ColExpanded : styles.statTitleCollapsed}>Engine & Fuel Customization</h2>
+                {/* <h2 className={isExpanded ? styles.statTitle5ColExpanded : styles.statTitleCollapsed}>Weapon Stat Block</h2>
+                <p className={styles.engineExplanation}>This area displays stats for each unique comination of fuel type and modifications of your reaction engines.</p> */}
                 {shipEngineAccelDelta.map((engine, index) => (
                     <div key={index} className={styles.engineCustomizationSubContainerEngineAccelDelta}>
                         <span className={styles.engineCustomizationLabel}>Engine Type:</span>
@@ -4834,6 +4840,14 @@ const CreateShipClass = ({ isExpanded }) => {
                         <span className={styles.engineCustomizationValue}>{engine.accel} G</span>
                         <span className={styles.engineCustomizationLabel}>Delta V:</span>
                         <span className={styles.engineCustomizationValue}>{engine.deltaV} mps</span>
+                        <span className={styles.engineCustomizationLabel}>Ram Rocket:</span>
+                        <span className={styles.engineCustomizationValue}>
+                            {engine.ramRocket ? <span>&#9989;</span> : '❌'}
+                        </span>
+                        <span className={styles.engineCustomizationLabel}>High Thrust:</span>
+                        <span className={styles.engineCustomizationValue}>
+                            {engine.highThrust ? <span>&#9989;</span> : '❌'}
+                        </span>
                     </div>
                 ))}
                 {enginesArr.map((engineModule, index) => (
@@ -5007,9 +5021,9 @@ const CreateShipClass = ({ isExpanded }) => {
                         <span className={styles.engineCustomizationLabelFuel}>Assigned Contents:</span>
                         {shipValidFuelTypes.map((fuelType, idx) => (
                             <label key={idx} className={styles.engineCustomizationCheckLabelFuel}>
-                                {fuelType}:
+                                <span className={styles.fuelCustomizationLabel}>{fuelType}:</span>
                                 <input
-                                    className={styles.inputCheckbox}
+                                    className={styles.engineCustomizationCheckbox}
                                     type="checkbox"
                                     checked={fuelTank.assignedContents === unformatFuelType(fuelType)}
                                     onChange={() => updateAssignedContents(fuelType, fuelTank.moduleLocation1, fuelTank.moduleNumber)}
