@@ -21,9 +21,9 @@ const ShipModuleSelector = ({ handleSetModules, styles, buildCol, buildRow, ship
 
     // This useEffect updates the module, cost, workspaces, and repairSkill state variables (used for display purposes) 
     // when the shipModule state variable is changed in the higher component.
-    useEffect(() => {
+    // useEffect(() => {
 
-    }, [shipModules])
+    // }, [shipModules])
 
     // This use effect retrieves the values for cost and workspaces from the modules array in the create-ship-class component, 
     // this is to reflect changes caused by customization such as automation and other design features.
@@ -195,27 +195,46 @@ const ShipModuleSelector = ({ handleSetModules, styles, buildCol, buildRow, ship
     //     setModule('');
     // }, [shipSM, shipTL, superScience, shipStreamlinedUn])
 
+    function resetButtonHandler() {
+        handleSetModules('', null, moduleLocation1, moduleLocation2, moduleNumber, 0, 0, null, 0, 0, 0)
+    }
+
+    function formatModuleNumber(moduleNumber) {
+        let moduleNumberStr = String(moduleNumber);
+        if (moduleNumberStr.startsWith('Core')) {
+            return moduleNumberStr.replace('Core', 'Core ');
+        }
+        return moduleNumberStr;
+    }
+
     return (
         <div className={`${styles.buildLabel} ${buildCol} ${buildRow}`}>
-            <span className={styles.moduleLabel}>&#91;{moduleNumber}&#93;   {module} </span>
-            <select value={category} onChange={handleCategoryChange}>
-                <option value="">Select Category</option>
-                {categoryList.map((category) => (
-                    <option key={category} value={category}>{category}</option>
-                ))}
-            </select>
+            <span className={styles.moduleLabel1}>&#91;{formatModuleNumber(moduleNumber)}&#93; </span>
+            <span className={styles.moduleLabel2}> {module} </span>
+            <br></br>
+            {module === '' || module === undefined && (
+                <>
+                    <select value={category} onChange={handleCategoryChange}>
+                        <option value="">Select Category</option>
+                        {categoryList.map((category) => (
+                            <option key={category} value={category}>{category}</option>
+                        ))}
+                    </select>
 
-            {category && (
-                <select value={module} onChange={handleModuleChange}>
-                    <option value="">Select Module</option>
-                    {moduleList.map((module) => (
-                        <option key={module} value={module} disabled={module === 'All Core Modules Already in Use'}>{module}</option>
-                    ))}
-                </select>
+                    {category && (
+                        <select value={module} onChange={handleModuleChange}>
+                            <option value="">Select Module</option>
+                            {moduleList.map((module) => (
+                                <option key={module} value={module} disabled={module === 'All Core Modules Already in Use'}>{module}</option>
+                            ))}
+                        </select>
+                    )}
+                </>
             )}
-
-            <span className={styles.moduleInfoSpanTitle}>Cost: ${displayCost} Workspaces: {displayWorkspaces}</span>
+            <br></br>
+            <span className={styles.moduleInfoSpanTitle}>Cost: ${displayCost} Workspaces: {displayWorkspaces}<br></br></span>
             <span className={styles.moduleInfoSpanTitle} title={repairSkill}>Repair Skill</span>
+            <button className={styles.statComponentButtonModule} onClick={resetButtonHandler}>Reset</button>
         </div>
     )
 }

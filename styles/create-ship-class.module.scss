@@ -1,5 +1,9 @@
 @import '../styles/_variables.module.scss';
 
+.globalFont {
+    font-family: 'Roboto', sans-serif;
+}
+
 %commonContainerStyles {
     display: grid;
     padding: 5px;
@@ -184,10 +188,19 @@
     grid-column: 5 / span 4;
 }
 
-.moduleLabel {
-    color: $secondaryColor1;
+%moduleLabelStyles {
     font-size: 20px;
-    display: block;
+    display: inline;
+}
+
+.moduleLabel1 {
+    @extend %moduleLabelStyles;
+    color: $secondaryColor1;
+}
+
+.moduleLabel2 {
+    @extend %moduleLabelStyles;
+    color: $secondaryColor2;
 }
 
 .buildLabel {
@@ -407,6 +420,11 @@
     @extend %statComponentButtonCommonStyles;
 }
 
+.statComponentButtonModule {
+    @extend %statComponentButtonCommonStyles;
+    margin: 5px 0px 0px 40px;
+}
+
 %statTitleCommonStyles {
     color: $secondaryColor2;
     margin: 3px 0px;
@@ -471,7 +489,7 @@
 .moduleInfoSpanTitle {
     color: $secondaryColor1;
     font-size: 13px;
-    display: block;
+    display: inline;
     padding: 4px 0px;
     text-decoration: underline;
     cursor: pointer;
@@ -979,6 +997,11 @@
 .engineCustomizationSubContainerEngineAccelDelta {
     @extend %engineCustomizationSubContainerCommonStyles;
     grid-row: span 3;
+}
+
+.engineCustomizationSubContainerEngineAccelDeltaHighThrust {
+    @extend %engineCustomizationSubContainerCommonStyles;
+    grid-row: span 2;
 }
 
 .fuelTankSelect {
