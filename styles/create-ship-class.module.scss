@@ -1023,7 +1023,17 @@
     grid-column: span 3;
 }
 
-.engineExplanation {
-    @extend %statBlockLableCargoCommonStyles;
-    grid-column: 1 / span 6;
+.engineCustomizationTitle {
+    @extend %commonTitleStyles;
+    grid-column: span 6;
+}
+
+.engineCustomizationInfo {
+    @extend %habitatPowerInfoLabelCommonStyles;
+    grid-column: span 6;
+}
+
+.engineCustomizationSubContainerInfo {
+    @extend %engineCustomizationSubContainerCommonStyles;
+    grid-row: span 2;
 }

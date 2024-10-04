@@ -234,7 +234,7 @@ const ShipModuleSelector = ({ handleSetModules, styles, buildCol, buildRow, ship
             <br></br>
             <span className={styles.moduleInfoSpanTitle}>Cost: ${displayCost} Workspaces: {displayWorkspaces}<br></br></span>
             <span className={styles.moduleInfoSpanTitle} title={repairSkill}>Repair Skill</span>
-            <button className={styles.statComponentButtonModule} onClick={resetButtonHandler}>Reset</button>
+            {module !== '' && module !== undefined && <button className={styles.statComponentButtonModule} onClick={resetButtonHandler}>Reset</button>}
         </div>
     )
 }

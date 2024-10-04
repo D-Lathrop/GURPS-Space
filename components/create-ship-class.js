@@ -1235,6 +1235,7 @@ const CreateShipClass = ({ isExpanded }) => {
 
         let newStardriveReactionlessArr = [];
 
+        console.log(`stardriveReactionlessArr: ${JSON.stringify(stardriveReactionlessArr)}`);
         for (let rowIndex = 0; rowIndex < newShipModules.length; rowIndex++) {
             for (let colIndex = 0; colIndex < newShipModules[rowIndex].length; colIndex++) {
                 let currentModule = newShipModules[rowIndex][colIndex];
@@ -1279,6 +1280,13 @@ const CreateShipClass = ({ isExpanded }) => {
                 function handleStardrive() {
 
                     function addReactionlessEngine(EngineType) {
+                        if (newStardriveReactionlessArr.length === 0) {
+                            newStardriveReactionlessArr.push({
+                                title: 'Stardrive Reactionless Engines',
+                                info: 'This section shows reactionless engines that are part of stardrive modules.',
+                            })
+                        }
+
                         const reactionlessEngine = modulesUseEffectData[EngineType];
                         const reactionlessEngineSM = reactionlessEngine.find(module => module.SM === shipSM);
 
@@ -1790,6 +1798,8 @@ const CreateShipClass = ({ isExpanded }) => {
         setTeleportProjectors(teleProjectors);
         setTeleportProjectorsSend(teleProjectorsSend);
         setTeleportProjectorsReceive(teleProjectorsReceive);
+
+        console.log(`stardriveReactionlessArr: ${JSON.stringify(stardriveReactionlessArr)}`);
 
         setStardriveReactionlessArr(newStardriveReactionlessArr);
 
@@ -4438,7 +4448,15 @@ const CreateShipClass = ({ isExpanded }) => {
             'Super Conversion Torch', 'Rotary', 'Standard', 'Hot Reactionless', 'Super Reactionless', 'Subwarp', 'Super Stardrive Engine',
             'Stardrive Engine']
 
-        let newEngineModulesArr = [];
+        const infoMessage = 'This section shows all engines along with customization options.';
+
+
+        let newEngineModulesArr = [
+            {
+                title: 'Engines',
+                info: infoMessage
+            }
+        ];
 
         processShipModules(shipModules, (shipModule) => {
             if (engineKeys.includes(shipModule.moduleKey)) {
@@ -4448,81 +4466,6 @@ const CreateShipClass = ({ isExpanded }) => {
 
         setEnginesArr(newEngineModulesArr);
     }, [shipModules])
-
-    const handleEngineCheckboxChange = (moduleLocation1, moduleNumber, property) => {
-        const [rowIndex, colIndex] = getModuleIndex(moduleLocation1, moduleNumber);
-
-        let newModuleObj = { ...shipModules[rowIndex][colIndex] };
-
-        switch (property) {
-            case 'ramRocket':
-                newModuleObj.ramRocket = !newModuleObj.ramRocket;
-                break;
-            case 'highThrust':
-                newModuleObj.highThrust = !newModuleObj.highThrust;
-                break;
-            case 'driveField':
-                newModuleObj.driveField = !newModuleObj.driveField;
-                break;
-            case 'pseudoVelocity':
-                newModuleObj.pseudoVelocity = !newModuleObj.pseudoVelocity;
-                break;
-            case 'singularityDrive':
-                newModuleObj.singularityDrive = !newModuleObj.singularityDrive;
-                break;
-            case 'stardriveFuel':
-                newModuleObj.stardriveFuel = !newModuleObj.stardriveFuel;
-                break;
-            case 'reactionlessEngineSuper':
-                newModuleObj.reactionlessEngineSuper = !newModuleObj.reactionlessEngineSuper;
-                if (newModuleObj.reactionlessEngineSuper) {
-                    newModuleObj.reactionlessEngineHot = false;
-                    newModuleObj.reactionlessEngineStandard = false;
-                    newModuleObj.reactionlessEngineRotary = false;
-                }
-                break;
-            case 'reactionlessEngineHot':
-                newModuleObj.reactionlessEngineHot = !newModuleObj.reactionlessEngineHot;
-                if (newModuleObj.reactionlessEngineHot) {
-                    newModuleObj.reactionlessEngineSuper = false;
-                    newModuleObj.reactionlessEngineStandard = false;
-                    newModuleObj.reactionlessEngineRotary = false;
-                }
-                break;
-            case 'reactionlessEngineStandard':
-                newModuleObj.reactionlessEngineStandard = !newModuleObj.reactionlessEngineStandard;
-                if (newModuleObj.reactionlessEngineStandard) {
-                    newModuleObj.reactionlessEngineSuper = false;
-                    newModuleObj.reactionlessEngineHot = false;
-                    newModuleObj.reactionlessEngineRotary = false;
-                }
-                break;
-            case 'reactionlessEngineRotary':
-                newModuleObj.reactionlessEngineRotary = !newModuleObj.reactionlessEngineRotary;
-                if (newModuleObj.reactionlessEngineRotary) {
-                    newModuleObj.reactionlessEngineSuper = false;
-                    newModuleObj.reactionlessEngineHot = false;
-                    newModuleObj.reactionlessEngineStandard = false;
-                }
-                break;
-            case 'reactionlessEngineExtraCost':
-                newModuleObj.reactionlessEngineExtraCost = !newModuleObj.reactionlessEngineExtraCost;
-                break;
-            case 'negativeMassPropulsionDrive':
-                newModuleObj.negativeMassPropulsionDrive = !newModuleObj.negativeMassPropulsionDrive;
-                break;
-            default:
-                console.log("Unexpected value in handleWeaponCheckboxChange.");
-                return;
-        }
-
-        setModules(prevModules => {
-            const newModules = [...prevModules];
-            newModules[rowIndex] = [...newModules[rowIndex]];
-            newModules[rowIndex][colIndex] = newModuleObj;
-            return newModules;
-        });
-    };
 
     function formatFuelType(fuelType) {
         if (fuelType === undefined || fuelType === null) {
@@ -4643,7 +4586,14 @@ const CreateShipClass = ({ isExpanded }) => {
 
     // This useEffect populates the fuelTanksArr state variable used to display and customize fuel tanks.
     useEffect(() => {
-        let fuelTanksArr = [];
+        const infoMessage = 'This section shows each fuel tank module along with options for contents. Select an engine to enable its fuel options or select Exposed Radiators in the Ship Design tab to assign thermal fluid for heat sinks.';
+
+        let fuelTanksArr = [
+            {
+                title: 'Fuel Tanks',
+                info: infoMessage
+            }
+        ];
 
         processShipModules(shipModules, (shipModule) => {
             if (shipModule.moduleKey === 'Fuel Tank') {
@@ -4655,113 +4605,20 @@ const CreateShipClass = ({ isExpanded }) => {
         setFuelTanksArr(fuelTanksArr);
     }, [shipModules]);
 
-    function updateAssignedContents(selectedFuel, moduleLocation, moduleNumber) {
-
-        const unformattedFuel = unformatFuelType(selectedFuel);
-
-        const [rowIndex, colIndex] = getModuleIndex(moduleLocation, moduleNumber)
-
-        let newModules = [...shipModules];
-        newModules[rowIndex] = [...newModules[rowIndex]];
-        newModules[rowIndex][colIndex] = { ...newModules[rowIndex][colIndex] };
-        newModules[rowIndex][colIndex].assignedContents = unformattedFuel;
-
-        setModules(newModules);
-    }
-
-    // {
-    //     moduleKey: moduleKey,
-    //     moduleCategory: moduleCategory,
-    //     moduleLocation1: moduleLocation1,
-    //     moduleLocation2: moduleLocation2,
-    //     moduleNumber: moduleNumber,
-    //     baseModulePowerDemand: modulePowerDemand,
-    //     modulePowerDemand: modulePowerDemand,
-    //     baseModuleCost: moduleCost,
-    //     moduleCost: moduleCost,
-    //     baseModuleWorkspaces: moduleWorkspaces,
-    //     moduleWorkspaces: moduleWorkspaces,
-    //     alreadyCustomized: false
-    //     customizable: true;
-    //     assignedContents: 'string';
-    //     fuelLoad: SMData.Fuel;
-    // }
     // This useEffect updates the shipEngineAccelDelta array based on ship modules and the fuelObj.
     useEffect(() => {
-        let newEngineAccelDelta = []
+        const infoMessage = 'This section shows the acceleration and delta-v for each unique reaction engine, customization, and fuel combination. Each delta-v calculation assumes all fuel tanks of that fuel type will be used by that single set of engines.';
+
+        let newEngineAccelDelta = [
+            {
+                title: 'Reaction Engine Accel & Delta V',
+                info: infoMessage
+            }
+        ]
 
         processShipModules(shipModules, (shipModule) => {
             let moduleKey = shipModule.moduleKey;
 
-
-            // function addReactionlessAccel(moduleKey) {
-            //     const accel = shipModule.accel;
-
-            //     const existingEntry = newEngineAccelDelta.find(entry => entry.engineType === moduleKey);
-            //     if (existingEntry) {
-            //         existingEntry.accel += accel;
-            //     } else {
-            //         newEngineAccelDelta.push({
-            //             engineType: moduleKey,
-            //             accel: accel,
-            //             deltaV: Infinity
-            //         });
-            //     }
-            // }
-
-            // function addStardriveReactionless(engineType) {
-            //     const moduleKeyObj = shipData[engineType];
-            //     const accel = moduleKeyObj.Accel;
-
-            //     const existingEntry = newEngineAccelDelta.find(entry => entry.engineType === moduleKey);
-            //     if (existingEntry) {
-            //         existingEntry.accel += accel;
-            //     } else {
-            //         newEngineAccelDelta.push({
-            //             engineType: moduleKey,
-            //             accel: accel,
-            //             deltaV: Infinity
-            //         });
-            //     }
-            // }
-
-            // function addReactionAccelDelta(moduleKey) {
-            //     const fuelTypes = shipModule.fuelTypes;
-            //     const moduleAccel = shipModule.accel;
-            //     const moduleMpsTank = shipModule.mpsTank;
-            //     const ramRocket = shipModule.ramRocket ?? false;
-            //     const highThrust = shipModule.highThrust ?? false;
-
-            //     for (let i = 0; i < fuelTypes.length; i++) {
-            //         let fuelType = fuelTypes[i];
-            //         let fuelObj = shipFuelObj;
-
-            //         let deltaV = 0;
-            //         let accel = moduleAccel;
-
-            //         if (fuelObj.hasOwnProperty(fuelType) && fuelType !== 'Water') {
-            //             deltaV = fuelObj[fuelType] * moduleMpsTank;
-            //         } else if (fuelObj.hasOwnProperty(fuelType) && fuelType === 'Water') {
-            //             deltaV = fuelObj[fuelType] * (moduleMpsTank / 3);
-            //             accel *= 3;
-            //         }
-
-            //         if (deltaV > 0) {
-            //             let existingEntry = newEngineAccelDelta.find(entry => entry.engineType === moduleKey && entry.fuelType === fuelType && entry.ramRocket === ramRocket && entry.highThrust === highThrust);
-            //             if (existingEntry) {
-            //                 existingEntry.accel += accel;
-            //             } else {
-            //                 newEngineAccelDelta.push({
-            //                     engineType: moduleKey,
-            //                     fuelType: fuelType,
-            //                     accel: accel,
-            //                     deltaV: deltaV,
-            //                     ramRocket: ramRocket,
-            //                     highThrust: highThrust
-            //                 });
-            //             }
-            //         }
-            //     }
             function addReactionAccelDelta(moduleKey) {
                 const fuelTypes = shipModule.fuelTypes;
                 const moduleAccel = shipModule.accel;
@@ -4808,28 +4665,6 @@ const CreateShipClass = ({ isExpanded }) => {
 
 
             switch (moduleKey) {
-                // case "Super Reactionless":
-                // case "Hot Reactionless":
-                // case "Standard":
-                // case "Rotary":
-                // case "Subwarp":
-                //     addReactionlessAccel(moduleKey);
-                //     break;
-                // case "Super Stardrive Engine":
-                // case "Stardrive Engine":
-                //     if (shipModule.reactionlessEngineSuper) {
-                //         addStardriveReactionless("Super Reactionless")
-                //     }
-                //     if (shipModule.reactionlessEngineHot) {
-                //         addStardriveReactionless("Hot Reactionless")
-                //     }
-                //     if (shipModule.reactionlessEngineStandard) {
-                //         addStardriveReactionless("Standard")
-                //     }
-                //     if (shipModule.reactionlessEngineRotary) {
-                //         addStardriveReactionless("Rotary")
-                //     }
-                //     break;
                 case "Antimatter Plasma Torch":
                 case "Super Antimatter Plasma Torch":
                 case "Antimatter Thermal Rocket":
@@ -4854,29 +4689,121 @@ const CreateShipClass = ({ isExpanded }) => {
                 case "Chemical":
                     addReactionAccelDelta(moduleKey);
                     break;
-
                 default:
-
                     break;
-
             }
-
             setEngineAccelDelta(newEngineAccelDelta);
         })
-
     }, [shipModules, shipFuelObj]);
 
-    function EngineCustomizationDisplay() {
-        const isEmpty = shipEngineAccelDelta.length === 0 && enginesArr.length === 0 && shipFuelTanksArr.length === 0 && stardriveReactionlessArr.length === 1 && Object.keys(stardriveReactionlessArr[0]).length === 0;
+    const handleEngineCheckboxChange = (moduleLocation1, moduleNumber, property) => {
+        const [rowIndex, colIndex] = getModuleIndex(moduleLocation1, moduleNumber);
 
+        let newModuleObj = { ...shipModules[rowIndex][colIndex] };
+
+        switch (property) {
+            case 'ramRocket':
+                newModuleObj.ramRocket = !newModuleObj.ramRocket;
+                break;
+            case 'highThrust':
+                newModuleObj.highThrust = !newModuleObj.highThrust;
+                break;
+            case 'driveField':
+                newModuleObj.driveField = !newModuleObj.driveField;
+                break;
+            case 'pseudoVelocity':
+                newModuleObj.pseudoVelocity = !newModuleObj.pseudoVelocity;
+                break;
+            case 'singularityDrive':
+                newModuleObj.singularityDrive = !newModuleObj.singularityDrive;
+                break;
+            case 'stardriveFuel':
+                newModuleObj.stardriveFuel = !newModuleObj.stardriveFuel;
+                break;
+            case 'reactionlessEngineSuper':
+                newModuleObj.reactionlessEngineSuper = !newModuleObj.reactionlessEngineSuper;
+                if (newModuleObj.reactionlessEngineSuper) {
+                    newModuleObj.reactionlessEngineHot = false;
+                    newModuleObj.reactionlessEngineStandard = false;
+                    newModuleObj.reactionlessEngineRotary = false;
+                }
+                break;
+            case 'reactionlessEngineHot':
+                newModuleObj.reactionlessEngineHot = !newModuleObj.reactionlessEngineHot;
+                if (newModuleObj.reactionlessEngineHot) {
+                    newModuleObj.reactionlessEngineSuper = false;
+                    newModuleObj.reactionlessEngineStandard = false;
+                    newModuleObj.reactionlessEngineRotary = false;
+                }
+                break;
+            case 'reactionlessEngineStandard':
+                newModuleObj.reactionlessEngineStandard = !newModuleObj.reactionlessEngineStandard;
+                if (newModuleObj.reactionlessEngineStandard) {
+                    newModuleObj.reactionlessEngineSuper = false;
+                    newModuleObj.reactionlessEngineHot = false;
+                    newModuleObj.reactionlessEngineRotary = false;
+                }
+                break;
+            case 'reactionlessEngineRotary':
+                newModuleObj.reactionlessEngineRotary = !newModuleObj.reactionlessEngineRotary;
+                if (newModuleObj.reactionlessEngineRotary) {
+                    newModuleObj.reactionlessEngineSuper = false;
+                    newModuleObj.reactionlessEngineHot = false;
+                    newModuleObj.reactionlessEngineStandard = false;
+                }
+                break;
+            case 'reactionlessEngineExtraCost':
+                newModuleObj.reactionlessEngineExtraCost = !newModuleObj.reactionlessEngineExtraCost;
+                break;
+            case 'negativeMassPropulsionDrive':
+                newModuleObj.negativeMassPropulsionDrive = !newModuleObj.negativeMassPropulsionDrive;
+                break;
+            default:
+                console.log("Unexpected value in handleWeaponCheckboxChange.");
+                return;
+        }
+
+        setModules(prevModules => {
+            const newModules = [...prevModules];
+            newModules[rowIndex] = [...newModules[rowIndex]];
+            newModules[rowIndex][colIndex] = newModuleObj;
+            return newModules;
+        });
+
+
+    };
+
+    function updateAssignedContents(selectedFuel, moduleLocation, moduleNumber) {
+        const unformattedFuel = unformatFuelType(selectedFuel);
+        const [rowIndex, colIndex] = getModuleIndex(moduleLocation, moduleNumber)
+
+        let newModules = [...shipModules];
+        newModules[rowIndex] = [...newModules[rowIndex]];
+        newModules[rowIndex][colIndex] = { ...newModules[rowIndex][colIndex] };
+        newModules[rowIndex][colIndex].assignedContents = unformattedFuel;
+
+        setModules(newModules);
+    }
+
+    function roundToTwoDecimals(value) {
+        return Math.round(value * 100) / 100;
+    }
+
+    function EngineCustomizationDisplay() {
         return (
             <div className={styles.engineCustomizationContainer}>
                 <h2 className={isExpanded ? styles.statTitle5ColExpanded : styles.statTitleCollapsed}>Engine & Fuel Customization</h2>
-                {isEmpty ? (
-                    <p>Select engines, fuel tanks, or star drives.</p>
-                ) : (
-                    <>
-                        {shipEngineAccelDelta.map((engine, index) => (
+
+                {shipEngineAccelDelta.length > 1 && shipEngineAccelDelta.map((engine, index) => {
+                    if (engine.hasOwnProperty('title') && engine.hasOwnProperty('info')) {
+                        return (
+                            <div key={index} className={styles.engineCustomizationSubContainerInfo}>
+                                <span className={styles.engineCustomizationTitle}>{engine.title}</span>
+                                <span className={styles.engineCustomizationInfo}>{engine.info}</span>
+                            </div>
+                        );
+                    } else {
+                        return (
                             <div
                                 key={index}
                                 className={
@@ -4891,7 +4818,7 @@ const CreateShipClass = ({ isExpanded }) => {
                                 <span className={styles.engineCustomizationLabel}>Acceleration:</span>
                                 <span className={styles.engineCustomizationValue}>{engine.accel} G</span>
                                 <span className={styles.engineCustomizationLabel}>Delta V:</span>
-                                <span className={styles.engineCustomizationValue}>{engine.deltaV} mps</span>
+                                <span className={styles.engineCustomizationValue}>{roundToTwoDecimals(engine.deltaV)} mps</span>
                                 {engine.hasOwnProperty('ramRocket') && (
                                     <>
                                         <span className={styles.engineCustomizationLabel}>Ram Rocket:</span>
@@ -4909,8 +4836,20 @@ const CreateShipClass = ({ isExpanded }) => {
                                     </>
                                 )}
                             </div>
-                        ))}
-                        {enginesArr.map((engineModule, index) => (
+                        );
+                    }
+                })}
+
+                {enginesArr.length > 1 && enginesArr.map((engineModule, index) => {
+                    if (engineModule.hasOwnProperty('title') && engineModule.hasOwnProperty('info')) {
+                        return (
+                            <div key={index} className={styles.engineCustomizationSubContainerInfo}>
+                                <span className={styles.engineCustomizationTitle}>{engineModule.title}</span>
+                                <span className={styles.engineCustomizationInfo}>{engineModule.info}</span>
+                            </div>
+                        );
+                    } else {
+                        return (
                             <div key={index} className={`${getEngineDisplayClass(engineModule.moduleKey)}`}>
                                 <span className={styles.engineCustomizationLabel}>Module:</span>
                                 <span className={styles.engineCustomizationValue}>{engineModule.moduleKey}</span>
@@ -5062,8 +5001,20 @@ const CreateShipClass = ({ isExpanded }) => {
                                     </label>
                                 )}
                             </div>
-                        ))}
-                        {shipFuelTanksArr.map((fuelTank, index) => (
+                        );
+                    }
+                })}
+
+                {shipFuelTanksArr.length > 1 && shipFuelTanksArr.map((fuelTank, index) => {
+                    if (fuelTank.hasOwnProperty('title') && fuelTank.hasOwnProperty('info')) {
+                        return (
+                            <div key={index} className={styles.engineCustomizationSubContainerInfo}>
+                                <span className={styles.engineCustomizationTitle}>{fuelTank.title}</span>
+                                <span className={styles.engineCustomizationInfo}>{fuelTank.info}</span>
+                            </div>
+                        );
+                    } else {
+                        return (
                             <div key={index} className={getFuelDisplayClass()}>
                                 <span className={styles.engineCustomizationLabel}>Module:</span>
                                 <span className={styles.engineCustomizationValue}>{fuelTank.moduleKey}</span>
@@ -5090,16 +5041,28 @@ const CreateShipClass = ({ isExpanded }) => {
                                     </label>
                                 ))}
                             </div>
-                        ))}
-                        {stardriveReactionlessArr.length === 1 && Object.keys(stardriveReactionlessArr[0]).length === 0 ? null : (
-                            stardriveReactionlessArr.map((engineModule, index) => (
+                        );
+                    }
+                })}
+
+                {stardriveReactionlessArr.length === 1 && Object.keys(stardriveReactionlessArr[0]).length === 0 ? null : (
+                    stardriveReactionlessArr.map((engineModule, index) => {
+                        if (engineModule.hasOwnProperty('title') && engineModule.hasOwnProperty('info')) {
+                            return (
+                                <div key={index} className={styles.engineCustomizationSubContainerInfo}>
+                                    <span className={styles.engineCustomizationTitle}>{engineModule.title}</span>
+                                    <span className={styles.engineCustomizationInfo}>{engineModule.info}</span>
+                                </div>
+                            );
+                        } else {
+                            return (
                                 <div key={index} className={styles.engineCustomizationSubContainerNoOptions}>
                                     <span className={styles.engineCustomizationLabel}>Module Key:</span>
                                     <span className={styles.engineCustomizationValue}>{engineModule.moduleKey}</span>
                                     <span className={styles.engineCustomizationLabel}>Category:</span>
                                     <span className={styles.engineCustomizationValue}>{engineModule.moduleCategory}</span>
-                                    <span className={styles.engineCustomizationLabel}>Location 1:</span>
-                                    <span className={styles.engineCustomizationValue}>{engineModule.moduleLocation1}</span>
+                                    <span className={styles.engineCustomizationLabel}>Hull Location:</span>
+                                    <span className={styles.engineCustomizationValue}>{formatModuleLocation(engineModule.moduleLocation1)}</span>
                                     <span className={styles.engineCustomizationLabel}>Module Number:</span>
                                     <span className={styles.engineCustomizationValue}>{engineModule.moduleNumber}</span>
                                     <span className={styles.engineCustomizationLabel}>mps/tank:</span>
@@ -5118,9 +5081,9 @@ const CreateShipClass = ({ isExpanded }) => {
                                         ) : ''}
                                     </span>
                                 </div>
-                            ))
-                        )}
-                    </>
+                            );
+                        }
+                    })
                 )}
             </div>
         );
