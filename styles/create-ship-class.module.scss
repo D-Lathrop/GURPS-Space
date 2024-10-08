@@ -981,12 +981,12 @@
 
 .engineCustomizationSubContainer9Options {
     @extend %engineCustomizationSubContainerCommonStyles;
-    grid-row: span 6;
+    grid-row: span 7;
 }
 
 .engineCustomizationSubContainerNoOptions {
     @extend %engineCustomizationSubContainerCommonStyles;
-    grid-row: span 3;
+    grid-row: span 4;
 }
 
 .engineCustomizationSubContainer1to2Options {
@@ -1036,4 +1036,9 @@
 .engineCustomizationSubContainerInfo {
     @extend %engineCustomizationSubContainerCommonStyles;
     grid-row: span 2;
+}
+
+.customizationSelect {
+    grid-column: span 4;
+    height: 70%;
 }
